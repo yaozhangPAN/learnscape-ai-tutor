@@ -25,7 +25,7 @@ const Navbar = () => {
               Mock Exam
             </Link>
             <Link to="/courses" className="text-gray-700 hover:text-learnscape-blue transition-colors">
-              Courses
+              Video Tutorials
             </Link>
             <Link to="/question-bank" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Question Bank
@@ -81,7 +81,7 @@ const Navbar = () => {
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
               onClick={() => setIsMenuOpen(false)}
             >
-              Courses
+              Video Tutorials
             </Link>
             <Link 
               to="/question-bank" 

@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Book, Clock, Star, Users } from "lucide-react";
+import { Book, Clock, Star, Users, Video } from "lucide-react";
 
 type Course = {
   id: string;
@@ -135,9 +135,9 @@ const Courses = () => {
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Online Courses</h1>
+          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Video Tutorials</h1>
           <p className="text-gray-600">
-            Access high-quality interactive courses designed by expert educators to help you master key concepts and excel in your exams.
+            Access high-quality video tutorials designed by expert educators to help you master key concepts and excel in your exams.
           </p>
         </div>
 
@@ -204,8 +204,8 @@ const Courses = () => {
               <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
                 <div className="font-semibold text-learnscape-blue">{course.price}</div>
                 <Button className="bg-learnscape-blue hover:bg-blue-700">
-                  <Book className="h-4 w-4 mr-2" />
-                  Enroll Now
+                  <Video className="h-4 w-4 mr-2" />
+                  Watch Now
                 </Button>
               </CardFooter>
             </Card>
