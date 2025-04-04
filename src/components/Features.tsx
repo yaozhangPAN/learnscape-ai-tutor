@@ -27,7 +27,7 @@ const Features = () => {
       icon: <Brain className="h-10 w-10 text-green-500" />,
       title: "AI Tutor",
       description: "Get personalized help with challenging concepts through our AI-powered tutoring system.",
-      link: ""
+      link: "/ai-tutor"
     },
     {
       icon: <BarChart3 className="h-10 w-10 text-red-500" />,

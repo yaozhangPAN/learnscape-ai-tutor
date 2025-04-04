@@ -18,9 +18,6 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-learnscape-blue transition-colors">
-              Home
-            </Link>
             <Link to="/question-bank" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Question Bank
             </Link>
@@ -38,6 +35,9 @@ const Navbar = () => {
             </Link>
             <Link to="/dashboard" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Dashboard
+            </Link>
+            <Link to="/ai-tutor" className="text-gray-700 hover:text-learnscape-blue transition-colors">
+              AI Tutor
             </Link>
             <Button 
               asChild
@@ -110,6 +110,13 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Dashboard
+            </Link>
+            <Link 
+              to="/ai-tutor" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              AI Tutor
             </Link>
             <Link 
               to="/login" 

@@ -1,0 +1,207 @@
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+
+const TutorMe = () => {
+  const [question, setQuestion] = useState("");
+  const [response, setResponse] = useState("");
+  const [subject, setSubject] = useState("math");
+  const [level, setLevel] = useState("primary-4");
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const subjects = [
+    { value: "math", label: "Mathematics" },
+    { value: "english", label: "English" },
+    { value: "science", label: "Science" },
+    { value: "history", label: "History" },
+    { value: "geography", label: "Geography" }
+  ];
+
+  const levels = [
+    { value: "primary-1", label: "Primary 1" },
+    { value: "primary-2", label: "Primary 2" },
+    { value: "primary-3", label: "Primary 3" },
+    { value: "primary-4", label: "Primary 4" },
+    { value: "primary-5", label: "Primary 5" },
+    { value: "primary-6", label: "Primary 6" }
+  ];
+
+  const handleSubmit = () => {
+    if (!question.trim()) {
+      toast({
+        title: "Empty Question",
+        description: "Please enter a question to get help.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    
+    // Simulate AI generating an answer
+    setTimeout(() => {
+      // Example response (in a real app, this would come from an AI API)
+      let sampleResponse = "";
+      
+      if (subject === "math") {
+        sampleResponse = `
+          <h3>Solution Approach</h3>
+          <p>To solve this problem, we need to break it down into steps:</p>
+          
+          <ol>
+            <li>Identify what we're looking for: the area of the rectangle</li>
+            <li>Remember that Area = Length × Width</li>
+            <li>Use the given information to find the length and width</li>
+            <li>Multiply these values to find the area</li>
+          </ol>
+          
+          <h3>Solution</h3>
+          <p>Given that the length is 12 cm and the width is 5 cm:</p>
+          <p>Area = 12 cm × 5 cm = 60 cm²</p>
+          
+          <h3>Check</h3>
+          <p>We can verify this by drawing a rectangle with these dimensions and counting the square units.</p>
+          
+          <h3>Would you like to try a similar problem?</h3>
+          <p>Find the area of a rectangle with length 8 cm and width 6 cm.</p>
+        `;
+      } else if (subject === "science") {
+        sampleResponse = `
+          <h3>Understanding the Water Cycle</h3>
+          <p>The water cycle is the continuous movement of water on, above, and below the Earth's surface. It involves several key processes:</p>
+          
+          <ul>
+            <li><strong>Evaporation:</strong> Water from oceans, lakes, and rivers turns into water vapor due to heat from the sun.</li>
+            <li><strong>Condensation:</strong> As water vapor rises and cools, it forms clouds.</li>
+            <li><strong>Precipitation:</strong> When water droplets in clouds become heavy enough, they fall as rain, snow, or hail.</li>
+            <li><strong>Collection:</strong> Water returns to oceans, lakes, and rivers, or seeps into the ground.</li>
+          </ul>
+          
+          <p>This cycle is crucial for life on Earth as it provides fresh water and helps regulate temperature.</p>
+          
+          <h3>Would you like to learn more about any specific part of the water cycle?</h3>
+        `;
+      } else {
+        sampleResponse = `
+          <h3>Understanding Your Question</h3>
+          <p>I'd be happy to help with your question about ${subjects.find(s => s.value === subject).label}.</p>
+          
+          <p>Based on the Primary ${level.split('-')[1]} level curriculum in Singapore, here's what you need to know:</p>
+          
+          <p>Your question touches on key concepts that students your age are learning. Let's break it down:</p>
+          
+          <h3>Key Concepts</h3>
+          <ul>
+            <li>First, we need to understand the main idea</li>
+            <li>Then, apply the relevant methods we've learned</li>
+            <li>Finally, check our answer to make sure it makes sense</li>
+          </ul>
+          
+          <p>Does this help you understand the problem better? I can explain any part in more detail if you'd like.</p>
+        `;
+      }
+      
+      setResponse(sampleResponse);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const handleClear = () => {
+    setQuestion("");
+    setResponse("");
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-learnscape-darkBlue">AI Tutor</h2>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handleClear}>Clear</Button>
+          <Button onClick={handleSubmit} disabled={isLoading}>
+            {isLoading ? "Thinking..." : "Ask Question"}
+          </Button>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="md:col-span-1 space-y-4">
+          <div>
+            <label className="text-sm font-medium block mb-1">Subject</label>
+            <Select value={subject} onValueChange={setSubject}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Subject" />
+              </SelectTrigger>
+              <SelectContent>
+                {subjects.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <label className="text-sm font-medium block mb-1">Level</label>
+            <Select value={level} onValueChange={setLevel}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Level" />
+              </SelectTrigger>
+              <SelectContent>
+                {levels.map((l) => (
+                  <SelectItem key={l.value} value={l.value}>
+                    {l.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="bg-blue-50 p-4 rounded-md">
+            <h3 className="font-medium text-sm mb-2">Tips</h3>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>Be specific in your questions</li>
+              <li>Include any relevant information</li>
+              <li>Try different ways of asking</li>
+              <li>Follow up with clarification questions</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="md:col-span-3 space-y-6">
+          <div>
+            <label className="text-sm font-medium block mb-1">Your Question</label>
+            <Textarea 
+              placeholder="What would you like help with today? E.g., How do I calculate the area of a rectangle?"
+              className="min-h-[150px] resize-none"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+          </div>
+          
+          {response && (
+            <div>
+              <label className="text-sm font-medium block mb-1">AI Tutor Response</label>
+              <div className="bg-gray-50 border rounded-md p-6 prose prose-sm max-w-none">
+                <div dangerouslySetInnerHTML={{ __html: response }} />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TutorMe;
