@@ -21,6 +21,9 @@ const Navbar = () => {
             <Link to="/" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Home
             </Link>
+            <Link to="/mock-exam" className="text-gray-700 hover:text-learnscape-blue transition-colors">
+              Mock Exam
+            </Link>
             <Link to="#features" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Features
             </Link>
@@ -59,6 +62,13 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Home
+            </Link>
+            <Link 
+              to="/mock-exam" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Mock Exam
             </Link>
             <Link 
               to="#features" 
