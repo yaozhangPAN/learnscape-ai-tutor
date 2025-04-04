@@ -12,6 +12,7 @@ import Courses from "./pages/Courses";
 import AboutUs from "./pages/AboutUs";
 import QuestionBank from "./pages/QuestionBank";
 import Leaderboard from "./pages/Leaderboard";
+import Worksheets from "./pages/Worksheets";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/mock-exam" element={<MockExam />} />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/worksheets" element={<Worksheets />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/question-bank" element={<QuestionBank />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
