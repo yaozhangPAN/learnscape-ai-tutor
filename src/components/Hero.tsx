@@ -37,7 +37,7 @@ const Hero = () => {
                 </span>
               </h1>
               <p className="mt-3 text-base text-gray-600 sm:mt-5 sm:text-lg">
-                Join Learnscape for free academic support with Singapore primary school tuition materials, exam papers, worksheets, and get premium supports from AI Tutor for personalized, interactive AI-powered learning!
+                Join Learnscape for free academic support with Singapore primary school tuition materials, exam papers, worksheets, and get premium supports from Star Teacher Video Lessons and AI Tutor for focused, personalized, interactive AI-powered learning!
               </p>
               <div className="mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
