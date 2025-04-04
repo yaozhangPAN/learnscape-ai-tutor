@@ -35,7 +35,7 @@ const UserProfile = () => {
           throw error;
         }
 
-        setProfile(data);
+        setProfile(data as Profile);
       } catch (error: any) {
         console.error("Error fetching profile:", error.message);
       } finally {
