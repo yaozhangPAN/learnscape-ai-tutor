@@ -95,13 +95,13 @@ serve(async (req) => {
       
       // Fetch course details to determine the correct price
       // In a real implementation, you would fetch the price from your database
-      let videoPrice = 69900; // Default price: S$699
+      let videoPrice = 39900; // Default price: S$399
       
       // This is a mock implementation - in a real app, you'd query your database
       if (productId === "3" || productId === "8") {
-        videoPrice = 79900; // S$799
+        videoPrice = 49900; // S$499
       } else if (productId === "4") {
-        videoPrice = 89900; // S$899
+        videoPrice = 59900; // S$599
       }
       
       const videoTitle = "PSLE Chinese Mastery"; // Example title
