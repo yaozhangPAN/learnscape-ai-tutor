@@ -1,11 +1,12 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Crown } from "lucide-react";
 
 type Profile = {
   id: string;
@@ -16,6 +17,7 @@ type Profile = {
 
 const UserProfile = () => {
   const { user, signOut } = useAuth();
+  const { isPremium, startCheckoutSession } = useSubscription();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -58,6 +60,13 @@ const UserProfile = () => {
     }
   };
 
+  const handleSubscribe = async () => {
+    const checkoutUrl = await startCheckoutSession("premium_subscription");
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    }
+  };
+
   if (loading) {
     return (
       <Card>
@@ -97,9 +106,16 @@ const UserProfile = () => {
                 <User className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-xl font-semibold">{profile.name}</h3>
-              <p className="px-3 py-1 bg-learnscape-yellow/20 text-learnscape-darkBlue rounded-full text-sm font-medium">
-                {profile.user_type.charAt(0).toUpperCase() + profile.user_type.slice(1)}
-              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <p className="px-3 py-1 bg-learnscape-yellow/20 text-learnscape-darkBlue rounded-full text-sm font-medium">
+                  {profile.user_type.charAt(0).toUpperCase() + profile.user_type.slice(1)}
+                </p>
+                {isPremium && (
+                  <p className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-full text-sm font-medium flex items-center">
+                    <Crown size={14} className="mr-1" /> Premium
+                  </p>
+                )}
+              </div>
             </div>
             
             <div className="mt-4 space-y-2">
@@ -111,7 +127,26 @@ const UserProfile = () => {
                 <span className="text-gray-500">Joined:</span>
                 <span>{new Date(profile.created_at).toLocaleDateString()}</span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Subscription:</span>
+                <span>{isPremium ? "Premium" : "Free"}</span>
+              </div>
             </div>
+
+            {!isPremium && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <Button 
+                  onClick={handleSubscribe}
+                  className="w-full bg-learnscape-blue hover:bg-blue-700"
+                >
+                  <Crown size={16} className="mr-2" />
+                  Upgrade to Premium (S$99/month)
+                </Button>
+                <p className="text-xs text-center text-gray-500 mt-2">
+                  Get access to AI tutor, daily recommendations, and all premium features.
+                </p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center">

@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QuestionModule from "@/components/QuestionModule";
 import Navbar from "@/components/Navbar";
+import PremiumStatus from "@/components/PremiumStatus";
 
 const Dashboard = () => {
   const [greeting, setGreeting] = useState(() => {
@@ -129,40 +130,7 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle>AI Recommendations</CardTitle>
-                <CardDescription>Personalized for your learning needs</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-learnscape-blue flex items-center justify-center">
-                      <Brain className="h-4 w-4 text-white" />
-                    </div>
-                    <h4 className="font-semibold">Focus Areas</h4>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Based on your recent performance, we recommend focusing on:
-                  </p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
-                      Multiplication with decimals
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
-                      English comprehension
-                    </li>
-                  </ul>
-                </div>
-                
-                <Button className="w-full bg-learnscape-blue hover:bg-blue-700 flex items-center justify-center">
-                  <Brain className="mr-2 h-4 w-4" />
-                  Get AI Tutor Help
-                </Button>
-              </CardContent>
-            </Card>
+            <PremiumStatus />
           </div>
         </div>
 

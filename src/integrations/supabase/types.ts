@@ -54,12 +54,92 @@ export type Database = {
         }
         Relationships: []
       }
+      purchased_content: {
+        Row: {
+          content_id: string
+          content_type: string
+          currency: string
+          id: string
+          payment_reference: string | null
+          price: number
+          purchase_date: string
+          user_id: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          currency?: string
+          id?: string
+          payment_reference?: string | null
+          price: number
+          purchase_date?: string
+          user_id: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          currency?: string
+          id?: string
+          payment_reference?: string | null
+          price?: number
+          purchase_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          currency: string
+          end_date: string
+          id: string
+          payment_reference: string | null
+          price: number
+          start_date: string
+          status: string
+          subscription_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          end_date: string
+          id?: string
+          payment_reference?: string | null
+          price: number
+          start_date?: string
+          status: string
+          subscription_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          end_date?: string
+          id?: string
+          payment_reference?: string | null
+          price?: number
+          start_date?: string
+          status?: string
+          subscription_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_premium_subscription: {
+        Args: {
+          user_uuid: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

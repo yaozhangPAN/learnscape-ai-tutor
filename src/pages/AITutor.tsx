@@ -9,9 +9,12 @@ import Footer from "@/components/Footer";
 import WritingCoach from "@/components/AITutor/WritingCoach";
 import OralExamPractice from "@/components/AITutor/OralExamPractice";
 import TutorMe from "@/components/AITutor/TutorMe";
+import SubscriptionBanner from "@/components/SubscriptionBanner";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const AITutor = () => {
   const [activeTab, setActiveTab] = useState("writing-coach");
+  const { isPremium } = useSubscription();
   
   const tutorOptions = [
     {
@@ -51,6 +54,8 @@ const AITutor = () => {
               Choose from one of our specialized tutoring options below.
             </p>
           </div>
+
+          {!isPremium && <SubscriptionBanner type="ai-tutor" />}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {tutorOptions.map((option) => (

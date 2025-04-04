@@ -1,12 +1,15 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Book, Clock, Star, Users, Video } from "lucide-react";
+import { Book, Clock, Star, Users, Video, Crown, Lock } from "lucide-react";
+import { useSubscription } from "@/contexts/SubscriptionContext";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 type Course = {
   id: string;
@@ -18,6 +21,7 @@ type Course = {
   rating: number;
   students: number;
   price: string;
+  isPremium: boolean;
   image: string;
 };
 
@@ -32,6 +36,7 @@ const mockCourses: Course[] = [
     rating: 4.8,
     students: 248,
     price: "Free",
+    isPremium: false,
     image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
@@ -43,7 +48,8 @@ const mockCourses: Course[] = [
     duration: "8 weeks",
     rating: 4.7,
     students: 173,
-    price: "Free",
+    price: "S$19.99",
+    isPremium: true,
     image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
@@ -55,7 +61,8 @@ const mockCourses: Course[] = [
     duration: "12 weeks",
     rating: 4.9,
     students: 215,
-    price: "Free",
+    price: "S$24.99",
+    isPremium: true,
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
@@ -67,7 +74,8 @@ const mockCourses: Course[] = [
     duration: "10 weeks",
     rating: 4.6,
     students: 142,
-    price: "Free",
+    price: "S$29.99",
+    isPremium: true,
     image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
@@ -80,6 +88,7 @@ const mockCourses: Course[] = [
     rating: 4.7,
     students: 186,
     price: "Free",
+    isPremium: false,
     image: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
@@ -92,6 +101,7 @@ const mockCourses: Course[] = [
     rating: 4.5,
     students: 167,
     price: "Free",
+    isPremium: false,
     image: "https://images.unsplash.com/photo-1581093804475-577d72e73ef7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
@@ -103,7 +113,8 @@ const mockCourses: Course[] = [
     duration: "11 weeks",
     rating: 4.8,
     students: 156,
-    price: "Free",
+    price: "S$19.99",
+    isPremium: true,
     image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
@@ -115,7 +126,8 @@ const mockCourses: Course[] = [
     duration: "12 weeks",
     rating: 4.9,
     students: 168,
-    price: "Free",
+    price: "S$29.99",
+    isPremium: true,
     image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   }
 ];
@@ -123,12 +135,66 @@ const mockCourses: Course[] = [
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
+  const [searchParams] = useSearchParams();
+  const contentId = searchParams.get("content");
 
   const filteredCourses = mockCourses.filter(
     course => 
       (selectedLevel === "all" || course.level === selectedLevel) && 
       (selectedSubject === "all" || course.subject === selectedSubject)
   );
+
+  useEffect(() => {
+    // If contentId is in URL params, find and select that course
+    if (contentId) {
+      const course = mockCourses.find(c => c.id === contentId);
+      if (course) {
+        setSelectedCourse(course);
+        setDialogOpen(true);
+      }
+    }
+  }, [contentId]);
+
+  const handleWatchNow = async (course: Course) => {
+    if (!course.isPremium) {
+      // Free course, just open it
+      setSelectedCourse(course);
+      setDialogOpen(true);
+      return;
+    }
+
+    // Check if user has premium or has purchased this course
+    const hasAccess = isPremium || await hasAccessToContent(course.id, "video_tutorial");
+    
+    if (hasAccess) {
+      // User has access, open the course
+      setSelectedCourse(course);
+      setDialogOpen(true);
+    } else {
+      // User doesn't have access, prompt to purchase
+      setSelectedCourse(course);
+      setDialogOpen(true);
+    }
+  };
+
+  const handlePurchase = async () => {
+    if (!selectedCourse) return;
+    
+    const checkoutUrl = await startCheckoutSession("video_tutorial", selectedCourse.id);
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    }
+  };
+
+  const handleSubscribe = async () => {
+    const checkoutUrl = await startCheckoutSession("premium_subscription");
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -171,12 +237,18 @@ const Courses = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filteredCourses.map((course) => (
             <Card key={course.id} className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
-              <div className="h-48 overflow-hidden">
+              <div className="h-48 overflow-hidden relative">
                 <img 
                   src={course.image} 
                   alt={course.title} 
                   className="w-full h-full object-cover transition-transform hover:scale-105"
                 />
+                {course.isPremium && (
+                  <div className="absolute top-2 right-2 bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
+                    <Crown className="h-3 w-3 mr-1" />
+                    Premium
+                  </div>
+                )}
               </div>
               <CardContent className="pt-6">
                 <div className="flex items-start justify-between mb-2">
@@ -203,7 +275,10 @@ const Courses = () => {
               </CardContent>
               <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
                 <div className="font-semibold text-learnscape-blue">{course.price}</div>
-                <Button className="bg-learnscape-blue hover:bg-blue-700">
+                <Button 
+                  className="bg-learnscape-blue hover:bg-blue-700"
+                  onClick={() => handleWatchNow(course)}
+                >
                   <Video className="h-4 w-4 mr-2" />
                   Watch Now
                 </Button>
@@ -233,6 +308,55 @@ const Courses = () => {
         </Pagination>
       </div>
       <Footer />
+
+      {/* Video preview dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          {selectedCourse && (
+            <>
+              <DialogHeader>
+                <DialogTitle>{selectedCourse.title}</DialogTitle>
+                <DialogDescription>{selectedCourse.description}</DialogDescription>
+              </DialogHeader>
+              
+              {/* Content based on access */}
+              {(isPremium || !selectedCourse.isPremium || hasAccessToContent(selectedCourse.id, "video_tutorial")) ? (
+                <div className="aspect-video bg-black rounded-md overflow-hidden">
+                  {/* This would be a real video player in a production app */}
+                  <div className="w-full h-full flex items-center justify-center text-white">
+                    <div className="text-center">
+                      <Video className="h-16 w-16 mx-auto mb-4" />
+                      <p>Video player would be embedded here</p>
+                      <p className="text-sm text-gray-400 mt-2">
+                        This is a placeholder for the actual video content
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="aspect-video bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
+                  <div className="text-center p-8">
+                    <Lock className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+                    <h3 className="text-xl font-semibold mb-2">Premium Content</h3>
+                    <p className="text-gray-600 mb-6">
+                      This video tutorial requires a purchase or premium subscription to access.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Button onClick={handlePurchase}>
+                        Purchase ({selectedCourse.price})
+                      </Button>
+                      <Button variant="outline" onClick={handleSubscribe}>
+                        <Crown className="mr-2 h-4 w-4" />
+                        Subscribe to Premium
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
