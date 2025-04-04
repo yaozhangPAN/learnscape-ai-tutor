@@ -13,72 +13,31 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const QUESTIONS_PER_PAGE = 10;
 
 const questionData = [
-  { id: 1, title: "Grade 6 - Reading Comprehension - 1", subject: "English", type: "Reading", level: "Primary 6", term: "CA1", date: "2025-03-01" },
-  { id: 2, title: "Grade 6 - Grammar Practice - 1", subject: "English", type: "Grammar", level: "Primary 6", term: "CA1", date: "2025-03-05" },
-  { id: 3, title: "Grade 5 - Reading Comprehension - 1", subject: "English", type: "Reading", level: "Primary 5", term: "SA1", date: "2025-03-08" },
-  { id: 4, title: "Grade 6 - Essay Writing - 1", subject: "English", type: "Writing", level: "Primary 6", term: "CA2", date: "2025-03-10" },
-  { id: 5, title: "Grade 6 - Vocabulary Practice - 1", subject: "English", type: "Vocabulary", level: "Primary 6", term: "CA2", date: "2025-03-12" },
-  { id: 6, title: "Grade 5 - Listening Practice - 1", subject: "English", type: "Listening", level: "Primary 5", term: "SA2", date: "2025-03-15" },
-  { id: 7, title: "Grade 4 - Reading Comprehension - 1", subject: "English", type: "Reading", level: "Primary 4", term: "CA1", date: "2025-03-18" },
-  { id: 8, title: "Grade 6 - Comprehensive Test - 1", subject: "English", type: "Comprehensive", level: "Primary 6", term: "SA1", date: "2025-03-20" },
-  { id: 9, title: "Grade 5 - Grammar Practice - 1", subject: "English", type: "Grammar", level: "Primary 5", term: "CA1", date: "2025-03-22" },
-  { id: 10, title: "Grade 6 - Reading Comprehension - 2", subject: "English", type: "Reading", level: "Primary 6", term: "SA2", date: "2025-03-25" },
-  { id: 11, title: "Grade 4 - Vocabulary Practice - 1", subject: "English", type: "Vocabulary", level: "Primary 4", term: "CA2", date: "2025-03-28" },
-  { id: 12, title: "Grade 6 - Reading Comprehension - 3", subject: "English", type: "Reading", level: "Primary 6", term: "SA1", date: "2025-04-01" },
-  { id: 13, title: "Grade 3 - Addition and Subtraction", subject: "Math", type: "Arithmetic", level: "Primary 3", term: "CA1", date: "2025-03-02" },
-  { id: 14, title: "Grade 4 - Multiplication and Division", subject: "Math", type: "Arithmetic", level: "Primary 4", term: "SA1", date: "2025-03-06" },
-  { id: 15, title: "Grade 5 - Fractions", subject: "Math", type: "Fractions", level: "Primary 5", term: "CA2", date: "2025-03-11" },
-  { id: 16, title: "Grade 6 - Geometry", subject: "Math", type: "Geometry", level: "Primary 6", term: "SA2", date: "2025-03-16" },
   { id: 17, title: "Grade 2 - Basic Characters", subject: "Chinese", type: "Characters", level: "Primary 2", term: "CA1", date: "2025-03-03" },
   { id: 18, title: "Grade 3 - Reading Practice", subject: "Chinese", type: "Reading", level: "Primary 3", term: "SA1", date: "2025-03-09" },
   { id: 19, title: "Grade 4 - Composition", subject: "Chinese", type: "Writing", level: "Primary 4", term: "CA2", date: "2025-03-14" },
-  { id: 20, title: "Grade 6 - Comprehensive Test", subject: "Chinese", type: "Comprehensive", level: "Primary 6", term: "SA2", date: "2025-03-19" },
-  { id: 21, title: "Grade 3 - Plants and Animals", subject: "Science", type: "Biology", level: "Primary 3", term: "CA1", date: "2025-03-04" },
-  { id: 22, title: "Grade 4 - Energy and Forces", subject: "Science", type: "Physics", level: "Primary 4", term: "SA1", date: "2025-03-13" },
-  { id: 23, title: "Grade 5 - Materials and Matter", subject: "Science", type: "Chemistry", level: "Primary 5", term: "CA2", date: "2025-03-17" },
-  { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
+  { id: 20, title: "Grade 6 - Comprehensive Test", subject: "Chinese", type: "Comprehensive", level: "Primary 6", term: "SA2", date: "2025-03-19" }
 ];
 
 const questionModules = [
-  {
-    title: "English Language",
-    description: "Improve students' reading comprehension and analytical skills",
-    icon: <BookOpen className="h-6 w-6 text-white" />,
-    count: questionData.filter(q => q.subject === "English").length,
-    color: "bg-learnscape-blue text-white"
-  },
-  {
-    title: "Mathematics",
-    description: "Strengthen numerical reasoning and problem-solving abilities",
-    icon: <FileText className="h-6 w-6 text-white" />,
-    count: questionData.filter(q => q.subject === "Math").length,
-    color: "bg-learnscape-purple text-white"
-  },
   {
     title: "Chinese Language",
     description: "Develop language proficiency and cultural understanding",
     icon: <Book className="h-6 w-6 text-white" />,
     count: questionData.filter(q => q.subject === "Chinese").length,
     color: "bg-orange-500 text-white"
-  },
-  {
-    title: "Science",
-    description: "Foster scientific inquiry and critical thinking",
-    icon: <GraduationCap className="h-6 w-6 text-white" />,
-    count: questionData.filter(q => q.subject === "Science").length,
-    color: "bg-green-500 text-white"
   }
 ];
 
 const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
-const subjects = ["All Subjects", "English", "Math", "Chinese", "Science"];
+const subjects = ["Chinese"];
 const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
 const QuestionBank = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGrade, setSelectedGrade] = useState("All Grades");
-  const [selectedSubject, setSelectedSubject] = useState("All Subjects");
+  const [selectedSubject, setSelectedSubject] = useState("Chinese");
   const [selectedTerm, setSelectedTerm] = useState("All Terms");
 
   // Apply all filters
@@ -87,19 +46,15 @@ const QuestionBank = () => {
     const matchesSearch = 
       question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.subject.toLowerCase().includes(searchTerm.toLowerCase());
+      question.level.toLowerCase().includes(searchTerm.toLowerCase());
     
     // Grade filter
     const matchesGrade = selectedGrade === "All Grades" || question.level === selectedGrade;
     
-    // Subject filter
-    const matchesSubject = selectedSubject === "All Subjects" || question.subject === selectedSubject;
-    
     // Term filter
     const matchesTerm = selectedTerm === "All Terms" || question.term === selectedTerm;
     
-    return matchesSearch && matchesGrade && matchesSubject && matchesTerm;
+    return matchesSearch && matchesGrade && matchesTerm;
   });
 
   const totalPages = Math.ceil(filteredQuestions.length / QUESTIONS_PER_PAGE);
@@ -122,7 +77,7 @@ const QuestionBank = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold mb-4">Question Bank</h1>
           <p className="text-lg max-w-3xl">
-            Our comprehensive question bank covers English, Math, Chinese, and Science for Primary 1 to Primary 6 students.
+            Our comprehensive question bank covers Chinese for Primary 1 to Primary 6 students.
             Practice with questions designed for different assessment periods: CA1, SA1, CA2, and SA2.
           </p>
         </div>
@@ -131,7 +86,7 @@ const QuestionBank = () => {
       {/* Question Modules */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-8">Subject Areas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
           {questionModules.map((module, index) => (
             <QuestionModule
               key={index}
@@ -167,7 +122,7 @@ const QuestionBank = () => {
               />
             </div>
             
-            {/* Subject Filter */}
+            {/* Subject Filter - Only Chinese */}
             <div>
               <Select 
                 value={selectedSubject} 
@@ -175,6 +130,7 @@ const QuestionBank = () => {
                   setSelectedSubject(value);
                   handleFilterChange();
                 }}
+                disabled
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Subject" />
@@ -239,7 +195,6 @@ const QuestionBank = () => {
                 variant="outline" 
                 className="w-full"
                 onClick={() => {
-                  setSelectedSubject("All Subjects");
                   setSelectedGrade("All Grades");
                   setSelectedTerm("All Terms");
                   setSearchTerm("");
@@ -258,7 +213,6 @@ const QuestionBank = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Question Title</TableHead>
-                    <TableHead>Subject</TableHead>
                     <TableHead>Level</TableHead>
                     <TableHead>Term</TableHead>
                     <TableHead>Date</TableHead>
@@ -270,7 +224,6 @@ const QuestionBank = () => {
                     currentQuestions.map((question) => (
                       <TableRow key={question.id}>
                         <TableCell className="font-medium">{question.title}</TableCell>
-                        <TableCell>{question.subject}</TableCell>
                         <TableCell>{question.level}</TableCell>
                         <TableCell>{question.term}</TableCell>
                         <TableCell>{question.date}</TableCell>
@@ -281,7 +234,7 @@ const QuestionBank = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                      <TableCell colSpan={5} className="text-center py-8 text-gray-500">
                         No questions match your search criteria. Try adjusting your filters.
                       </TableCell>
                     </TableRow>
