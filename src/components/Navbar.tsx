@@ -30,6 +30,9 @@ const Navbar = () => {
             <Link to="/question-bank" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Question Bank
             </Link>
+            <Link to="/leaderboard" className="text-gray-700 hover:text-learnscape-blue transition-colors">
+              Leaderboard
+            </Link>
             <Link to="/about" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               About Us
             </Link>
@@ -86,6 +89,13 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Question Bank
+            </Link>
+            <Link 
+              to="/leaderboard" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Leaderboard
             </Link>
             <Link 
               to="/about" 

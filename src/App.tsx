@@ -11,6 +11,7 @@ import MockExam from "./pages/MockExam";
 import Courses from "./pages/Courses";
 import AboutUs from "./pages/AboutUs";
 import QuestionBank from "./pages/QuestionBank";
+import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/courses" element={<Courses />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/question-bank" element={<QuestionBank />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
