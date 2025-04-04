@@ -201,7 +201,7 @@ const Courses = () => {
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Video Tutorials</h1>
+          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Star Teacher Video Lessons</h1>
           <p className="text-gray-600">
             Access high-quality video tutorials designed by expert educators to help you master key concepts and excel in your exams.
           </p>

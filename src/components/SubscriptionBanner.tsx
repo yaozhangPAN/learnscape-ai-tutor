@@ -52,8 +52,8 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
       description = "Subscribe to our premium plan to receive personalized learning recommendations every day.";
       break;
     case "video-tutorial":
-      title = "Premium Video Tutorial";
-      description = "Purchase this video tutorial or subscribe to our premium plan for unlimited access to all video tutorials.";
+      title = "Premium Star Teacher Video Lesson";
+      description = "Purchase this video lesson or subscribe to our premium plan for unlimited access to all Star Teacher Video Lessons.";
       break;
   }
 

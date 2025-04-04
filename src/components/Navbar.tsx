@@ -24,7 +24,7 @@ const Navbar = () => {
 
   const navLinks = [
     { path: "/question-bank", name: "Question Bank" },
-    { path: "/video-tutorials", name: "Video Tutorials" },
+    { path: "/video-tutorials", name: "Star Teacher Video Lessons" },
     { path: "/mock-exam", name: "Mock Exam" },
     { path: "/worksheets", name: "Worksheets" },
     { path: "/leaderboard", name: "Leaderboard" },
