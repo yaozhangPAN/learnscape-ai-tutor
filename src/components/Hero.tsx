@@ -31,9 +31,9 @@ const Hero = () => {
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className={`sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
               <h1 className="text-4xl font-extrabold tracking-tight text-learnscape-darkBlue sm:text-5xl md:text-6xl">
-                <span className="block mb-2">Learning is an</span>
+                <span className="block mb-2">AI-Powered Learning for</span>
                 <span className="block mt-1 gradient-text flex items-center gap-2">
-                  Adventure! <Sparkles className="inline-block w-6 h-6 md:w-8 md:h-8 animate-wiggle text-yellow-400" />
+                  Singapore Students <Sparkles className="inline-block w-6 h-6 md:w-8 md:h-8 animate-wiggle text-yellow-400" />
                 </span>
               </h1>
               <p className="mt-3 text-base text-gray-600 sm:mt-5 sm:text-lg">
