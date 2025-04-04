@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -537,7 +537,6 @@ const MockExam = () => {
                       <PaginationItem>
                         <PaginationPrevious 
                           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                          disabled={currentPage === 1}
                           className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
@@ -576,7 +575,6 @@ const MockExam = () => {
                       <PaginationItem>
                         <PaginationNext 
                           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                          disabled={currentPage === totalPages}
                           className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
                         />
                       </PaginationItem>
