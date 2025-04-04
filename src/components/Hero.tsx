@@ -68,34 +68,36 @@ const Hero = () => {
               <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
                 <div className="relative block w-full h-full bg-learnscape-lightGray rounded-lg overflow-hidden">
                   <div className="p-8">
-                    <div className="bg-white rounded-lg shadow-md p-6 animate-float hover:animate-bounce-slow transition-all">
-                      <div className="flex space-x-4 items-center mb-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center animate-pulse">
-                          <Brain className="text-white h-6 w-6" />
+                    <Link to="/ai-tutor" className="block">
+                      <div className="bg-white rounded-lg shadow-md p-6 animate-float hover:animate-bounce-slow transition-all">
+                        <div className="flex space-x-4 items-center mb-4">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center animate-pulse">
+                            <Brain className="text-white h-6 w-6" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-learnscape-darkBlue flex items-center">
+                              AI Tutor <Sparkles className="ml-2 h-4 w-4 text-yellow-400" />
+                            </h3>
+                            <p className="text-sm text-gray-500">Your learning companion</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-lg font-semibold text-learnscape-darkBlue flex items-center">
-                            AI Tutor <Sparkles className="ml-2 h-4 w-4 text-yellow-400" />
-                          </h3>
-                          <p className="text-sm text-gray-500">Your learning companion</p>
+                        <div className="space-y-3">
+                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-green-500 rounded-full animate-pulse" style={{ width: '85%' }}></div>
+                          </div>
+                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-yellow-500 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                          </div>
+                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-red-500 rounded-full animate-pulse" style={{ width: '35%' }}></div>
+                          </div>
+                        </div>
+                        <div className="mt-4 text-sm text-gray-600 bg-yellow-50 p-3 rounded-lg border border-yellow-100 relative">
+                          <span className="absolute -top-2 -left-2 bg-yellow-200 rounded-full w-5 h-5 flex items-center justify-center text-xs">💡</span>
+                          Let's practice more multiplication today!
                         </div>
                       </div>
-                      <div className="space-y-3">
-                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div className="h-full bg-green-500 rounded-full animate-pulse" style={{ width: '85%' }}></div>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div className="h-full bg-yellow-500 rounded-full animate-pulse" style={{ width: '60%' }}></div>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500 rounded-full animate-pulse" style={{ width: '35%' }}></div>
-                        </div>
-                      </div>
-                      <div className="mt-4 text-sm text-gray-600 bg-yellow-50 p-3 rounded-lg border border-yellow-100 relative">
-                        <span className="absolute -top-2 -left-2 bg-yellow-200 rounded-full w-5 h-5 flex items-center justify-center text-xs">💡</span>
-                        Let's practice more multiplication today!
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               </div>
