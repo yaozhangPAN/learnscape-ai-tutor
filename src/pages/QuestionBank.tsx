@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { BookOpen, FileText, ListCheck, Search, GraduationCap, Book, Calendar } from "lucide-react";
-import QuestionModule from "@/components/QuestionModule";
+import { Search, Calendar } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DailyRecommendations from "@/components/AITutor/DailyRecommendations";
@@ -39,44 +38,6 @@ const questionData = [
   { id: 22, title: "Grade 4 - Energy and Forces", subject: "Science", type: "Physics", level: "Primary 4", term: "SA1", date: "2025-03-13" },
   { id: 23, title: "Grade 5 - Materials and Matter", subject: "Science", type: "Chemistry", level: "Primary 5", term: "CA2", date: "2025-03-17" },
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
-];
-
-const questionModules = [
-  {
-    title: "English Language",
-    description: "Improve students' reading comprehension and analytical skills",
-    icon: <BookOpen className="h-6 w-6 text-white" />,
-    count: questionData.filter(q => q.subject === "English").length,
-    color: "bg-learnscape-blue text-white"
-  },
-  {
-    title: "Mathematics",
-    description: "Strengthen numerical reasoning and problem-solving abilities",
-    icon: <FileText className="h-6 w-6 text-white" />,
-    count: questionData.filter(q => q.subject === "Math").length,
-    color: "bg-learnscape-purple text-white"
-  },
-  {
-    title: "Chinese Language",
-    description: "Develop language proficiency and cultural understanding",
-    icon: <Book className="h-6 w-6 text-white" />,
-    count: questionData.filter(q => q.subject === "Chinese").length,
-    color: "bg-orange-500 text-white"
-  },
-  {
-    title: "Science",
-    description: "Foster scientific inquiry and critical thinking",
-    icon: <GraduationCap className="h-6 w-6 text-white" />,
-    count: questionData.filter(q => q.subject === "Science").length,
-    color: "bg-green-500 text-white"
-  },
-  {
-    title: "Daily Recommendations",
-    description: "Personalized study recommendations based on your progress",
-    icon: <Calendar className="h-6 w-6 text-white" />,
-    count: 5,
-    color: "bg-amber-500 text-white"
-  }
 ];
 
 const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
@@ -138,36 +99,8 @@ const QuestionBank = () => {
         </div>
       </div>
 
-      {/* Question Modules */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-8">Subject Areas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {questionModules.map((module, index) => (
-            <QuestionModule
-              key={index}
-              title={module.title}
-              description={module.description}
-              icon={module.icon}
-              count={module.count}
-              color={module.color}
-              onClick={() => {
-                if (module.title === "Daily Recommendations") {
-                  setActiveTab("daily-recommendations");
-                } else {
-                  setActiveTab("question-list");
-                  if (module.title !== "Daily Recommendations") {
-                    setSelectedSubject(module.title.replace(" Language", ""));
-                    handleFilterChange();
-                  }
-                }
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
       {/* Tabs for Question List and Daily Recommendations */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8">
             <TabsTrigger value="question-list" className="text-base">
