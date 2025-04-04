@@ -68,7 +68,7 @@ const mockCourses: Course[] = [
     rating: 4.6,
     students: 142,
     price: "Free",
-    image: "https://images.unsplash.com/photo-1580237072263-0c749a3d8c98?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
     id: "5",
@@ -93,6 +93,30 @@ const mockCourses: Course[] = [
     students: 167,
     price: "Free",
     image: "https://images.unsplash.com/photo-1581093804475-577d72e73ef7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+  },
+  {
+    id: "7",
+    title: "Primary 6 Chinese - Mastering Comprehension",
+    description: "Improve your reading and understanding of Chinese texts for PSLE",
+    level: "p6",
+    subject: "chinese",
+    duration: "11 weeks",
+    rating: 4.8,
+    students: 156,
+    price: "Free",
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+  },
+  {
+    id: "8",
+    title: "Primary 6 Chinese - Mastering Composition",
+    description: "Develop essential writing skills for Chinese compositions in PSLE",
+    level: "p6",
+    subject: "chinese",
+    duration: "12 weeks",
+    rating: 4.9,
+    students: 168,
+    price: "Free",
+    image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   }
 ];
 
