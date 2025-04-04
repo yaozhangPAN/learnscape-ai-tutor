@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -33,7 +32,8 @@ import {
   BookOpen, 
   Star, 
   Filter,
-  ChevronDown
+  ChevronDown,
+  PlayCircle
 } from "lucide-react";
 
 type ExamPaper = {
@@ -46,6 +46,7 @@ type ExamPaper = {
   level: string;
   downloadCount: number;
   isTopSchool?: boolean;
+  isOnlineAvailable?: boolean;
 };
 
 const mockExamPapers: ExamPaper[] = [
@@ -58,7 +59,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "english",
     level: "p6",
     downloadCount: 245,
-    isTopSchool: true
+    isTopSchool: true,
+    isOnlineAvailable: true
   },
   {
     id: "2",
@@ -69,7 +71,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "mathematics",
     level: "p6",
     downloadCount: 317,
-    isTopSchool: true
+    isTopSchool: true,
+    isOnlineAvailable: true
   },
   {
     id: "3",
@@ -80,7 +83,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "science",
     level: "p6",
     downloadCount: 198,
-    isTopSchool: true
+    isTopSchool: true,
+    isOnlineAvailable: true
   },
   {
     id: "4",
@@ -91,7 +95,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "chinese",
     level: "p5",
     downloadCount: 156,
-    isTopSchool: true
+    isTopSchool: true,
+    isOnlineAvailable: false
   },
   {
     id: "5",
@@ -102,7 +107,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "mathematics",
     level: "p5",
     downloadCount: 267,
-    isTopSchool: true
+    isTopSchool: true,
+    isOnlineAvailable: false
   },
   {
     id: "6",
@@ -113,7 +119,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "science",
     level: "p5",
     downloadCount: 182,
-    isTopSchool: true
+    isTopSchool: true,
+    isOnlineAvailable: false
   },
   {
     id: "7",
@@ -124,7 +131,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "english",
     level: "p6",
     downloadCount: 203,
-    isTopSchool: false
+    isTopSchool: false,
+    isOnlineAvailable: false
   },
   {
     id: "8",
@@ -135,7 +143,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "mathematics",
     level: "p6",
     downloadCount: 289,
-    isTopSchool: false
+    isTopSchool: false,
+    isOnlineAvailable: false
   },
   {
     id: "9",
@@ -146,7 +155,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "science",
     level: "p5",
     downloadCount: 178,
-    isTopSchool: false
+    isTopSchool: false,
+    isOnlineAvailable: false
   },
   {
     id: "10",
@@ -157,7 +167,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "english",
     level: "p5",
     downloadCount: 165,
-    isTopSchool: false
+    isTopSchool: false,
+    isOnlineAvailable: false
   },
   {
     id: "11",
@@ -168,7 +179,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "mathematics",
     level: "p5",
     downloadCount: 192,
-    isTopSchool: false
+    isTopSchool: false,
+    isOnlineAvailable: false
   },
   {
     id: "12",
@@ -179,7 +191,8 @@ const mockExamPapers: ExamPaper[] = [
     subject: "science",
     level: "p6",
     downloadCount: 213,
-    isTopSchool: false
+    isTopSchool: false,
+    isOnlineAvailable: false
   }
 ];
 
@@ -201,7 +214,6 @@ const MockExam = () => {
   const [currentPage, setCurrentPage] = useState<number>(parseInt(searchParams.get("page") || "1"));
   const itemsPerPage = viewMode === "PAPER_MOCK" ? 10 : 20;
 
-  // Filter papers based on selected filters
   const filteredPapers = mockExamPapers.filter(paper => {
     const matchesLevel = selectedLevel === "all" || paper.level === selectedLevel;
     const matchesSubject = selectedSubject === "all" || paper.subject === selectedSubject;
@@ -217,12 +229,10 @@ const MockExam = () => {
            matchesType && matchesTopSchool && matchesSearch;
   });
 
-  // Pagination
   const totalPages = Math.ceil(filteredPapers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = filteredPapers.slice(startIndex, startIndex + itemsPerPage);
 
-  // Update URL parameters when filters change
   useEffect(() => {
     const params: Record<string, string> = {
       mode: viewMode,
@@ -242,7 +252,6 @@ const MockExam = () => {
       params.search = searchQuery;
     }
     
-    // Remove empty params
     Object.keys(params).forEach(key => {
       if (!params[key]) {
         delete params[key];
@@ -255,7 +264,6 @@ const MockExam = () => {
     selectedYear, selectedType, topSchoolsOnly, currentPage, searchQuery
   ]);
 
-  // Reset page number when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -263,13 +271,11 @@ const MockExam = () => {
     selectedYear, selectedType, topSchoolsOnly, searchQuery
   ]);
 
-  // Switch between Mock Exam and Practice modes
   const handleModeChange = (mode: string) => {
     setViewMode(mode);
     navigate(`/mock-exam?mode=${mode}`);
   };
 
-  // Reset all filters
   const resetFilters = () => {
     setSelectedLevel("all");
     setSelectedSubject("all");
@@ -278,6 +284,10 @@ const MockExam = () => {
     setSelectedType("all");
     setTopSchoolsOnly(false);
     setSearchQuery("");
+  };
+
+  const handleTakeExam = (examId: string) => {
+    navigate(`/take-exam/${examId}`);
   };
 
   return (
@@ -292,7 +302,6 @@ const MockExam = () => {
           </p>
         </div>
 
-        {/* Mode tabs */}
         <div className="mb-6">
           <Tabs value={viewMode} onValueChange={handleModeChange}>
             <TabsList className="grid w-full grid-cols-2">
@@ -308,7 +317,6 @@ const MockExam = () => {
           </Tabs>
         </div>
 
-        {/* Search and filters section */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
             <div className="relative flex-grow">
@@ -420,7 +428,6 @@ const MockExam = () => {
           </div>
         </div>
 
-        {/* Results display */}
         <div className="bg-white rounded-lg shadow-md mb-8">
           <div className="p-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
@@ -453,7 +460,6 @@ const MockExam = () => {
 
           {filteredPapers.length > 0 ? (
             <div>
-              {/* Table view for larger screens */}
               <div className="hidden md:block overflow-x-auto">
                 <Table>
                   <TableHeader>
@@ -483,11 +489,22 @@ const MockExam = () => {
                         <TableCell>{paper.year}</TableCell>
                         <TableCell>{paper.type}</TableCell>
                         <TableCell className="text-right">{paper.downloadCount}</TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right space-x-2">
                           <Button size="sm">
                             <Download className="h-4 w-4 mr-2" />
                             Download
                           </Button>
+                          {paper.isOnlineAvailable && (
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                              onClick={() => handleTakeExam(paper.id)}
+                            >
+                              <PlayCircle className="h-4 w-4 mr-2" />
+                              Take Online
+                            </Button>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -495,7 +512,6 @@ const MockExam = () => {
                 </Table>
               </div>
 
-              {/* Card view for mobile */}
               <div className="md:hidden">
                 {currentItems.map((paper) => (
                   <Card key={paper.id} className="mb-4 border-gray-200 mx-4 my-4">
@@ -519,17 +535,25 @@ const MockExam = () => {
                         <span>{paper.downloadCount} downloads</span>
                       </div>
                     </CardContent>
-                    <CardFooter>
-                      <Button variant="outline" className="w-full">
+                    <CardFooter className="flex gap-2">
+                      <Button variant="outline" className="flex-1">
                         <Download className="h-4 w-4 mr-2" />
-                        Download Paper
+                        Download
                       </Button>
+                      {paper.isOnlineAvailable && (
+                        <Button 
+                          className="flex-1 bg-green-600 hover:bg-green-700" 
+                          onClick={() => handleTakeExam(paper.id)}
+                        >
+                          <PlayCircle className="h-4 w-4 mr-2" />
+                          Take Online
+                        </Button>
+                      )}
                     </CardFooter>
                   </Card>
                 ))}
               </div>
 
-              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="p-4 border-t border-gray-200">
                   <Pagination>
@@ -543,13 +567,11 @@ const MockExam = () => {
                       
                       {Array.from({ length: totalPages }, (_, i) => i + 1)
                         .filter(page => {
-                          // Show first, last, and pages around current page
                           return page === 1 || 
                                  page === totalPages || 
                                  (page >= currentPage - 1 && page <= currentPage + 1);
                         })
                         .map((page, index, array) => {
-                          // Add ellipsis if there are gaps
                           const shouldShowEllipsisAfter = index < array.length - 1 && array[index + 1] - page > 1;
                           
                           return (

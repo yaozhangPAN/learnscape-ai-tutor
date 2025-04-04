@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import MockExam from "./pages/MockExam";
+import OnlineExam from "./components/ExamTaking/OnlineExam";
 import Courses from "./pages/Courses";
 import AboutUs from "./pages/AboutUs";
 import QuestionBank from "./pages/QuestionBank";
@@ -68,6 +70,14 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <MockExam />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/take-exam/:examId" 
+                element={
+                  <ProtectedRoute>
+                    <OnlineExam />
                   </ProtectedRoute>
                 } 
               />
