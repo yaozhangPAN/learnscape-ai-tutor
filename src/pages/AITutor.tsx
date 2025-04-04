@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Calendar } from "lucide-react";
+import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Calendar, Camera } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,6 +11,7 @@ import OralExamPractice from "@/components/AITutor/OralExamPractice";
 import TutorMe from "@/components/AITutor/TutorMe";
 import ErrorAnalysis from "@/components/AITutor/ErrorAnalysis";
 import DailyRecommendations from "@/components/AITutor/DailyRecommendations";
+import SnapAndSolve from "@/components/AITutor/SnapAndSolve";
 import SubscriptionBanner from "@/components/SubscriptionBanner";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 
@@ -67,6 +68,14 @@ const AITutor = () => {
       description: "Get personalized daily study recommendations tailored to your learning needs.",
       component: <DailyRecommendations />,
       emoji: "📅"
+    },
+    {
+      id: "snap-and-solve",
+      title: "Snap & Solve",
+      icon: <Camera className="h-8 w-8 text-indigo-500" />,
+      description: "Take a photo of your question to get step by step guidance for reaching solutions!",
+      component: <SnapAndSolve />,
+      emoji: "📸"
     }
   ];
 
@@ -129,7 +138,7 @@ const AITutor = () => {
 
           <div className={`bg-white rounded-lg shadow-md p-6 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
             <Tabs defaultValue="writing-coach" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-5 mb-8">
+              <TabsList className="grid grid-cols-6 mb-8">
                 {tutorOptions.map((option) => (
                   <TabsTrigger key={option.id} value={option.id} className="flex items-center justify-center gap-2">
                     {option.emoji}
