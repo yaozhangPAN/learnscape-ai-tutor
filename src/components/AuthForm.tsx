@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 // Form schemas
 const loginSchema = z.object({
@@ -33,6 +34,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const AuthForm = () => {
   const [activeTab, setActiveTab] = useState<string>("login");
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -57,26 +59,73 @@ const AuthForm = () => {
     }
   });
 
-  const onLoginSubmit = (data: LoginFormValues) => {
-    // In a real application, this would be an API call
-    console.log("Login data:", data);
-    toast({
-      title: "Login Successful",
-      description: "Welcome back to Learnscape!",
-    });
-    // Redirect to dashboard
-    navigate("/dashboard");
+  const onLoginSubmit = async (data: LoginFormValues) => {
+    setIsLoading(true);
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Login Successful",
+        description: "Welcome back to Learnscape!",
+      });
+      
+      // Redirect to dashboard
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast({
+        title: "Login Failed",
+        description: error.message || "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const onRegisterSubmit = (data: RegisterFormValues) => {
-    // In a real application, this would be an API call
-    console.log("Register data:", data);
-    toast({
-      title: "Registration Successful",
-      description: "Your account has been created successfully!",
-    });
-    // Redirect to dashboard
-    navigate("/dashboard");
+  const onRegisterSubmit = async (data: RegisterFormValues) => {
+    setIsLoading(true);
+    
+    try {
+      // Register the user with Supabase
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            name: data.name,
+            userType: data.userType,
+          },
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Registration Successful",
+        description: "Your account has been created successfully! Please check your email for verification.",
+      });
+      
+      // Redirect to dashboard or confirmation page
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast({
+        title: "Registration Failed",
+        description: error.message || "An error occurred during registration.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -103,6 +152,7 @@ const AuthForm = () => {
                       type="email"
                       placeholder="your.email@example.com"
                       {...loginForm.register("email")}
+                      disabled={isLoading}
                     />
                     {loginForm.formState.errors.email && (
                       <p className="text-sm text-red-500">{loginForm.formState.errors.email.message}</p>
@@ -119,6 +169,7 @@ const AuthForm = () => {
                       id="password"
                       type="password"
                       {...loginForm.register("password")}
+                      disabled={isLoading}
                     />
                     {loginForm.formState.errors.password && (
                       <p className="text-sm text-red-500">{loginForm.formState.errors.password.message}</p>
@@ -126,8 +177,8 @@ const AuthForm = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button type="submit" className="w-full bg-learnscape-blue hover:bg-blue-700">
-                    Login
+                  <Button type="submit" className="w-full bg-learnscape-blue hover:bg-blue-700" disabled={isLoading}>
+                    {isLoading ? "Logging in..." : "Login"}
                   </Button>
                 </CardFooter>
               </form>
@@ -148,6 +199,7 @@ const AuthForm = () => {
                       id="name"
                       placeholder="John Doe"
                       {...registerForm.register("name")}
+                      disabled={isLoading}
                     />
                     {registerForm.formState.errors.name && (
                       <p className="text-sm text-red-500">{registerForm.formState.errors.name.message}</p>
@@ -161,6 +213,7 @@ const AuthForm = () => {
                       type="email"
                       placeholder="your.email@example.com"
                       {...registerForm.register("email")}
+                      disabled={isLoading}
                     />
                     {registerForm.formState.errors.email && (
                       <p className="text-sm text-red-500">{registerForm.formState.errors.email.message}</p>
@@ -173,6 +226,7 @@ const AuthForm = () => {
                       id="register-password"
                       type="password"
                       {...registerForm.register("password")}
+                      disabled={isLoading}
                     />
                     {registerForm.formState.errors.password && (
                       <p className="text-sm text-red-500">{registerForm.formState.errors.password.message}</p>
@@ -185,6 +239,7 @@ const AuthForm = () => {
                       id="confirm-password"
                       type="password"
                       {...registerForm.register("confirmPassword")}
+                      disabled={isLoading}
                     />
                     {registerForm.formState.errors.confirmPassword && (
                       <p className="text-sm text-red-500">{registerForm.formState.errors.confirmPassword.message}</p>
@@ -197,6 +252,7 @@ const AuthForm = () => {
                       id="user-type"
                       className="w-full h-10 px-3 rounded-md border border-input bg-background"
                       {...registerForm.register("userType")}
+                      disabled={isLoading}
                     >
                       <option value="student">Student</option>
                       <option value="parent">Parent</option>
@@ -212,8 +268,8 @@ const AuthForm = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button type="submit" className="w-full bg-learnscape-blue hover:bg-blue-700">
-                    Register
+                  <Button type="submit" className="w-full bg-learnscape-blue hover:bg-blue-700" disabled={isLoading}>
+                    {isLoading ? "Creating account..." : "Register"}
                   </Button>
                 </CardFooter>
               </form>

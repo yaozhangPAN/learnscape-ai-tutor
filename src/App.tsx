@@ -3,7 +3,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -19,29 +20,106 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Protected route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isLoading } = useAuth();
+  
+  if (isLoading) {
+    // You could return a loading spinner here
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+  
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/mock-exam" element={<MockExam />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/worksheets" element={<Worksheets />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/question-bank" element={<QuestionBank />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/referral" element={<Referral />} />
-          <Route path="/ai-tutor" element={<AITutor />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Login />} />
+            
+            {/* Protected routes */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/mock-exam" 
+              element={
+                <ProtectedRoute>
+                  <MockExam />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/courses" 
+              element={
+                <ProtectedRoute>
+                  <Courses />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/worksheets" 
+              element={
+                <ProtectedRoute>
+                  <Worksheets />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/question-bank" 
+              element={
+                <ProtectedRoute>
+                  <QuestionBank />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/leaderboard" 
+              element={
+                <ProtectedRoute>
+                  <Leaderboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/referral" 
+              element={
+                <ProtectedRoute>
+                  <Referral />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/ai-tutor" 
+              element={
+                <ProtectedRoute>
+                  <AITutor />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/about" element={<AboutUs />} />
+            
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
