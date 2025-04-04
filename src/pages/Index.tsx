@@ -6,26 +6,11 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col overflow-hidden">
-      {/* Floating educational elements */}
-      <div className="fixed w-8 h-8 bg-learnscape-yellow rounded-full top-[15%] left-[5%] animate-bounce z-10 opacity-70" style={{ animationDuration: '3s' }}></div>
-      <div className="fixed w-6 h-6 bg-learnscape-blue rounded-full top-[30%] right-[8%] animate-ping z-10 opacity-60" style={{ animationDuration: '4s' }}></div>
-      <div className="fixed w-10 h-10 bg-learnscape-purple rounded-full bottom-[20%] left-[7%] animate-pulse z-10 opacity-60" style={{ animationDuration: '5s' }}></div>
-      
-      {/* Math symbols floating around */}
-      <div className="fixed text-2xl font-bold text-learnscape-blue/50 top-[25%] left-[12%] animate-float z-10">+</div>
-      <div className="fixed text-2xl font-bold text-learnscape-purple/50 bottom-[30%] right-[15%] animate-float z-10" style={{ animationDelay: '1s', animationDuration: '6s' }}>÷</div>
-      <div className="fixed text-2xl font-bold text-green-500/50 top-[40%] right-[10%] animate-float z-10" style={{ animationDelay: '2s', animationDuration: '7s' }}>×</div>
-      <div className="fixed text-2xl font-bold text-red-500/50 bottom-[15%] right-[20%] animate-float z-10" style={{ animationDelay: '3s', animationDuration: '5s' }}>−</div>
-      
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <Hero />
       <Features />
-      <div className="py-16 bg-learnscape-yellow/30 relative">
-        {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-40 h-40 bg-learnscape-yellow/40 rounded-full translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-learnscape-purple/20 rounded-full -translate-x-1/2 translate-y-1/2"></div>
-        
+      <div className="py-16 bg-learnscape-yellow/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-extrabold text-learnscape-darkBlue sm:text-4xl">
@@ -37,7 +22,7 @@ const Index = () => {
           </div>
           
           <div className="mt-12 grid gap-8 lg:grid-cols-3">
-            <div className="bg-white p-8 rounded-lg shadow-md transform transition-transform hover:scale-105 hover:shadow-lg">
+            <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="flex items-center mb-4">
                 <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl">
                   L
@@ -52,7 +37,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="bg-white p-8 rounded-lg shadow-md transform transition-transform hover:scale-105 hover:shadow-lg">
+            <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="flex items-center mb-4">
                 <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl">
                   S
@@ -67,7 +52,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="bg-white p-8 rounded-lg shadow-md transform transition-transform hover:scale-105 hover:shadow-lg">
+            <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="flex items-center mb-4">
                 <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl">
                   R

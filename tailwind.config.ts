@@ -100,24 +100,12 @@ export default {
 					'50%': {
 						transform: 'translateY(-10px)'
 					}
-				},
-				'fly-across': {
-					'0%': { 
-						transform: 'translateX(-100%) translateY(0) rotate(0)' 
-					},
-					'50%': { 
-						transform: 'translateX(50vw) translateY(-20vh) rotate(15deg)' 
-					},
-					'100%': { 
-						transform: 'translateX(100vw) translateY(0) rotate(0)' 
-					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'float': 'float 5s ease-in-out infinite',
-				'fly-across': 'fly-across 15s linear infinite'
+				'float': 'float 5s ease-in-out infinite'
 			}
 		}
 	},

@@ -66,13 +66,8 @@ const Features = () => {
   ];
 
   return (
-    <div id="features" className="py-16 bg-white relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 left-0 w-32 h-32 bg-learnscape-yellow/40 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-20 right-10 w-20 h-20 bg-learnscape-purple/30 rounded-full animate-bounce"></div>
-      <div className="absolute bottom-40 left-10 w-16 h-16 bg-learnscape-blue/20 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div id="features" className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-learnscape-darkBlue sm:text-4xl">
             Features That Enhance Learning
@@ -85,7 +80,7 @@ const Features = () => {
         {/* Free Features Section */}
         <div className="mt-16">
           <div className="flex items-center justify-center mb-8">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl mr-4 animate-bounce" style={{ animationDuration: '2s' }}>
+            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl mr-4">
               <span>✓</span>
             </div>
             <h3 className="text-2xl font-bold text-learnscape-darkBlue">
@@ -94,14 +89,11 @@ const Features = () => {
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {freeFeatures.map((feature, index) => (
-              <Card 
-                key={index} 
-                className={`card-hover border border-gray-100 ${feature.link ? 'cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-learnscape-blue/50' : ''} relative overflow-hidden group`}
-              >
+              <Card key={index} className={`card-hover border border-gray-100 ${feature.link ? 'cursor-pointer transition-transform hover:scale-105' : ''}`}>
                 {feature.link ? (
                   <Link to={feature.link} className="block h-full">
                     <CardHeader>
-                      <div className="mb-2 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">{feature.icon}</div>
+                      <div className="mb-2">{feature.icon}</div>
                       <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
                         {feature.title}
                       </CardTitle>
@@ -111,13 +103,11 @@ const Features = () => {
                         {feature.description}
                       </CardDescription>
                     </CardContent>
-                    {/* Fun background element only visible on hover */}
-                    <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-gradient-to-tl from-learnscape-yellow/30 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </Link>
                 ) : (
                   <>
                     <CardHeader>
-                      <div className="mb-2 transform transition-transform duration-500 hover:scale-110 hover:rotate-3">{feature.icon}</div>
+                      <div className="mb-2">{feature.icon}</div>
                       <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
                         {feature.title}
                       </CardTitle>
@@ -134,19 +124,12 @@ const Features = () => {
           </div>
         </div>
 
-        <div className="relative my-16">
-          <Separator className="my-4 bg-gray-200" />
-          {/* Animated pencil crossing the separator */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
-            <div className="h-12 w-3 bg-gradient-to-b from-yellow-500 via-yellow-400 to-yellow-300 rounded-t-full animate-bounce" style={{animationDuration: '1.5s'}}></div>
-            <div className="h-1 w-3 bg-gray-300 rounded-b-sm"></div>
-          </div>
-        </div>
+        <Separator className="my-16 bg-gray-200" />
 
         {/* Premium Features Section */}
         <div>
           <div className="flex items-center justify-center mb-8">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 flex items-center justify-center text-white font-bold text-xl mr-4 animate-pulse">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 flex items-center justify-center text-white font-bold text-xl mr-4">
               <span>✨</span>
             </div>
             <h3 className="text-2xl font-bold text-learnscape-darkBlue">
@@ -155,36 +138,26 @@ const Features = () => {
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {premiumFeatures.map((feature, index) => (
-              <Card 
-                key={index} 
-                className="card-hover border border-gray-100 bg-gradient-to-br from-white to-yellow-50 shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 group relative overflow-hidden"
-              >
+              <Card key={index} className="card-hover border border-gray-100 bg-gradient-to-br from-white to-yellow-50 shadow-md cursor-pointer transition-transform hover:scale-105">
                 <Link to={feature.link} className="block h-full">
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-yellow-100 rounded-bl-full z-0 transform rotate-0 group-hover:rotate-45 transition-transform duration-500"></div>
-                  <CardHeader className="relative z-10">
-                    <div className="mb-2 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">{feature.icon}</div>
+                  <CardHeader>
+                    <div className="mb-2">{feature.icon}</div>
                     <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
                       {feature.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="relative z-10">
+                  <CardContent>
                     <CardDescription className="text-gray-600">
                       {feature.description}
                     </CardDescription>
                   </CardContent>
-                  {/* Sparkle effect (visible only on hover) */}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-yellow-400 animate-pulse">✨</div>
                 </Link>
               </Card>
             ))}
           </div>
         </div>
 
-        <div className="mt-16 text-center relative">
-          {/* Decorative elements */}
-          <div className="absolute -top-6 left-1/4 w-4 h-4 bg-learnscape-purple/30 rounded-full animate-ping" style={{animationDuration: '2s'}}></div>
-          <div className="absolute -top-10 right-1/4 w-6 h-6 bg-learnscape-yellow/40 rounded-full animate-bounce" style={{animationDuration: '3s'}}></div>
-          
+        <div className="mt-16 text-center">
           <h3 className="text-2xl font-bold text-learnscape-darkBlue">
             Free For All Singapore Students
           </h3>
@@ -192,28 +165,8 @@ const Features = () => {
             Learnscape is committed to making quality education accessible to everyone.
             All our basic resources are completely free for all users.
           </p>
-          
-          {/* Flying paper airplane animation */}
-          <div className="absolute bottom-0 left-0 animate-flyAcross">
-            <div className="transform rotate-12">
-              <div className="w-10 h-10 bg-white border border-gray-200 rotate-45 shadow-sm"></div>
-            </div>
-          </div>
         </div>
       </div>
-      
-      {/* Add these keyframe animations to the stylesheet */}
-      <style jsx>{`
-        @keyframes flyAcross {
-          0% { transform: translateX(-100%) translateY(0) rotate(0); }
-          50% { transform: translateX(50vw) translateY(-20vh) rotate(15deg); }
-          100% { transform: translateX(100vw) translateY(0) rotate(0); }
-        }
-        
-        .animate-flyAcross {
-          animation: flyAcross 15s linear infinite;
-        }
-      `}</style>
     </div>
   );
 };
