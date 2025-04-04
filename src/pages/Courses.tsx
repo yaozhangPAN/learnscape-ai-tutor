@@ -149,7 +149,7 @@ const mockCourses: Course[] = [
     duration: "3 weeks",
     rating: 4.9,
     students: 312,
-    price: "S$299",
+    price: "S$40",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -163,7 +163,7 @@ const mockCourses: Course[] = [
     duration: "3 weeks",
     rating: 4.8,
     students: 287,
-    price: "S$299",
+    price: "S$40",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -177,7 +177,7 @@ const mockCourses: Course[] = [
     duration: "3 weeks",
     rating: 4.7,
     students: 254,
-    price: "S$299",
+    price: "S$40",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -191,7 +191,7 @@ const mockCourses: Course[] = [
     duration: "2 weeks",
     rating: 4.9,
     students: 398,
-    price: "S$249",
+    price: "S$40",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -205,7 +205,7 @@ const mockCourses: Course[] = [
     duration: "2 weeks",
     rating: 4.8,
     students: 345,
-    price: "S$249",
+    price: "S$40",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"

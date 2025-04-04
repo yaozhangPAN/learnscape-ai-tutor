@@ -93,18 +93,21 @@ serve(async (req) => {
         throw new Error("Product ID is required for video tutorial purchase");
       }
       
-      // Fetch course details to determine the correct price
-      // In a real implementation, you would fetch the price from your database
-      let videoPrice = 39900; // Default price: S$399
+      // Determine the price based on the course type and ID
+      let videoPrice = 39900; // Default price for tutorial courses: S$399
+      let videoTitle = "PSLE Tutorial"; // Default title
       
-      // This is a mock implementation - in a real app, you'd query your database
-      if (productId === "3" || productId === "8") {
-        videoPrice = 49900; // S$499
+      // Check if it's a past paper walkthrough course (IDs 9-13 are past papers)
+      if (["9", "10", "11", "12", "13"].includes(productId)) {
+        videoPrice = 4000; // S$40.00 for past paper walkthroughs
+        videoTitle = "PSLE Past Paper Walkthrough";
+      } else if (productId === "3" || productId === "8") {
+        videoPrice = 49900; // S$499 for specific tutorial courses
+        videoTitle = "PSLE Premium Tutorial";
       } else if (productId === "4") {
-        videoPrice = 59900; // S$599
+        videoPrice = 59900; // S$599 for the most premium tutorial
+        videoTitle = "PSLE Advanced Tutorial";
       }
-      
-      const videoTitle = "PSLE Chinese Mastery"; // Example title
       
       sessionParams = {
         ...sessionParams,
