@@ -53,7 +53,7 @@ const Features = () => {
     },
     {
       icon: <Video className="h-10 w-10 text-blue-500" />,
-      title: "Video Tutorials",
+      title: "Star Teacher Video Lessons",
       description: "Premium video lessons explaining complex topics with step-by-step guidance.",
       link: "/video-tutorials"
     },
