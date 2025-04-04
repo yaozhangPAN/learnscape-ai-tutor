@@ -1,10 +1,11 @@
 
-import { Book, Brain, BarChart3, List, Star, Users } from "lucide-react";
+import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { Separator } from "@/components/ui/separator";
 
 const Features = () => {
-  const features = [
+  const freeFeatures = [
     {
       icon: <Book className="h-10 w-10 text-learnscape-blue" />,
       title: "Question Bank",
@@ -24,22 +25,43 @@ const Features = () => {
       link: ""
     },
     {
-      icon: <Brain className="h-10 w-10 text-green-500" />,
-      title: "AI Tutor",
-      description: "Get personalized help with challenging concepts through our AI-powered tutoring system.",
-      link: "/ai-tutor"
-    },
-    {
       icon: <BarChart3 className="h-10 w-10 text-red-500" />,
       title: "Performance Analytics",
       description: "Track your progress with detailed insights into strengths and areas for improvement.",
       link: "/dashboard"
     },
     {
+      icon: <FileText className="h-10 w-10 text-green-500" />,
+      title: "Worksheets",
+      description: "Free test papers and worksheets for downloading and practice at your own pace.",
+      link: "/worksheets"
+    },
+    {
       icon: <Users className="h-10 w-10 text-indigo-500" />,
       title: "Community Learning",
       description: "Connect with other students and share resources in a collaborative environment.",
       link: "/leaderboard"
+    }
+  ];
+
+  const premiumFeatures = [
+    {
+      icon: <Brain className="h-10 w-10 text-green-500" />,
+      title: "AI Tutor",
+      description: "Get personalized help with challenging concepts through our AI-powered tutoring system.",
+      link: "/ai-tutor"
+    },
+    {
+      icon: <Video className="h-10 w-10 text-blue-500" />,
+      title: "Video Tutorials",
+      description: "Premium video lessons explaining complex topics with step-by-step guidance.",
+      link: "/video-tutorials"
+    },
+    {
+      icon: <Zap className="h-10 w-10 text-amber-500" />,
+      title: "Daily Recommendations",
+      description: "AI-based recommendations that push the most relevant questions based on your past mistakes.",
+      link: "/dashboard"
     }
   ];
 
@@ -55,10 +77,68 @@ const Features = () => {
           </p>
         </div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, index) => (
-            <Card key={index} className={`card-hover border border-gray-100 ${feature.link ? 'cursor-pointer transition-transform hover:scale-105' : ''}`}>
-              {feature.link ? (
+        {/* Free Features Section */}
+        <div className="mt-16">
+          <div className="flex items-center justify-center mb-8">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl mr-4">
+              <span>✓</span>
+            </div>
+            <h3 className="text-2xl font-bold text-learnscape-darkBlue">
+              Free Features
+            </h3>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {freeFeatures.map((feature, index) => (
+              <Card key={index} className={`card-hover border border-gray-100 ${feature.link ? 'cursor-pointer transition-transform hover:scale-105' : ''}`}>
+                {feature.link ? (
+                  <Link to={feature.link} className="block h-full">
+                    <CardHeader>
+                      <div className="mb-2">{feature.icon}</div>
+                      <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
+                        {feature.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-gray-600">
+                        {feature.description}
+                      </CardDescription>
+                    </CardContent>
+                  </Link>
+                ) : (
+                  <>
+                    <CardHeader>
+                      <div className="mb-2">{feature.icon}</div>
+                      <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
+                        {feature.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-gray-600">
+                        {feature.description}
+                      </CardDescription>
+                    </CardContent>
+                  </>
+                )}
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <Separator className="my-16 bg-gray-200" />
+
+        {/* Premium Features Section */}
+        <div>
+          <div className="flex items-center justify-center mb-8">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 flex items-center justify-center text-white font-bold text-xl mr-4">
+              <span>✨</span>
+            </div>
+            <h3 className="text-2xl font-bold text-learnscape-darkBlue">
+              Premium Features
+            </h3>
+          </div>
+          <div className="grid gap-8 md:grid-cols-3">
+            {premiumFeatures.map((feature, index) => (
+              <Card key={index} className="card-hover border border-gray-100 bg-gradient-to-br from-white to-yellow-50 shadow-md cursor-pointer transition-transform hover:scale-105">
                 <Link to={feature.link} className="block h-full">
                   <CardHeader>
                     <div className="mb-2">{feature.icon}</div>
@@ -72,23 +152,9 @@ const Features = () => {
                     </CardDescription>
                   </CardContent>
                 </Link>
-              ) : (
-                <>
-                  <CardHeader>
-                    <div className="mb-2">{feature.icon}</div>
-                    <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
-                      {feature.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-gray-600">
-                      {feature.description}
-                    </CardDescription>
-                  </CardContent>
-                </>
-              )}
-            </Card>
-          ))}
+              </Card>
+            ))}
+          </div>
         </div>
 
         <div className="mt-16 text-center">
@@ -97,7 +163,7 @@ const Features = () => {
           </h3>
           <p className="mt-4 max-w-2xl text-lg text-gray-500 mx-auto">
             Learnscape is committed to making quality education accessible to everyone.
-            All our resources are completely free for all users.
+            All our basic resources are completely free for all users.
           </p>
         </div>
       </div>
