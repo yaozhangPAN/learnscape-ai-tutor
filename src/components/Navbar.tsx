@@ -21,6 +21,7 @@ const Navbar = () => {
             <Link to="/question-bank" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Question Bank
             </Link>
+            {/* Update the path to /video-tutorials */}
             <Link to="/video-tutorials" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Video Tutorials
             </Link>
@@ -76,6 +77,7 @@ const Navbar = () => {
             >
               Question Bank
             </Link>
+            {/* Update the path to /video-tutorials */}
             <Link 
               to="/video-tutorials" 
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
