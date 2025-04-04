@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,13 +15,17 @@ import { useToast } from "@/hooks/use-toast";
 const TutorMe = () => {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
-  const [subject, setSubject] = useState("chinese");
+  const [subject, setSubject] = useState("math");
   const [level, setLevel] = useState("primary-4");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const subjects = [
-    { value: "chinese", label: "Chinese" }
+    { value: "math", label: "Mathematics" },
+    { value: "english", label: "English" },
+    { value: "science", label: "Science" },
+    { value: "history", label: "History" },
+    { value: "geography", label: "Geography" }
   ];
 
   const levels = [
@@ -49,7 +54,7 @@ const TutorMe = () => {
       // Example response (in a real app, this would come from an AI API)
       let sampleResponse = "";
       
-      if (subject === "chinese") {
+      if (subject === "math") {
         sampleResponse = `
           <h3>Solution Approach</h3>
           <p>To solve this problem, we need to break it down into steps:</p>
@@ -178,7 +183,7 @@ const TutorMe = () => {
           <div>
             <label className="text-sm font-medium block mb-1">Your Question</label>
             <Textarea 
-              placeholder="What would you like help with today? E.g., How do I write this Chinese character?"
+              placeholder="What would you like help with today? E.g., How do I calculate the area of a rectangle?"
               className="min-h-[150px] resize-none"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}

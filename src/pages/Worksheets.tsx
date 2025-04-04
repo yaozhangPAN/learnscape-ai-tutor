@@ -21,6 +21,36 @@ type Worksheet = {
 
 const worksheets: Worksheet[] = [
   {
+    id: "1",
+    title: "English Vocabulary Practice",
+    subject: "english",
+    grade: "p1",
+    type: "vocabulary",
+    date: "2023-10-15",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 245
+  },
+  {
+    id: "2",
+    title: "Mathematics Addition & Subtraction",
+    subject: "mathematics",
+    grade: "p1",
+    type: "arithmetic",
+    date: "2023-11-02",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 317
+  },
+  {
+    id: "3",
+    title: "Science Plants & Animals",
+    subject: "science",
+    grade: "p2",
+    type: "biology",
+    date: "2023-12-08",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 198
+  },
+  {
     id: "4",
     title: "Chinese Characters Practice",
     subject: "chinese",
@@ -31,6 +61,36 @@ const worksheets: Worksheet[] = [
     downloadCount: 156
   },
   {
+    id: "5",
+    title: "Mathematics Multiplication Tables",
+    subject: "mathematics",
+    grade: "p3",
+    type: "arithmetic",
+    date: "2024-01-25",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 267
+  },
+  {
+    id: "6",
+    title: "Science Experiments Worksheet",
+    subject: "science",
+    grade: "p3",
+    type: "experiments",
+    date: "2024-02-14",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 212
+  },
+  {
+    id: "7",
+    title: "English Grammar Exercises",
+    subject: "english",
+    grade: "p4",
+    type: "grammar",
+    date: "2024-02-28",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 189
+  },
+  {
     id: "8",
     title: "Chinese Reading Comprehension",
     subject: "chinese",
@@ -39,6 +99,36 @@ const worksheets: Worksheet[] = [
     date: "2024-03-05",
     thumbnailUrl: "/placeholder.svg",
     downloadCount: 142
+  },
+  {
+    id: "9",
+    title: "Mathematics Problem Solving",
+    subject: "mathematics",
+    grade: "p5",
+    type: "problem-solving",
+    date: "2024-03-15",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 231
+  },
+  {
+    id: "10",
+    title: "Science Energy & Forces",
+    subject: "science",
+    grade: "p5",
+    type: "physics",
+    date: "2024-03-22",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 178
+  },
+  {
+    id: "11",
+    title: "English Essay Writing Guide",
+    subject: "english",
+    grade: "p6",
+    type: "writing",
+    date: "2024-03-30",
+    thumbnailUrl: "/placeholder.svg",
+    downloadCount: 295
   },
   {
     id: "12",
@@ -54,13 +144,14 @@ const worksheets: Worksheet[] = [
 
 const Worksheets = () => {
   const [selectedGrade, setSelectedGrade] = useState<string>("all");
-  const [selectedSubject, setSelectedSubject] = useState<string>("chinese");
+  const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
   const filteredWorksheets = worksheets.filter(
     worksheet => 
-      (selectedGrade === "all" || worksheet.grade === selectedGrade)
+      (selectedGrade === "all" || worksheet.grade === selectedGrade) && 
+      (selectedSubject === "all" || worksheet.subject === selectedSubject)
   );
 
   const totalPages = Math.ceil(filteredWorksheets.length / itemsPerPage);
@@ -108,9 +199,13 @@ const Worksheets = () => {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-2">Subject</h3>
-              <Tabs defaultValue="chinese" onValueChange={setSelectedSubject}>
-                <TabsList className="grid grid-cols-1 w-full">
+              <Tabs defaultValue="all" onValueChange={setSelectedSubject}>
+                <TabsList className="grid grid-cols-5 w-full">
+                  <TabsTrigger value="english">English</TabsTrigger>
+                  <TabsTrigger value="mathematics">Math</TabsTrigger>
+                  <TabsTrigger value="science">Science</TabsTrigger>
                   <TabsTrigger value="chinese">Chinese</TabsTrigger>
+                  <TabsTrigger value="all">All</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -125,6 +220,7 @@ const Worksheets = () => {
               className="mt-4"
               onClick={() => {
                 setSelectedGrade("all");
+                setSelectedSubject("all");
               }}
             >
               Clear Filters

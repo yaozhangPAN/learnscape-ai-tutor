@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -26,6 +27,45 @@ type Course = {
 
 const mockCourses: Course[] = [
   {
+    id: "1",
+    title: "Primary 6 Mathematics - Problem Solving Strategies",
+    description: "Learn effective problem-solving techniques for PSLE Mathematics",
+    level: "p6",
+    subject: "mathematics",
+    duration: "10 weeks",
+    rating: 4.8,
+    students: 248,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+  },
+  {
+    id: "2",
+    title: "Primary 6 Science - Mastering Energy Conversions",
+    description: "Comprehensive coverage of energy concepts for PSLE Science",
+    level: "p6",
+    subject: "science",
+    duration: "8 weeks",
+    rating: 4.7,
+    students: 173,
+    price: "S$19.99",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+  },
+  {
+    id: "3",
+    title: "Primary 6 English - Mastering Comprehension",
+    description: "Enhance reading and comprehension skills for PSLE English",
+    level: "p6",
+    subject: "english",
+    duration: "12 weeks",
+    rating: 4.9,
+    students: 215,
+    price: "S$24.99",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+  },
+  {
     id: "4",
     title: "Primary 6 Chinese - Vocabulary Building",
     description: "Expand your Chinese vocabulary for PSLE Chinese examinations",
@@ -37,6 +77,32 @@ const mockCourses: Course[] = [
     price: "S$29.99",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+  },
+  {
+    id: "5",
+    title: "Primary 5 Mathematics - Fractions and Decimals",
+    description: "Master the concepts of fractions and decimals",
+    level: "p5",
+    subject: "mathematics",
+    duration: "8 weeks",
+    rating: 4.7,
+    students: 186,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+  },
+  {
+    id: "6",
+    title: "Primary 5 Science - Forces and Energy",
+    description: "Understand the fundamentals of forces and energy",
+    level: "p5",
+    subject: "science",
+    duration: "9 weeks",
+    rating: 4.5,
+    students: 167,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1581093804475-577d72e73ef7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
   {
     id: "7",
@@ -68,7 +134,7 @@ const mockCourses: Course[] = [
 
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
-  const [selectedSubject, setSelectedSubject] = useState<string>("chinese");
+  const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
@@ -77,7 +143,8 @@ const Courses = () => {
 
   const filteredCourses = mockCourses.filter(
     course => 
-      (selectedLevel === "all" || course.level === selectedLevel)
+      (selectedLevel === "all" || course.level === selectedLevel) && 
+      (selectedSubject === "all" || course.subject === selectedSubject)
   );
 
   useEffect(() => {
@@ -154,9 +221,13 @@ const Courses = () => {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-2">Subject</h3>
-              <Tabs defaultValue="chinese" onValueChange={setSelectedSubject}>
-                <TabsList className="grid grid-cols-1 w-full">
+              <Tabs defaultValue="all" onValueChange={setSelectedSubject}>
+                <TabsList className="grid grid-cols-5 w-full">
+                  <TabsTrigger value="english">English</TabsTrigger>
+                  <TabsTrigger value="mathematics">Math</TabsTrigger>
+                  <TabsTrigger value="science">Science</TabsTrigger>
                   <TabsTrigger value="chinese">Chinese</TabsTrigger>
+                  <TabsTrigger value="all">All</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -223,6 +294,12 @@ const Courses = () => {
             </PaginationItem>
             <PaginationItem>
               <PaginationLink href="#" isActive>1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">2</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
             </PaginationItem>
             <PaginationItem>
               <PaginationNext href="#" />
