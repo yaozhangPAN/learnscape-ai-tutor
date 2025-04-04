@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Book, Clock, Star, Users, Video, Crown, Lock } from "lucide-react";
+import { Book, Clock, Star, Users, Video, Crown, Lock, BookOpen } from "lucide-react";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
@@ -23,6 +23,7 @@ type Course = {
   price: string;
   isPremium: boolean;
   image: string;
+  type?: string; // Added type property to distinguish course types
 };
 
 const mockCourses: Course[] = [
@@ -37,7 +38,8 @@ const mockCourses: Course[] = [
     students: 248,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
   },
   {
     id: "2",
@@ -50,7 +52,8 @@ const mockCourses: Course[] = [
     students: 173,
     price: "S$399",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
   },
   {
     id: "3",
@@ -63,7 +66,8 @@ const mockCourses: Course[] = [
     students: 215,
     price: "S$499",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
   },
   {
     id: "4",
@@ -76,7 +80,8 @@ const mockCourses: Course[] = [
     students: 142,
     price: "S$599",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
   },
   {
     id: "5",
@@ -89,7 +94,8 @@ const mockCourses: Course[] = [
     students: 186,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
   },
   {
     id: "6",
@@ -102,7 +108,8 @@ const mockCourses: Course[] = [
     students: 167,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1581093804475-577d72e73ef7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1581093804475-577d72e73ef7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
   },
   {
     id: "7",
@@ -115,7 +122,8 @@ const mockCourses: Course[] = [
     students: 156,
     price: "S$399",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
   },
   {
     id: "8",
@@ -128,13 +136,100 @@ const mockCourses: Course[] = [
     students: 168,
     price: "S$499",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
+    image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "tutorial"
+  },
+  // Past Paper Walkthrough courses - newly added
+  {
+    id: "9",
+    title: "2024 PSLE Mathematics Paper Walkthrough",
+    description: "Detailed explanation of the 2024 PSLE Mathematics paper with step-by-step solutions",
+    level: "p6",
+    subject: "mathematics",
+    duration: "3 weeks",
+    rating: 4.9,
+    students: 312,
+    price: "S$299",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "10",
+    title: "2024 PSLE Science Paper Walkthrough",
+    description: "Complete analysis and solutions for the 2024 PSLE Science examination",
+    level: "p6",
+    subject: "science",
+    duration: "3 weeks",
+    rating: 4.8,
+    students: 287,
+    price: "S$299",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "11",
+    title: "2024 PSLE English Paper Walkthrough",
+    description: "Expert analysis of the 2024 PSLE English paper with model answers",
+    level: "p6",
+    subject: "english",
+    duration: "3 weeks",
+    rating: 4.7,
+    students: 254,
+    price: "S$299",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "12",
+    title: "2023 PSLE Mathematics Paper Walkthrough",
+    description: "In-depth review of the 2023 PSLE Mathematics paper with strategies for similar questions",
+    level: "p6",
+    subject: "mathematics",
+    duration: "2 weeks",
+    rating: 4.9,
+    students: 398,
+    price: "S$249",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "13",
+    title: "2023 PSLE Science Paper Walkthrough",
+    description: "Comprehensive examination of the 2023 PSLE Science paper with detailed explanations",
+    level: "p6",
+    subject: "science",
+    duration: "2 weeks",
+    rating: 4.8,
+    students: 345,
+    price: "S$249",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "14",
+    title: "P5 Common Test - Mathematics Solutions",
+    description: "Expert guidance on typical Primary 5 mathematics assessment questions",
+    level: "p5",
+    subject: "mathematics",
+    duration: "1 week",
+    rating: 4.6,
+    students: 178,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
   }
 ];
 
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
+  const [selectedType, setSelectedType] = useState<string>("all"); // Added state for course type
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
@@ -144,7 +239,8 @@ const Courses = () => {
   const filteredCourses = mockCourses.filter(
     course => 
       (selectedLevel === "all" || course.level === selectedLevel) && 
-      (selectedSubject === "all" || course.subject === selectedSubject)
+      (selectedSubject === "all" || course.subject === selectedSubject) &&
+      (selectedType === "all" || course.type === selectedType)
   );
 
   useEffect(() => {
@@ -208,7 +304,7 @@ const Courses = () => {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div>
               <h3 className="text-lg font-semibold mb-2">Primary Level</h3>
               <Tabs defaultValue="p6" onValueChange={setSelectedLevel}>
@@ -231,6 +327,16 @@ const Courses = () => {
                 </TabsList>
               </Tabs>
             </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Content Type</h3>
+              <Tabs defaultValue="all" onValueChange={setSelectedType}>
+                <TabsList className="grid grid-cols-3 w-full">
+                  <TabsTrigger value="tutorial">Tutorials</TabsTrigger>
+                  <TabsTrigger value="past_paper">Past Papers</TabsTrigger>
+                  <TabsTrigger value="all">All Types</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
           </div>
         </div>
 
@@ -247,6 +353,12 @@ const Courses = () => {
                   <div className="absolute top-2 right-2 bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
                     <Crown className="h-3 w-3 mr-1" />
                     Premium
+                  </div>
+                )}
+                {course.type === "past_paper" && (
+                  <div className="absolute top-2 left-2 bg-amber-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
+                    <BookOpen className="h-3 w-3 mr-1" />
+                    Past Paper
                   </div>
                 )}
               </div>
