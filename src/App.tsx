@@ -13,6 +13,7 @@ import AboutUs from "./pages/AboutUs";
 import QuestionBank from "./pages/QuestionBank";
 import Leaderboard from "./pages/Leaderboard";
 import Worksheets from "./pages/Worksheets";
+import Referral from "./pages/Referral";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/about" element={<AboutUs />} />
           <Route path="/question-bank" element={<QuestionBank />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/referral" element={<Referral />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

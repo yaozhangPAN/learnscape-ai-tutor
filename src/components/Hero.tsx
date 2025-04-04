@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,11 @@ const Hero = () => {
                 <div className="mt-3 sm:mt-0 sm:ml-3">
                   <Button asChild variant="outline" className="w-full flex items-center justify-center px-8 py-3 text-base font-medium border-learnscape-blue text-learnscape-blue hover:bg-blue-50">
                     <Link to="/about">About Us</Link>
+                  </Button>
+                </div>
+                <div className="mt-3 sm:mt-0 sm:ml-3">
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-purple hover:bg-purple-700 text-white">
+                    <Link to="/referral">Referral</Link>
                   </Button>
                 </div>
               </div>
