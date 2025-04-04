@@ -48,7 +48,7 @@ const mockCourses: Course[] = [
     duration: "8 weeks",
     rating: 4.7,
     students: 173,
-    price: "S$19.99",
+    price: "S$699",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
@@ -61,7 +61,7 @@ const mockCourses: Course[] = [
     duration: "12 weeks",
     rating: 4.9,
     students: 215,
-    price: "S$24.99",
+    price: "S$799",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
@@ -74,7 +74,7 @@ const mockCourses: Course[] = [
     duration: "10 weeks",
     rating: 4.6,
     students: 142,
-    price: "S$29.99",
+    price: "S$899",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
@@ -113,7 +113,7 @@ const mockCourses: Course[] = [
     duration: "11 weeks",
     rating: 4.8,
     students: 156,
-    price: "S$19.99",
+    price: "S$699",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   },
@@ -126,7 +126,7 @@ const mockCourses: Course[] = [
     duration: "12 weeks",
     rating: 4.9,
     students: 168,
-    price: "S$29.99",
+    price: "S$799",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
   }

@@ -93,9 +93,18 @@ serve(async (req) => {
         throw new Error("Product ID is required for video tutorial purchase");
       }
       
-      // In a real implementation, you would fetch the price and details from your database
-      const videoPrice = 1999; // Example price: S$19.99
-      const videoTitle = "PSLE Math Mastery"; // Example title
+      // Fetch course details to determine the correct price
+      // In a real implementation, you would fetch the price from your database
+      let videoPrice = 69900; // Default price: S$699
+      
+      // This is a mock implementation - in a real app, you'd query your database
+      if (productId === "3" || productId === "8") {
+        videoPrice = 79900; // S$799
+      } else if (productId === "4") {
+        videoPrice = 89900; // S$899
+      }
+      
+      const videoTitle = "PSLE Chinese Mastery"; // Example title
       
       sessionParams = {
         ...sessionParams,
