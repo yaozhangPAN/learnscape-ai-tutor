@@ -24,7 +24,7 @@ const Navbar = () => {
             <Link to="/mock-exam" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Mock Exam
             </Link>
-            <Link to="/courses" className="text-gray-700 hover:text-learnscape-blue transition-colors">
+            <Link to="/video-tutorials" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Video Tutorials
             </Link>
             <Link to="/worksheets" className="text-gray-700 hover:text-learnscape-blue transition-colors">
@@ -35,9 +35,6 @@ const Navbar = () => {
             </Link>
             <Link to="/leaderboard" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Leaderboard
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-learnscape-blue transition-colors">
-              About Us
             </Link>
             <Link to="/dashboard" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Dashboard
@@ -80,7 +77,7 @@ const Navbar = () => {
               Mock Exam
             </Link>
             <Link 
-              to="/courses" 
+              to="/video-tutorials" 
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -106,13 +103,6 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Leaderboard
-            </Link>
-            <Link 
-              to="/about" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About Us
             </Link>
             <Link 
               to="/dashboard" 
