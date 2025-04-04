@@ -12,38 +12,38 @@ import QuestionModule from "@/components/QuestionModule";
 const QUESTIONS_PER_PAGE = 10;
 
 const questionData = [
-  { id: 1, title: "小学六年级 - 阅读理解练习 - 1", type: "阅读理解", level: "小学六年级", date: "2025-03-01" },
-  { id: 2, title: "小学六年级 - 语法练习 - 1", type: "语法", level: "小学六年级", date: "2025-03-05" },
-  { id: 3, title: "小学五年级 - 阅读理解练习 - 1", type: "阅读理解", level: "小学五年级", date: "2025-03-08" },
-  { id: 4, title: "小学六年级 - 作文练习 - 1", type: "作文", level: "小学六年级", date: "2025-03-10" },
-  { id: 5, title: "小学六年级 - 词汇练习 - 1", type: "词汇", level: "小学六年级", date: "2025-03-12" },
-  { id: 6, title: "小学五年级 - 听力练习 - 1", type: "听力", level: "小学五年级", date: "2025-03-15" },
-  { id: 7, title: "小学四年级 - 阅读理解练习 - 1", type: "阅读理解", level: "小学四年级", date: "2025-03-18" },
-  { id: 8, title: "小学六年级 - 综合练习 - 1", type: "综合", level: "小学六年级", date: "2025-03-20" },
-  { id: 9, title: "小学五年级 - 语法练习 - 1", type: "语法", level: "小学五年级", date: "2025-03-22" },
-  { id: 10, title: "小学六年级 - 阅读理解练习 - 2", type: "阅读理解", level: "小学六年级", date: "2025-03-25" },
-  { id: 11, title: "小学四年级 - 词汇练习 - 1", type: "词汇", level: "小学四年级", date: "2025-03-28" },
-  { id: 12, title: "小学六年级 - 阅读理解练习 - 3", type: "阅读理解", level: "小学六年级", date: "2025-04-01" },
+  { id: 1, title: "Grade 6 - Reading Comprehension - 1", type: "Reading", level: "Grade 6", date: "2025-03-01" },
+  { id: 2, title: "Grade 6 - Grammar Practice - 1", type: "Grammar", level: "Grade 6", date: "2025-03-05" },
+  { id: 3, title: "Grade 5 - Reading Comprehension - 1", type: "Reading", level: "Grade 5", date: "2025-03-08" },
+  { id: 4, title: "Grade 6 - Essay Writing - 1", type: "Writing", level: "Grade 6", date: "2025-03-10" },
+  { id: 5, title: "Grade 6 - Vocabulary Practice - 1", type: "Vocabulary", level: "Grade 6", date: "2025-03-12" },
+  { id: 6, title: "Grade 5 - Listening Practice - 1", type: "Listening", level: "Grade 5", date: "2025-03-15" },
+  { id: 7, title: "Grade 4 - Reading Comprehension - 1", type: "Reading", level: "Grade 4", date: "2025-03-18" },
+  { id: 8, title: "Grade 6 - Comprehensive Test - 1", type: "Comprehensive", level: "Grade 6", date: "2025-03-20" },
+  { id: 9, title: "Grade 5 - Grammar Practice - 1", type: "Grammar", level: "Grade 5", date: "2025-03-22" },
+  { id: 10, title: "Grade 6 - Reading Comprehension - 2", type: "Reading", level: "Grade 6", date: "2025-03-25" },
+  { id: 11, title: "Grade 4 - Vocabulary Practice - 1", type: "Vocabulary", level: "Grade 4", date: "2025-03-28" },
+  { id: 12, title: "Grade 6 - Reading Comprehension - 3", type: "Reading", level: "Grade 6", date: "2025-04-01" },
 ];
 
 const questionModules = [
   {
-    title: "阅读理解",
-    description: "提高学生的阅读理解能力和分析能力",
+    title: "Reading Comprehension",
+    description: "Improve students' reading comprehension and analytical skills",
     icon: <BookOpen className="h-6 w-6 text-white" />,
     count: 24,
     color: "bg-learnscape-blue text-white"
   },
   {
-    title: "语法与词汇",
-    description: "巩固语法知识和扩充词汇量",
+    title: "Grammar & Vocabulary",
+    description: "Strengthen grammar knowledge and expand vocabulary",
     icon: <FileText className="h-6 w-6 text-white" />,
     count: 18,
     color: "bg-learnscape-purple text-white"
   },
   {
-    title: "综合练习",
-    description: "全面检测学生的语言应用能力",
+    title: "Comprehensive Practice",
+    description: "Thoroughly test students' language application ability",
     icon: <ListCheck className="h-6 w-6 text-white" />,
     count: 12,
     color: "bg-green-500 text-white"
@@ -73,16 +73,18 @@ const QuestionBank = () => {
       {/* Banner */}
       <div className="bg-learnscape-darkBlue text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">题库资源</h1>
+          <h1 className="text-4xl font-bold mb-4">Question Bank</h1>
           <p className="text-lg max-w-3xl">
-            我们精心设计的题库资源涵盖各个级别的中文学习，从基础词汇到高级阅读理解，帮助学生全面提升中文能力。
+            Our carefully designed question bank covers all levels of Chinese language learning, 
+            from basic vocabulary to advanced reading comprehension, helping students improve their 
+            Chinese language skills comprehensively.
           </p>
         </div>
       </div>
 
       {/* Question Modules */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-8">题目类型</h2>
+        <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-8">Question Types</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {questionModules.map((module, index) => (
             <QuestionModule
@@ -100,14 +102,14 @@ const QuestionBank = () => {
       {/* Search and Question List */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">题目列表</h2>
+          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">Question List</h2>
           
           {/* Search */}
           <div className="relative flex items-center mb-6">
             <Search className="absolute left-3 h-5 w-5 text-gray-400" />
             <Input
               type="text"
-              placeholder="搜索题目..."
+              placeholder="Search questions..."
               className="pl-10 pr-4"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -120,11 +122,11 @@ const QuestionBank = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>题目名称</TableHead>
-                    <TableHead>类型</TableHead>
-                    <TableHead>级别</TableHead>
-                    <TableHead>日期</TableHead>
-                    <TableHead className="text-right">操作</TableHead>
+                    <TableHead>Question Title</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Level</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -135,7 +137,7 @@ const QuestionBank = () => {
                       <TableCell>{question.level}</TableCell>
                       <TableCell>{question.date}</TableCell>
                       <TableCell className="text-right">
-                        <Button className="bg-learnscape-blue text-white">查看</Button>
+                        <Button className="bg-learnscape-blue text-white">View</Button>
                       </TableCell>
                     </TableRow>
                   ))}
