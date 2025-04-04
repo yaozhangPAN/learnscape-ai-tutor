@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -49,7 +50,7 @@ const mockCourses: Course[] = [
     duration: "8 weeks",
     rating: 4.7,
     students: 173,
-    price: "S$40",
+    price: "S$399",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
@@ -63,7 +64,7 @@ const mockCourses: Course[] = [
     duration: "12 weeks",
     rating: 4.9,
     students: 215,
-    price: "S$40",
+    price: "S$499",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
@@ -77,7 +78,7 @@ const mockCourses: Course[] = [
     duration: "10 weeks",
     rating: 4.6,
     students: 142,
-    price: "S$40",
+    price: "S$599",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
@@ -119,7 +120,7 @@ const mockCourses: Course[] = [
     duration: "11 weeks",
     rating: 4.8,
     students: 156,
-    price: "S$40",
+    price: "S$399",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
@@ -133,7 +134,7 @@ const mockCourses: Course[] = [
     duration: "12 weeks",
     rating: 4.9,
     students: 168,
-    price: "S$40",
+    price: "S$499",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
@@ -148,7 +149,7 @@ const mockCourses: Course[] = [
     duration: "3 weeks",
     rating: 4.9,
     students: 312,
-    price: "S$40",
+    price: "S$299",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -162,7 +163,7 @@ const mockCourses: Course[] = [
     duration: "3 weeks",
     rating: 4.8,
     students: 287,
-    price: "S$40",
+    price: "S$299",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -176,7 +177,7 @@ const mockCourses: Course[] = [
     duration: "3 weeks",
     rating: 4.7,
     students: 254,
-    price: "S$40",
+    price: "S$299",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -190,7 +191,7 @@ const mockCourses: Course[] = [
     duration: "2 weeks",
     rating: 4.9,
     students: 398,
-    price: "S$40",
+    price: "S$249",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
@@ -204,7 +205,7 @@ const mockCourses: Course[] = [
     duration: "2 weeks",
     rating: 4.8,
     students: 345,
-    price: "S$40",
+    price: "S$249",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
