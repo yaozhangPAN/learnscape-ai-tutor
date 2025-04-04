@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { BookOpen, FileText, ListCheck, Search, GraduationCap, Book } from "lucide-react";
+import { BookOpen, FileText, ListCheck, Search, GraduationCap, Book, Calendar } from "lucide-react";
 import QuestionModule from "@/components/QuestionModule";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import DailyRecommendations from "@/components/AITutor/DailyRecommendations";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -67,6 +69,13 @@ const questionModules = [
     icon: <GraduationCap className="h-6 w-6 text-white" />,
     count: questionData.filter(q => q.subject === "Science").length,
     color: "bg-green-500 text-white"
+  },
+  {
+    title: "Daily Recommendations",
+    description: "Personalized study recommendations based on your progress",
+    icon: <Calendar className="h-6 w-6 text-white" />,
+    count: 5,
+    color: "bg-amber-500 text-white"
   }
 ];
 
@@ -80,6 +89,7 @@ const QuestionBank = () => {
   const [selectedGrade, setSelectedGrade] = useState("All Grades");
   const [selectedSubject, setSelectedSubject] = useState("All Subjects");
   const [selectedTerm, setSelectedTerm] = useState("All Terms");
+  const [activeTab, setActiveTab] = useState("question-list");
 
   // Apply all filters
   const filteredQuestions = questionData.filter(question => {
@@ -131,7 +141,7 @@ const QuestionBank = () => {
       {/* Question Modules */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-8">Subject Areas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {questionModules.map((module, index) => (
             <QuestionModule
               key={index}
@@ -140,196 +150,228 @@ const QuestionBank = () => {
               icon={module.icon}
               count={module.count}
               color={module.color}
+              onClick={() => {
+                if (module.title === "Daily Recommendations") {
+                  setActiveTab("daily-recommendations");
+                } else {
+                  setActiveTab("question-list");
+                  if (module.title !== "Daily Recommendations") {
+                    setSelectedSubject(module.title.replace(" Language", ""));
+                    handleFilterChange();
+                  }
+                }
+              }}
             />
           ))}
         </div>
       </div>
 
-      {/* Search and Question List */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">Question List</h2>
+      {/* Tabs for Question List and Daily Recommendations */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="question-list" className="text-base">
+              <Search className="h-4 w-4 mr-2" />
+              Question List
+            </TabsTrigger>
+            <TabsTrigger value="daily-recommendations" className="text-base">
+              <Calendar className="h-4 w-4 mr-2" />
+              Daily Recommendations
+            </TabsTrigger>
+          </TabsList>
           
-          {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            {/* Search */}
-            <div className="relative flex items-center col-span-1 md:col-span-4">
-              <Search className="absolute left-3 h-5 w-5 text-gray-400" />
-              <Input
-                type="text"
-                placeholder="Search questions..."
-                className="pl-10 pr-4"
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  handleFilterChange();
-                }}
-              />
-            </div>
-            
-            {/* Subject Filter */}
-            <div>
-              <Select 
-                value={selectedSubject} 
-                onValueChange={(value) => {
-                  setSelectedSubject(value);
-                  handleFilterChange();
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Subject" />
-                </SelectTrigger>
-                <SelectContent>
-                  {subjects.map((subject) => (
-                    <SelectItem key={subject} value={subject}>
-                      {subject}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            {/* Grade Filter */}
-            <div>
-              <Select 
-                value={selectedGrade} 
-                onValueChange={(value) => {
-                  setSelectedGrade(value);
-                  handleFilterChange();
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Grade" />
-                </SelectTrigger>
-                <SelectContent>
-                  {grades.map((grade) => (
-                    <SelectItem key={grade} value={grade}>
-                      {grade}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            {/* Term Filter */}
-            <div>
-              <Select 
-                value={selectedTerm} 
-                onValueChange={(value) => {
-                  setSelectedTerm(value);
-                  handleFilterChange();
-                }}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Term" />
-                </SelectTrigger>
-                <SelectContent>
-                  {terms.map((term) => (
-                    <SelectItem key={term} value={term}>
-                      {term}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            {/* Clear Filters Button */}
-            <div>
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => {
-                  setSelectedSubject("All Subjects");
-                  setSelectedGrade("All Grades");
-                  setSelectedTerm("All Terms");
-                  setSearchTerm("");
-                  handleFilterChange();
-                }}
-              >
-                Clear Filters
-              </Button>
-            </div>
-          </div>
+          <TabsContent value="question-list">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">Question List</h2>
+              
+              {/* Filters */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                {/* Search */}
+                <div className="relative flex items-center col-span-1 md:col-span-4">
+                  <Search className="absolute left-3 h-5 w-5 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search questions..."
+                    className="pl-10 pr-4"
+                    value={searchTerm}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      handleFilterChange();
+                    }}
+                  />
+                </div>
+                
+                {/* Subject Filter */}
+                <div>
+                  <Select 
+                    value={selectedSubject} 
+                    onValueChange={(value) => {
+                      setSelectedSubject(value);
+                      handleFilterChange();
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Subject" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {subjects.map((subject) => (
+                        <SelectItem key={subject} value={subject}>
+                          {subject}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                {/* Grade Filter */}
+                <div>
+                  <Select 
+                    value={selectedGrade} 
+                    onValueChange={(value) => {
+                      setSelectedGrade(value);
+                      handleFilterChange();
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Grade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {grades.map((grade) => (
+                        <SelectItem key={grade} value={grade}>
+                          {grade}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                {/* Term Filter */}
+                <div>
+                  <Select 
+                    value={selectedTerm} 
+                    onValueChange={(value) => {
+                      setSelectedTerm(value);
+                      handleFilterChange();
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Term" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {terms.map((term) => (
+                        <SelectItem key={term} value={term}>
+                          {term}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                {/* Clear Filters Button */}
+                <div>
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => {
+                      setSelectedSubject("All Subjects");
+                      setSelectedGrade("All Grades");
+                      setSelectedTerm("All Terms");
+                      setSearchTerm("");
+                      handleFilterChange();
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              </div>
 
-          {/* Questions Table */}
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Question Title</TableHead>
-                    <TableHead>Subject</TableHead>
-                    <TableHead>Level</TableHead>
-                    <TableHead>Term</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {currentQuestions.length > 0 ? (
-                    currentQuestions.map((question) => (
-                      <TableRow key={question.id}>
-                        <TableCell className="font-medium">{question.title}</TableCell>
-                        <TableCell>{question.subject}</TableCell>
-                        <TableCell>{question.level}</TableCell>
-                        <TableCell>{question.term}</TableCell>
-                        <TableCell>{question.date}</TableCell>
-                        <TableCell className="text-right">
-                          <Button className="bg-learnscape-blue text-white">View</Button>
-                        </TableCell>
+              {/* Questions Table */}
+              <Card>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Question Title</TableHead>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>Level</TableHead>
+                        <TableHead>Term</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                        No questions match your search criteria. Try adjusting your filters.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                    </TableHeader>
+                    <TableBody>
+                      {currentQuestions.length > 0 ? (
+                        currentQuestions.map((question) => (
+                          <TableRow key={question.id}>
+                            <TableCell className="font-medium">{question.title}</TableCell>
+                            <TableCell>{question.subject}</TableCell>
+                            <TableCell>{question.level}</TableCell>
+                            <TableCell>{question.term}</TableCell>
+                            <TableCell>{question.date}</TableCell>
+                            <TableCell className="text-right">
+                              <Button className="bg-learnscape-blue text-white">View</Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            No questions match your search criteria. Try adjusting your filters.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
 
-          {/* Results count */}
-          <div className="mt-4 text-sm text-gray-500">
-            Showing {currentQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0} to {Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)} of {filteredQuestions.length} questions
-          </div>
+              {/* Results count */}
+              <div className="mt-4 text-sm text-gray-500">
+                Showing {currentQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0} to {Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)} of {filteredQuestions.length} questions
+              </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-6">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                    />
-                  </PaginationItem>
-                  
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        isActive={page === currentPage}
-                        onClick={() => setCurrentPage(page)}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  
-                  <PaginationItem>
-                    <PaginationNext 
-                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-6">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            isActive={page === currentPage}
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </TabsContent>
+          
+          <TabsContent value="daily-recommendations">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <DailyRecommendations />
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

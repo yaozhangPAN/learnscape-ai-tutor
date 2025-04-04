@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Calendar, Camera } from "lucide-react";
+import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Camera } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,7 +10,6 @@ import WritingCoach from "@/components/AITutor/WritingCoach";
 import OralExamPractice from "@/components/AITutor/OralExamPractice";
 import TutorMe from "@/components/AITutor/TutorMe";
 import ErrorAnalysis from "@/components/AITutor/ErrorAnalysis";
-import DailyRecommendations from "@/components/AITutor/DailyRecommendations";
 import SnapAndSolve from "@/components/AITutor/SnapAndSolve";
 import SubscriptionBanner from "@/components/SubscriptionBanner";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -60,14 +59,6 @@ const AITutor = () => {
       description: "Analyze your mistakes and learn how to avoid them in future examinations.",
       component: <ErrorAnalysis />,
       emoji: "🔍"
-    },
-    {
-      id: "daily-recommendations",
-      title: "Daily Recommendations",
-      icon: <Calendar className="h-8 w-8 text-amber-500" />,
-      description: "Get personalized daily study recommendations tailored to your learning needs.",
-      component: <DailyRecommendations />,
-      emoji: "📅"
     },
     {
       id: "snap-and-solve",
@@ -138,7 +129,7 @@ const AITutor = () => {
 
           <div className={`bg-white rounded-lg shadow-md p-6 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
             <Tabs defaultValue="writing-coach" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-6 mb-8">
+              <TabsList className="grid grid-cols-5 mb-8">
                 {tutorOptions.map((option) => (
                   <TabsTrigger key={option.id} value={option.id} className="flex items-center justify-center gap-2">
                     {option.emoji}
