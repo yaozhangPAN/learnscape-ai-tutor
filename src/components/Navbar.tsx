@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, BookOpen, Award, Sparkles, Brain, FileText, Users, BarChart2 } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,13 +23,13 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { path: "/question-bank", name: "Question Bank", icon: <BookOpen className="h-4 w-4" /> },
-    { path: "/video-tutorials", name: "Video Tutorials", icon: <FileText className="h-4 w-4" /> },
-    { path: "/mock-exam", name: "Mock Exam", icon: <Award className="h-4 w-4" /> },
-    { path: "/worksheets", name: "Worksheets", icon: <FileText className="h-4 w-4" /> },
-    { path: "/leaderboard", name: "Leaderboard", icon: <Users className="h-4 w-4" /> },
-    { path: "/dashboard", name: "Dashboard", icon: <BarChart2 className="h-4 w-4" /> },
-    { path: "/ai-tutor", name: "AI Tutor", icon: <Brain className="h-4 w-4" /> },
+    { path: "/question-bank", name: "Question Bank" },
+    { path: "/video-tutorials", name: "Video Tutorials" },
+    { path: "/mock-exam", name: "Mock Exam" },
+    { path: "/worksheets", name: "Worksheets" },
+    { path: "/leaderboard", name: "Leaderboard" },
+    { path: "/dashboard", name: "Dashboard" },
+    { path: "/ai-tutor", name: "AI Tutor" },
   ];
 
   return (
@@ -52,11 +52,10 @@ const Navbar = () => {
               <Link 
                 key={link.path} 
                 to={link.path} 
-                className={`text-gray-700 hover:text-learnscape-blue transition-colors flex items-center gap-1.5 py-1 group relative ${
+                className={`text-gray-700 hover:text-learnscape-blue transition-colors py-1 group relative ${
                   location.pathname === link.path ? 'text-learnscape-blue font-medium' : ''
                 }`}
               >
-                {link.icon}
                 {link.name}
                 {location.pathname === link.path && (
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-learnscape-blue"></span>
@@ -94,26 +93,24 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
             <Link 
               to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue flex items-center"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
               onClick={() => setIsMenuOpen(false)}
             >
-              <BookOpen className="mr-2 h-4 w-4" />
               Home
             </Link>
             {navLinks.map((link) => (
               <Link 
                 key={link.path}
                 to={link.path} 
-                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center ${
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
                   location.pathname === link.path 
                     ? 'text-learnscape-blue bg-blue-50' 
                     : 'text-gray-700 hover:text-learnscape-blue'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                {link.icon}
-                <span className="ml-2">{link.name}</span>
-                {link.path === "/ai-tutor" && <Sparkles className="ml-1 h-3 w-3 text-yellow-400" />}
+                {link.name}
+                {link.path === "/ai-tutor" && <span className="ml-1 text-xs">✨</span>}
               </Link>
             ))}
             <Link 
