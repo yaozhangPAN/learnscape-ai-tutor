@@ -93,8 +93,16 @@ serve(async (req) => {
         throw new Error("Product ID is required for video tutorial purchase");
       }
       
-      // All video tutorials now have a fixed price of S$40
-      const videoPrice = 4000; // S$40.00
+      // Fetch course details to determine the correct price
+      // In a real implementation, you would fetch the price from your database
+      let videoPrice = 39900; // Default price: S$399
+      
+      // This is a mock implementation - in a real app, you'd query your database
+      if (productId === "3" || productId === "8") {
+        videoPrice = 49900; // S$499
+      } else if (productId === "4") {
+        videoPrice = 59900; // S$599
+      }
       
       const videoTitle = "PSLE Chinese Mastery"; // Example title
       
