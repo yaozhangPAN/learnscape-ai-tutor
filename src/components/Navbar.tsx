@@ -21,17 +21,17 @@ const Navbar = () => {
             <Link to="/" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Home
             </Link>
-            <Link to="/mock-exam" className="text-gray-700 hover:text-learnscape-blue transition-colors">
-              Mock Exam
+            <Link to="/question-bank" className="text-gray-700 hover:text-learnscape-blue transition-colors">
+              Question Bank
             </Link>
             <Link to="/video-tutorials" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Video Tutorials
             </Link>
+            <Link to="/mock-exam" className="text-gray-700 hover:text-learnscape-blue transition-colors">
+              Mock Exam
+            </Link>
             <Link to="/worksheets" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Worksheets
-            </Link>
-            <Link to="/question-bank" className="text-gray-700 hover:text-learnscape-blue transition-colors">
-              Question Bank
             </Link>
             <Link to="/leaderboard" className="text-gray-700 hover:text-learnscape-blue transition-colors">
               Leaderboard
@@ -70,11 +70,11 @@ const Navbar = () => {
               Home
             </Link>
             <Link 
-              to="/mock-exam" 
+              to="/question-bank" 
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
               onClick={() => setIsMenuOpen(false)}
             >
-              Mock Exam
+              Question Bank
             </Link>
             <Link 
               to="/video-tutorials" 
@@ -84,18 +84,18 @@ const Navbar = () => {
               Video Tutorials
             </Link>
             <Link 
+              to="/mock-exam" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Mock Exam
+            </Link>
+            <Link 
               to="/worksheets" 
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
               onClick={() => setIsMenuOpen(false)}
             >
               Worksheets
-            </Link>
-            <Link 
-              to="/question-bank" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Question Bank
             </Link>
             <Link 
               to="/leaderboard" 
