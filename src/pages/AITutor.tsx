@@ -49,7 +49,7 @@ const AITutor = () => {
       id: "dictation-practice",
       title: "Dictation Practice",
       icon: <Headphones className="h-8 w-8 text-indigo-500" />,
-      description: "Build your vocabulary by writing down the words you hear.",
+      description: "Get ready for your school spelling test with fun Chinese and English dictation practice!",
       component: <DictationPractice />,
       emoji: "🎧"
     },
