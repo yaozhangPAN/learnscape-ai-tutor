@@ -1,5 +1,4 @@
-
-import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award, Flame } from "lucide-react";
+import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
@@ -23,24 +22,6 @@ const Features = () => {
       title: "Favorites",
       description: "Save important questions for quick access and create your own study collection.",
       link: ""
-    },
-    {
-      icon: <Flame className="h-10 w-10 text-orange-500" />,
-      title: "Streak",
-      description: "Track your daily learning progress and maintain your study streak for continuous improvement.",
-      link: "/dashboard"
-    },
-    {
-      icon: <FileText className="h-10 w-10 text-green-500" />,
-      title: "Worksheets",
-      description: "Free test papers and worksheets for downloading and practice at your own pace.",
-      link: "/worksheets"
-    },
-    {
-      icon: <Award className="h-10 w-10 text-indigo-500" />,
-      title: "Leaderboard",
-      description: "Encourage healthy competition and track your ranking among peer students to motivate consistent learning.",
-      link: "/leaderboard"
     }
   ];
 
