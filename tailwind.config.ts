@@ -68,7 +68,9 @@ export default {
 					purple: '#38A169', // Changed from purple to darker green
 					yellow: '#F2FCE2', // Changed to light green hue
 					darkBlue: '#1E5B3A', // Changed from dark blue to dark green
-					lightGray: '#F9FAFB'
+					lightGray: '#F9FAFB',
+					cream: '#FFFDE7', // Added creamy yellow background
+					mint: '#A8E6CF'  // Added soft mint green for content areas
 				}
 			},
 			borderRadius: {

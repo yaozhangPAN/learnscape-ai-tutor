@@ -14,7 +14,7 @@ const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
   return (
     <div className="md:hidden">
       {papers.map((paper) => (
-        <Card key={paper.id} className="mb-4 border-gray-200 mx-4 my-4">
+        <Card key={paper.id} className="mb-4 border-gray-200 mx-4 my-4 bg-white shadow-md">
           <CardContent className="pt-6">
             <div className="flex items-start justify-between mb-4">
               <div className="bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded">

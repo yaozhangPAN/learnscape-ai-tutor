@@ -126,7 +126,13 @@
 
 /* Add playful styles */
 .playful-bg {
-  background-color: #E8F5E9;
+  background-color: #FFFDE7; /* Updated to creamy yellow background */
+}
+
+.content-area {
+  background-color: #A8E6CF; /* Soft mint green */
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .rounded-container {
@@ -134,4 +140,3 @@
   padding: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
 }
-
