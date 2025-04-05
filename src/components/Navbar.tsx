@@ -29,7 +29,7 @@ const Navbar = () => {
     { path: "/video-tutorials", name: "Video Lessons" },
     { path: "/mock-exam", name: "Mock Exam" },
     { path: "/leaderboard", name: "Leaderboard" },
-    { path: "/dashboard", name: "Dashboard" },
+    { path: "/dashboard", name: "Streak" },
     { path: "/ai-tutor", name: "AI Tutor" },
   ];
 

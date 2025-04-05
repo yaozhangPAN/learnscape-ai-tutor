@@ -1,5 +1,5 @@
 
-import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award } from "lucide-react";
+import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award, Flame } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
@@ -25,9 +25,9 @@ const Features = () => {
       link: ""
     },
     {
-      icon: <BarChart3 className="h-10 w-10 text-red-500" />,
-      title: "Performance Analytics",
-      description: "Track your progress with detailed insights into strengths and areas for improvement.",
+      icon: <Flame className="h-10 w-10 text-orange-500" />,
+      title: "Streak",
+      description: "Track your daily learning progress and maintain your study streak for continuous improvement.",
       link: "/dashboard"
     },
     {
