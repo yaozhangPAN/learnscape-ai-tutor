@@ -74,3 +74,33 @@
     transform: scale(0);
   }
 }
+
+/* Character animations */
+@keyframes float-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.cartoon-character {
+  animation: float-bounce 3s ease-in-out infinite;
+}
+
+.cartoon-character:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.cartoon-character:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.cartoon-character:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.cartoon-character:hover {
+  animation-play-state: paused;
+}

@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
+import CartoonCharacters from "@/components/CartoonCharacters";
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
@@ -13,10 +14,13 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
       <Navbar />
       <div className={`transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
-        <Hero />
+        <div className="relative">
+          <Hero />
+          <CartoonCharacters />
+        </div>
         <Features />
         <div className="py-16 bg-learnscape-yellow/30 relative overflow-hidden">
           {/* Decorative elements */}
