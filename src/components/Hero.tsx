@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Brain } from "lucide-react";
+import { ArrowRight, Sparkles, Brain, Calendar } from "lucide-react";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -43,11 +42,7 @@ const Hero = () => {
                 <div className="rounded-md shadow">
                   <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-blue hover:bg-green-700 group">
                     <Link to="/daily-plan" className="flex items-center">
-                      <img 
-                        src="/lovable-uploads/5f13138d-564f-4d30-98b9-192d891f3cd4.png" 
-                        alt="Adventure mountain" 
-                        className="w-8 h-8 mr-2"
-                      />
+                      <Calendar className="mr-2 h-5 w-5" />
                       Daily Adventure
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
@@ -56,11 +51,7 @@ const Hero = () => {
                 <div className="mt-3 sm:mt-0 sm:ml-3">
                   <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-[#FFD700] hover:bg-[#f0c800] text-black group">
                     <Link to="/referral" className="flex items-center">
-                      <img 
-                        src="/lovable-uploads/9a9791df-299b-4d4f-b4e4-4cd232ecf481.png" 
-                        alt="Treasure chest" 
-                        className="w-8 h-8 mr-2"
-                      />
+                      <Sparkles className="mr-2 h-5 w-5" />
                       Get Rewards <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
                     </Link>
                   </Button>
