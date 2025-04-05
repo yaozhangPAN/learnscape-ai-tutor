@@ -58,18 +58,18 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-learnscape-blue/30 p-6 rounded-lg mb-6">
+    <div className="bg-[#FFFDE7] border border-learnscape-blue/30 p-6 rounded-lg mb-6">
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-xl font-semibold text-learnscape-darkBlue flex items-center">
-            <Sparkles className="h-5 w-5 mr-2 text-yellow-500" />
+            <Sparkles className="h-5 w-5 mr-2 text-learnscape-blue" />
             {title}
           </h3>
           <p className="text-gray-600 mt-2">{description}</p>
           <div className="mt-4">
             <Button 
               onClick={handleSubscribe}
-              className="bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white"
+              className="bg-[#FFA500] hover:bg-[#FF6F00] text-white"
             >
               {type === "video-tutorial" && contentId 
                 ? "Purchase This Video" 
@@ -78,7 +78,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
             {type === "video-tutorial" && contentId && (
               <Button 
                 variant="outline" 
-                className="ml-2 border-amber-300 text-amber-700 hover:bg-amber-50"
+                className="ml-2"
                 onClick={() => startCheckoutSession("premium_subscription")}
               >
                 Subscribe to Premium
@@ -86,8 +86,8 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
             )}
           </div>
         </div>
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-learnscape-blue/20 transform rotate-3 hover:rotate-0 transition-transform">
-          <div className="text-3xl font-bold text-gradient-to-r from-amber-500 to-orange-500">S$99</div>
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-learnscape-blue/20">
+          <div className="text-3xl font-bold text-learnscape-blue">S$99</div>
           <div className="text-sm text-gray-500">per month</div>
         </div>
       </div>
