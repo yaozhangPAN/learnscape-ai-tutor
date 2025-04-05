@@ -137,7 +137,7 @@ const UserProfile = () => {
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <Button 
                   onClick={handleSubscribe}
-                  className="w-full bg-learnscape-blue hover:bg-blue-700"
+                  className="w-full bg-[#FFA500] hover:bg-[#FF6F00] text-white"
                 >
                   <Crown size={16} className="mr-2" />
                   Upgrade to Premium (S$99/month)
