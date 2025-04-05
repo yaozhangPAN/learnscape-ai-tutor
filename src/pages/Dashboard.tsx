@@ -1,14 +1,13 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Book, BookX, Star, Brain, BarChart3, Search, Calendar } from "lucide-react";
+import { Book, BookX, Star, Brain, BarChart3, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QuestionModule from "@/components/QuestionModule";
 import Navbar from "@/components/Navbar";
 import PremiumStatus from "@/components/PremiumStatus";
-import { Progress } from "@/components/ui/progress";
 
 const Dashboard = () => {
   const [greeting, setGreeting] = useState(() => {
@@ -67,33 +66,6 @@ const Dashboard = () => {
       activity: "Reviewed Science concepts", 
       date: "2 days ago", 
       score: "Complete" 
-    },
-  ];
-
-  const dailyRecommendations = [
-    {
-      id: 1,
-      title: "English Comprehension",
-      description: "Improve your reading skills",
-      progress: 0,
-      difficulty: "Medium",
-      estimatedTime: "20 mins",
-    },
-    {
-      id: 2,
-      title: "Mathematics Problem Set",
-      description: "Practice with fractions and decimals",
-      progress: 35,
-      difficulty: "Hard",
-      estimatedTime: "30 mins",
-    },
-    {
-      id: 3,
-      title: "Science Quiz",
-      description: "Test your knowledge on plants",
-      progress: 75,
-      difficulty: "Easy",
-      estimatedTime: "15 mins",
     },
   ];
 
@@ -160,69 +132,6 @@ const Dashboard = () => {
           <div>
             <PremiumStatus />
           </div>
-        </div>
-
-        {/* Daily Recommendations Module */}
-        <div className="mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <div>
-                <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
-                  Today's Recommendations
-                </CardTitle>
-                <CardDescription>
-                  Personalized questions based on your learning progress
-                </CardDescription>
-              </div>
-              <Button asChild variant="ghost" className="text-learnscape-blue hover:text-learnscape-darkBlue">
-                <Link to="/question-bank?tab=daily-recommendations">
-                  View All
-                </Link>
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {dailyRecommendations.map((item) => (
-                  <div key={item.id} className="bg-gray-50 p-4 rounded-lg transition hover:bg-gray-100">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="font-medium">{item.title}</h3>
-                        <p className="text-sm text-gray-500">{item.description}</p>
-                      </div>
-                      <div className="flex space-x-2 text-xs">
-                        <span className={`px-2 py-1 rounded-full ${
-                          item.difficulty === 'Easy' 
-                            ? 'bg-green-100 text-green-800' 
-                            : item.difficulty === 'Medium'
-                              ? 'bg-yellow-100 text-yellow-800' 
-                              : 'bg-red-100 text-red-800'
-                        }`}>
-                          {item.difficulty}
-                        </span>
-                        <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full">
-                          {item.estimatedTime}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Progress</span>
-                        <span>{item.progress}%</span>
-                      </div>
-                      <Progress value={item.progress} className="h-2" />
-                    </div>
-                    <div className="mt-4 flex justify-end">
-                      <Button asChild size="sm" className="bg-learnscape-blue hover:bg-blue-700">
-                        <Link to={`/question-bank?tab=daily-recommendations&topic=${item.id}`}>
-                          Continue
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         <div className="mb-8">
