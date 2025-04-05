@@ -64,10 +64,10 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				learnscape: {
-					blue: '#A8E6CF', // Changed to 嫩绿
-					purple: '#4FC3F7', // Changed to 天蓝
-					yellow: '#FFFDE7', // Changed to 淡米黄
-					darkBlue: '#37474F', // Changed to 深蓝
+					blue: '#4ABA79', // Changed from blue to green
+					purple: '#38A169', // Changed from purple to darker green
+					yellow: '#F2FCE2', // Changed to light green hue
+					darkBlue: '#1E5B3A', // Changed from dark blue to dark green
 					lightGray: '#F9FAFB'
 				}
 			},

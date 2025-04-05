@@ -5,83 +5,82 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;  /* #FFFFFF white */
-    --foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 152 66% 78%;  /* #A8E6CF 嫩绿 */
-    --primary-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --primary: 151 42% 51%; /* Changed from blue to green */
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 199 93% 63%;  /* #4FC3F7 天蓝 */
-    --secondary-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --secondary: 142 43% 42%; /* Changed from purple to darker green */
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 38%;  /* #616161 正文灰 */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 39 100% 50%;  /* #FFA500 橙色 */
-    --accent-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --accent: 104 44% 93%; /* Changed to light green */
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 100% 95%;  /* #FFFDE7 淡米黄 */
+    --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 199 93% 63%;  /* #4FC3F7 天蓝 */
+    --ring: 142 43% 42%; /* Changed to green */
 
     --radius: 0.75rem;
 
-    --sidebar-background: 210 13% 25%;  /* #37474F 深蓝 */
-    --sidebar-foreground: 60 100% 95%;  /* #FFFDE7 淡米黄 */
-    --sidebar-primary: 152 66% 78%;  /* #A8E6CF 嫩绿 */
-    --sidebar-primary-foreground: 210 13% 25%;  /* #37474F 深蓝 */
-    --sidebar-accent: 39 100% 50%;  /* #FFA500 橙色 */
-    --sidebar-accent-foreground: 210 13% 25%;  /* #37474F 深蓝 */
-    --sidebar-border: 0 0% 26%;
-    --sidebar-ring: 152 66% 78%;  /* #A8E6CF 嫩绿 */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 151 42% 51%; /* Changed to green */
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 151 42% 51%; /* Changed to green */
   }
 
   .dark {
-    --background: 210 13% 25%;  /* #37474F 深蓝 */
-    --foreground: 60 100% 95%;  /* #FFFDE7 淡米黄 */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 210 13% 22%;  /* Darker version of #37474F */
-    --card-foreground: 60 100% 95%;  /* #FFFDE7 淡米黄 */
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 210 13% 25%;  /* #37474F 深蓝 */
-    --popover-foreground: 60 100% 95%;  /* #FFFDE7 淡米黄 */
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 152 66% 78%;  /* #A8E6CF 嫩绿 */
-    --primary-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --primary: 151 42% 51%; /* Changed from blue to green */
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 199 93% 63%;  /* #4FC3F7 天蓝 */
-    --secondary-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --secondary: 142 43% 42%; /* Changed from purple to darker green */
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 13% 30%;  /* Lighter version of #37474F */
-    --muted-foreground: 0 0% 75%;  /* Lighter version of #616161 */
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 39 100% 50%;  /* #FFA500 橙色 */
-    --accent-foreground: 210 13% 25%;  /* #37474F 深蓝 */
+    --accent: 104 44% 93%; /* Changed to light green */
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 100% 95%;  /* #FFFDE7 淡米黄 */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 210 13% 30%;  /* Lighter version of #37474F */
-    --input: 210 13% 30%;  /* Lighter version of #37474F */
-    --ring: 152 66% 78%;  /* #A8E6CF 嫩绿 */
-
-    --sidebar-background: 210 13% 22%;  /* Darker version of #37474F */
-    --sidebar-foreground: 60 100% 95%;  /* #FFFDE7 淡米黄 */
-    --sidebar-primary: 152 66% 78%;  /* #A8E6CF 嫩绿 */
-    --sidebar-primary-foreground: 210 13% 25%;  /* #37474F 深蓝 */
-    --sidebar-accent: 39 100% 50%;  /* #FFA500 橙色 */
-    --sidebar-accent-foreground: 210 13% 25%;  /* #37474F 深蓝 */
-    --sidebar-border: 210 13% 30%;  /* Lighter version of #37474F */
-    --sidebar-ring: 152 66% 78%;  /* #A8E6CF 嫩绿 */
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 142 43% 42%; /* Changed to green */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 151 42% 51%; /* Changed to green */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 151 42% 51%; /* Changed to green */
   }
 }
 
@@ -102,11 +101,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-accent hover:bg-accent/80 text-accent-foreground font-semibold py-2 px-4 rounded-lg transition-colors;
+    @apply bg-learnscape-blue hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
   }
   
   .btn-secondary {
-    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold py-2 px-4 rounded-lg transition-colors;
+    @apply bg-learnscape-purple hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
   }
   
   .card-hover {
@@ -114,6 +113,6 @@
   }
   
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-learnscape-blue to-learnscape-purple;
   }
 }
