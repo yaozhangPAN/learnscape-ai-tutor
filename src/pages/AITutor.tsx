@@ -1,9 +1,9 @@
 
 import { useState, useEffect } from "react";
-import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Camera, Headphones } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Pen, Mic, Brain, Sparkles, FileSearch, Camera, Headphones } from "lucide-react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TabsContent } from "@/components/ui/tabs";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WritingCoach from "@/components/AITutor/WritingCoach";
@@ -13,6 +13,7 @@ import ErrorAnalysis from "@/components/AITutor/ErrorAnalysis";
 import SnapAndSolve from "@/components/AITutor/SnapAndSolve";
 import DictationPractice from "@/components/AITutor/DictationPractice";
 import SubscriptionBanner from "@/components/SubscriptionBanner";
+import AISidebar from "@/components/AITutor/AISidebar";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const AITutor = () => {
@@ -32,7 +33,7 @@ const AITutor = () => {
     {
       id: "writing-coach",
       title: "Writing Coach",
-      icon: <Pen className="h-8 w-8 text-learnscape-blue" />,
+      icon: <Pen className="h-6 w-6" />,
       description: "Improve your writing skills with personalized feedback and guidance.",
       component: <WritingCoach />,
       emoji: "✏️"
@@ -40,7 +41,7 @@ const AITutor = () => {
     {
       id: "oral-exam",
       title: "Oral Exam Practice",
-      icon: <Mic className="h-8 w-8 text-learnscape-purple" />,
+      icon: <Mic className="h-6 w-6" />,
       description: "Practice your speaking skills and prepare for oral examinations.",
       component: <OralExamPractice />,
       emoji: "🎙️"
@@ -48,7 +49,7 @@ const AITutor = () => {
     {
       id: "dictation-practice",
       title: "Dictation Practice",
-      icon: <Headphones className="h-8 w-8 text-indigo-500" />,
+      icon: <Headphones className="h-6 w-6" />,
       description: "Get ready for your school spelling test with fun Chinese and English dictation practice!",
       component: <DictationPractice />,
       emoji: "🎧"
@@ -56,7 +57,7 @@ const AITutor = () => {
     {
       id: "tutor-me",
       title: "Tutor Me",
-      icon: <Brain className="h-8 w-8 text-green-500" />,
+      icon: <Brain className="h-6 w-6" />,
       description: "Get personalized help with any subject or concept you're struggling with.",
       component: <TutorMe />,
       emoji: "🧠"
@@ -64,7 +65,7 @@ const AITutor = () => {
     {
       id: "error-analysis",
       title: "Error Analysis",
-      icon: <FileSearch className="h-8 w-8 text-red-500" />,
+      icon: <FileSearch className="h-6 w-6" />,
       description: "Analyze your mistakes and learn how to avoid them in future examinations.",
       component: <ErrorAnalysis />,
       emoji: "🔍"
@@ -72,12 +73,14 @@ const AITutor = () => {
     {
       id: "snap-and-solve",
       title: "Snap & Solve",
-      icon: <Camera className="h-8 w-8 text-indigo-500" />,
+      icon: <Camera className="h-6 w-6" />,
       description: "Take a photo of your question to get step by step guidance for reaching solutions!",
       component: <SnapAndSolve />,
       emoji: "📸"
     }
   ];
+
+  const currentTool = tutorOptions.find(option => option.id === activeTab);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -100,58 +103,55 @@ const AITutor = () => {
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Your friendly AI learning companion is here to help! Choose one of our special 
-              learning tools below and let's learn together.
+              learning tools and let's learn together.
             </p>
           </div>
 
           {!isPremium && <SubscriptionBanner type="ai-tutor" />}
 
-          <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-            {tutorOptions.map((option, index) => (
-              <Card 
-                key={option.id}
-                className={`cursor-pointer transition-all hover:shadow-lg border-2 overflow-hidden group ${
-                  activeTab === option.id ? 'border-learnscape-blue animate-pop' : 'border-transparent'
-                }`}
-                onClick={() => setActiveTab(option.id)}
-              >
-                <div className="absolute -right-6 -top-6 w-20 h-20 bg-yellow-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <CardHeader className="flex flex-col items-center text-center pb-2 relative">
-                  <div className="mb-2 p-3 rounded-full bg-gray-100 group-hover:bg-blue-50 transition-colors">
-                    {option.icon}
+          <div className={`transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+            <SidebarProvider defaultOpen={true}>
+              <div className="flex min-h-[600px] w-full bg-white rounded-lg shadow-md overflow-hidden">
+                <AISidebar 
+                  options={tutorOptions} 
+                  activeTab={activeTab} 
+                  onTabChange={setActiveTab} 
+                />
+                
+                <div className="flex-1 p-6">
+                  {currentTool && (
+                    <div className="mb-6">
+                      <Card className="border-0 shadow-none bg-gray-50">
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-full bg-blue-100">
+                              {currentTool.icon}
+                            </div>
+                            <div>
+                              <CardTitle className="text-xl flex items-center">
+                                {currentTool.title}
+                                <span className="ml-2">{currentTool.emoji}</span>
+                              </CardTitle>
+                              <CardDescription>
+                                {currentTool.description}
+                              </CardDescription>
+                            </div>
+                          </div>
+                        </CardHeader>
+                      </Card>
+                    </div>
+                  )}
+                  
+                  <div className="mt-4">
+                    {tutorOptions.map((option) => (
+                      <div key={option.id} className={activeTab === option.id ? 'block' : 'hidden'}>
+                        {option.component}
+                      </div>
+                    ))}
                   </div>
-                  <CardTitle className="text-xl flex items-center">
-                    {option.title}
-                    <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
-                      {option.emoji}
-                    </span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-center">
-                    {option.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className={`bg-white rounded-lg shadow-md p-6 transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-            <Tabs defaultValue="writing-coach" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-6 mb-8">
-                {tutorOptions.map((option) => (
-                  <TabsTrigger key={option.id} value={option.id} className="flex items-center justify-center gap-2">
-                    {option.emoji}
-                    {option.title}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              {tutorOptions.map((option) => (
-                <TabsContent key={option.id} value={option.id}>
-                  {option.component}
-                </TabsContent>
-              ))}
-            </Tabs>
+                </div>
+              </div>
+            </SidebarProvider>
           </div>
         </div>
       </main>
