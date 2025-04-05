@@ -27,7 +27,7 @@ const Features = () => {
     {
       icon: <FileText className="h-10 w-10 text-green-500" />,
       title: "Mock Exam",
-      description: "Practice with full-length exam papers from top Singapore schools to prepare for your actual exams.",
+      description: "Practice with full-length exam papers from top Singapore schools. The system automatically times and scores your paper.",
       link: "/mock-exam"
     }
   ];
