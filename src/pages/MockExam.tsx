@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -269,6 +270,16 @@ const MockExam = () => {
     selectedLevel, selectedSubject, selectedSchool, 
     selectedYear, selectedType, topSchoolsOnly, searchQuery
   ]);
+
+  const resetFilters = () => {
+    setSelectedLevel("all");
+    setSelectedSubject("all");
+    setSelectedSchool("all");
+    setSelectedYear("all");
+    setSelectedType("all");
+    setTopSchoolsOnly(false);
+    setSearchQuery("");
+  };
 
   const handleTakeExam = (examId: string) => {
     navigate(`/take-exam/${examId}`);
