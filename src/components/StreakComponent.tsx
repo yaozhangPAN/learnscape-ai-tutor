@@ -3,8 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Award, Calendar, Clock, CreditCard, Flame } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Calendar, Clock, Flame } from "lucide-react";
 
 const StreakComponent = () => {
   const [activeTab, setActiveTab] = useState("personal");
@@ -104,53 +103,6 @@ const StreakComponent = () => {
               <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white text-lg py-6">
                 EXTEND STREAK
               </Button>
-            </CardContent>
-          </Card>
-          
-          {/* Upgrade to Premium component */}
-          <Card className="bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-100 shadow-md mb-8">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row items-center justify-between">
-                <div className="mb-6 md:mb-0 md:mr-8">
-                  <h3 className="text-xl font-semibold text-learnscape-darkBlue flex items-center">
-                    <Award className="h-5 w-5 mr-2 text-amber-500" />
-                    Upgrade to Premium
-                  </h3>
-                  <p className="mt-2 text-gray-600 max-w-lg">
-                    Get unlimited access to AI Tutor, Daily Recommendations, and all Video Tutorials.
-                  </p>
-                  
-                  <ul className="mt-4 space-y-2">
-                    <li className="flex items-center text-gray-700">
-                      <span className="inline-block w-5 h-5 mr-2 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                      Unlimited AI tutor sessions
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="inline-block w-5 h-5 mr-2 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                      Personalized daily study plan
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <span className="inline-block w-5 h-5 mr-2 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                      S$50 credits for purchasing premium video lessons
-                    </li>
-                  </ul>
-                  
-                  <div className="mt-6">
-                    <Link to="/login">
-                      <Button className="bg-[#FFA500] hover:bg-[#FF6F00] text-white">
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Subscribe for S$99/month
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-                
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-amber-100">
-                  <div className="text-3xl font-bold text-learnscape-darkBlue">S$99</div>
-                  <div className="text-sm text-gray-500">per month</div>
-                  <div className="mt-1 text-amber-600 text-sm font-medium">Cancel anytime</div>
-                </div>
-              </div>
             </CardContent>
           </Card>
           
