@@ -48,7 +48,7 @@ const Features = () => {
     },
     {
       icon: <Zap className="h-10 w-10 text-amber-500" />,
-      title: "Daily Recommendations",
+      title: "AI Powered Daily Study Plan",
       description: "AI-based recommendations that push the most relevant questions based on your past mistakes.",
       link: "/dashboard"
     }
