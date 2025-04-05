@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -64,13 +63,14 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				learnscape: {
-					blue: '#4ECCE6', // Updated to soft blue from image
+					blue: '#4ECCE6', // Soft blue
 					purple: '#38A169', // Keeping green for secondary color
-					yellow: '#FFE176', // Updated to bright yellow from image
+					yellow: '#FFE176', // Bright yellow
 					darkBlue: '#0A3A5C', // Dark blue for text
 					lightGray: '#F9FAFB',
-					lime: '#B5E254', // New lime green color from image
-					cream: '#FFF9D6', // New cream background color from image
+					lime: '#B5E254', // Lime green
+					cream: '#FFF9D6', // Cream background color
+					lightGreen: '#F2FCE2', // New soft light green color
 				}
 			},
 			borderRadius: {

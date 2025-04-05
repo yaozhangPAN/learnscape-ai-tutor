@@ -8,7 +8,7 @@ import { XCircle, ArrowLeft } from "lucide-react";
 
 const PaymentCanceled = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-learnscape-cream">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md border-2 border-gray-100">

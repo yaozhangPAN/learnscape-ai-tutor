@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 54 80% 95%; /* Cream background */
+    --background: 100 60% 97%; /* Soft light green background */
     --foreground: 210 84% 20%; /* Dark blue text */
 
     --card: 0 0% 100%;
@@ -35,7 +35,7 @@
 
     --radius: 1.5rem; /* Increased border radius for more rounded elements */
 
-    --sidebar-background: 54 80% 95%; /* Match cream background */
+    --sidebar-background: 100 60% 97%; /* Match soft light green background */
     --sidebar-foreground: 210 84% 20%;
     --sidebar-primary: 190 80% 60%; /* Soft blue */
     --sidebar-primary-foreground: 0 0% 98%;
@@ -91,7 +91,7 @@
   }
 
   body {
-    @apply bg-learnscape-cream text-foreground;
+    @apply bg-background text-foreground;
     font-family: 'Nunito', sans-serif;
   }
 
