@@ -16,15 +16,20 @@ const Hero = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const decorativeColors = [
+    "bg-green-200", "bg-blue-200", "bg-yellow-200", 
+    "bg-pink-200", "bg-purple-200", "bg-orange-200"
+  ];
+
   return (
     <div className="relative overflow-hidden bg-white">
       <div className="absolute inset-0 bg-gradient-to-b from-learnscape-yellow/30 to-white z-0"></div>
       
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-10 h-10 rounded-full bg-green-200 animate-bounce-slow opacity-70 hidden md:block"></div>
-      <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-green-200 animate-float opacity-70 hidden md:block"></div>
-      <div className="absolute bottom-20 left-1/4 w-6 h-6 rounded-full bg-green-200 animate-spin-slow opacity-70 hidden md:block"></div>
-      <div className="absolute bottom-40 right-1/3 w-12 h-12 rounded-full bg-green-200 animate-wiggle opacity-70 hidden md:block"></div>
+      {/* Decorative elements with varied pastel colors */}
+      <div className="absolute top-20 left-10 w-10 h-10 rounded-full bg-pink-200 animate-bounce-slow opacity-70 hidden md:block"></div>
+      <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-blue-200 animate-float opacity-70 hidden md:block"></div>
+      <div className="absolute bottom-20 left-1/4 w-6 h-6 rounded-full bg-yellow-200 animate-spin-slow opacity-70 hidden md:block"></div>
+      <div className="absolute bottom-40 right-1/3 w-12 h-12 rounded-full bg-purple-200 animate-wiggle opacity-70 hidden md:block"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="py-16 lg:py-24">
@@ -69,12 +74,12 @@ const Hero = () => {
             </div>
             <div className={`mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
               <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
-                <div className="relative block w-full h-full bg-learnscape-lightGray rounded-lg overflow-hidden">
+                <div className="relative block w-full h-full bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden">
                   <div className="p-8">
                     <Link to="/ai-tutor" className="block">
-                      <div className="bg-white rounded-lg shadow-md p-6 animate-float hover:animate-bounce-slow transition-all">
+                      <div className="bg-white rounded-lg shadow-md p-6 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all">
                         <div className="flex space-x-4 items-center mb-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center animate-pulse">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-400 to-purple-400 flex items-center justify-center animate-pulse">
                             <Brain className="text-white h-6 w-6" />
                           </div>
                           <div>
