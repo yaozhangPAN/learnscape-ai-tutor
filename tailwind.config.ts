@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,23 +64,17 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				learnscape: {
-					blue: '#4ECCE6', // Soft blue
-					purple: '#38A169', // Keeping green for secondary color
-					yellow: '#FFE176', // Bright yellow
-					darkBlue: '#0A3A5C', // Dark blue for text
-					lightGray: '#F9FAFB',
-					lime: '#B5E254', // Lime green
-					cream: '#FFF9D6', // Cream background color
-					lightGreen: '#F2FCE2', // New soft light green color
+					blue: '#4ABA79', // Changed from blue to green
+					purple: '#38A169', // Changed from purple to darker green
+					yellow: '#F2FCE2', // Changed to light green hue
+					darkBlue: '#1E5B3A', // Changed from dark blue to dark green
+					lightGray: '#F9FAFB'
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)',
-				xl: '1.5rem',
-				'2xl': '2rem',
-				'3xl': '3rem',
+				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
 				'accordion-down': {

@@ -1,58 +1,49 @@
 
-import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 
-interface QuestionModuleProps {
+type QuestionModuleProps = {
   title: string;
   description: string;
   icon: React.ReactNode;
   count: number;
   color: string;
-}
+  onClick?: () => void;
+};
 
-const QuestionModule = ({ title, description, icon, count, color }: QuestionModuleProps) => {
-  // Determine the route based on the title
-  const getRoute = () => {
-    if (title === "Question Bank") return "/question-bank";
-    if (title === "Wrong Questions") return "/question-bank?filter=wrong";
-    if (title === "Favorites") return "/question-bank?filter=favorites";
-    if (title === "Leaderboard") return "/leaderboard";
-    return "/";
-  };
-
-  // Determine button text based on the title
-  const getButtonText = () => {
-    if (title === "Leaderboard") return "View Rankings";
-    return "View Questions";
-  };
-
+const QuestionModule = ({ title, description, icon, count, color, onClick }: QuestionModuleProps) => {
+  // Special treatment for Leaderboard if needed
+  const isLeaderboard = title.toLowerCase() === "leaderboard";
+  
   return (
-    <Link to={getRoute()} className="block">
-      <div className="rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-full bg-white border-2 border-gray-100">
-        <div className="p-6">
-          <div className="flex flex-col h-full">
-            <div className="flex items-center mb-4">
-              <div className={`p-3 rounded-2xl ${color}`}>
-                {icon}
-              </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-bold text-learnscape-darkBlue">{title}</h3>
-                <p className="text-gray-600 text-sm">{description}</p>
-              </div>
-            </div>
-            <div className="mt-2 flex justify-between items-center">
-              <span className="text-3xl font-bold text-learnscape-darkBlue">
-                {count.toLocaleString()}
-              </span>
-              <span className="text-learnscape-blue flex items-center text-sm font-medium hover:underline group">
-                {getButtonText()}
-                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </div>
+    <Card className="card-hover border border-gray-100 h-full cursor-pointer" onClick={onClick}>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center ${color}`}>
+            {icon}
           </div>
+          <div className="text-2xl font-bold">{count}</div>
         </div>
-      </div>
-    </Link>
+        <CardTitle className="text-xl font-bold text-learnscape-darkBlue mt-4">
+          {title}
+        </CardTitle>
+        <CardDescription>
+          {description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex-grow">
+        <div className="text-sm text-gray-500">
+          Last updated: {new Date().toLocaleDateString()}
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button className={`w-full flex items-center justify-center ${color.includes('bg-learnscape-blue') ? 'text-white' : ''}`}>
+          {isLeaderboard ? "View Rankings" : "View All"}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 
