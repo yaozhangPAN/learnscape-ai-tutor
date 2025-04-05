@@ -74,33 +74,6 @@ const AboutUs = () => {
         </div>
       </section>
       
-      {/* Our Story Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-learnscape-darkBlue mb-6">Our Story</h2>
-              <p className="text-gray-700 mb-4">
-                Founded in 2015, Learnscape began with a simple idea: to make high-quality education accessible to all students in Singapore.
-              </p>
-              <p className="text-gray-700 mb-4">
-                We recognized the challenges many students face in the competitive Singapore education system and set out to create a learning platform that adapts to individual needs, focuses on conceptual understanding, and prepares students not just for exams, but for lifelong success.
-              </p>
-              <p className="text-gray-700">
-                Today, Learnscape has helped thousands of students achieve their academic goals through our innovative approach to teaching and learning.
-              </p>
-            </div>
-            <div className="rounded-lg overflow-hidden shadow-xl">
-              <img 
-                src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
-                alt="Learnscape classroom" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-      
       {/* Stats Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
