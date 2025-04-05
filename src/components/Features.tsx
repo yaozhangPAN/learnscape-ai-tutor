@@ -1,3 +1,4 @@
+
 import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -22,6 +23,12 @@ const Features = () => {
       title: "Favorites",
       description: "Save important questions for quick access and create your own study collection.",
       link: ""
+    },
+    {
+      icon: <FileText className="h-10 w-10 text-green-500" />,
+      title: "Mock Exam",
+      description: "Practice with full-length exam papers from top Singapore schools to prepare for your actual exams.",
+      link: "/mock-exam"
     }
   ];
 
