@@ -118,11 +118,11 @@ const leaderboardData = [
 const getBadgeVariant = (badge: string) => {
   switch (badge) {
     case "Expert":
-      return "default";
+      return "achievement"; // Using the new achievement badge variant
     case "Advanced":
       return "secondary";
     case "Intermediate":
-      return "outline";
+      return "default";
     default:
       return "outline";
   }
@@ -149,16 +149,16 @@ const Leaderboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
       
       {/* Banner */}
-      <div className="bg-gradient-to-r from-learnscape-blue to-learnscape-purple py-16 px-4">
+      <div className="bg-gradient-to-r from-primary to-secondary py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground text-center mb-4">
             Leaderboard
           </h1>
-          <p className="text-lg text-white text-center max-w-2xl mx-auto">
+          <p className="text-lg text-foreground text-center max-w-2xl mx-auto">
             Recognizing our top performers who've demonstrated exceptional dedication and achievement in their learning journey.
           </p>
         </div>
@@ -167,14 +167,14 @@ const Leaderboard = () => {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Top 3 showcase */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-            <Award className="mr-2 text-learnscape-blue" /> Top Achievers
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center">
+            <Award className="mr-2 text-[#FFD700]" /> Top Achievers
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {leaderboardData.slice(0, 3).map((user) => (
+            {filteredData.slice(0, 3).map((user) => (
               <Card key={user.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader className={`text-center ${
-                  user.rank === 1 ? "bg-yellow-50" : 
+                  user.rank === 1 ? "bg-[#FFD700]/10" : 
                   user.rank === 2 ? "bg-gray-50" : "bg-amber-50"
                 }`}>
                   <div className="flex justify-center mb-4">
@@ -192,9 +192,9 @@ const Leaderboard = () => {
                   <div className="mb-2">
                     <Badge variant={getBadgeVariant(user.badge)}>{user.badge}</Badge>
                   </div>
-                  <p className="text-2xl font-bold text-learnscape-blue">{user.score.toLocaleString()}</p>
-                  <p className="text-sm text-gray-500">Points</p>
-                  <p className="mt-2 text-gray-600">{user.questions} Questions Answered</p>
+                  <p className="text-2xl font-bold text-primary">{user.score.toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">Points</p>
+                  <p className="mt-2 text-muted-foreground">{user.questions} Questions Answered</p>
                 </CardContent>
               </Card>
             ))}
@@ -210,7 +210,7 @@ const Leaderboard = () => {
               placeholder="Search by name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-learnscape-blue"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>

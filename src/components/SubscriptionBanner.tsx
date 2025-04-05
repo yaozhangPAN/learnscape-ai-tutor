@@ -58,18 +58,18 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-learnscape-blue/20 to-learnscape-purple/20 border border-learnscape-blue/30 p-6 rounded-lg mb-6">
+    <div className="bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 p-6 rounded-lg mb-6">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-xl font-semibold text-learnscape-darkBlue flex items-center">
-            <Sparkles className="h-5 w-5 mr-2 text-learnscape-blue" />
+          <h3 className="text-xl font-semibold text-foreground flex items-center">
+            <Sparkles className="h-5 w-5 mr-2 text-[#FFD700]" />
             {title}
           </h3>
           <p className="text-gray-600 mt-2">{description}</p>
           <div className="mt-4">
             <Button 
               onClick={handleSubscribe}
-              className="bg-learnscape-blue hover:bg-green-700"
+              className="bg-accent hover:bg-[#FF6F00] text-white"
             >
               {type === "video-tutorial" && contentId 
                 ? "Purchase This Video" 
@@ -86,8 +86,8 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
             )}
           </div>
         </div>
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-learnscape-blue/20">
-          <div className="text-3xl font-bold text-learnscape-blue">S$99</div>
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-primary/20">
+          <div className="text-3xl font-bold text-primary">S$99</div>
           <div className="text-sm text-gray-500">per month</div>
         </div>
       </div>

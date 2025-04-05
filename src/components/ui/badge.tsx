@@ -17,7 +17,11 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
         success: 
-          "border-transparent bg-green-100 text-green-800 hover:bg-green-200/80",
+          "border-transparent bg-[#A8E6CF]/20 text-foreground hover:bg-[#A8E6CF]/30",
+        achievement:
+          "border-transparent bg-[#FFD700]/20 text-foreground hover:bg-[#FFD700]/30", // Achievement badge with 金黄 color
+        error:
+          "border-transparent bg-[#FF8A80]/20 text-foreground hover:bg-[#FF8A80]/30", // Error badge with 柔红 color
       },
     },
     defaultVariants: {
