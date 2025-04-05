@@ -35,7 +35,7 @@ const QuestionModule = ({ title, description, icon, count, color, onClick }: Que
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="orange" className="w-full flex items-center justify-center">
+        <Button variant="default" className="w-full flex items-center justify-center">
           View All
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
