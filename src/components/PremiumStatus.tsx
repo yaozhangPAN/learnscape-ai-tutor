@@ -61,7 +61,7 @@ const PremiumStatus = () => {
   }
 
   return (
-    <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+    <Card className="bg-[#FFFDE7] border-green-200">
       <CardHeader className="pb-2">
         <CardTitle className="text-learnscape-darkBlue">Upgrade to Premium</CardTitle>
       </CardHeader>
@@ -87,7 +87,7 @@ const PremiumStatus = () => {
       <CardFooter className="border-t border-green-100 pt-3">
         <Button 
           onClick={handleSubscribe}
-          className="w-full bg-learnscape-blue hover:bg-green-700"
+          className="w-full bg-[#FFA500] hover:bg-[#FF6F00] text-white"
         >
           <Crown className="mr-2 h-4 w-4" />
           Subscribe for S$99/month

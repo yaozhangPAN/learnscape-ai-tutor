@@ -58,7 +58,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-learnscape-blue/20 to-learnscape-purple/20 border border-learnscape-blue/30 p-6 rounded-lg mb-6">
+    <div className="bg-[#FFFDE7] border border-learnscape-blue/30 p-6 rounded-lg mb-6">
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-xl font-semibold text-learnscape-darkBlue flex items-center">
