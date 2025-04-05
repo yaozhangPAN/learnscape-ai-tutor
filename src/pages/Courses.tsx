@@ -23,148 +23,205 @@ type Course = {
   price: string;
   isPremium: boolean;
   image: string;
-  type?: string;
+  type?: string; // Added type property to distinguish course types
 };
 
 const mockCourses: Course[] = [
   {
     id: "1",
-    title: "Primary 6 English Comprehension Mastery",
-    description: "Learn effective strategies to improve reading comprehension skills for PSLE success.",
+    title: "Primary 6 Mathematics - Problem Solving Strategies",
+    description: "Learn effective problem-solving techniques for PSLE Mathematics",
     level: "p6",
-    subject: "english",
-    duration: "2h 30m",
+    subject: "mathematics",
+    duration: "10 weeks",
     rating: 4.8,
-    students: 1250,
-    price: "S$29.90",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWR1Y2F0aW9ufGVufDB8fDB8fHww",
+    students: 248,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
   {
     id: "2",
-    title: "Primary 6 Problem Solving Techniques",
-    description: "Master advanced problem-solving strategies to tackle challenging math questions in PSLE.",
+    title: "Primary 6 Science - Mastering Energy Conversions",
+    description: "Comprehensive coverage of energy concepts for PSLE Science",
     level: "p6",
-    subject: "mathematics",
-    duration: "3h 15m",
-    rating: 4.9,
-    students: 1875,
-    price: "S$34.90",
+    subject: "science",
+    duration: "8 weeks",
+    rating: 4.7,
+    students: 173,
+    price: "S$399",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWF0aCUyMGNsYXNzfGVufDB8fDB8fHww",
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
   {
     id: "3",
-    title: "Science Experiment Explanations",
-    description: "Understand the scientific concepts behind common PSLE science experiments.",
+    title: "Primary 6 English - Mastering Comprehension",
+    description: "Enhance reading and comprehension skills for PSLE English",
     level: "p6",
-    subject: "science",
-    duration: "2h 45m",
-    rating: 4.7,
-    students: 980,
-    price: "S$24.90",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2NpZW5jZSUyMGV4cGVyaW1lbnR8ZW58MHx8MHx8fDA%3D",
+    subject: "english",
+    duration: "12 weeks",
+    rating: 4.9,
+    students: 215,
+    price: "S$499",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
   {
     id: "4",
-    title: "Chinese Oral Exam Preparation",
-    description: "Boost your confidence and skills for the Chinese oral examination.",
+    title: "Primary 6 Chinese - Vocabulary Building",
+    description: "Expand your Chinese vocabulary for PSLE Chinese examinations",
     level: "p6",
     subject: "chinese",
-    duration: "1h 50m",
+    duration: "10 weeks",
     rating: 4.6,
-    students: 765,
-    price: "Free",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1577985902455-9cf85adcdca0?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hpbmVzZSUyMGNsYXNzfGVufDB8fDB8fHww",
+    students: 142,
+    price: "S$599",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
   {
     id: "5",
-    title: "Primary 5 English Creative Writing",
-    description: "Develop creative writing skills and techniques to excel in compositions.",
+    title: "Primary 5 Mathematics - Fractions and Decimals",
+    description: "Master the concepts of fractions and decimals",
     level: "p5",
-    subject: "english",
-    duration: "2h 10m",
+    subject: "mathematics",
+    duration: "8 weeks",
     rating: 4.7,
-    students: 890,
-    price: "S$19.90",
+    students: 186,
+    price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d3JpdGluZ3xlbnwwfHwwfHx8MA%3D%3D",
+    image: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
   {
     id: "6",
-    title: "Primary 5 Fraction Concepts",
-    description: "A comprehensive guide to understanding fractions for Primary 5 students.",
+    title: "Primary 5 Science - Forces and Energy",
+    description: "Understand the fundamentals of forces and energy",
     level: "p5",
-    subject: "mathematics",
-    duration: "2h 30m",
-    rating: 4.8,
-    students: 1120,
-    price: "S$22.90",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1632571401005-458e9d244591?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZnJhY3Rpb258ZW58MHx8MHx8fDA%3D",
+    subject: "science",
+    duration: "9 weeks",
+    rating: 4.5,
+    students: 167,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1581093804475-577d72e73ef7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
   {
     id: "7",
-    title: "Primary 5 Science Systems and Cycles",
-    description: "Learn about plant and animal systems, water cycle, and other natural processes.",
-    level: "p5",
-    subject: "science",
-    duration: "2h 15m",
-    rating: 4.5,
-    students: 680,
-    price: "S$21.90",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2NpZW5jZXxlbnwwfHwwfHx8MA%3D%3D",
+    title: "Primary 6 Chinese - Mastering Comprehension",
+    description: "Improve your reading and understanding of Chinese texts for PSLE",
+    level: "p6",
+    subject: "chinese",
+    duration: "11 weeks",
+    rating: 4.8,
+    students: 156,
+    price: "S$399",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
   {
     id: "8",
-    title: "Primary 5 Chinese Character Writing",
-    description: "Master the art of writing Chinese characters with proper stroke order and technique.",
-    level: "p5",
+    title: "Primary 6 Chinese - Mastering Composition",
+    description: "Develop essential writing skills for Chinese compositions in PSLE",
+    level: "p6",
     subject: "chinese",
-    duration: "1h 45m",
-    rating: 4.6,
-    students: 520,
-    price: "S$18.90",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1499591934245-40b55745b905?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hpbmVzZSUyMGNoYXJhY3RlcnN8ZW58MHx8MHx8fDA%3D",
+    duration: "12 weeks",
+    rating: 4.9,
+    students: 168,
+    price: "S$499",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
+  // Past Paper Walkthrough courses - newly added
   {
     id: "9",
-    title: "Primary 6 Math Past Paper Solutions",
-    description: "Detailed solutions to past PSLE Mathematics papers with step-by-step explanations.",
+    title: "2024 PSLE Mathematics Paper Walkthrough",
+    description: "Detailed explanation of the 2024 PSLE Mathematics paper with step-by-step solutions",
     level: "p6",
     subject: "mathematics",
-    duration: "4h 20m",
+    duration: "3 weeks",
     rating: 4.9,
-    students: 2100,
-    price: "S$39.90",
+    students: 312,
+    price: "S$40",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1535572290543-960a8046f5af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZXhhbXxlbnwwfHwwfHx8MA%3D%3D",
+    image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
   },
   {
     id: "10",
-    title: "Primary 6 Science Exam Techniques",
-    description: "Learn how to approach and answer different types of science questions in PSLE.",
+    title: "2024 PSLE Science Paper Walkthrough",
+    description: "Complete analysis and solutions for the 2024 PSLE Science examination",
     level: "p6",
     subject: "science",
-    duration: "3h 10m",
+    duration: "3 weeks",
     rating: 4.8,
-    students: 1560,
-    price: "S$28.90",
+    students: 287,
+    price: "S$40",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2NpZW5jZSUyMGV4cGVyaW1lbnR8ZW58MHx8MHx8fDA%3D",
+    image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "11",
+    title: "2024 PSLE English Paper Walkthrough",
+    description: "Expert analysis of the 2024 PSLE English paper with model answers",
+    level: "p6",
+    subject: "english",
+    duration: "3 weeks",
+    rating: 4.7,
+    students: 254,
+    price: "S$40",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "12",
+    title: "2023 PSLE Mathematics Paper Walkthrough",
+    description: "In-depth review of the 2023 PSLE Mathematics paper with strategies for similar questions",
+    level: "p6",
+    subject: "mathematics",
+    duration: "2 weeks",
+    rating: 4.9,
+    students: 398,
+    price: "S$40",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "13",
+    title: "2023 PSLE Science Paper Walkthrough",
+    description: "Comprehensive examination of the 2023 PSLE Science paper with detailed explanations",
+    level: "p6",
+    subject: "science",
+    duration: "2 weeks",
+    rating: 4.8,
+    students: 345,
+    price: "S$40",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    type: "past_paper"
+  },
+  {
+    id: "14",
+    title: "P5 Common Test - Mathematics Solutions",
+    description: "Expert guidance on typical Primary 5 mathematics assessment questions",
+    level: "p5",
+    subject: "mathematics",
+    duration: "1 week",
+    rating: 4.6,
+    students: 178,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "past_paper"
   }
 ];
@@ -172,20 +229,12 @@ const mockCourses: Course[] = [
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
-  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedType, setSelectedType] = useState<string>("all"); // Added state for course type
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
   const [searchParams] = useSearchParams();
   const contentId = searchParams.get("content");
-
-  const videoUrls: Record<string, string> = {
-    "1": "https://cdn.videvo.net/videvo_files/video/free/2012-06/large_watermarked/hd0048_preview.mp4",
-    "2": "https://cdn.videvo.net/videvo_files/video/free/2014-07/large_watermarked/ScientificExperiment_preview.mp4",
-    "3": "https://cdn.videvo.net/videvo_files/video/free/2015-07/large_watermarked/Thailand_Timelapse_HD_preview.mp4",
-    "9": "https://cdn.videvo.net/videvo_files/video/free/2014-10/large_watermarked/Number_Patterns_preview.mp4",
-    "10": "https://cdn.videvo.net/videvo_files/video/free/2017-08/large_watermarked/170724_15_Chemistry_07_preview.mp4",
-  };
 
   const filteredCourses = mockCourses.filter(
     course => 
@@ -195,6 +244,7 @@ const Courses = () => {
   );
 
   useEffect(() => {
+    // If contentId is in URL params, find and select that course
     if (contentId) {
       const course = mockCourses.find(c => c.id === contentId);
       if (course) {
@@ -206,17 +256,21 @@ const Courses = () => {
 
   const handleWatchNow = async (course: Course) => {
     if (!course.isPremium) {
+      // Free course, just open it
       setSelectedCourse(course);
       setDialogOpen(true);
       return;
     }
 
+    // Check if user has premium or has purchased this course
     const hasAccess = isPremium || await hasAccessToContent(course.id, "video_tutorial");
     
     if (hasAccess) {
+      // User has access, open the course
       setSelectedCourse(course);
       setDialogOpen(true);
     } else {
+      // User doesn't have access, prompt to purchase
       setSelectedCourse(course);
       setDialogOpen(true);
     }
@@ -367,6 +421,7 @@ const Courses = () => {
       </div>
       <Footer />
 
+      {/* Video preview dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-4xl">
           {selectedCourse && (
@@ -376,28 +431,19 @@ const Courses = () => {
                 <DialogDescription>{selectedCourse.description}</DialogDescription>
               </DialogHeader>
               
+              {/* Content based on access */}
               {(isPremium || !selectedCourse.isPremium || hasAccessToContent(selectedCourse.id, "video_tutorial")) ? (
                 <div className="aspect-video bg-black rounded-md overflow-hidden">
-                  {videoUrls[selectedCourse.id] ? (
-                    <video 
-                      className="w-full h-full" 
-                      controls
-                      src={videoUrls[selectedCourse.id]}
-                      poster={selectedCourse.image}
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-white">
-                      <div className="text-center">
-                        <Video className="h-16 w-16 mx-auto mb-4" />
-                        <p>No video available for this course</p>
-                        <p className="text-sm text-gray-400 mt-2">
-                          This is a placeholder for the actual video content
-                        </p>
-                      </div>
+                  {/* This would be a real video player in a production app */}
+                  <div className="w-full h-full flex items-center justify-center text-white">
+                    <div className="text-center">
+                      <Video className="h-16 w-16 mx-auto mb-4" />
+                      <p>Video player would be embedded here</p>
+                      <p className="text-sm text-gray-400 mt-2">
+                        This is a placeholder for the actual video content
+                      </p>
                     </div>
-                  )}
+                  </div>
                 </div>
               ) : (
                 <div className="aspect-video bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
