@@ -42,19 +42,22 @@ const Features = () => {
       icon: <Brain className="h-10 w-10 text-green-500" />,
       title: "AI Tutor",
       description: "Get personalized help with challenging concepts through our AI-powered tutoring system.",
-      link: "/ai-tutor"
+      link: "/ai-tutor",
+      bgColor: "bg-gradient-to-br from-[#001F3F] to-[#D3E4FD]" // Navy blue to soft blue gradient
     },
     {
       icon: <Video className="h-10 w-10 text-blue-500" />,
       title: "Star Teacher Video Lessons",
       description: "Premium video lessons explaining complex topics with step-by-step guidance.",
-      link: "/video-tutorials"
+      link: "/video-tutorials",
+      bgColor: "bg-gradient-to-br from-[#D4AF37] to-[#FFEB3B]" // Champagne gold to yellow gradient
     },
     {
       icon: <Zap className="h-10 w-10 text-amber-500" />,
       title: "AI Powered Daily Study Plan",
       description: "Generating daily study plan tailored to your learning needs based on your performance and learning goals.",
-      link: "/daily-plan"
+      link: "/daily-plan",
+      bgColor: "bg-gradient-to-br from-[#00695C] to-[#C5E1A5]" // Emerald green to light green gradient
     }
   ];
 
@@ -142,7 +145,7 @@ const Features = () => {
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {premiumFeatures.map((feature, index) => (
-              <Card key={index} className="card-hover border border-gray-100 bg-gradient-to-br from-white to-yellow-50 shadow-md cursor-pointer transition-transform hover:scale-105">
+              <Card key={index} className={`card-hover border border-gray-100 ${feature.bgColor} shadow-md cursor-pointer transition-transform hover:scale-105`}>
                 <Link to={feature.link} className="block h-full">
                   <CardHeader>
                     <div className="mb-2">{feature.icon}</div>
