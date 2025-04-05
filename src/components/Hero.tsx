@@ -42,7 +42,7 @@ const Hero = () => {
               <div className="mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
                   <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-blue hover:bg-green-700 group">
-                    <Link to="/register">
+                    <Link to="/daily-plan">
                       Start Your Journey
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>

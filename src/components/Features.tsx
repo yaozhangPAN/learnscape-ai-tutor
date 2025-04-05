@@ -1,4 +1,3 @@
-
 import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award, CreditCard } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -50,7 +49,7 @@ const Features = () => {
       icon: <Zap className="h-10 w-10 text-amber-500" />,
       title: "AI Powered Daily Study Plan",
       description: "Generating daily study plan tailored to your learning needs based on your performance and learning goals.",
-      link: "/dashboard"
+      link: "/daily-plan"
     }
   ];
 
