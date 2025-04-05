@@ -10,25 +10,29 @@ const Features = () => {
       icon: <Book className="h-10 w-10 text-learnscape-blue" />,
       title: "Question Bank",
       description: "Access thousands of Singapore primary school curriculum questions with customizable practice sessions.",
-      link: "/question-bank"
+      link: "/question-bank",
+      bgColor: "bg-gradient-to-br from-[#FFDEE2] to-[#FDE1D3]"
     },
     {
       icon: <List className="h-10 w-10 text-learnscape-purple" />,
       title: "Wrong Questions",
       description: "System automatically collects questions you answered incorrectly for targeted revision.",
-      link: ""
+      link: "",
+      bgColor: "bg-gradient-to-br from-[#D3E4FD] to-[#E5DEFF]"
     },
     {
       icon: <Star className="h-10 w-10 text-yellow-500" />,
       title: "Favorites",
       description: "Save important questions for quick access and create your own study collection.",
-      link: ""
+      link: "",
+      bgColor: "bg-gradient-to-br from-[#F2FCE2] to-[#FEF7CD]"
     },
     {
       icon: <FileText className="h-10 w-10 text-green-500" />,
       title: "Mock Exam",
       description: "Practice with full-length exam papers from top Singapore schools. The system automatically times and scores your paper.",
-      link: "/mock-exam"
+      link: "/mock-exam",
+      bgColor: "bg-gradient-to-br from-[#E5DEFF] to-[#D3E4FD]"
     }
   ];
 
@@ -77,7 +81,7 @@ const Features = () => {
           </div>
           <div className="grid gap-8 md:grid-cols-2">
             {freeFeatures.map((feature, index) => (
-              <Card key={index} className={`card-hover border border-gray-100 ${feature.link ? 'cursor-pointer transition-transform hover:scale-105' : ''}`}>
+              <Card key={index} className={`card-hover border border-gray-100 ${feature.bgColor} shadow-sm ${feature.link ? 'cursor-pointer transition-transform hover:scale-105' : ''}`}>
                 {feature.link ? (
                   <Link to={feature.link} className="block h-full">
                     <CardHeader>
