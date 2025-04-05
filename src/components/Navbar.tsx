@@ -2,12 +2,14 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +33,11 @@ const Navbar = () => {
     { path: "/dashboard", name: "Dashboard" },
     { path: "/ai-tutor", name: "AI Tutor" },
   ];
+
+  const handleLogout = async () => {
+    await signOut();
+    setIsMenuOpen(false);
+  };
 
   return (
     <nav className={`bg-white sticky top-0 z-50 transition-all duration-300 ${
@@ -65,15 +72,27 @@ const Navbar = () => {
                 </span>
               </Link>
             ))}
-            <Button 
-              asChild
-              className="bg-learnscape-blue hover:bg-green-700 group relative overflow-hidden"
-            >
-              <Link to="/login">
-                <span className="relative z-10">Login</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-              </Link>
-            </Button>
+            {user ? (
+              <Button 
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="flex items-center"
+              >
+                <LogOut className="mr-1 h-4 w-4" />
+                Logout
+              </Button>
+            ) : (
+              <Button 
+                asChild
+                className="bg-learnscape-blue hover:bg-green-700 group relative overflow-hidden"
+              >
+                <Link to="/login">
+                  <span className="relative z-10">Login</span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                </Link>
+              </Button>
+            )}
           </div>
           
           <div className="md:hidden flex items-center">
@@ -113,13 +132,25 @@ const Navbar = () => {
                 {link.path === "/ai-tutor" && <span className="ml-1 text-xs">✨</span>}
               </Link>
             ))}
-            <Link 
-              to="/login" 
-              className="block px-3 py-2 rounded-md text-base font-medium bg-learnscape-blue text-white hover:bg-green-700 mt-4 text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Login
-            </Link>
+            {user ? (
+              <button 
+                onClick={handleLogout}
+                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-red-500 hover:bg-red-600 mt-4"
+              >
+                <span className="flex items-center">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </span>
+              </button>
+            ) : (
+              <Link 
+                to="/login" 
+                className="block px-3 py-2 rounded-md text-base font-medium bg-learnscape-blue text-white hover:bg-green-700 mt-4 text-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       )}
