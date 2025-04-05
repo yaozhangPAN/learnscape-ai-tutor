@@ -25,12 +25,12 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { path: "/question-bank", name: "Question Bank" },
+    { path: "/question-bank", name: "Adventure" },
     { path: "/video-tutorials", name: "Video Lessons" },
-    { path: "/mock-exam", name: "Mock Exam" },
-    { path: "/leaderboard", name: "Leaderboard" },
-    { path: "/dashboard", name: "Dashboard" },
-    { path: "/ai-tutor", name: "AI Tutor" },
+    { path: "/mock-exam", name: "Challenges" },
+    { path: "/leaderboard", name: "Friends" },
+    { path: "/dashboard", name: "Achievements" },
+    { path: "/ai-tutor", name: "Helper" },
   ];
 
   const handleLogout = async () => {
@@ -50,7 +50,7 @@ const Navbar = () => {
                 <Star className="absolute -left-6 -top-1 text-white h-5 w-5 animate-pulse" />
               </div>
               <span className="text-2xl font-extrabold text-learnscape-darkBlue flex items-center relative">
-                Learnscape
+                My Learning
                 <Sparkles className="ml-1 h-4 w-4 text-yellow-400 opacity-100 transition-opacity animate-pulse" />
               </span>
             </Link>
@@ -87,11 +87,11 @@ const Navbar = () => {
             ) : (
               <Button 
                 asChild
-                className="bg-learnscape-blue hover:bg-learnscape-purple group relative overflow-hidden rounded-full border-2 border-white shadow-md"
+                className="bg-green-500 hover:bg-green-600 group relative overflow-hidden rounded-full border-2 border-white shadow-md text-white font-bold"
               >
                 <Link to="/login">
-                  <span className="relative z-10">Login</span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-learnscape-blue to-learnscape-purple opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  <span className="relative z-10">Start Learning</span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity"></span>
                 </Link>
               </Button>
             )}
@@ -147,10 +147,10 @@ const Navbar = () => {
             ) : (
               <Link 
                 to="/login" 
-                className="block px-3 py-2 rounded-full text-base font-medium bg-learnscape-blue text-white hover:bg-learnscape-purple mt-4 text-center"
+                className="block px-3 py-2 rounded-full text-base font-medium bg-green-500 text-white hover:bg-green-600 mt-4 text-center font-bold"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Login
+                Start Learning
               </Link>
             )}
           </div>

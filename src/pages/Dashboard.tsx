@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Book, BookX, Star, Brain, BarChart3, Search } from "lucide-react";
+import { Map, BookOpen, Star, Brain, Search, Award, Trophy, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,22 +19,22 @@ const Dashboard = () => {
 
   const modules = [
     {
-      title: "Question Bank",
-      description: "Customizable practice questions",
-      icon: <Book className="h-6 w-6 text-white" />,
-      count: 2500,
-      color: "bg-learnscape-blue text-white",
+      title: "Adventure",
+      description: "Exciting learning quests",
+      icon: <Map className="h-6 w-6 text-white" />,
+      count: 25,
+      color: "bg-green-500 text-white",
     },
     {
-      title: "Wrong Questions",
-      description: "Track questions you missed",
-      icon: <BookX className="h-6 w-6 text-white" />,
+      title: "My Words",
+      description: "Words you've learned",
+      icon: <BookOpen className="h-6 w-6 text-white" />,
       count: 42,
-      color: "bg-learnscape-purple text-white",
+      color: "bg-orange-500 text-white",
     },
     {
-      title: "Favorites",
-      description: "Your saved questions",
+      title: "Collected Stars",
+      description: "Your rewards",
       icon: <Star className="h-6 w-6 text-white" />,
       count: 78,
       color: "bg-yellow-500 text-white",
@@ -42,43 +42,43 @@ const Dashboard = () => {
   ];
 
   const subjects = [
-    { name: "Mathematics", progress: 75 },
-    { name: "English", progress: 60 },
-    { name: "Science", progress: 45 },
-    { name: "Chinese", progress: 30 },
+    { name: "Math Adventure", progress: 75 },
+    { name: "Reading Quest", progress: 60 },
+    { name: "Science Explorer", progress: 45 },
+    { name: "Language Journey", progress: 30 },
   ];
 
   const recentActivities = [
     { 
       id: 1, 
-      activity: "Completed Mathematics practice", 
+      activity: "Completed Math puzzle", 
       date: "1 hour ago", 
-      score: "8/10" 
+      score: "8/10 stars" 
     },
     { 
       id: 2, 
-      activity: "Started English vocabulary quiz", 
+      activity: "Started Reading adventure", 
       date: "Yesterday", 
       score: "In progress" 
     },
     { 
       id: 3, 
-      activity: "Reviewed Science concepts", 
+      activity: "Discovered Science secret", 
       date: "2 days ago", 
-      score: "Complete" 
+      score: "Badge earned" 
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-yellow-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-learnscape-darkBlue">
-            {greeting}, Student
+          <h1 className="text-3xl font-bold text-learnscape-brown flex items-center">
+            {greeting}, Explorer! <Trophy className="ml-2 h-6 w-6 text-amber-500" />
           </h1>
           <p className="text-gray-600">
-            Here's an overview of your learning progress
+            Here's a look at your learning adventures
           </p>
         </div>
 
@@ -97,27 +97,30 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Learning Progress</CardTitle>
-                <CardDescription>Your performance across subjects</CardDescription>
+            <Card className="border-4 border-white rounded-3xl shadow-lg">
+              <CardHeader className="bg-gradient-to-b from-yellow-100 to-white">
+                <CardTitle className="flex items-center">
+                  <Award className="mr-2 h-6 w-6 text-amber-500" />
+                  Learning Progress
+                </CardTitle>
+                <CardDescription>Your adventure completion</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {subjects.map((subject) => (
                     <div key={subject.name} className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>{subject.name}</span>
+                        <span className="font-medium">{subject.name}</span>
                         <span className="font-medium">{subject.progress}%</span>
                       </div>
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-3 bg-gray-200 rounded-full overflow-hidden border border-white">
                         <div 
                           className={`h-full rounded-full ${
                             subject.progress > 65 
                               ? 'bg-green-500' 
                               : subject.progress > 40 
                                 ? 'bg-yellow-500' 
-                                : 'bg-red-500'
+                                : 'bg-orange-500'
                           }`}
                           style={{ width: `${subject.progress}%` }}
                         ></div>
@@ -130,15 +133,39 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <PremiumStatus />
+            <Card className="border-4 border-white rounded-3xl shadow-lg bg-gradient-to-b from-cyan-100 to-white">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Target className="mr-2 h-6 w-6 text-cyan-500" />
+                  Daily Goal
+                </CardTitle>
+                <CardDescription>Special mission for today</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-white p-4 rounded-xl shadow-inner border border-cyan-200">
+                  <div className="flex items-center justify-center mb-3">
+                    <div className="w-12 h-12 rounded-full bg-cyan-500 text-white flex items-center justify-center text-xl font-bold">
+                      3
+                    </div>
+                  </div>
+                  <p className="text-center font-medium text-gray-700">Complete 3 math puzzles today!</p>
+                  <Button className="w-full mt-4 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full">
+                    Start Mission
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
         <div className="mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Activities</CardTitle>
-              <CardDescription>Your learning journey in the past few days</CardDescription>
+          <Card className="border-4 border-white rounded-3xl shadow-lg">
+            <CardHeader className="bg-gradient-to-b from-yellow-100 to-white">
+              <CardTitle className="flex items-center">
+                <Trophy className="mr-2 h-6 w-6 text-amber-500" />
+                Recent Adventures
+              </CardTitle>
+              <CardDescription>Your learning journey so far</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="divide-y">
@@ -152,9 +179,9 @@ const Dashboard = () => {
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                         activity.score === "In progress" 
                           ? "bg-blue-100 text-blue-800" 
-                          : activity.score === "Complete" 
+                          : activity.score === "Badge earned" 
                             ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
+                            : "bg-amber-100 text-amber-800"
                       }`}>
                         {activity.score}
                       </span>
@@ -167,10 +194,10 @@ const Dashboard = () => {
         </div>
 
         <div className="text-center mb-8">
-          <Button asChild className="bg-learnscape-blue hover:bg-blue-700">
+          <Button asChild className="bg-green-500 hover:bg-green-600 rounded-full text-white">
             <Link to="/question-bank">
-              <Search className="mr-2 h-4 w-4" />
-              Explore Question Bank
+              <Map className="mr-2 h-4 w-4" />
+              Start New Adventure
             </Link>
           </Button>
         </div>
