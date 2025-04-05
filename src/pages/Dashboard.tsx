@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QuestionModule from "@/components/QuestionModule";
 import Navbar from "@/components/Navbar";
-import PremiumStatus from "@/components/PremiumStatus";
 import StreakComponent from "@/components/StreakComponent";
 
 const Dashboard = () => {
@@ -99,43 +98,37 @@ const Dashboard = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Learning Progress</CardTitle>
-                <CardDescription>Your performance across subjects</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {subjects.map((subject) => (
-                    <div key={subject.name} className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>{subject.name}</span>
-                        <span className="font-medium">{subject.progress}%</span>
-                      </div>
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full rounded-full ${
-                            subject.progress > 65 
-                              ? 'bg-green-500' 
-                              : subject.progress > 40 
-                                ? 'bg-yellow-500' 
-                                : 'bg-red-500'
-                          }`}
-                          style={{ width: `${subject.progress}%` }}
-                        ></div>
-                      </div>
+        <div className="mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Learning Progress</CardTitle>
+              <CardDescription>Your performance across subjects</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {subjects.map((subject) => (
+                  <div key={subject.name} className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>{subject.name}</span>
+                      <span className="font-medium">{subject.progress}%</span>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div>
-            <PremiumStatus />
-          </div>
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full ${
+                          subject.progress > 65 
+                            ? 'bg-green-500' 
+                            : subject.progress > 40 
+                              ? 'bg-yellow-500' 
+                              : 'bg-red-500'
+                        }`}
+                        style={{ width: `${subject.progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="mb-8">
