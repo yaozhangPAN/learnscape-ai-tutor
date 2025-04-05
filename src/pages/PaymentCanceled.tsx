@@ -11,7 +11,7 @@ const PaymentCanceled = () => {
     <div className="min-h-screen flex flex-col playful-bg">
       <Navbar />
       <main className="flex-grow flex items-center justify-center px-4 py-12">
-        <Card className="w-full max-w-md border-2 border-red-200 shadow-lg">
+        <Card className="w-full max-w-md border-2 shadow-lg">
           <CardHeader className="text-center pb-2">
             <CardTitle className="text-2xl">Payment Canceled</CardTitle>
           </CardHeader>
@@ -37,4 +37,3 @@ const PaymentCanceled = () => {
 };
 
 export default PaymentCanceled;
-

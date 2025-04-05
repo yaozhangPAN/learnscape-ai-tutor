@@ -135,8 +135,3 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
 }
 
-/* Add shadow to cards for more contrast */
-.card-shadow {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
