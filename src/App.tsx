@@ -12,7 +12,6 @@ import Dashboard from "./pages/Dashboard";
 import MockExam from "./pages/MockExam";
 import OnlineExam from "./components/ExamTaking/OnlineExam";
 import Courses from "./pages/Courses";
-import AboutUs from "./pages/AboutUs";
 import QuestionBank from "./pages/QuestionBank";
 import Leaderboard from "./pages/Leaderboard";
 import Worksheets from "./pages/Worksheets";
@@ -53,7 +52,6 @@ const App = () => (
               <Route path="/register" element={<Login />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
               <Route path="/payment-canceled" element={<PaymentCanceled />} />
-              <Route path="/about" element={<AboutUs />} />
               
               <Route path="/video-tutorials" element={<Courses />} />
               
@@ -129,6 +127,9 @@ const App = () => (
                   </ProtectedRoute>
                 } 
               />
+              
+              {/* Redirect any /about requests to the home page */}
+              <Route path="/about" element={<Navigate to="/" replace />} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>
