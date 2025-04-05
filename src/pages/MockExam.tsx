@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -271,21 +270,6 @@ const MockExam = () => {
     selectedYear, selectedType, topSchoolsOnly, searchQuery
   ]);
 
-  const handleModeChange = (mode: string) => {
-    setViewMode(mode);
-    navigate(`/mock-exam?mode=${mode}`);
-  };
-
-  const resetFilters = () => {
-    setSelectedLevel("all");
-    setSelectedSubject("all");
-    setSelectedSchool("all");
-    setSelectedYear("all");
-    setSelectedType("all");
-    setTopSchoolsOnly(false);
-    setSearchQuery("");
-  };
-
   const handleTakeExam = (examId: string) => {
     navigate(`/take-exam/${examId}`);
   };
@@ -300,21 +284,6 @@ const MockExam = () => {
             Access a comprehensive collection of past year exam papers from top schools in Singapore.
             Practice with real exam questions to prepare for your primary school examinations.
           </p>
-        </div>
-
-        <div className="mb-6">
-          <Tabs value={viewMode} onValueChange={handleModeChange}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="PAPER_MOCK">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Mock Exams
-              </TabsTrigger>
-              <TabsTrigger value="PAPER_PRACTICE">
-                <FileText className="h-4 w-4 mr-2" />
-                Practice Papers
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -432,29 +401,9 @@ const MockExam = () => {
           <div className="p-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold text-learnscape-darkBlue">
-                {viewMode === "PAPER_MOCK" ? "Mock Exams" : "Practice Papers"} 
+                Exam Papers
                 <span className="ml-2 text-sm font-normal text-gray-500">({filteredPapers.length} results)</span>
               </h2>
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="hidden md:flex items-center"
-                  onClick={() => setViewMode("PAPER_MOCK")}
-                >
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Mock Exams
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="hidden md:flex items-center"
-                  onClick={() => setViewMode("PAPER_PRACTICE")}
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  Practice Papers
-                </Button>
-              </div>
             </div>
           </div>
 
