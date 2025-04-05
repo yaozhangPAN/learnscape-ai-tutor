@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,23 +64,17 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				learnscape: {
-					blue: '#12AD4B',
-					purple: '#0D8A3A',
-					yellow: '#FFD74A',
-					darkBlue: '#8B3E00',
-					lightGray: '#FFF8E1',
-					orange: '#FF7A45',
-					teal: '#1ABFB3',
-					brown: '#8B3E00',
-					red: '#FF5F52'
+					blue: '#4ABA79', // Changed from blue to green
+					purple: '#38A169', // Changed from purple to darker green
+					yellow: '#F2FCE2', // Changed to light green hue
+					darkBlue: '#1E5B3A', // Changed from dark blue to dark green
+					lightGray: '#F9FAFB'
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)',
-				'2xl': '1.5rem',
-				'3xl': '2rem'
+				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
 				'accordion-down': {
@@ -153,9 +148,6 @@ export default {
 				'wiggle': 'wiggle 2s ease-in-out infinite',
 				'pop': 'pop 0.3s ease-out',
 				'spin-slow': 'spin-slow 12s linear infinite'
-			},
-			fontFamily: {
-				'rounded': ['Nunito', 'system-ui', 'sans-serif'],
 			}
 		}
 	},
