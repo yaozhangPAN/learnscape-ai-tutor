@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, LogOut } from "lucide-react";
+import { Menu, X, Sparkles, LogOut, Home } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
@@ -25,12 +25,13 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { path: "/question-bank", name: "Question Bank" },
+    { path: "/", name: "Home", icon: <Home className="mr-2 h-4 w-4" /> },
+    { path: "/ai-tutor", name: "AI Tutor", icon: <span className="ml-1 text-xs">✨</span> },
     { path: "/video-tutorials", name: "Video Lessons" },
+    { path: "/question-bank", name: "Question Bank" },
     { path: "/mock-exam", name: "Mock Exam" },
     { path: "/leaderboard", name: "Leaderboard" },
-    { path: "/dashboard", name: "Streak" },
-    { path: "/ai-tutor", name: "AI Tutor" },
+    { path: "/dashboard", name: "Streak and Analyze" },
   ];
 
   const handleLogout = async () => {
@@ -58,17 +59,19 @@ const Navbar = () => {
               <Link 
                 key={link.path} 
                 to={link.path} 
-                className={`text-gray-700 hover:text-learnscape-blue transition-colors py-1 group relative ${
-                  location.pathname === link.path ? 'text-learnscape-blue font-medium' : ''
+                className={`text-gray-700 hover:text-learnscape-blue transition-colors py-1 group relative font-bold ${
+                  location.pathname === link.path ? 'text-learnscape-blue font-bold' : ''
                 }`}
               >
                 {link.name}
                 {location.pathname === link.path && (
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-learnscape-blue"></span>
                 )}
-                <span className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {link.path === "/ai-tutor" && <span className="text-xs">✨</span>}
-                </span>
+                {link.icon && (
+                  <span className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {link.icon}
+                  </span>
+                )}
               </Link>
             ))}
             {user ? (
@@ -109,18 +112,11 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
-            <Link 
-              to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
             {navLinks.map((link) => (
               <Link 
                 key={link.path}
                 to={link.path} 
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                className={`block px-3 py-2 rounded-md text-base font-bold ${
                   location.pathname === link.path 
                     ? 'text-learnscape-blue bg-green-50' 
                     : 'text-gray-700 hover:text-learnscape-blue'
