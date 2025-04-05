@@ -33,7 +33,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`bg-secondary sticky top-0 z-50 transition-all duration-300 ${
+    <nav className={`bg-[#FFFDE7] sticky top-0 z-50 transition-all duration-300 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,7 +52,7 @@ const Navbar = () => {
               <Link 
                 key={link.path} 
                 to={link.path} 
-                className={`text-secondary-foreground hover:text-primary transition-colors py-1 group relative ${
+                className={`text-[#37474F] hover:text-primary transition-colors py-1 group relative ${
                   location.pathname === link.path ? 'text-primary font-medium' : ''
                 }`}
               >
@@ -79,7 +79,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-secondary-foreground hover:text-primary focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-[#37474F] hover:text-primary focus:outline-none"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -90,10 +90,10 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-secondary">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#FFFDE7]">
             <Link 
               to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-secondary-foreground hover:text-primary"
+              className="block px-3 py-2 rounded-md text-base font-medium text-[#37474F] hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
@@ -104,8 +104,8 @@ const Navbar = () => {
                 to={link.path} 
                 className={`block px-3 py-2 rounded-md text-base font-medium ${
                   location.pathname === link.path 
-                    ? 'text-primary bg-secondary-foreground/10' 
-                    : 'text-secondary-foreground hover:text-primary'
+                    ? 'text-primary bg-[#37474F]/10' 
+                    : 'text-[#37474F] hover:text-primary'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >

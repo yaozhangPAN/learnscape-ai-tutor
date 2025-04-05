@@ -13,12 +13,12 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <div className={`transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
         <Hero />
         <Features />
-        <div className="py-16 bg-learnscape-yellow/30 relative overflow-hidden">
+        <div className="py-16 bg-[#FFFDE7]/30 relative overflow-hidden">
           {/* Decorative elements */}
           <div className="absolute top-10 left-[10%] w-12 h-12 rounded-full bg-purple-200/60 animate-bounce-slow"></div>
           <div className="absolute top-20 right-[15%] w-8 h-8 rounded-full bg-blue-200/60 animate-float"></div>

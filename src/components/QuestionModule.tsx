@@ -14,7 +14,7 @@ type QuestionModuleProps = {
 
 const QuestionModule = ({ title, description, icon, count, color, onClick }: QuestionModuleProps) => {
   return (
-    <Card className="card-hover border border-gray-100 h-full cursor-pointer" onClick={onClick}>
+    <Card className="card-hover border border-gray-100 h-full cursor-pointer bg-white" onClick={onClick}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className={`w-12 h-12 rounded-full flex items-center justify-center ${color}`}>
