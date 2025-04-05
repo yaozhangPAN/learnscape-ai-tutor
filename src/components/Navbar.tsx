@@ -46,7 +46,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center group">
-              <span className="text-2xl font-extrabold text-[#03353E] flex items-center relative">
+              <span className="text-2xl font-extrabold gradient-text flex items-center relative">
                 Learnscape
                 <Sparkles className="ml-1 h-4 w-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse" />
               </span>
@@ -58,13 +58,13 @@ const Navbar = () => {
               <Link 
                 key={link.path} 
                 to={link.path} 
-                className={`text-[#03353E] hover:text-[#4ABA79] transition-colors py-1 group relative ${
-                  location.pathname === link.path ? 'text-[#4ABA79] font-medium' : ''
+                className={`text-gray-700 hover:text-learnscape-blue transition-colors py-1 group relative ${
+                  location.pathname === link.path ? 'text-learnscape-blue font-medium' : ''
                 }`}
               >
                 {link.name}
                 {location.pathname === link.path && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#4ABA79]"></span>
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-learnscape-blue"></span>
                 )}
                 <span className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   {link.path === "/ai-tutor" && <span className="text-xs">✨</span>}
@@ -76,7 +76,7 @@ const Navbar = () => {
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                className="flex items-center border-[#03353E] text-[#03353E]"
+                className="flex items-center"
               >
                 <LogOut className="mr-1 h-4 w-4" />
                 Logout
@@ -84,7 +84,7 @@ const Navbar = () => {
             ) : (
               <Button 
                 asChild
-                className="bg-[#4ABA79] hover:bg-[#4ABA79]/90 text-[#03353E] border border-[#03353E] group relative overflow-hidden rounded-full"
+                className="bg-learnscape-blue hover:bg-green-700 group relative overflow-hidden"
               >
                 <Link to="/login">
                   <span className="relative z-10">Login</span>
@@ -97,7 +97,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-[#03353E] hover:text-[#4ABA79] focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-learnscape-blue focus:outline-none"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -111,7 +111,7 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
             <Link 
               to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-[#03353E] hover:text-[#4ABA79]"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-learnscape-blue"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
@@ -122,8 +122,8 @@ const Navbar = () => {
                 to={link.path} 
                 className={`block px-3 py-2 rounded-md text-base font-medium ${
                   location.pathname === link.path 
-                    ? 'text-[#4ABA79] bg-green-50' 
-                    : 'text-[#03353E] hover:text-[#4ABA79]'
+                    ? 'text-learnscape-blue bg-green-50' 
+                    : 'text-gray-700 hover:text-learnscape-blue'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -144,7 +144,7 @@ const Navbar = () => {
             ) : (
               <Link 
                 to="/login" 
-                className="block px-3 py-2 rounded-md text-base font-medium bg-[#4ABA79] text-[#03353E] hover:bg-[#4ABA79]/90 mt-4 text-center border border-[#03353E]"
+                className="block px-3 py-2 rounded-md text-base font-medium bg-learnscape-blue text-white hover:bg-green-700 mt-4 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Login

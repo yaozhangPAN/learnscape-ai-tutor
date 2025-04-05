@@ -27,7 +27,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
 
   if (loadingSubscription) {
     return (
-      <div className="bg-white border border-gray-200 p-4 rounded-lg animate-pulse shadow-sm">
+      <div className="bg-gray-100 border border-gray-200 p-4 rounded-lg animate-pulse">
         <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
         <div className="h-4 bg-gray-300 rounded w-full mb-4"></div>
         <div className="h-10 bg-gray-300 rounded w-1/3"></div>
@@ -58,7 +58,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
   }
 
   return (
-    <div className="bg-white border-2 border-learnscape-blue/30 p-6 rounded-lg mb-6 shadow-md">
+    <div className="bg-gradient-to-r from-learnscape-blue/20 to-learnscape-purple/20 border border-learnscape-blue/30 p-6 rounded-lg mb-6">
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-xl font-semibold text-learnscape-darkBlue flex items-center">
@@ -86,7 +86,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
             )}
           </div>
         </div>
-        <div className="bg-learnscape-mint p-3 rounded-lg shadow-sm border border-learnscape-blue/20">
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-learnscape-blue/20">
           <div className="text-3xl font-bold text-learnscape-blue">S$99</div>
           <div className="text-sm text-gray-500">per month</div>
         </div>

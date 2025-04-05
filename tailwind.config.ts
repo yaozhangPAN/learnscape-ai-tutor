@@ -66,11 +66,9 @@ export default {
 				learnscape: {
 					blue: '#4ABA79', // Changed from blue to green
 					purple: '#38A169', // Changed from purple to darker green
-					yellow: '#FFFDE7', // Changed to light yellow background
-					darkBlue: '#03353E', // Changed to darker teal
-					lightGray: '#F9FAFB',
-					cream: '#FFFDE7',  // Creamy yellow background
-					mint: '#A8E6CF'  // Soft mint green for content areas
+					yellow: '#F2FCE2', // Changed to light green hue
+					darkBlue: '#1E5B3A', // Changed from dark blue to dark green
+					lightGray: '#F9FAFB'
 				}
 			},
 			borderRadius: {

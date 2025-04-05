@@ -16,7 +16,7 @@ const PremiumStatus = () => {
 
   if (loadingSubscription) {
     return (
-      <Card className="h-full animate-pulse bg-white">
+      <Card className="h-full animate-pulse">
         <CardHeader>
           <div className="h-6 bg-gray-200 rounded w-1/2 mb-2"></div>
         </CardHeader>
@@ -34,7 +34,7 @@ const PremiumStatus = () => {
 
   if (isPremium) {
     return (
-      <Card className="bg-learnscape-mint border-green-200 shadow-md">
+      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-emerald-800">
             <Crown className="h-5 w-5 text-green-500" /> Premium Account
@@ -61,7 +61,7 @@ const PremiumStatus = () => {
   }
 
   return (
-    <Card className="bg-white border-2 shadow-md">
+    <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
       <CardHeader className="pb-2">
         <CardTitle className="text-learnscape-darkBlue">Upgrade to Premium</CardTitle>
       </CardHeader>

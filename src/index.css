@@ -101,11 +101,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-learnscape-blue hover:bg-green-700 text-[#03353E] font-bold py-3 px-6 rounded-full transition-colors border-2 border-[#03353E];
+    @apply bg-learnscape-blue hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition-colors;
   }
   
   .btn-secondary {
-    @apply bg-learnscape-purple hover:bg-green-800 text-white font-bold py-3 px-6 rounded-full transition-colors border-2 border-[#03353E];
+    @apply bg-learnscape-purple hover:bg-green-800 text-white font-bold py-3 px-6 rounded-full transition-colors;
   }
   
   .card-hover {
@@ -113,7 +113,7 @@
   }
   
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#4ABA79] to-[#38A169];
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-learnscape-blue to-learnscape-purple;
   }
 }
 
@@ -126,46 +126,12 @@
 
 /* Add playful styles */
 .playful-bg {
-  background-color: #FFFDE7; /* Updated to creamy yellow background */
-}
-
-.content-area {
-  background-color: #A8E6CF; /* Soft mint green */
-  border-radius: 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  border: 2px solid #03353E;
+  background-color: #E8F5E9;
 }
 
 .rounded-container {
   border-radius: 24px;
   padding: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
-  border: 2px solid #03353E;
 }
 
-/* Cartoon style elements */
-.cartoon-card {
-  border: 2px solid #03353E;
-  border-radius: 24px;
-  background-color: #A8E6CF;
-  box-shadow: 4px 4px 0 #03353E;
-  transition: all 0.2s ease-in-out;
-}
-
-.cartoon-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 6px 6px 0 #03353E;
-}
-
-.cartoon-button {
-  border: 2px solid #03353E;
-  border-radius: 999px;
-  font-weight: bold;
-  box-shadow: 3px 3px 0 #03353E;
-  transition: all 0.2s ease-in-out;
-}
-
-.cartoon-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 5px 5px 0 #03353E;
-}
