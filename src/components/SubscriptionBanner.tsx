@@ -1,4 +1,3 @@
-
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Button } from "./ui/button";
 import { Sparkles } from "lucide-react";
@@ -73,7 +72,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
             >
               {type === "video-tutorial" && contentId 
                 ? "Purchase This Video" 
-                : "Subscribe for S$99/month"}
+                : "Subscribe for ???/month"}
             </Button>
             {type === "video-tutorial" && contentId && (
               <Button 
@@ -87,7 +86,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
           </div>
         </div>
         <div className="bg-white p-3 rounded-lg shadow-sm border border-learnscape-blue/20">
-          <div className="text-3xl font-bold text-learnscape-blue">S$99</div>
+          <div className="text-3xl font-bold text-learnscape-blue">???</div>
           <div className="text-sm text-gray-500">per month</div>
         </div>
       </div>

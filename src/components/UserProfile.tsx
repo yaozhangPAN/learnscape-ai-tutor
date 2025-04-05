@@ -140,7 +140,7 @@ const UserProfile = () => {
                   className="w-full bg-[#FFA500] hover:bg-[#FF6F00] text-white"
                 >
                   <Crown size={16} className="mr-2" />
-                  Upgrade to Premium (S$99/month)
+                  Upgrade to Premium (???/month)
                 </Button>
                 <p className="text-xs text-center text-gray-500 mt-2">
                   Get access to AI tutor, daily recommendations, and all premium features.

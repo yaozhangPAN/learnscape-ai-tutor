@@ -1,4 +1,3 @@
-
 import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award, CreditCard } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -195,14 +194,14 @@ const Features = () => {
                 <Link to="/login">
                   <Button className="bg-[#FFA500] hover:bg-[#FF6F00] text-white">
                     <CreditCard className="h-4 w-4 mr-2" />
-                    Subscribe for S$99/month
+                    Subscribe for ???/month
                   </Button>
                 </Link>
               </div>
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-sm border border-amber-100 flex flex-col items-center">
-              <div className="text-4xl font-bold text-learnscape-darkBlue">S$99</div>
+              <div className="text-4xl font-bold text-learnscape-darkBlue">???</div>
               <div className="text-sm text-gray-500">per month</div>
               <div className="mt-2 text-amber-600 text-sm font-medium">Cancel anytime</div>
             </div>

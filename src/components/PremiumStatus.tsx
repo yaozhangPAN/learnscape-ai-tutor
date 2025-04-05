@@ -1,4 +1,3 @@
-
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Crown, Star, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
@@ -90,7 +89,7 @@ const PremiumStatus = () => {
           className="w-full bg-[#FFA500] hover:bg-[#FF6F00] text-white"
         >
           <Crown className="mr-2 h-4 w-4" />
-          Subscribe for S$99/month
+          Subscribe for ???/month
         </Button>
       </CardFooter>
     </Card>
