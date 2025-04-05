@@ -112,6 +112,17 @@ const Features = () => {
           </div>
         </div>
 
+        {/* Free For All Singapore Students section moved here */}
+        <div className="mt-12 text-center bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-2xl shadow-sm">
+          <h3 className="text-2xl font-bold text-learnscape-darkBlue">
+            Free For All Singapore Students
+          </h3>
+          <p className="mt-4 max-w-2xl text-lg text-gray-500 mx-auto">
+            Learnscape is committed to making quality education accessible to everyone.
+            All our basic resources are completely free for all users.
+          </p>
+        </div>
+
         <Separator className="my-16 bg-gray-200" />
 
         {/* Premium Features Section */}
@@ -143,16 +154,6 @@ const Features = () => {
               </Card>
             ))}
           </div>
-        </div>
-
-        <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold text-learnscape-darkBlue">
-            Free For All Singapore Students
-          </h3>
-          <p className="mt-4 max-w-2xl text-lg text-gray-500 mx-auto">
-            Learnscape is committed to making quality education accessible to everyone.
-            All our basic resources are completely free for all users.
-          </p>
         </div>
       </div>
     </div>
