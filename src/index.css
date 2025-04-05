@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,7 +33,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 142 43% 42%; /* Changed to green */
 
-    --radius: 0.75rem;
+    --radius: 1.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -100,11 +101,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-learnscape-blue hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+    @apply bg-learnscape-blue hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition-colors;
   }
   
   .btn-secondary {
-    @apply bg-learnscape-purple hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+    @apply bg-learnscape-purple hover:bg-green-800 text-white font-bold py-3 px-6 rounded-full transition-colors;
   }
   
   .card-hover {
@@ -122,3 +123,15 @@
   color: #fcd34d;
   text-shadow: 3px 3px 0 #f59e0b;
 }
+
+/* Add playful styles */
+.playful-bg {
+  background-color: #E8F5E9;
+}
+
+.rounded-container {
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
+
