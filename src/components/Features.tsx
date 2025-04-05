@@ -75,7 +75,7 @@ const Features = () => {
               Free Features
             </h3>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2">
             {freeFeatures.map((feature, index) => (
               <Card key={index} className={`card-hover border border-gray-100 ${feature.link ? 'cursor-pointer transition-transform hover:scale-105' : ''}`}>
                 {feature.link ? (
