@@ -9,5 +9,5 @@ export type ExamPaper = {
   level: string;
   downloadCount: number;
   isTopSchool?: boolean; // Keeping this to maintain compatibility with existing data
-  isOnlineAvailable?: boolean;
+  isOnlineAvailable?: boolean; // This is now optional as all papers can be taken online
 };

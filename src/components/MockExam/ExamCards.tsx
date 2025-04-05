@@ -40,15 +40,13 @@ const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>
-            {paper.isOnlineAvailable && (
-              <Button 
-                className="flex-1 bg-green-600 hover:bg-green-700" 
-                onClick={() => handleTakeExam(paper.id)}
-              >
-                <PlayCircle className="h-4 w-4 mr-2" />
-                Take Online
-              </Button>
-            )}
+            <Button 
+              className="flex-1 bg-green-600 hover:bg-green-700" 
+              onClick={() => handleTakeExam(paper.id)}
+            >
+              <PlayCircle className="h-4 w-4 mr-2" />
+              Take Online
+            </Button>
           </CardFooter>
         </Card>
       ))}

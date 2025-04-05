@@ -46,17 +46,15 @@ const ExamTable: React.FC<ExamTableProps> = ({ papers, handleTakeExam }) => {
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
-                {paper.isOnlineAvailable && (
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
-                    onClick={() => handleTakeExam(paper.id)}
-                  >
-                    <PlayCircle className="h-4 w-4 mr-2" />
-                    Take Online
-                  </Button>
-                )}
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                  onClick={() => handleTakeExam(paper.id)}
+                >
+                  <PlayCircle className="h-4 w-4 mr-2" />
+                  Take Online
+                </Button>
               </TableCell>
             </TableRow>
           ))}
