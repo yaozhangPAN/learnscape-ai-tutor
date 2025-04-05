@@ -17,6 +17,12 @@ import Leaderboard from "./pages/Leaderboard";
 import Worksheets from "./pages/Worksheets";
 import Referral from "./pages/Referral";
 import AITutor from "./pages/AITutor";
+import WritingCoach from "./pages/WritingCoach";
+import OralExamPractice from "./pages/OralExamPractice";
+import DictationPractice from "./pages/DictationPractice";
+import TutorMe from "./pages/TutorMe";
+import ErrorAnalysis from "./pages/ErrorAnalysis";
+import SnapAndSolve from "./pages/SnapAndSolve";
 import NotFound from "./pages/NotFound";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCanceled from "./pages/PaymentCanceled";
@@ -124,6 +130,56 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <AITutor />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* New AI Module Routes */}
+              <Route 
+                path="/ai-tutor/writing-coach" 
+                element={
+                  <ProtectedRoute>
+                    <WritingCoach />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/ai-tutor/oral-exam" 
+                element={
+                  <ProtectedRoute>
+                    <OralExamPractice />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/ai-tutor/dictation-practice" 
+                element={
+                  <ProtectedRoute>
+                    <DictationPractice />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/ai-tutor/tutor-me" 
+                element={
+                  <ProtectedRoute>
+                    <TutorMe />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/ai-tutor/error-analysis" 
+                element={
+                  <ProtectedRoute>
+                    <ErrorAnalysis />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/ai-tutor/snap-and-solve" 
+                element={
+                  <ProtectedRoute>
+                    <SnapAndSolve />
                   </ProtectedRoute>
                 } 
               />
