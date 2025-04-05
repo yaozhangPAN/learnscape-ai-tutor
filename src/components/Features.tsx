@@ -26,7 +26,7 @@ const Features = () => {
       title: "Favorites",
       description: "Save important questions for quick access and create your own study collection.",
       link: "",
-      bgColor: "bg-gradient-to-br from-[#F2FCE2] to-[#FEF7CD]"
+      bgColor: "bg-gradient-to-br from-[#D3E4FD] to-[#E2F4EA]"
     },
     {
       icon: <FileText className="h-10 w-10 text-green-500" />,
