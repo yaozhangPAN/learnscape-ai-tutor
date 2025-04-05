@@ -1,8 +1,9 @@
 
-import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award } from "lucide-react";
+import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award, CreditCard } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 const Features = () => {
   const freeFeatures = [
@@ -153,6 +154,51 @@ const Features = () => {
                 </Link>
               </Card>
             ))}
+          </div>
+        </div>
+
+        {/* Premium Subscription Banner */}
+        <div className="mt-12 bg-gradient-to-r from-yellow-50 to-amber-50 p-8 rounded-2xl shadow-md border border-amber-100">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-6 md:mb-0 md:mr-8">
+              <h3 className="text-2xl font-bold text-learnscape-darkBlue flex items-center">
+                <Award className="h-6 w-6 mr-2 text-amber-500" />
+                Upgrade to Premium
+              </h3>
+              <p className="mt-2 text-gray-600 max-w-lg">
+                Get unlimited access to AI Tutor, Daily Recommendations, and all Video Tutorials.
+              </p>
+              
+              <ul className="mt-4 space-y-2">
+                <li className="flex items-center text-gray-700">
+                  <span className="inline-block w-5 h-5 mr-2 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
+                  Unlimited AI tutor sessions
+                </li>
+                <li className="flex items-center text-gray-700">
+                  <span className="inline-block w-5 h-5 mr-2 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
+                  Personalized daily study plan
+                </li>
+                <li className="flex items-center text-gray-700">
+                  <span className="inline-block w-5 h-5 mr-2 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
+                  S$50 credits for purchasing premium video lessons
+                </li>
+              </ul>
+              
+              <div className="mt-6">
+                <Link to="/login">
+                  <Button className="bg-[#FFA500] hover:bg-[#FF6F00] text-white">
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    Subscribe for S$99/month
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-amber-100 flex flex-col items-center">
+              <div className="text-4xl font-bold text-learnscape-darkBlue">S$99</div>
+              <div className="text-sm text-gray-500">per month</div>
+              <div className="mt-2 text-amber-600 text-sm font-medium">Cancel anytime</div>
+            </div>
           </div>
         </div>
       </div>
