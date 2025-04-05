@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Filter, Search, Star } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 
 type ExamFiltersProps = {
   searchQuery: string;
@@ -18,8 +18,6 @@ type ExamFiltersProps = {
   setSelectedYear: (year: string) => void;
   selectedType: string;
   setSelectedType: (type: string) => void;
-  topSchoolsOnly: boolean;
-  setTopSchoolsOnly: (value: boolean) => void;
   resetFilters: () => void;
   schools: string[];
   years: string[];
@@ -39,8 +37,6 @@ const ExamFilters: React.FC<ExamFiltersProps> = ({
   setSelectedYear,
   selectedType,
   setSelectedType,
-  topSchoolsOnly,
-  setTopSchoolsOnly,
   resetFilters,
   schools,
   years,
@@ -68,7 +64,7 @@ const ExamFilters: React.FC<ExamFiltersProps> = ({
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Level</label>
           <Select value={selectedLevel} onValueChange={setSelectedLevel}>
@@ -143,17 +139,6 @@ const ExamFilters: React.FC<ExamFiltersProps> = ({
               ))}
             </SelectContent>
           </Select>
-        </div>
-        
-        <div className="flex items-end">
-          <Button 
-            variant={topSchoolsOnly ? "default" : "outline"} 
-            className="w-full"
-            onClick={() => setTopSchoolsOnly(!topSchoolsOnly)}
-          >
-            <Star className={`h-4 w-4 mr-2 ${topSchoolsOnly ? "fill-yellow-400" : ""}`} />
-            Top Schools Only
-          </Button>
         </div>
       </div>
     </div>

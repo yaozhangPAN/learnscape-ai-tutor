@@ -19,7 +19,6 @@ const MockExam = () => {
   const [selectedSchool, setSelectedSchool] = useState<string>(searchParams.get("schoolId") || "all");
   const [selectedYear, setSelectedYear] = useState<string>(searchParams.get("paperYear") || "all");
   const [selectedType, setSelectedType] = useState<string>(searchParams.get("paperType") || "all");
-  const [topSchoolsOnly, setTopSchoolsOnly] = useState<boolean>(searchParams.get("topSchools") === "true");
   const [currentPage, setCurrentPage] = useState<number>(parseInt(searchParams.get("page") || "1"));
   const itemsPerPage = 10;
 
@@ -29,13 +28,12 @@ const MockExam = () => {
     const matchesSchool = selectedSchool === "all" || paper.school === selectedSchool;
     const matchesYear = selectedYear === "all" || paper.year === selectedYear;
     const matchesType = selectedType === "all" || paper.type === selectedType;
-    const matchesTopSchool = !topSchoolsOnly || paper.isTopSchool;
     const matchesSearch = searchQuery === "" || 
       paper.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
       paper.school.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesLevel && matchesSubject && matchesSchool && matchesYear && 
-           matchesType && matchesTopSchool && matchesSearch;
+           matchesType && matchesSearch;
   });
 
   const totalPages = Math.ceil(filteredPapers.length / itemsPerPage);
@@ -52,10 +50,6 @@ const MockExam = () => {
       page: currentPage.toString()
     };
     
-    if (topSchoolsOnly) {
-      params.topSchools = "true";
-    }
-    
     if (searchQuery) {
       params.search = searchQuery;
     }
@@ -69,14 +63,14 @@ const MockExam = () => {
     setSearchParams(params);
   }, [
     selectedLevel, selectedSubject, selectedSchool, 
-    selectedYear, selectedType, topSchoolsOnly, currentPage, searchQuery
+    selectedYear, selectedType, currentPage, searchQuery
   ]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [
     selectedLevel, selectedSubject, selectedSchool, 
-    selectedYear, selectedType, topSchoolsOnly, searchQuery
+    selectedYear, selectedType, searchQuery
   ]);
 
   const resetFilters = () => {
@@ -85,7 +79,6 @@ const MockExam = () => {
     setSelectedSchool("all");
     setSelectedYear("all");
     setSelectedType("all");
-    setTopSchoolsOnly(false);
     setSearchQuery("");
   };
 
@@ -118,8 +111,6 @@ const MockExam = () => {
           setSelectedYear={setSelectedYear}
           selectedType={selectedType}
           setSelectedType={setSelectedType}
-          topSchoolsOnly={topSchoolsOnly}
-          setTopSchoolsOnly={setTopSchoolsOnly}
           resetFilters={resetFilters}
           schools={schools}
           years={years}

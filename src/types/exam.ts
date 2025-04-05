@@ -8,6 +8,6 @@ export type ExamPaper = {
   subject: string;
   level: string;
   downloadCount: number;
-  isTopSchool?: boolean;
+  isTopSchool?: boolean; // Keeping this to maintain compatibility with existing data
   isOnlineAvailable?: boolean;
 };
