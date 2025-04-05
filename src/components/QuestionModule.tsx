@@ -17,7 +17,7 @@ const QuestionModule = ({ title, description, icon, count, color, onClick }: Que
   const isLeaderboard = title.toLowerCase() === "leaderboard";
   
   return (
-    <Card className="card-hover border-2 h-full cursor-pointer" onClick={onClick}>
+    <Card className="card-hover border-2 border-green-200 h-full cursor-pointer" onClick={onClick}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className={`w-14 h-14 rounded-full flex items-center justify-center ${color}`}>
@@ -48,3 +48,4 @@ const QuestionModule = ({ title, description, icon, count, color, onClick }: Que
 };
 
 export default QuestionModule;
+

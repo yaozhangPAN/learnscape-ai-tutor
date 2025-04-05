@@ -14,7 +14,7 @@ const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
   return (
     <div className="md:hidden">
       {papers.map((paper) => (
-        <Card key={paper.id} className="mb-4 border-gray-200 mx-4 my-4">
+        <Card key={paper.id} className="mb-4 border-2 border-green-200 mx-4 my-4">
           <CardContent className="pt-6">
             <div className="flex items-start justify-between mb-4">
               <div className="bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded">
@@ -36,7 +36,7 @@ const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
             </div>
           </CardContent>
           <CardFooter className="flex gap-2">
-            <Button variant="outline" className="flex-1">
+            <Button variant="outline" className="flex-1 border-2">
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>
@@ -55,3 +55,4 @@ const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
 };
 
 export default ExamCards;
+

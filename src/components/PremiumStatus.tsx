@@ -34,7 +34,7 @@ const PremiumStatus = () => {
 
   if (isPremium) {
     return (
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+      <Card className="bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-300">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-emerald-800">
             <Crown className="h-5 w-5 text-green-500" /> Premium Account
@@ -61,7 +61,7 @@ const PremiumStatus = () => {
   }
 
   return (
-    <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+    <Card className="bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-300">
       <CardHeader className="pb-2">
         <CardTitle className="text-learnscape-darkBlue">Upgrade to Premium</CardTitle>
       </CardHeader>
@@ -98,3 +98,4 @@ const PremiumStatus = () => {
 };
 
 export default PremiumStatus;
+
