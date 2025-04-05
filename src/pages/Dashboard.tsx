@@ -38,7 +38,7 @@ const Dashboard = () => {
       description: "Your saved questions",
       icon: <Star className="h-6 w-6 text-white" />,
       count: 78,
-      color: "bg-yellow-500 text-white",
+      color: "bg-learnscape-yellow text-white",
     },
   ];
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-learnscape-cream">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
@@ -101,9 +101,9 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2">
-            <Card>
+            <Card className="border-2 border-gray-100">
               <CardHeader>
-                <CardTitle>Learning Progress</CardTitle>
+                <CardTitle className="text-learnscape-darkBlue">Learning Progress</CardTitle>
                 <CardDescription>Your performance across subjects</CardDescription>
               </CardHeader>
               <CardContent>
@@ -139,9 +139,9 @@ const Dashboard = () => {
         </div>
 
         <div className="mb-8">
-          <Card>
+          <Card className="border-2 border-gray-100">
             <CardHeader>
-              <CardTitle>Recent Activities</CardTitle>
+              <CardTitle className="text-learnscape-darkBlue">Recent Activities</CardTitle>
               <CardDescription>Your learning journey in the past few days</CardDescription>
             </CardHeader>
             <CardContent>
@@ -171,7 +171,7 @@ const Dashboard = () => {
         </div>
 
         <div className="text-center mb-8">
-          <Button asChild className="bg-learnscape-blue hover:bg-blue-700">
+          <Button asChild className="bg-learnscape-blue hover:bg-sky-500 rounded-2xl">
             <Link to="/question-bank">
               <Search className="mr-2 h-4 w-4" />
               Explore Question Bank

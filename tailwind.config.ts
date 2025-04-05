@@ -64,17 +64,22 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				learnscape: {
-					blue: '#4ABA79', // Changed from blue to green
-					purple: '#38A169', // Changed from purple to darker green
-					yellow: '#F2FCE2', // Changed to light green hue
-					darkBlue: '#1E5B3A', // Changed from dark blue to dark green
-					lightGray: '#F9FAFB'
+					blue: '#4ECCE6', // Updated to soft blue from image
+					purple: '#38A169', // Keeping green for secondary color
+					yellow: '#FFE176', // Updated to bright yellow from image
+					darkBlue: '#0A3A5C', // Dark blue for text
+					lightGray: '#F9FAFB',
+					lime: '#B5E254', // New lime green color from image
+					cream: '#FFF9D6', // New cream background color from image
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				xl: '1.5rem',
+				'2xl': '2rem',
+				'3xl': '3rem',
 			},
 			keyframes: {
 				'accordion-down': {
