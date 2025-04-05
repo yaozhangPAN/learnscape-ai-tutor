@@ -61,7 +61,7 @@ const PremiumStatus = () => {
   }
 
   return (
-    <Card className="bg-[#FFFDE7] border border-yellow-200">
+    <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
       <CardHeader className="pb-2">
         <CardTitle className="text-learnscape-darkBlue">Upgrade to Premium</CardTitle>
       </CardHeader>
@@ -71,24 +71,23 @@ const PremiumStatus = () => {
         </p>
         <ul className="space-y-2 text-sm text-gray-600">
           <li className="flex items-start">
-            <ChevronRight className="h-4 w-4 text-[#FFA500] mt-0.5 mr-1 flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-learnscape-blue mt-0.5 mr-1 flex-shrink-0" />
             <span>Unlimited AI tutor sessions</span>
           </li>
           <li className="flex items-start">
-            <ChevronRight className="h-4 w-4 text-[#FFA500] mt-0.5 mr-1 flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-learnscape-blue mt-0.5 mr-1 flex-shrink-0" />
             <span>Personalized daily recommendations</span>
           </li>
           <li className="flex items-start">
-            <ChevronRight className="h-4 w-4 text-[#FFA500] mt-0.5 mr-1 flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-learnscape-blue mt-0.5 mr-1 flex-shrink-0" />
             <span>Access to all premium video tutorials</span>
           </li>
         </ul>
       </CardContent>
-      <CardFooter className="border-t border-yellow-100 pt-3">
+      <CardFooter className="border-t border-green-100 pt-3">
         <Button 
           onClick={handleSubscribe}
-          variant="orange" 
-          className="w-full"
+          className="w-full bg-learnscape-blue hover:bg-green-700"
         >
           <Crown className="mr-2 h-4 w-4" />
           Subscribe for S$99/month

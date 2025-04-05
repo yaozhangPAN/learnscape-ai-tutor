@@ -72,8 +72,7 @@ const Referral = () => {
                 </div>
                 <Button 
                   onClick={() => copyToClipboard(referralLink)}
-                  variant="orange"
-                  className="flex items-center justify-center"
+                  className="bg-learnscape-blue hover:bg-blue-700 flex items-center justify-center"
                 >
                   <Copy className="mr-2 h-4 w-4" />
                   Copy
@@ -84,8 +83,7 @@ const Referral = () => {
                 <h3 className="text-lg font-semibold text-learnscape-darkBlue mb-3">Or share directly:</h3>
                 <Button 
                   onClick={shareReferral}
-                  variant="orange"
-                  className="w-full sm:w-auto flex items-center justify-center"
+                  className="w-full sm:w-auto bg-learnscape-purple hover:bg-purple-700 flex items-center justify-center"
                 >
                   <Share2 className="mr-2 h-4 w-4" />
                   Share with Friends

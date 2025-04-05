@@ -41,7 +41,7 @@ const Hero = () => {
               </p>
               <div className="mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
-                  <Button asChild variant="orange" className="w-full flex items-center justify-center px-8 py-3 text-base font-medium group">
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-blue hover:bg-green-700 group">
                     <Link to="/register">
                       Start Your Journey
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -49,9 +49,9 @@ const Hero = () => {
                   </Button>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-[#FFD700] hover:bg-[#FFC700] group">
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-purple hover:bg-green-800 text-white group">
                     <Link to="/referral">
-                      Get Rewards <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
+                      Invite Friends <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
                     </Link>
                   </Button>
                 </div>
