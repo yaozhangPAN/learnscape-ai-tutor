@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Brain, BookOpen } from "lucide-react";
+import { ArrowRight, Sparkles, Brain } from "lucide-react";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -21,10 +21,10 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-learnscape-yellow/30 to-white z-0"></div>
       
       {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-10 h-10 rounded-full bg-red-200 animate-bounce-slow opacity-70 hidden md:block"></div>
-      <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-blue-200 animate-float opacity-70 hidden md:block"></div>
+      <div className="absolute top-20 left-10 w-10 h-10 rounded-full bg-green-200 animate-bounce-slow opacity-70 hidden md:block"></div>
+      <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-green-200 animate-float opacity-70 hidden md:block"></div>
       <div className="absolute bottom-20 left-1/4 w-6 h-6 rounded-full bg-green-200 animate-spin-slow opacity-70 hidden md:block"></div>
-      <div className="absolute bottom-40 right-1/3 w-12 h-12 rounded-full bg-purple-200 animate-wiggle opacity-70 hidden md:block"></div>
+      <div className="absolute bottom-40 right-1/3 w-12 h-12 rounded-full bg-green-200 animate-wiggle opacity-70 hidden md:block"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="py-16 lg:py-24">
@@ -41,7 +41,7 @@ const Hero = () => {
               </p>
               <div className="mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
-                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-blue hover:bg-blue-700 group">
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-blue hover:bg-green-700 group">
                     <Link to="/register">
                       Start Your Journey
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -49,7 +49,7 @@ const Hero = () => {
                   </Button>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-purple hover:bg-purple-700 text-white group">
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-purple hover:bg-green-800 text-white group">
                     <Link to="/referral">
                       Invite Friends <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
                     </Link>
@@ -85,8 +85,8 @@ const Hero = () => {
                             <div className="h-full bg-red-500 rounded-full animate-pulse" style={{ width: '35%' }}></div>
                           </div>
                         </div>
-                        <div className="mt-4 text-sm text-gray-600 bg-yellow-50 p-3 rounded-lg border border-yellow-100 relative">
-                          <span className="absolute -top-2 -left-2 bg-yellow-200 rounded-full w-5 h-5 flex items-center justify-center text-xs">💡</span>
+                        <div className="mt-4 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border border-green-100 relative">
+                          <span className="absolute -top-2 -left-2 bg-green-200 rounded-full w-5 h-5 flex items-center justify-center text-xs">💡</span>
                           Let's practice more multiplication today!
                         </div>
                       </div>

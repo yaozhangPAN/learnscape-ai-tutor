@@ -34,25 +34,25 @@ const PremiumStatus = () => {
 
   if (isPremium) {
     return (
-      <Card className="bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200">
+      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-amber-800">
-            <Crown className="h-5 w-5 text-yellow-500" /> Premium Account
+          <CardTitle className="flex items-center gap-2 text-emerald-800">
+            <Crown className="h-5 w-5 text-green-500" /> Premium Account
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex gap-1 mb-3">
             {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+              <Star key={star} className="h-4 w-4 fill-green-500 text-green-500" />
             ))}
           </div>
-          <p className="text-amber-800">
+          <p className="text-emerald-800">
             You have full access to all premium features including AI Tutor, Daily Recommendations,
             and all Video Tutorials.
           </p>
         </CardContent>
-        <CardFooter className="border-t border-yellow-200 pt-3">
-          <p className="text-sm text-amber-700">
+        <CardFooter className="border-t border-green-200 pt-3">
+          <p className="text-sm text-emerald-700">
             Thank you for being a premium member!
           </p>
         </CardFooter>
@@ -61,7 +61,7 @@ const PremiumStatus = () => {
   }
 
   return (
-    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+    <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
       <CardHeader className="pb-2">
         <CardTitle className="text-learnscape-darkBlue">Upgrade to Premium</CardTitle>
       </CardHeader>
@@ -84,10 +84,10 @@ const PremiumStatus = () => {
           </li>
         </ul>
       </CardContent>
-      <CardFooter className="border-t border-blue-100 pt-3">
+      <CardFooter className="border-t border-green-100 pt-3">
         <Button 
           onClick={handleSubscribe}
-          className="w-full bg-learnscape-blue hover:bg-blue-700"
+          className="w-full bg-learnscape-blue hover:bg-green-700"
         >
           <Crown className="mr-2 h-4 w-4" />
           Subscribe for S$99/month

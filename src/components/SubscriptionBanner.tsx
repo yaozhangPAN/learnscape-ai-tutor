@@ -69,7 +69,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
           <div className="mt-4">
             <Button 
               onClick={handleSubscribe}
-              className="bg-learnscape-blue hover:bg-blue-700"
+              className="bg-learnscape-blue hover:bg-green-700"
             >
               {type === "video-tutorial" && contentId 
                 ? "Purchase This Video" 

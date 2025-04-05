@@ -67,11 +67,11 @@ const Navbar = () => {
             ))}
             <Button 
               asChild
-              className="bg-learnscape-blue hover:bg-blue-700 group relative overflow-hidden"
+              className="bg-learnscape-blue hover:bg-green-700 group relative overflow-hidden"
             >
               <Link to="/login">
                 <span className="relative z-10">Login</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </Link>
             </Button>
           </div>
@@ -104,7 +104,7 @@ const Navbar = () => {
                 to={link.path} 
                 className={`block px-3 py-2 rounded-md text-base font-medium ${
                   location.pathname === link.path 
-                    ? 'text-learnscape-blue bg-blue-50' 
+                    ? 'text-learnscape-blue bg-green-50' 
                     : 'text-gray-700 hover:text-learnscape-blue'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
@@ -115,7 +115,7 @@ const Navbar = () => {
             ))}
             <Link 
               to="/login" 
-              className="block px-3 py-2 rounded-md text-base font-medium bg-learnscape-blue text-white hover:bg-blue-700 mt-4 text-center"
+              className="block px-3 py-2 rounded-md text-base font-medium bg-learnscape-blue text-white hover:bg-green-700 mt-4 text-center"
               onClick={() => setIsMenuOpen(false)}
             >
               Login
