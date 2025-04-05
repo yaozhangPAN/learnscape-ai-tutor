@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -26,7 +27,146 @@ type Course = {
 };
 
 const mockCourses: Course[] = [
-  // ... keep existing mockCourses array
+  {
+    id: "1",
+    title: "Primary 6 English Comprehension Mastery",
+    description: "Learn effective strategies to improve reading comprehension skills for PSLE success.",
+    level: "p6",
+    subject: "english",
+    duration: "2h 30m",
+    rating: 4.8,
+    students: 1250,
+    price: "S$29.90",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWR1Y2F0aW9ufGVufDB8fDB8fHww",
+    type: "tutorial"
+  },
+  {
+    id: "2",
+    title: "Primary 6 Problem Solving Techniques",
+    description: "Master advanced problem-solving strategies to tackle challenging math questions in PSLE.",
+    level: "p6",
+    subject: "mathematics",
+    duration: "3h 15m",
+    rating: 4.9,
+    students: 1875,
+    price: "S$34.90",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWF0aCUyMGNsYXNzfGVufDB8fDB8fHww",
+    type: "tutorial"
+  },
+  {
+    id: "3",
+    title: "Science Experiment Explanations",
+    description: "Understand the scientific concepts behind common PSLE science experiments.",
+    level: "p6",
+    subject: "science",
+    duration: "2h 45m",
+    rating: 4.7,
+    students: 980,
+    price: "S$24.90",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2NpZW5jZSUyMGV4cGVyaW1lbnR8ZW58MHx8MHx8fDA%3D",
+    type: "tutorial"
+  },
+  {
+    id: "4",
+    title: "Chinese Oral Exam Preparation",
+    description: "Boost your confidence and skills for the Chinese oral examination.",
+    level: "p6",
+    subject: "chinese",
+    duration: "1h 50m",
+    rating: 4.6,
+    students: 765,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1577985902455-9cf85adcdca0?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hpbmVzZSUyMGNsYXNzfGVufDB8fDB8fHww",
+    type: "tutorial"
+  },
+  {
+    id: "5",
+    title: "Primary 5 English Creative Writing",
+    description: "Develop creative writing skills and techniques to excel in compositions.",
+    level: "p5",
+    subject: "english",
+    duration: "2h 10m",
+    rating: 4.7,
+    students: 890,
+    price: "S$19.90",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8d3JpdGluZ3xlbnwwfHwwfHx8MA%3D%3D",
+    type: "tutorial"
+  },
+  {
+    id: "6",
+    title: "Primary 5 Fraction Concepts",
+    description: "A comprehensive guide to understanding fractions for Primary 5 students.",
+    level: "p5",
+    subject: "mathematics",
+    duration: "2h 30m",
+    rating: 4.8,
+    students: 1120,
+    price: "S$22.90",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1632571401005-458e9d244591?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZnJhY3Rpb258ZW58MHx8MHx8fDA%3D",
+    type: "tutorial"
+  },
+  {
+    id: "7",
+    title: "Primary 5 Science Systems and Cycles",
+    description: "Learn about plant and animal systems, water cycle, and other natural processes.",
+    level: "p5",
+    subject: "science",
+    duration: "2h 15m",
+    rating: 4.5,
+    students: 680,
+    price: "S$21.90",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2NpZW5jZXxlbnwwfHwwfHx8MA%3D%3D",
+    type: "tutorial"
+  },
+  {
+    id: "8",
+    title: "Primary 5 Chinese Character Writing",
+    description: "Master the art of writing Chinese characters with proper stroke order and technique.",
+    level: "p5",
+    subject: "chinese",
+    duration: "1h 45m",
+    rating: 4.6,
+    students: 520,
+    price: "S$18.90",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1499591934245-40b55745b905?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hpbmVzZSUyMGNoYXJhY3RlcnN8ZW58MHx8MHx8fDA%3D",
+    type: "tutorial"
+  },
+  {
+    id: "9",
+    title: "Primary 6 Math Past Paper Solutions",
+    description: "Detailed solutions to past PSLE Mathematics papers with step-by-step explanations.",
+    level: "p6",
+    subject: "mathematics",
+    duration: "4h 20m",
+    rating: 4.9,
+    students: 2100,
+    price: "S$39.90",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1535572290543-960a8046f5af?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZXhhbXxlbnwwfHwwfHx8MA%3D%3D",
+    type: "past_paper"
+  },
+  {
+    id: "10",
+    title: "Primary 6 Science Exam Techniques",
+    description: "Learn how to approach and answer different types of science questions in PSLE.",
+    level: "p6",
+    subject: "science",
+    duration: "3h 10m",
+    rating: 4.8,
+    students: 1560,
+    price: "S$28.90",
+    isPremium: true,
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2NpZW5jZSUyMGV4cGVyaW1lbnR8ZW58MHx8MHx8fDA%3D",
+    type: "past_paper"
+  }
 ];
 
 const Courses = () => {
