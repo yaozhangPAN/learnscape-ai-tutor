@@ -1,3 +1,4 @@
+
 import { Book, Brain, BarChart3, List, Star, Users, FileText, Video, Zap, Award, CreditCard } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -18,7 +19,7 @@ const Features = () => {
       title: "Wrong Questions",
       description: "System automatically collects questions you answered incorrectly for targeted revision.",
       link: "",
-      bgColor: "bg-gradient-to-br from-[#D3E4FD] to-[#E5DEFF]"
+      bgColor: "bg-gradient-to-br from-[#FEF7CD] to-[#FFFFFF]"
     },
     {
       icon: <Star className="h-10 w-10 text-yellow-500" />,
