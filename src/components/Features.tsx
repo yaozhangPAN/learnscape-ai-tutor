@@ -149,12 +149,12 @@ const Features = () => {
                 <Link to={feature.link} className="block h-full">
                   <CardHeader>
                     <div className="mb-2">{feature.icon}</div>
-                    <CardTitle className="text-xl font-bold text-learnscape-darkBlue">
+                    <CardTitle className="text-xl font-bold text-white">
                       {feature.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-gray-600">
+                    <CardDescription className="text-white font-medium">
                       {feature.description}
                     </CardDescription>
                   </CardContent>
