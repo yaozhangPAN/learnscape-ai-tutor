@@ -29,21 +29,6 @@ import PaymentCanceled from "./pages/PaymentCanceled";
 
 const queryClient = new QueryClient();
 
-// Protected route component
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, isLoading } = useAuth();
-  
-  if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-  
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return <>{children}</>;
-};
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -60,129 +45,23 @@ const App = () => (
               <Route path="/payment-canceled" element={<PaymentCanceled />} />
               
               <Route path="/video-tutorials" element={<Courses />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/mock-exam" element={<MockExam />} />
+              <Route path="/take-exam/:examId" element={<OnlineExam />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/worksheets" element={<Worksheets />} />
+              <Route path="/question-bank" element={<QuestionBank />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/referral" element={<Referral />} />
+              <Route path="/ai-tutor" element={<AITutor />} />
               
-              <Route 
-                path="/dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/mock-exam" 
-                element={
-                  <ProtectedRoute>
-                    <MockExam />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/take-exam/:examId" 
-                element={
-                  <ProtectedRoute>
-                    <OnlineExam />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/courses" 
-                element={
-                  <ProtectedRoute>
-                    <Courses />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/worksheets" 
-                element={
-                  <ProtectedRoute>
-                    <Worksheets />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/question-bank" 
-                element={
-                  <ProtectedRoute>
-                    <QuestionBank />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/leaderboard" 
-                element={
-                  <ProtectedRoute>
-                    <Leaderboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/referral" 
-                element={
-                  <ProtectedRoute>
-                    <Referral />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/ai-tutor" 
-                element={
-                  <ProtectedRoute>
-                    <AITutor />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              {/* New AI Module Routes */}
-              <Route 
-                path="/ai-tutor/writing-coach" 
-                element={
-                  <ProtectedRoute>
-                    <WritingCoach />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/ai-tutor/oral-exam" 
-                element={
-                  <ProtectedRoute>
-                    <OralExamPractice />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/ai-tutor/dictation-practice" 
-                element={
-                  <ProtectedRoute>
-                    <DictationPractice />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/ai-tutor/tutor-me" 
-                element={
-                  <ProtectedRoute>
-                    <TutorMe />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/ai-tutor/error-analysis" 
-                element={
-                  <ProtectedRoute>
-                    <ErrorAnalysis />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/ai-tutor/snap-and-solve" 
-                element={
-                  <ProtectedRoute>
-                    <SnapAndSolve />
-                  </ProtectedRoute>
-                } 
-              />
+              {/* AI Module Routes */}
+              <Route path="/ai-tutor/writing-coach" element={<WritingCoach />} />
+              <Route path="/ai-tutor/oral-exam" element={<OralExamPractice />} />
+              <Route path="/ai-tutor/dictation-practice" element={<DictationPractice />} />
+              <Route path="/ai-tutor/tutor-me" element={<TutorMe />} />
+              <Route path="/ai-tutor/error-analysis" element={<ErrorAnalysis />} />
+              <Route path="/ai-tutor/snap-and-solve" element={<SnapAndSolve />} />
               
               {/* Redirect any /about requests to the home page */}
               <Route path="/about" element={<Navigate to="/" replace />} />
