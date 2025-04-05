@@ -49,9 +49,9 @@ const Hero = () => {
                   </Button>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <Button asChild variant="orange" className="w-full flex items-center justify-center px-8 py-3 text-base font-medium text-white group">
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-[#FFD700] hover:bg-[#FFC700] group">
                     <Link to="/referral">
-                      Invite Friends <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
+                      Get Rewards <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
                     </Link>
                   </Button>
                 </div>
