@@ -13,6 +13,9 @@ type QuestionModuleProps = {
 };
 
 const QuestionModule = ({ title, description, icon, count, color, onClick }: QuestionModuleProps) => {
+  // Special treatment for Leaderboard if needed
+  const isLeaderboard = title.toLowerCase() === "leaderboard";
+  
   return (
     <Card className="card-hover border border-gray-100 h-full cursor-pointer" onClick={onClick}>
       <CardHeader>
@@ -36,7 +39,7 @@ const QuestionModule = ({ title, description, icon, count, color, onClick }: Que
       </CardContent>
       <CardFooter>
         <Button className={`w-full flex items-center justify-center ${color.includes('bg-learnscape-blue') ? 'text-white' : ''}`}>
-          View All
+          {isLeaderboard ? "View Rankings" : "View All"}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardFooter>
