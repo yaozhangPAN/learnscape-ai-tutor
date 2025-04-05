@@ -13,16 +13,16 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-learnscape-yellow">
       <Navbar />
       <div className={`transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
         <Hero />
         <Features />
-        <div className="py-16 bg-learnscape-yellow/30 relative overflow-hidden">
+        <div className="py-16 bg-learnscape-lightgreen/70 relative overflow-hidden">
           {/* Decorative elements */}
-          <div className="absolute top-10 left-[10%] w-12 h-12 rounded-full bg-purple-200/60 animate-bounce-slow"></div>
-          <div className="absolute top-20 right-[15%] w-8 h-8 rounded-full bg-blue-200/60 animate-float"></div>
-          <div className="absolute bottom-10 left-[20%] w-10 h-10 rounded-full bg-green-200/60 animate-spin-slow"></div>
+          <div className="absolute top-10 left-[10%] w-12 h-12 rounded-full bg-learnscape-lightorange/60 animate-bounce-slow"></div>
+          <div className="absolute top-20 right-[15%] w-8 h-8 rounded-full bg-learnscape-lightblue/60 animate-float"></div>
+          <div className="absolute bottom-10 left-[20%] w-10 h-10 rounded-full bg-learnscape-green/40 animate-spin-slow"></div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
@@ -30,15 +30,15 @@ const Index = () => {
                 Why Students Love Learnscape
                 <span className="absolute -top-6 -right-8 text-2xl animate-wiggle">✨</span>
               </h2>
-              <p className="mt-4 text-xl text-gray-500">
+              <p className="mt-4 text-xl text-gray-600">
                 Join thousands of Singapore students already improving their learning outcomes.
               </p>
             </div>
             
             <div className="mt-12 grid gap-8 lg:grid-cols-3">
-              <div className="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="bg-white p-8 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="flex items-center mb-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl">
+                  <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-orange to-learnscape-blue flex items-center justify-center text-white font-bold text-xl">
                     L
                   </div>
                   <div className="ml-4">
@@ -51,9 +51,9 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="bg-white p-8 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="flex items-center mb-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl">
+                  <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-orange to-learnscape-blue flex items-center justify-center text-white font-bold text-xl">
                     S
                   </div>
                   <div className="ml-4">
@@ -66,9 +66,9 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="bg-white p-8 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="flex items-center mb-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center text-white font-bold text-xl">
+                  <div className="h-12 w-12 rounded-full bg-gradient-to-r from-learnscape-orange to-learnscape-blue flex items-center justify-center text-white font-bold text-xl">
                     R
                   </div>
                   <div className="ml-4">

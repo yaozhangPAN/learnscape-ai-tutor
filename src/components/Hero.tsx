@@ -17,41 +17,41 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative overflow-hidden bg-white">
-      <div className="absolute inset-0 bg-gradient-to-b from-learnscape-yellow/30 to-white z-0"></div>
+    <div className="relative overflow-hidden bg-learnscape-yellow">
+      <div className="absolute inset-0 bg-gradient-to-b from-learnscape-yellow to-white z-0"></div>
       
       {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-10 h-10 rounded-full bg-green-200 animate-bounce-slow opacity-70 hidden md:block"></div>
-      <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-green-200 animate-float opacity-70 hidden md:block"></div>
-      <div className="absolute bottom-20 left-1/4 w-6 h-6 rounded-full bg-green-200 animate-spin-slow opacity-70 hidden md:block"></div>
-      <div className="absolute bottom-40 right-1/3 w-12 h-12 rounded-full bg-green-200 animate-wiggle opacity-70 hidden md:block"></div>
+      <div className="absolute top-20 left-10 w-10 h-10 rounded-full bg-learnscape-lightgreen animate-bounce-slow opacity-70 hidden md:block"></div>
+      <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-learnscape-lightblue animate-float opacity-70 hidden md:block"></div>
+      <div className="absolute bottom-20 left-1/4 w-6 h-6 rounded-full bg-learnscape-lightorange animate-spin-slow opacity-70 hidden md:block"></div>
+      <div className="absolute bottom-40 right-1/3 w-12 h-12 rounded-full bg-learnscape-lightgreen animate-wiggle opacity-70 hidden md:block"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="py-16 lg:py-24">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className={`sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
               <h1 className="text-4xl font-extrabold tracking-tight text-learnscape-darkBlue sm:text-5xl md:text-6xl">
-                <span className="block mb-2">AI-Powered Learning for</span>
-                <span className="block mt-1 gradient-text flex items-center gap-2">
-                  Singapore Students <Sparkles className="inline-block w-6 h-6 md:w-8 md:h-8 animate-wiggle text-yellow-400" />
+                <span className="block mb-2">Welcome!</span>
+                <span className="block mt-1 text-learnscape-orange">
+                  Explore thousands of fun and interactive lessons.
                 </span>
               </h1>
               <p className="mt-3 text-base text-gray-600 sm:mt-5 sm:text-lg">
-                Learnscape offers academic support with Top Schools tuition materials, exam papers, worksheets, Star Teacher Video Lessons, and AI Tutor for personalized, interactive AI-powered learning.
+                Join thousands of Singapore students already improving their learning outcomes with our engaging educational platform.
               </p>
               <div className="mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow">
-                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-blue hover:bg-green-700 group">
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-orange hover:bg-orange-500 rounded-full text-white group">
                     <Link to="/register">
-                      Start Your Journey
+                      Sign Up
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </Button>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-purple hover:bg-green-800 text-white group">
-                    <Link to="/referral">
-                      Invite Friends <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
+                  <Button asChild className="w-full flex items-center justify-center px-8 py-3 text-base font-medium bg-learnscape-green hover:bg-green-600 text-white rounded-full group">
+                    <Link to="/login">
+                      Log In <Sparkles className="ml-2 h-4 w-4 transition-all group-hover:animate-spin-slow" />
                     </Link>
                   </Button>
                 </div>
@@ -59,12 +59,12 @@ const Hero = () => {
             </div>
             <div className={`mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
               <div className="relative mx-auto w-full rounded-lg shadow-lg lg:max-w-md">
-                <div className="relative block w-full h-full bg-learnscape-lightGray rounded-lg overflow-hidden">
+                <div className="relative block w-full h-full bg-white rounded-3xl overflow-hidden">
                   <div className="p-8">
                     <Link to="/ai-tutor" className="block">
-                      <div className="bg-white rounded-lg shadow-md p-6 animate-float hover:animate-bounce-slow transition-all">
+                      <div className="bg-learnscape-lightgreen rounded-3xl shadow-md p-6 animate-float hover:animate-bounce-slow transition-all">
                         <div className="flex space-x-4 items-center mb-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-learnscape-blue to-learnscape-purple flex items-center justify-center animate-pulse">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-learnscape-orange to-learnscape-blue flex items-center justify-center animate-pulse">
                             <Brain className="text-white h-6 w-6" />
                           </div>
                           <div>
@@ -85,7 +85,7 @@ const Hero = () => {
                             <div className="h-full bg-red-500 rounded-full animate-pulse" style={{ width: '35%' }}></div>
                           </div>
                         </div>
-                        <div className="mt-4 text-sm text-gray-600 bg-green-50 p-3 rounded-lg border border-green-100 relative">
+                        <div className="mt-4 text-sm text-gray-600 bg-white p-3 rounded-lg border border-green-100 relative">
                           <span className="absolute -top-2 -left-2 bg-green-200 rounded-full w-5 h-5 flex items-center justify-center text-xs">💡</span>
                           Let's practice more multiplication today!
                         </div>

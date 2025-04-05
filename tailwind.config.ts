@@ -64,11 +64,16 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				learnscape: {
-					blue: '#4ABA79', // Changed from blue to green
-					purple: '#38A169', // Changed from purple to darker green
-					yellow: '#F2FCE2', // Changed to light green hue
-					darkBlue: '#1E5B3A', // Changed from dark blue to dark green
-					lightGray: '#F9FAFB'
+					blue: '#3BB6FF', // Changed to bright blue
+					purple: '#FF9933', // Changed to orange
+					yellow: '#FFF8E1', // Light yellow background
+					darkBlue: '#003366', // Dark blue for text
+					lightGray: '#F9FAFB',
+					green: '#8FD14F', // Bright green
+					lightgreen: '#CBFF8C', // Light green
+					orange: '#FF9933', // Orange
+					lightorange: '#FFD699', // Light orange
+					lightblue: '#99E6FF', // Light blue
 				}
 			},
 			borderRadius: {
