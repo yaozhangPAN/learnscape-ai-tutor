@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Book, CheckCircle2, Clock, Award, Brain, BookOpen, FileText } from "lucide-react";
+import { Calendar, Book, CheckCircle2, Clock, Award, Brain, BookOpen, FileText, ChevronRight, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
@@ -27,7 +27,7 @@ const DailyRecommendations = () => {
           subject: "Mathematics",
           estimatedTime: "15 mins",
           difficulty: "Medium",
-          icon: <FileText className="h-12 w-12 text-blue-500" />,
+          icon: <FileText className="h-10 w-10 text-blue-500" />,
           description: "Practice adding and subtracting fractions with unlike denominators.",
           completed: false,
           progress: 0
@@ -39,7 +39,7 @@ const DailyRecommendations = () => {
           subject: "English",
           estimatedTime: "10 mins",
           difficulty: "Easy",
-          icon: <Book className="h-12 w-12 text-purple-500" />,
+          icon: <Book className="h-10 w-10 text-purple-500" />,
           description: "Expand your vocabulary with these common PSLE words.",
           completed: false,
           progress: 0
@@ -51,7 +51,7 @@ const DailyRecommendations = () => {
           subject: "Science",
           estimatedTime: "8 mins",
           difficulty: "Easy",
-          icon: <BookOpen className="h-12 w-12 text-green-500" />,
+          icon: <BookOpen className="h-10 w-10 text-green-500" />,
           description: "Learn about plant reproduction and life cycles.",
           completed: false,
           progress: 0
@@ -63,7 +63,7 @@ const DailyRecommendations = () => {
           subject: "Mathematics",
           estimatedTime: "12 mins",
           difficulty: "Hard",
-          icon: <Brain className="h-12 w-12 text-amber-500" />,
+          icon: <Brain className="h-10 w-10 text-amber-500" />,
           description: "Test your multiplication skills with these challenging problems.",
           completed: false,
           progress: 0
@@ -75,7 +75,7 @@ const DailyRecommendations = () => {
           subject: "English",
           estimatedTime: "20 mins",
           difficulty: "Medium",
-          icon: <FileText className="h-12 w-12 text-red-500" />,
+          icon: <FileText className="h-10 w-10 text-red-500" />,
           description: "Practice inferring meaning from text with this short story.",
           completed: false,
           progress: 0
@@ -156,7 +156,7 @@ const DailyRecommendations = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-learnscape-darkBlue flex items-center">
           <Calendar className="mr-2 h-6 w-6 text-amber-500" />
-          Daily Recommendations
+          Daily Learning Path
         </h2>
         <div className="flex items-center">
           <div className="text-sm mr-4">
@@ -164,7 +164,7 @@ const DailyRecommendations = () => {
             <span className="text-gray-500"> of {recommendations.length} completed today</span>
           </div>
           <Button>
-            Refresh Recommendations
+            Refresh Path
           </Button>
         </div>
       </div>
@@ -174,110 +174,144 @@ const DailyRecommendations = () => {
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-center">
         <Award className="h-8 w-8 text-amber-500 mr-4" />
         <div>
-          <h3 className="font-medium text-amber-700">Personalized Study Plan</h3>
+          <h3 className="font-medium text-amber-700">Your Learning Journey</h3>
           <p className="text-amber-600 text-sm">
-            These recommendations are tailored to your learning needs based on your performance and learning goals.
+            Follow this path to master today's concepts. Each activity builds on your knowledge.
           </p>
         </div>
       </div>
       
       {isLoading ? (
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader>
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-4 bg-gray-200 rounded w-full mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              </CardContent>
-              <CardFooter>
-                <div className="h-10 bg-gray-200 rounded w-1/3"></div>
-              </CardFooter>
-            </Card>
-          ))}
+        <div className="flex flex-col items-center space-y-6 py-10">
+          <div className="w-16 h-16 border-4 border-learnscape-blue border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-learnscape-darkBlue font-medium">Loading your learning path...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4">
-          {recommendations.map((rec) => (
-            <Card key={rec.id} className={`border-l-4 ${rec.completed ? 'border-l-green-500' : 'border-l-blue-500'} transition-all hover:shadow-md`}>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <div className="flex items-center">
-                  <div className="mr-4 p-2 bg-gray-100 rounded-lg">
-                    {rec.icon}
-                  </div>
-                  <div>
-                    <CardTitle className="text-xl flex items-center">
-                      {rec.title}
+        <div className="relative py-8">
+          {/* The path/road background */}
+          <div className="absolute left-0 right-0 h-16 top-1/2 transform -translate-y-1/2">
+            <div className="h-16 bg-gradient-to-r from-learnscape-yellow to-learnscape-yellow rounded-full mx-8 relative">
+              {/* Road markings */}
+              <div className="absolute top-1/2 left-4 right-4 h-2 bg-white transform -translate-y-1/2 flex justify-between">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="w-10 h-2 bg-white"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* Learning stations along the path */}
+          <div className="flex justify-between items-center relative z-10">
+            {recommendations.map((rec, index) => {
+              const isEven = index % 2 === 0;
+              const positionClass = isEven ? "items-start" : "items-end";
+              
+              return (
+                <div key={rec.id} className={`flex flex-col ${positionClass} relative z-10 group w-1/5`}>
+                  {/* Connection line to the road */}
+                  <div className={`absolute ${isEven ? 'top-full' : 'bottom-full'} left-1/2 w-0.5 h-12 bg-gray-300 -translate-x-1/2`}></div>
+                  
+                  {/* Station marker */}
+                  <div className={`
+                    flex flex-col items-center p-4 rounded-2xl 
+                    ${rec.completed 
+                      ? 'bg-green-100 border-2 border-green-500' 
+                      : rec.progress > 0 
+                        ? 'bg-blue-100 border-2 border-blue-500' 
+                        : 'bg-white border-2 border-learnscape-blue shadow-md hover:shadow-lg transition-all'
+                    }
+                    ${isEven ? 'mb-24' : 'mt-24'}
+                  `}>
+                    <div className="relative">
+                      <div className={`
+                        p-3 rounded-full 
+                        ${rec.completed 
+                          ? 'bg-green-500' 
+                          : rec.progress > 0 
+                            ? 'bg-blue-500' 
+                            : 'bg-learnscape-blue'
+                        }
+                      `}>
+                        {rec.icon}
+                      </div>
                       {rec.completed && (
-                        <CheckCircle2 className="ml-2 h-5 w-5 text-green-500" />
+                        <CheckCircle2 className="absolute -top-1 -right-1 h-6 w-6 text-green-500 bg-white rounded-full" />
                       )}
-                    </CardTitle>
-                    <div className="flex items-center text-sm text-gray-500 mt-1">
-                      <Badge variant="outline" className="mr-2">{rec.subject}</Badge>
-                      <Badge className={`flex items-center gap-1 ${getDifficultyColor(rec.difficulty)}`}>
-                        {rec.difficulty}
-                      </Badge>
-                      <span className="ml-3 flex items-center">
+                    </div>
+                    
+                    <div className="text-center mt-3">
+                      <h3 className="font-bold text-sm">{rec.title}</h3>
+                      <div className="flex flex-wrap justify-center gap-1 mt-1">
+                        <Badge variant="outline" className="text-xs">{rec.subject}</Badge>
+                        <Badge className={`text-xs ${getDifficultyColor(rec.difficulty)}`}>
+                          {rec.difficulty}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1 flex items-center justify-center">
                         <Clock className="h-3 w-3 mr-1" />
                         {rec.estimatedTime}
-                      </span>
-                      <Badge variant="outline" className="ml-2 flex items-center gap-1">
-                        {getTypeIcon(rec.type)}
-                        {rec.type.charAt(0).toUpperCase() + rec.type.slice(1)}
-                      </Badge>
+                      </p>
+                    </div>
+                    
+                    {rec.progress > 0 && !rec.completed && (
+                      <div className="w-full mt-2">
+                        <Progress value={rec.progress} className="h-1.5" />
+                      </div>
+                    )}
+                    
+                    <div className="mt-2">
+                      {rec.completed ? (
+                        <Button variant="outline" size="sm" className="text-xs">
+                          Review
+                        </Button>
+                      ) : rec.progress > 0 ? (
+                        <Button size="sm" className="text-xs">
+                          Continue
+                        </Button>
+                      ) : (
+                        <Button size="sm" className="text-xs" onClick={() => handleStartActivity(rec.id)}>
+                          Start
+                        </Button>
+                      )}
                     </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-3">{rec.description}</p>
-                {rec.progress > 0 && !rec.completed && (
-                  <div className="mt-2">
-                    <div className="flex justify-between text-xs mb-1">
-                      <span>Progress</span>
-                      <span>{rec.progress}%</span>
+                  
+                  {/* Arrow to next station (except for the last station) */}
+                  {index < recommendations.length - 1 && (
+                    <div className="absolute top-1/2 -right-10 transform -translate-y-1/2 text-learnscape-blue h-6 w-6">
+                      <ArrowRight className="h-6 w-6" />
                     </div>
-                    <Progress value={rec.progress} className="h-2" />
-                  </div>
-                )}
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <div>
-                  {rec.completed ? (
-                    <Badge variant="outline" className="text-green-500 flex items-center">
-                      <CheckCircle2 className="mr-1 h-3 w-3" />
-                      Completed
-                    </Badge>
-                  ) : rec.progress > 0 ? (
-                    <Badge variant="outline" className="text-blue-500">In Progress</Badge>
-                  ) : null}
-                </div>
-                <div>
-                  {rec.completed ? (
-                    <Button variant="outline">
-                      View Again
-                    </Button>
-                  ) : rec.progress > 0 ? (
-                    <div className="space-x-2">
-                      <Button variant="outline" onClick={() => handleStartActivity(rec.id)}>
-                        Continue
-                      </Button>
-                      <Button onClick={() => handleCompleteActivity(rec.id)}>
-                        Mark Complete
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button onClick={() => handleStartActivity(rec.id)}>
-                      Start Activity
-                    </Button>
                   )}
                 </div>
-              </CardFooter>
-            </Card>
-          ))}
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Weekly progress summary */}
+      {!isLoading && (
+        <div className="mt-10 p-4 bg-gray-50 rounded-lg">
+          <h3 className="font-bold text-learnscape-darkBlue mb-2">Weekly Progress</h3>
+          <div className="flex justify-between items-center">
+            <div className="flex space-x-2">
+              {[40, 60, 100, 80, 20, 0, 0].map((value, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="h-20 w-10 bg-gray-200 rounded-md relative">
+                    <div 
+                      className="absolute bottom-0 w-full bg-learnscape-blue rounded-md" 
+                      style={{ height: `${value}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1">{['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}</span>
+                </div>
+              ))}
+            </div>
+            <div className="text-right">
+              <p className="text-3xl font-bold text-learnscape-darkBlue">4 <span className="text-sm font-normal">days streak</span></p>
+              <p className="text-sm text-gray-500">Keep it up to earn bonus points!</p>
+            </div>
+          </div>
         </div>
       )}
     </div>
