@@ -143,26 +143,26 @@ const DailyPlan = () => {
         </div>
       )}
       
-      {/* Learning Path - Road style */}
-      <div className="max-w-md mx-auto px-4 py-8">
-        <div className="relative">
-          {/* Road path using SVG */}
+      {/* Learning Path - Horizontal Road style */}
+      <div className="mx-auto px-4 py-6 overflow-x-auto">
+        <div className="relative min-w-max" style={{ minWidth: "1000px" }}>
+          {/* Road path using SVG - horizontal */}
           <svg 
-            className="absolute top-0 left-0 w-full h-full" 
+            className="absolute top-16 left-0 w-full h-32" 
             style={{ zIndex: 0 }} 
-            viewBox="0 0 400 900" 
+            viewBox="0 0 1000 120" 
             preserveAspectRatio="none">
             {/* Dark road path */}
             <path 
-              d="M50,0 L50,100 C50,150 150,200 150,250 C150,300 50,350 50,400 C50,450 150,500 150,550 C150,600 50,650 50,700 L50,900" 
+              d="M0,60 C100,20 200,100 300,60 C400,20 500,100 600,60 C700,20 800,100 900,60 L1000,60" 
               stroke="#4a4a4a" 
-              strokeWidth="50" 
+              strokeWidth="30" 
               fill="none" 
               strokeLinecap="round"
             />
             {/* Dashed line in the middle of the road */}
             <path 
-              d="M50,0 L50,100 C50,150 150,200 150,250 C150,300 50,350 50,400 C50,450 150,500 150,550 C150,600 50,650 50,700 L50,900" 
+              d="M0,60 C100,20 200,100 300,60 C400,20 500,100 600,60 C700,20 800,100 900,60 L1000,60" 
               stroke="white" 
               strokeWidth="2" 
               fill="none" 
@@ -171,46 +171,27 @@ const DailyPlan = () => {
             />
           </svg>
           
-          {/* Lessons positioned along the road */}
-          <div className="relative z-10">
+          {/* Lessons positioned along the horizontal road */}
+          <div className="relative z-10 flex">
             {lessons.map((lesson, index) => {
               // Different positions based on the index to follow the curved road
-              let positionClass = "";
-              let extraMargin = "";
+              let verticalPosition = "mt-0";
               
-              if (index === 0) {
-                positionClass = "ml-0";
-                extraMargin = "mt-4";
-              } else if (index === 1) {
-                positionClass = "ml-32";
-                extraMargin = "mt-28";
-              } else if (index === 2) {
-                positionClass = "ml-0";
-                extraMargin = "mt-28";
-              } else if (index === 3) {
-                positionClass = "ml-32";
-                extraMargin = "mt-28";
-              } else if (index === 4) {
-                positionClass = "ml-0";
-                extraMargin = "mt-28";
-              } else if (index === 5) {
-                positionClass = "ml-32";
-                extraMargin = "mt-28";
-              } else if (index === 6) {
-                positionClass = "ml-0";
-                extraMargin = "mt-28";
-              } else if (index === 7) {
-                positionClass = "ml-32";
-                extraMargin = "mt-28";
+              // Alternate positions to follow the curve
+              if (index % 2 === 0) {
+                verticalPosition = "mt-0"; // Top of curve
+              } else {
+                verticalPosition = "mt-28"; // Bottom of curve
               }
               
               return (
                 <div
                   key={lesson.id}
-                  className={`${positionClass} ${extraMargin} flex items-center relative`}
+                  className={`${verticalPosition} flex flex-col items-center mx-16 relative`}
+                  style={{ zIndex: 2 }}
                 >
                   <div
-                    className="relative z-10"
+                    className="relative"
                     onClick={() => handleLessonClick(lesson.id)}
                   >
                     <div className="cursor-pointer transform hover:scale-105 transition-transform">
@@ -231,14 +212,21 @@ const DailyPlan = () => {
                   
                   {/* Connector line to the road - this simulates the pins on the map */}
                   {lesson.type !== "character" && lesson.type !== "chest" && (
-                    <div className={`absolute ${index % 2 === 0 ? 'left-8' : 'right-24'} w-10 h-1 bg-amber-200`}></div>
+                    <div 
+                      className={`absolute ${index % 2 === 0 ? 'bottom-0 h-10' : 'top-0 h-10'} w-1 bg-amber-200`}
+                      style={{ 
+                        left: '50%', 
+                        transform: 'translateX(-50%)',
+                        zIndex: 1
+                      }}
+                    ></div>
                   )}
                 </div>
               );
             })}
             
             {/* Bottom achievements */}
-            <div className="flex justify-center mt-16 pt-4">
+            <div className="flex justify-center items-center mx-10 mt-16">
               <div className="flex space-x-1">
                 {[1, 2, 3].map((star) => (
                   <Star key={star} className="h-6 w-6 text-yellow-400" fill="#FFC107" />
