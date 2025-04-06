@@ -143,59 +143,102 @@ const DailyPlan = () => {
         </div>
       )}
       
-      {/* Learning Path - Curved */}
+      {/* Learning Path - Road style */}
       <div className="max-w-md mx-auto px-4 py-8">
         <div className="relative">
-          {/* Custom curved path using SVG */}
-          <svg className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-full" 
-               style={{ zIndex: 0 }} 
-               viewBox="0 0 100 800" 
-               preserveAspectRatio="none">
+          {/* Road path using SVG */}
+          <svg 
+            className="absolute top-0 left-0 w-full h-full" 
+            style={{ zIndex: 0 }} 
+            viewBox="0 0 400 900" 
+            preserveAspectRatio="none">
+            {/* Dark road path */}
             <path 
-              d="M50,0 C70,100 30,200 50,300 C70,400 30,500 50,600 C70,700 50,800 50,800" 
-              stroke="#D1D5DB" 
-              strokeWidth="4" 
-              fill="none"
+              d="M50,0 L50,100 C50,150 150,200 150,250 C150,300 50,350 50,400 C50,450 150,500 150,550 C150,600 50,650 50,700 L50,900" 
+              stroke="#4a4a4a" 
+              strokeWidth="50" 
+              fill="none" 
+              strokeLinecap="round"
+            />
+            {/* Dashed line in the middle of the road */}
+            <path 
+              d="M50,0 L50,100 C50,150 150,200 150,250 C150,300 50,350 50,400 C50,450 150,500 150,550 C150,600 50,650 50,700 L50,900" 
+              stroke="white" 
+              strokeWidth="2" 
+              fill="none" 
+              strokeDasharray="10,10"
+              strokeLinecap="round"
             />
           </svg>
           
-          {/* Lessons positioned along the curve */}
-          <div className="relative z-10 flex flex-col items-center">
+          {/* Lessons positioned along the road */}
+          <div className="relative z-10">
             {lessons.map((lesson, index) => {
-              // Calculate position for curved path effect
-              const isEven = index % 2 === 0;
-              const offset = isEven ? 'translate-x-12' : '-translate-x-12';
-              const waveHeight = index * 100; // Approximation for the curved path
+              // Different positions based on the index to follow the curved road
+              let positionClass = "";
+              let extraMargin = "";
+              
+              if (index === 0) {
+                positionClass = "ml-0";
+                extraMargin = "mt-4";
+              } else if (index === 1) {
+                positionClass = "ml-32";
+                extraMargin = "mt-28";
+              } else if (index === 2) {
+                positionClass = "ml-0";
+                extraMargin = "mt-28";
+              } else if (index === 3) {
+                positionClass = "ml-32";
+                extraMargin = "mt-28";
+              } else if (index === 4) {
+                positionClass = "ml-0";
+                extraMargin = "mt-28";
+              } else if (index === 5) {
+                positionClass = "ml-32";
+                extraMargin = "mt-28";
+              } else if (index === 6) {
+                positionClass = "ml-0";
+                extraMargin = "mt-28";
+              } else if (index === 7) {
+                positionClass = "ml-32";
+                extraMargin = "mt-28";
+              }
               
               return (
                 <div
                   key={lesson.id}
-                  className={`relative mb-24 ${offset} flex flex-col items-center`}
-                  style={{ marginTop: index === 0 ? '0' : '' }}
+                  className={`${positionClass} ${extraMargin} flex items-center relative`}
                 >
                   <div
+                    className="relative z-10"
                     onClick={() => handleLessonClick(lesson.id)}
-                    className="cursor-pointer transform hover:scale-105 transition-transform"
                   >
-                    {lesson.type === "completed" && <GameIcons.Completed />}
-                    {lesson.type === "current" && <GameIcons.Current />}
-                    {lesson.type === "locked" && <GameIcons.Locked />}
-                    {lesson.type === "chest" && <GameIcons.ChestReward />}
-                    {lesson.type === "character" && <GameIcons.Character />}
-                    {lesson.type === "practice" && <GameIcons.Practice />}
+                    <div className="cursor-pointer transform hover:scale-105 transition-transform">
+                      {lesson.type === "completed" && <GameIcons.Completed />}
+                      {lesson.type === "current" && <GameIcons.Current />}
+                      {lesson.type === "locked" && <GameIcons.Locked />}
+                      {lesson.type === "chest" && <GameIcons.ChestReward />}
+                      {lesson.type === "character" && <GameIcons.Character />}
+                      {lesson.type === "practice" && <GameIcons.Practice />}
+                    </div>
+                    
+                    {/* Exercise details */}
+                    <div className={`mt-2 text-center max-w-[120px] ${lesson.type === "locked" ? "text-gray-400" : "text-gray-700"}`}>
+                      <p className="font-semibold text-sm">{lesson.title}</p>
+                      <p className="text-xs mt-1">{lesson.details}</p>
+                    </div>
                   </div>
                   
-                  {/* Exercise details */}
-                  <div className={`mt-2 text-center max-w-[150px] ${lesson.type === "locked" ? "text-gray-400" : "text-gray-700"}`}>
-                    <p className="font-semibold text-sm">{lesson.title}</p>
-                    <p className="text-xs mt-1">{lesson.details}</p>
-                  </div>
+                  {/* Connector line to the road - this simulates the pins on the map */}
+                  {lesson.type !== "character" && lesson.type !== "chest" && (
+                    <div className={`absolute ${index % 2 === 0 ? 'left-8' : 'right-24'} w-10 h-1 bg-amber-200`}></div>
+                  )}
                 </div>
               );
             })}
             
             {/* Bottom achievements */}
-            <div className="flex justify-center pt-4 mt-4">
+            <div className="flex justify-center mt-16 pt-4">
               <div className="flex space-x-1">
                 {[1, 2, 3].map((star) => (
                   <Star key={star} className="h-6 w-6 text-yellow-400" fill="#FFC107" />
