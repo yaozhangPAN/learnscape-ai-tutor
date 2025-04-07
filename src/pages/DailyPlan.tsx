@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import DailyRecommendations from "@/components/AITutor/DailyRecommendations";
-import { Calendar, Brain } from "lucide-react";
+import { Calendar, Brain, BookOpen, Award } from "lucide-react";
 
 const DailyPlan = () => {
   return (
@@ -25,12 +25,19 @@ const DailyPlan = () => {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center mb-6">
-            <Brain className="h-8 w-8 text-learnscape-blue mr-3" />
-            <h2 className="text-2xl font-bold text-learnscape-darkBlue">
-              Your Learning Journey
-            </h2>
+        <div className="bg-white rounded-xl shadow-md p-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center">
+              <BookOpen className="h-8 w-8 text-amber-500 mr-3" />
+              <h2 className="text-2xl font-bold text-learnscape-darkBlue">
+                Your Learning Journey
+              </h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <Award className="h-6 w-6 text-amber-500" />
+              <span className="text-xl font-bold text-amber-500">4</span>
+              <span className="text-gray-500">day streak</span>
+            </div>
           </div>
           <DailyRecommendations />
         </div>
