@@ -1,6 +1,6 @@
 
-import { useState, useEffect } from 'react';
-import { Check, Loader2, Video } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Check, Loader2, Video, AlertCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
@@ -25,10 +25,12 @@ const formSchema = z.object({
 
 const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
   const [loading, setLoading] = useState(false);
+  const [sdkLoading, setSdkLoading] = useState(false);
   const [zoomLoaded, setZoomLoaded] = useState(false);
   const [joinedMeeting, setJoinedMeeting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isMobile = useIsMobile();
+  const zoomContainerRef = useRef<HTMLDivElement>(null);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,115 +40,142 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
     },
   });
 
+  const loadScript = (src: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      document.body.appendChild(script);
+    });
+  };
+
   useEffect(() => {
     // Only load Zoom SDK after form is submitted
     if (!zoomLoaded) return;
 
-    const loadZoomSDK = () => {
-      // Load the Zoom Web SDK
-      const script = document.createElement('script');
-      script.src = 'https://source.zoom.us/2.18.0/lib/vendor/react.min.js';
-      script.async = true;
-      document.body.appendChild(script);
-
-      const script2 = document.createElement('script');
-      script2.src = 'https://source.zoom.us/2.18.0/lib/vendor/react-dom.min.js';
-      script2.async = true;
-      document.body.appendChild(script2);
-
-      const script3 = document.createElement('script');
-      script3.src = 'https://source.zoom.us/2.18.0/lib/vendor/redux.min.js';
-      script3.async = true;
-      document.body.appendChild(script3);
-
-      const script4 = document.createElement('script');
-      script4.src = 'https://source.zoom.us/2.18.0/lib/vendor/redux-thunk.min.js';
-      script4.async = true;
-      document.body.appendChild(script4);
-
-      const script5 = document.createElement('script');
-      script5.src = 'https://source.zoom.us/2.18.0/zoom-meeting-2.18.0.min.js';
-      script5.async = true;
-      script5.onload = initializeZoom;
-      script5.onerror = () => {
-        setError('Failed to load Zoom SDK');
-        setLoading(false);
-      };
-      document.body.appendChild(script5);
-
-      return () => {
-        document.body.removeChild(script);
-        document.body.removeChild(script2);
-        document.body.removeChild(script3);
-        document.body.removeChild(script4);
-        document.body.removeChild(script5);
+    const loadZoomSDK = async () => {
+      setSdkLoading(true);
+      
+      try {
+        console.log("Loading Zoom SDK scripts...");
+        // Load scripts in sequence to ensure proper loading order
+        await loadScript('https://source.zoom.us/2.18.0/lib/vendor/react.min.js');
+        await loadScript('https://source.zoom.us/2.18.0/lib/vendor/react-dom.min.js');
+        await loadScript('https://source.zoom.us/2.18.0/lib/vendor/redux.min.js');
+        await loadScript('https://source.zoom.us/2.18.0/lib/vendor/redux-thunk.min.js');
+        await loadScript('https://source.zoom.us/2.18.0/zoom-meeting-2.18.0.min.js');
         
-        // Clean up any Zoom artifacts
-        if (window.ZoomMtg) {
-          window.ZoomMtg.endMeeting({});
-        }
-      };
+        console.log("All Zoom SDK scripts loaded successfully");
+        // Give a small delay to ensure scripts are fully initialized
+        setTimeout(() => {
+          if (window.ZoomMtg) {
+            console.log("ZoomMtg object available");
+            initializeZoom();
+          } else {
+            console.error("ZoomMtg object not available after loading scripts");
+            setError("Failed to initialize Zoom SDK. Please try again.");
+            setSdkLoading(false);
+            setLoading(false);
+          }
+        }, 1000);
+      } catch (err) {
+        console.error("Error loading Zoom SDK:", err);
+        setError('Failed to load Zoom SDK. Please check your internet connection and try again.');
+        setSdkLoading(false);
+        setLoading(false);
+      }
     };
 
     loadZoomSDK();
+
+    return () => {
+      // Clean up any Zoom artifacts
+      if (window.ZoomMtg) {
+        try {
+          window.ZoomMtg.endMeeting({});
+        } catch (e) {
+          console.error("Error ending Zoom meeting:", e);
+        }
+      }
+    };
   }, [zoomLoaded]);
 
   const initializeZoom = () => {
+    console.log("Initializing Zoom...");
     if (!window.ZoomMtg) {
-      setError('Zoom SDK not loaded');
+      console.error("ZoomMtg is not defined");
+      setError('Zoom SDK not loaded. Please refresh and try again.');
+      setSdkLoading(false);
       setLoading(false);
       return;
     }
 
     const { meetingNumber, meetingPassword } = form.getValues();
+    console.log("Meeting credentials:", { meetingNumber, meetingPassword });
 
-    window.ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.0/lib', '/av');
-    window.ZoomMtg.preLoadWasm();
-    window.ZoomMtg.prepareWebSDK();
+    try {
+      window.ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.0/lib', '/av');
+      window.ZoomMtg.preLoadWasm();
+      window.ZoomMtg.prepareWebSDK();
+      
+      // For demo purposes, we'll use a mock token
+      // In production, this should be generated server-side
+      const mockToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExMTEyMjIyMyIsIm5hbWUiOiJNb2NrIFVzZXIiLCJpYXQiOjE2MTcxOTM0MzV9.NcNM-EFHXiZWMHGvS8PerL0g-xCYQPJZJXWvKW1tFD4";
+      
+      const zoomLeaveUrl = window.location.href;
 
-    // Zoom requires a JWT token signed with your Zoom API secret 
-    // for production use, this should be generated server-side
-    // For demo purposes, we'll use a mock token
-    const mockToken = "MOCK_JWT_TOKEN";
-    
-    const zoomLeaveUrl = window.location.href;
-
-    window.ZoomMtg.init({
-      leaveUrl: zoomLeaveUrl,
-      success: () => {
-        window.ZoomMtg.join({
-          meetingNumber: meetingNumber,
-          passWord: meetingPassword,
-          userName: userName,
-          signature: mockToken,
-          sdkKey: "ZOOM_SDK_KEY", // This would be your Zoom SDK key in production
-          success: () => {
-            setLoading(false);
-            setJoinedMeeting(true);
-            console.log('Joined Zoom meeting successfully');
-          },
-          error: (error: any) => {
-            setError(`Failed to join meeting: ${error.errorMessage || 'Unknown error'}`);
-            setLoading(false);
-            console.error('Failed to join meeting:', error);
-          }
-        });
-      },
-      error: (error: any) => {
-        setError(`Failed to initialize Zoom: ${error.errorMessage || 'Unknown error'}`);
-        setLoading(false);
-        console.error('Failed to initialize Zoom:', error);
-      }
-    });
+      console.log("Initializing Zoom meeting...");
+      window.ZoomMtg.init({
+        leaveUrl: zoomLeaveUrl,
+        disableInvite: true,
+        disableRecord: true,
+        success: () => {
+          console.log("Zoom initialized successfully, attempting to join meeting");
+          window.ZoomMtg.join({
+            meetingNumber: meetingNumber,
+            passWord: meetingPassword,
+            userName: userName,
+            signature: mockToken,
+            sdkKey: "MOCK_SDK_KEY", // This would be your Zoom SDK key in production
+            success: () => {
+              console.log("Joined Zoom meeting successfully");
+              setLoading(false);
+              setSdkLoading(false);
+              setJoinedMeeting(true);
+            },
+            error: (error: any) => {
+              console.error("Failed to join meeting:", error);
+              setError(`Failed to join meeting: ${error.errorMessage || 'Make sure your meeting ID and password are correct'}`);
+              setLoading(false);
+              setSdkLoading(false);
+            }
+          });
+        },
+        error: (error: any) => {
+          console.error("Failed to initialize Zoom:", error);
+          setError(`Failed to initialize Zoom: ${error.errorMessage || 'Unknown error'}`);
+          setLoading(false);
+          setSdkLoading(false);
+        }
+      });
+    } catch (e) {
+      console.error("Exception during Zoom initialization:", e);
+      setError('Error initializing Zoom. Please try again.');
+      setLoading(false);
+      setSdkLoading(false);
+    }
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log("Form submitted:", values);
     setLoading(true);
     setError(null);
     setZoomLoaded(true); // This will trigger the useEffect to load the SDK
   };
 
-  if (loading) {
+  if (loading && sdkLoading) {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-95 z-50 flex flex-col items-center justify-center">
         <Loader2 className="h-12 w-12 text-learnscape-blue animate-spin mb-4" />
@@ -160,7 +189,10 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-95 z-50 flex flex-col items-center justify-center p-6">
         <div className="bg-red-50 p-6 rounded-lg max-w-md w-full">
-          <h3 className="text-xl font-medium text-red-700 mb-3">Connection Error</h3>
+          <div className="flex items-center mb-3">
+            <AlertCircle className="h-5 w-5 text-red-600 mr-2" />
+            <h3 className="text-xl font-medium text-red-700">Connection Error</h3>
+          </div>
           <p className="text-gray-700 mb-4">{error}</p>
           <p className="text-sm text-gray-600 mb-4">
             This could be due to incorrect meeting credentials or network issues. In a production environment, 
@@ -170,8 +202,12 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
             <Button variant="outline" onClick={onClose}>
               Close
             </Button>
-            <Button onClick={() => window.open('https://zoom.us/join', '_blank')}>
-              Open in Zoom App
+            <Button onClick={() => {
+              setError(null);
+              setZoomLoaded(false);
+              form.reset();
+            }}>
+              Try Again
             </Button>
           </div>
         </div>
@@ -245,7 +281,7 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
           Exit Meeting
         </Button>
       </div>
-      <div id="zmmtg-root" className="flex-grow" style={{ height: 'calc(100vh - 65px)' }}></div>
+      <div id="zmmtg-root" ref={zoomContainerRef} className="flex-grow" style={{ height: 'calc(100vh - 65px)' }}></div>
     </div>
   );
 };
