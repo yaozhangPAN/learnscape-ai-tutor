@@ -24,6 +24,7 @@ import TutorMe from "./pages/TutorMe";
 import ErrorAnalysis from "./pages/ErrorAnalysis";
 import SnapAndSolve from "./pages/SnapAndSolve";
 import DailyPlan from "./pages/DailyPlan";
+import ZoomCourses from "./pages/ZoomCourses";
 import NotFound from "./pages/NotFound";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCanceled from "./pages/PaymentCanceled";
@@ -56,6 +57,7 @@ const App = () => (
               <Route path="/referral" element={<Referral />} />
               <Route path="/ai-tutor" element={<AITutor />} />
               <Route path="/daily-plan" element={<DailyPlan />} />
+              <Route path="/zoom-courses" element={<ZoomCourses />} />
               
               {/* AI Module Routes */}
               <Route path="/ai-tutor/writing-coach" element={<WritingCoach />} />
