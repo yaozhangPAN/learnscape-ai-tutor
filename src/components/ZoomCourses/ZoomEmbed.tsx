@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Check, Loader2, Video, AlertCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ZoomEmbedProps {
   onClose: () => void;
@@ -31,6 +32,7 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
   const [error, setError] = useState<string | null>(null);
   const isMobile = useIsMobile();
   const zoomContainerRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -102,7 +104,27 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
     };
   }, [zoomLoaded]);
 
-  const initializeZoom = () => {
+  const getZoomSignature = async (meetingNumber: string): Promise<{ signature: string, sdkKey: string } | null> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-zoom-signature', {
+        body: { meetingNumber, role: 0 } // 0 for attendee, 1 for host
+      });
+      
+      if (error) {
+        console.error('Error calling signature function:', error);
+        setError(`Failed to generate meeting signature: ${error.message}`);
+        return null;
+      }
+      
+      return data as { signature: string, sdkKey: string };
+    } catch (err) {
+      console.error('Exception getting Zoom signature:', err);
+      setError('Error connecting to Zoom service. Please try again later.');
+      return null;
+    }
+  };
+
+  const initializeZoom = async () => {
     console.log("Initializing Zoom...");
     if (!window.ZoomMtg) {
       console.error("ZoomMtg is not defined");
@@ -120,13 +142,19 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
       window.ZoomMtg.preLoadWasm();
       window.ZoomMtg.prepareWebSDK();
       
-      // For demo purposes, we'll use a mock token
-      // In production, this should be generated server-side
-      const mockToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjExMTEyMjIyMyIsIm5hbWUiOiJNb2NrIFVzZXIiLCJpYXQiOjE2MTcxOTM0MzV9.NcNM-EFHXiZWMHGvS8PerL0g-xCYQPJZJXWvKW1tFD4";
+      // Get signature from server
+      const signatureData = await getZoomSignature(meetingNumber);
       
+      if (!signatureData) {
+        setLoading(false);
+        setSdkLoading(false);
+        return;
+      }
+      
+      const { signature, sdkKey } = signatureData;
       const zoomLeaveUrl = window.location.href;
 
-      console.log("Initializing Zoom meeting...");
+      console.log("Initializing Zoom meeting with server-generated signature");
       window.ZoomMtg.init({
         leaveUrl: zoomLeaveUrl,
         disableInvite: true,
@@ -137,13 +165,17 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
             meetingNumber: meetingNumber,
             passWord: meetingPassword,
             userName: userName,
-            signature: mockToken,
-            sdkKey: "MOCK_SDK_KEY", // This would be your Zoom SDK key in production
+            signature: signature,
+            sdkKey: sdkKey,
             success: () => {
               console.log("Joined Zoom meeting successfully");
               setLoading(false);
               setSdkLoading(false);
               setJoinedMeeting(true);
+              toast({
+                title: "Connected to Zoom",
+                description: "You have successfully joined the meeting.",
+              });
             },
             error: (error: any) => {
               console.error("Failed to join meeting:", error);
@@ -195,8 +227,7 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
           </div>
           <p className="text-gray-700 mb-4">{error}</p>
           <p className="text-sm text-gray-600 mb-4">
-            This could be due to incorrect meeting credentials or network issues. In a production environment, 
-            you would need valid Zoom API credentials.
+            This could be due to incorrect meeting credentials or network issues. Please check your meeting details and try again.
           </p>
           <div className="flex justify-between">
             <Button variant="outline" onClick={onClose}>
@@ -288,7 +319,6 @@ const ZoomEmbed = ({ onClose, userName = "Guest User" }: ZoomEmbedProps) => {
 
 export default ZoomEmbed;
 
-// Add type definition for the ZoomMtg global object
 declare global {
   interface Window {
     ZoomMtg: any;
