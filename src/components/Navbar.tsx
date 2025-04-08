@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, LogOut, Home, CalendarDays } from "lucide-react";
+import { Menu, X, Sparkles, LogOut, Home, CalendarDays, Video } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
@@ -27,6 +27,7 @@ const Navbar = () => {
   const navLinks = [
     { path: "/", name: "Home", icon: <Home className="mr-2 h-4 w-4" /> },
     { path: "/daily-plan", name: "Daily Plan", icon: <CalendarDays className="mr-2 h-4 w-4" /> },
+    { path: "/zoom-courses", name: "Zoom Courses", icon: <Video className="mr-2 h-4 w-4" /> },
     { path: "/ai-tutor", name: "AI Tutor", icon: <span className="ml-1 text-xs">✨</span> },
     { path: "/video-tutorials", name: "Video Lessons" },
     { path: "/question-bank", name: "Question Bank" },
