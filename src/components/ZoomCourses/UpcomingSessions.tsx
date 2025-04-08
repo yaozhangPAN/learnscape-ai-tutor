@@ -56,15 +56,6 @@ const UpcomingSessions = ({ sessions, onJoinSession }: UpcomingSessionsProps) =>
     return null;
   }
 
-  // For demo purposes, using mock credentials
-  // In a real app, these would come from your backend
-  const getMockZoomCredentials = (sessionId: string) => {
-    return {
-      meetingNumber: "12345678901",
-      password: "password123",
-    };
-  };
-
   return (
     <>
       <Card className="mb-8 border-learnscape-blue/20">
@@ -114,10 +105,8 @@ const UpcomingSessions = ({ sessions, onJoinSession }: UpcomingSessionsProps) =>
       </Card>
 
       {/* Embedded Zoom Meeting */}
-      {showZoomEmbed && activeSession && (
+      {showZoomEmbed && (
         <ZoomEmbed
-          meetingNumber={getMockZoomCredentials(activeSession.id).meetingNumber}
-          meetingPassword={getMockZoomCredentials(activeSession.id).password}
           userName={`Student-${Math.floor(Math.random() * 1000)}`} // In a real app, use the authenticated user's name
           onClose={handleCloseZoom}
         />
