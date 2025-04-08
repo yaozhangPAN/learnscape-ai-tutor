@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,7 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import ZoomSessionCard from "@/components/ZoomCourses/ZoomSessionCard";
 import UpcomingSessions from "@/components/ZoomCourses/UpcomingSessions";
 
-// Mock data for Zoom courses
 const mockZoomCourses = [
   {
     id: "z1",
@@ -148,7 +146,6 @@ const ZoomCourses = () => {
       (selectedSubject === "all" || course.subject === selectedSubject)
   );
 
-  // Get all upcoming sessions across all courses
   const allUpcomingSessions = mockZoomCourses.flatMap(course => 
     course.upcomingSessions.map(session => ({
       ...session,
@@ -160,7 +157,6 @@ const ZoomCourses = () => {
     }))
   ).sort((a, b) => new Date(a.date + 'T' + a.startTime).getTime() - new Date(b.date + 'T' + b.startTime).getTime());
 
-  // Get only sessions scheduled for the next 7 days
   const today = new Date();
   const nextWeek = new Date(today);
   nextWeek.setDate(today.getDate() + 7);
@@ -178,7 +174,6 @@ const ZoomCourses = () => {
   const handleJoinSession = (session: any, courseId: string) => {
     const course = mockZoomCourses.find(c => c.id === courseId);
     setSelectedSession({...session, course});
-    setJoinDialogOpen(true);
   };
 
   const handleEnroll = async () => {
@@ -206,13 +201,11 @@ const ZoomCourses = () => {
           </p>
         </div>
 
-        {/* Upcoming Sessions This Week */}
         <UpcomingSessions 
           sessions={upcomingWeekSessions} 
           onJoinSession={handleJoinSession} 
         />
 
-        {/* Filters */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
@@ -240,7 +233,6 @@ const ZoomCourses = () => {
           </div>
         </div>
 
-        {/* Course Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filteredCourses.map((course) => (
             <ZoomSessionCard 
@@ -267,7 +259,6 @@ const ZoomCourses = () => {
       </div>
       <Footer />
 
-      {/* Course Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-4xl">
           {selectedCourse && (
@@ -314,12 +305,6 @@ const ZoomCourses = () => {
                         <div className="text-sm text-gray-600">
                           {session.startTime} - {session.endTime}
                         </div>
-                        <Button 
-                          className="mt-2 w-full"
-                          onClick={() => handleJoinSession(session, selectedCourse.id)}
-                        >
-                          Join Session
-                        </Button>
                       </div>
                     ))}
                   </div>
@@ -333,57 +318,6 @@ const ZoomCourses = () => {
                     Enroll in Course
                   </Button>
                 </div>
-              </DialogFooter>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Join Session Dialog */}
-      <Dialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen}>
-        <DialogContent className="max-w-md">
-          {selectedSession && (
-            <>
-              <DialogHeader>
-                <DialogTitle>Join Zoom Session</DialogTitle>
-                <DialogDescription>
-                  Ready to join the "{selectedSession.topic}" session?
-                </DialogDescription>
-              </DialogHeader>
-              
-              <div className="py-4">
-                <div className="bg-gray-50 p-4 rounded-md mb-4">
-                  <h3 className="font-semibold">{selectedSession.course?.title}</h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {formatDate(selectedSession.date)} • {selectedSession.startTime} - {selectedSession.endTime}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    Tutor: {selectedSession.course?.tutor}
-                  </p>
-                </div>
-                
-                <p className="text-sm">
-                  This will open Zoom in a new window. Make sure you have Zoom installed on your device.
-                </p>
-              </div>
-              
-              <DialogFooter>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setJoinDialogOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={() => {
-                    // In a real implementation, this would use a real Zoom URL
-                    window.open('https://zoom.us/join', '_blank');
-                    setJoinDialogOpen(false);
-                  }}
-                >
-                  <Video className="mr-2 h-4 w-4" />
-                  Join Now
-                </Button>
               </DialogFooter>
             </>
           )}
