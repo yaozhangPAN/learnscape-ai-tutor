@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,6 +27,8 @@ import ZoomCourses from "./pages/ZoomCourses";
 import NotFound from "./pages/NotFound";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCanceled from "./pages/PaymentCanceled";
+import VocabularyBuilder from "./pages/VocabularyBuilder";
+import LanguageArts from "./pages/LanguageArts";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,8 @@ const App = () => (
               <Route path="/ai-tutor/tutor-me" element={<TutorMe />} />
               <Route path="/ai-tutor/error-analysis" element={<ErrorAnalysis />} />
               <Route path="/ai-tutor/snap-and-solve" element={<SnapAndSolve />} />
+              <Route path="/ai-tutor/vocabulary" element={<VocabularyBuilder />} />
+              <Route path="/ai-tutor/language-arts" element={<LanguageArts />} />
               
               {/* Redirect any /about requests to the home page */}
               <Route path="/about" element={<Navigate to="/" replace />} />

@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Camera, Headphones } from "lucide-react";
+import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Camera, Headphones, Book, BookText } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -69,6 +68,22 @@ const AITutor = () => {
       description: "Take a photo of your question to get step by step guidance for reaching solutions!",
       path: "/ai-tutor/snap-and-solve",
       emoji: "📸"
+    },
+    {
+      id: "vocabulary",
+      title: "Vocabulary Builder",
+      icon: <Book className="h-8 w-8 text-emerald-500" />,
+      description: "Master new words through interactive flashcards and personalized learning.",
+      path: "/ai-tutor/vocabulary",
+      emoji: "📚"
+    },
+    {
+      id: "language-arts",
+      title: "Language Arts Workshop",
+      icon: <BookText className="h-8 w-8 text-purple-500" />,
+      description: "Develop your language skills through creative writing and reading comprehension.",
+      path: "/ai-tutor/language-arts",
+      emoji: "📝"
     }
   ];
 
