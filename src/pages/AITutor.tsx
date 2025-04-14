@@ -7,10 +7,12 @@ import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import SubscriptionBanner from "@/components/SubscriptionBanner";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useToast } from "@/hooks/use-toast";
 
 const AITutor = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { isPremium } = useSubscription();
+  const { toast } = useToast();
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -19,6 +21,17 @@ const AITutor = () => {
     
     return () => clearTimeout(timer);
   }, []);
+  
+  const handlePremiumFeatureClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isPremium) {
+      e.preventDefault();
+      toast({
+        title: "Premium Feature",
+        description: "Please subscribe to access the Language Arts Workshop.",
+        variant: "destructive",
+      });
+    }
+  };
   
   const tutorOptions = [
     {
@@ -86,7 +99,8 @@ const AITutor = () => {
       description: "Develop your language skills through creative writing and reading comprehension.",
       path: "https://game-art.fly.dev/",
       emoji: "📝",
-      external: true
+      external: true,
+      premiumOnly: true
     }
   ];
 
@@ -126,9 +140,13 @@ const AITutor = () => {
                     href={option.path} 
                     target="_blank" 
                     rel="noopener noreferrer"
+                    onClick={option.premiumOnly ? handlePremiumFeatureClick : undefined}
+                    className={option.premiumOnly && !isPremium ? "cursor-not-allowed" : ""}
                   >
                     <Card 
-                      className="cursor-pointer transition-all hover:shadow-lg border-2 overflow-hidden group border-transparent h-full"
+                      className={`cursor-pointer transition-all hover:shadow-lg border-2 overflow-hidden group border-transparent h-full ${
+                        option.premiumOnly && !isPremium ? 'opacity-75' : ''
+                      }`}
                     >
                       <div className="absolute -right-6 -top-6 w-20 h-20 bg-yellow-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <CardHeader className="flex flex-col items-center text-center pb-2 relative">
@@ -137,6 +155,11 @@ const AITutor = () => {
                         </div>
                         <CardTitle className="text-xl flex items-center">
                           {option.title}
+                          {option.premiumOnly && !isPremium && (
+                            <span className="ml-2 text-yellow-500">
+                              <Sparkles className="h-4 w-4" />
+                            </span>
+                          )}
                           <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
                             {option.emoji}
                           </span>
