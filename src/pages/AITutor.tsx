@@ -51,7 +51,8 @@ const AITutor = () => {
       icon: <Brain className="h-8 w-8 text-green-500" />,
       description: "Get personalized help with any subject or concept you're struggling with.",
       path: "/ai-tutor/tutor-me",
-      emoji: "🧠"
+      emoji: "🧠",
+      hidden: true
     },
     {
       id: "error-analysis",
@@ -59,7 +60,8 @@ const AITutor = () => {
       icon: <FileSearch className="h-8 w-8 text-red-500" />,
       description: "Analyze your mistakes and learn how to avoid them in future examinations.",
       path: "/ai-tutor/error-analysis",
-      emoji: "🔍"
+      emoji: "🔍",
+      hidden: true
     },
     {
       id: "snap-and-solve",
@@ -82,8 +84,9 @@ const AITutor = () => {
       title: "Language Arts Workshop",
       icon: <BookText className="h-8 w-8 text-purple-500" />,
       description: "Develop your language skills through creative writing and reading comprehension.",
-      path: "/ai-tutor/language-arts",
-      emoji: "📝"
+      path: "https://game-art.fly.dev/",
+      emoji: "📝",
+      external: true
     }
   ];
 
@@ -91,7 +94,6 @@ const AITutor = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 bg-gray-50 relative overflow-hidden">
-        {/* Decorative elements */}
         <div className="absolute top-20 left-[5%] w-16 h-16 rounded-full bg-blue-100/60 animate-float hidden md:block"></div>
         <div className="absolute top-40 right-[10%] w-12 h-12 rounded-full bg-purple-100/60 animate-spin-slow hidden md:block"></div>
         <div className="absolute bottom-20 left-[15%] w-10 h-10 rounded-full bg-green-100/60 animate-bounce-slow hidden md:block"></div>
@@ -115,36 +117,74 @@ const AITutor = () => {
           {!isPremium && <SubscriptionBanner type="ai-tutor" />}
 
           <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-            {tutorOptions.map((option, index) => (
-              <Link key={option.id} to={option.path}>
-                <Card 
-                  className="cursor-pointer transition-all hover:shadow-lg border-2 overflow-hidden group border-transparent h-full"
-                >
-                  <div className="absolute -right-6 -top-6 w-20 h-20 bg-yellow-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <CardHeader className="flex flex-col items-center text-center pb-2 relative">
-                    <div className="mb-2 p-3 rounded-full bg-gray-100 group-hover:bg-blue-50 transition-colors">
-                      {option.icon}
-                    </div>
-                    <CardTitle className="text-xl flex items-center">
-                      {option.title}
-                      <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
-                        {option.emoji}
-                      </span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-center">
-                      {option.description}
-                    </CardDescription>
-                  </CardContent>
-                  <CardFooter className="flex justify-center">
-                    <Button variant="ghost" className="group-hover:bg-blue-50 transition-colors">
-                      Start Learning
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Link>
-            ))}
+            {tutorOptions
+              .filter(option => !option.hidden)
+              .map((option, index) => (
+                option.external ? (
+                  <a 
+                    key={option.id} 
+                    href={option.path} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <Card 
+                      className="cursor-pointer transition-all hover:shadow-lg border-2 overflow-hidden group border-transparent h-full"
+                    >
+                      <div className="absolute -right-6 -top-6 w-20 h-20 bg-yellow-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <CardHeader className="flex flex-col items-center text-center pb-2 relative">
+                        <div className="mb-2 p-3 rounded-full bg-gray-100 group-hover:bg-blue-50 transition-colors">
+                          {option.icon}
+                        </div>
+                        <CardTitle className="text-xl flex items-center">
+                          {option.title}
+                          <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
+                            {option.emoji}
+                          </span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription className="text-center">
+                          {option.description}
+                        </CardDescription>
+                      </CardContent>
+                      <CardFooter className="flex justify-center">
+                        <Button variant="ghost" className="group-hover:bg-blue-50 transition-colors">
+                          Start Learning
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </a>
+                ) : (
+                  <Link key={option.id} to={option.path}>
+                    <Card 
+                      className="cursor-pointer transition-all hover:shadow-lg border-2 overflow-hidden group border-transparent h-full"
+                    >
+                      <div className="absolute -right-6 -top-6 w-20 h-20 bg-yellow-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <CardHeader className="flex flex-col items-center text-center pb-2 relative">
+                        <div className="mb-2 p-3 rounded-full bg-gray-100 group-hover:bg-blue-50 transition-colors">
+                          {option.icon}
+                        </div>
+                        <CardTitle className="text-xl flex items-center">
+                          {option.title}
+                          <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
+                            {option.emoji}
+                          </span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription className="text-center">
+                          {option.description}
+                        </CardDescription>
+                      </CardContent>
+                      <CardFooter className="flex justify-center">
+                        <Button variant="ghost" className="group-hover:bg-blue-50 transition-colors">
+                          Start Learning
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </Link>
+                )
+              ))}
           </div>
         </div>
       </main>
