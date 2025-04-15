@@ -1,14 +1,27 @@
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const LanguageArtsRedirect = () => {
-  useEffect(() => {
-    window.location.href = 'https://game-art.fly.dev/';
-  }, []);
+  const [loading, setLoading] = useState(true);
+
+  // Hide loading spinner after iframe loads
+  const handleIframeLoad = () => {
+    setLoading(false);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-learnscape-blue"></div>
+    <div className="min-h-screen w-full">
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-learnscape-blue"></div>
+        </div>
+      )}
+      <iframe 
+        src="https://game-art.fly.dev/" 
+        className="w-full h-screen border-0"
+        onLoad={handleIframeLoad}
+        title="Language Arts Workshop"
+      />
     </div>
   );
 };
