@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Camera, Headphones, Book, BookText } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,7 +52,8 @@ const AITutor = () => {
       icon: <Brain className="h-8 w-8 text-green-500" />,
       description: "Get personalized help with any subject or concept you're struggling with.",
       path: "/ai-tutor/tutor-me",
-      emoji: "🧠"
+      emoji: "🧠",
+      hidden: true // Add hidden property
     },
     {
       id: "error-analysis",
@@ -59,7 +61,8 @@ const AITutor = () => {
       icon: <FileSearch className="h-8 w-8 text-red-500" />,
       description: "Analyze your mistakes and learn how to avoid them in future examinations.",
       path: "/ai-tutor/error-analysis",
-      emoji: "🔍"
+      emoji: "🔍",
+      hidden: true // Add hidden property
     },
     {
       id: "snap-and-solve",
@@ -115,7 +118,9 @@ const AITutor = () => {
           {!isPremium && <SubscriptionBanner type="ai-tutor" />}
 
           <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-            {tutorOptions.map((option, index) => (
+            {tutorOptions
+              .filter(option => !option.hidden) // Filter out hidden options
+              .map((option, index) => (
               <Link key={option.id} to={option.path}>
                 <Card 
                   className="cursor-pointer transition-all hover:shadow-lg border-2 overflow-hidden group border-transparent h-full"
