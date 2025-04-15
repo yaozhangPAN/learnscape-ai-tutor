@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Camera, Headphones, Book, BookText } from "lucide-react";
+import { Pen, Mic, Brain, Sparkles, Stars, Lightbulb, FileSearch, Camera, Headphones, Book, BookText, BookOpen } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -91,6 +91,14 @@ const AITutor = () => {
       path: "#",
       onClick: handleLanguageArtsClick,
       emoji: "📝"
+    },
+    {
+      id: "reading-coach",
+      title: "Reading Coach",
+      icon: <BookOpen className="h-8 w-8 text-orange-500" />,
+      description: "Improve your reading comprehension with Microsoft's Reading Coach.",
+      path: "/ai-tutor/reading-coach",
+      emoji: "📖"
     }
   ];
 
