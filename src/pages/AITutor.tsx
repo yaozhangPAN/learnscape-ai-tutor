@@ -23,7 +23,7 @@ const AITutor = () => {
   }, []);
   
   const handleLanguageArtsClick = () => {
-    window.location.href = 'https://game-art.fly.dev/';
+    navigate('/ai-tutor/language-arts');
   };
   
   const tutorOptions = [
