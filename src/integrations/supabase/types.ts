@@ -87,6 +87,39 @@ export type Database = {
         }
         Relationships: []
       }
+      questions: {
+        Row: {
+          content: Json | null
+          created_at: string
+          id: string
+          level: string | null
+          subject: string | null
+          term: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string
+          id: string
+          level?: string | null
+          subject?: string | null
+          term?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string
+          id?: string
+          level?: string | null
+          subject?: string | null
+          term?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           created_at: string
