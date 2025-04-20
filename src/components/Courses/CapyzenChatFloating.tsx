@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export const CapyzenChatFloating: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const { isPremium } = useSubscription();
+  const { isPremium, startCheckoutSession } = useSubscription();
   const { toast } = useToast();
 
   // Listen for the custom event to open the chat
@@ -21,7 +21,20 @@ export const CapyzenChatFloating: React.FC = () => {
       } else {
         toast({
           title: "仅限付费会员",
-          description: "开通会员即可使用AI助教聊天功能",
+          description: (
+            <div className="flex flex-col gap-2">
+              <div>开通会员即可使用AI助教聊天功能</div>
+              <button
+                onClick={async () => {
+                  const url = await startCheckoutSession("premium_subscription");
+                  if (url) window.location.href = url;
+                }}
+                className="text-blue-600 underline hover:text-orange-500"
+              >
+                立即开通
+              </button>
+            </div>
+          ),
           variant: "destructive"
         });
       }
@@ -32,7 +45,7 @@ export const CapyzenChatFloating: React.FC = () => {
     return () => {
       window.removeEventListener("capyzen-chat-open", handleChatOpen);
     };
-  }, [isPremium, toast]);
+  }, [isPremium, toast, startCheckoutSession]);
 
   const handleButtonClick = () => {
     if (isPremium) {
@@ -40,7 +53,20 @@ export const CapyzenChatFloating: React.FC = () => {
     } else {
       toast({
         title: "仅限付费会员",
-        description: "开通会员即可使用AI助教聊天功能",
+        description: (
+          <div className="flex flex-col gap-2">
+            <div>开通会员即可使用AI助教聊天功能</div>
+            <button
+              onClick={async () => {
+                const url = await startCheckoutSession("premium_subscription");
+                if (url) window.location.href = url;
+              }}
+              className="text-blue-600 underline hover:text-orange-500"
+            >
+              立即开通
+            </button>
+          </div>
+        ),
         variant: "destructive"
       });
     }
