@@ -28,16 +28,22 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       
       console.log(`Starting upload for file: ${file.name}, size: ${file.size} bytes, type: ${file.type}`);
       
-      // Explicit bucket check with more detailed error handling
+      // Bucket check with more detailed error handling using listBuckets
       try {
-        const { data: bucket, error: bucketError } = await supabase.storage
-          .from('course-videos')
-          .getBucket();
+        const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
         
-        if (bucketError) {
-          console.error("Bucket check error:", bucketError);
-          throw new Error(`存储桶检查失败: ${bucketError.message}`);
+        if (bucketsError) {
+          console.error("Bucket listing error:", bucketsError);
+          throw new Error(`存储桶检查失败: ${bucketsError.message}`);
         }
+        
+        const courseVideosBucket = buckets.find(bucket => bucket.name === 'course-videos');
+        if (!courseVideosBucket) {
+          console.error("course-videos bucket not found in available buckets:", buckets.map(b => b.name));
+          throw new Error("存储桶 'course-videos' 不存在。请检查 Supabase 配置。");
+        }
+        
+        console.log("Successfully verified 'course-videos' bucket exists");
       } catch (bucketCheckError) {
         console.error("Detailed bucket check error:", bucketCheckError);
         throw new Error("无法访问 'course-videos' 存储桶。请检查 Supabase 配置。");
