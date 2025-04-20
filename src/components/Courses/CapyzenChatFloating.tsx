@@ -5,10 +5,12 @@ import { X } from "lucide-react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useToast } from "@/hooks/use-toast";
 
 export const CapyzenChatFloating: React.FC = () => {
   const [open, setOpen] = useState(false);
   const { isPremium } = useSubscription();
+  const { toast } = useToast();
 
   // Listen for the custom event to open the chat
   useEffect(() => {
@@ -16,30 +18,41 @@ export const CapyzenChatFloating: React.FC = () => {
       console.log("Custom event received: capyzen-chat-open");
       if (isPremium) {
         setOpen(true);
+      } else {
+        toast({
+          title: "仅限付费会员",
+          description: "开通会员即可使用AI助教聊天功能",
+          variant: "destructive"
+        });
       }
     };
     
-    // Add event listener for the custom event
     window.addEventListener("capyzen-chat-open", handleChatOpen);
     
-    // Clean up event listener on component unmount
     return () => {
       window.removeEventListener("capyzen-chat-open", handleChatOpen);
     };
-  }, [isPremium]);
+  }, [isPremium, toast]);
 
-  if (!isPremium) {
-    return null; // 不显示悬浮聊天入口给非付费用户
-  }
+  const handleButtonClick = () => {
+    if (isPremium) {
+      setOpen(true);
+    } else {
+      toast({
+        title: "仅限付费会员",
+        description: "开通会员即可使用AI助教聊天功能",
+        variant: "destructive"
+      });
+    }
+  };
 
-  // 固定右下角浮动ICON，展开后出现完整聊天面板
   return (
     <>
       {!open && (
         <button
           className="fixed z-50 bottom-8 right-6 bg-white border border-blue-100 shadow-lg rounded-full w-16 h-16 flex items-center justify-center hover:scale-105 transition-all"
           aria-label="打开AI对话"
-          onClick={() => setOpen(true)}
+          onClick={handleButtonClick}
           style={{ boxShadow: "0 4px 18px #3b82f633" }}
         >
           <Avatar className="h-12 w-12 border-2 border-blue-200 shadow-md">
