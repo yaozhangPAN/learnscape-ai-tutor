@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { useS3Upload } from '@/hooks/useS3Upload';
+import { useStorageUpload } from '@/hooks/useStorageUpload';
 import { UploadProgress } from './VideoUpload/UploadProgress';
 import { FileInfo } from './VideoUpload/FileInfo';
 import { formatFileSize, getMaxFileSize, SUPABASE_FREE_LIMIT, ADMIN_MAX_FILE_SIZE } from '@/utils/fileUtils';
@@ -44,8 +43,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     checkAdminStatus();
   }, [user, isPremium]);
   
-  // Initialize S3 upload hook with the correct max file size
-  const { uploadToS3, isUploading } = useS3Upload({
+  const { uploadToStorage, isUploading } = useStorageUpload({
     onProgress: setUploadProgress,
     maxFileSize: maxAllowedSize
   });
@@ -80,19 +78,6 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     }
   };
 
-  const simulateProgress = () => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 5;
-      if (progress >= 95) {
-        clearInterval(interval);
-      }
-      setUploadProgress(progress);
-    }, 300);
-    
-    return () => clearInterval(interval);
-  };
-
   const handleUpload = async () => {
     if (!file || !user) {
       toast({
@@ -112,29 +97,12 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       return;
     }
 
-    if (file.size > SUPABASE_FREE_LIMIT && !isAdmin) {
-      const proceedAnyway = window.confirm(
-        `This file (${formatFileSize(file.size)}) exceeds Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}. 
-        The upload may fail unless you have a paid Supabase plan. Do you want to proceed anyway?`
-      );
-      
-      if (!proceedAnyway) {
-        return;
-      }
-    }
-
     setUploading(true);
     setUploadProgress(0);
     setError(null);
     
     try {
-      const stopProgress = simulateProgress();
-      
-      console.log("Uploading file with size:", file.size, "Max allowed size:", maxAllowedSize);
-      
-      const fileUrl = await uploadToS3(file, courseId);
-      stopProgress();
-      setUploadProgress(100);
+      const fileUrl = await uploadToStorage(file, courseId);
 
       const { error: insertError } = await supabase
         .from('video_files')
