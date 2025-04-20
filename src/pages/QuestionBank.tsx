@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,8 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const QUESTIONS_PER_PAGE = 10;
 
-/*
-const questionData = [
+const defaultQuestionData = [
   { id: 1, title: "Grade 6 - Reading Comprehension - 1", subject: "English", type: "Reading", level: "Primary 6", term: "CA1", date: "2025-03-01" },
   { id: 2, title: "Grade 6 - Grammar Practice - 1", subject: "English", type: "Grammar", level: "Primary 6", term: "CA1", date: "2025-03-05" },
   { id: 3, title: "Grade 5 - Reading Comprehension - 1", subject: "English", type: "Reading", level: "Primary 5", term: "SA1", date: "2025-03-08" },
@@ -38,13 +37,6 @@ const questionData = [
   { id: 23, title: "Grade 5 - Materials and Matter", subject: "Science", type: "Chemistry", level: "Primary 5", term: "CA2", date: "2025-03-17" },
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
 ];
-*/
-
-const { questionData, error } = await supabase
-      .from('questions')
-      .select()
-      .eq('title', '南洋小学小六华文-短文填空');
-
 
 const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
 const subjects = ["All Subjects", "English", "Math", "Chinese", "Science"];
@@ -56,13 +48,44 @@ const QuestionBank = () => {
   const [selectedGrade, setSelectedGrade] = useState("All Grades");
   const [selectedSubject, setSelectedSubject] = useState("All Subjects");
   const [selectedTerm, setSelectedTerm] = useState("All Terms");
+  const [questionData, setQuestionData] = useState(defaultQuestionData);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error } = await supabase
+          .from('questions')
+          .select('*');
+        
+        if (error) {
+          console.error('Error fetching questions:', error);
+          setQuestionData(defaultQuestionData);
+        } else if (data && data.length > 0) {
+          setQuestionData(data);
+          console.log('Fetched questions:', data);
+        } else {
+          console.log('No data found in questions table, using default data');
+          setQuestionData(defaultQuestionData);
+        }
+      } catch (error) {
+        console.error('Exception when fetching questions:', error);
+        setQuestionData(defaultQuestionData);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
 
   const filteredQuestions = questionData.filter(question => {
     const matchesSearch = 
       question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      question.subject.toLowerCase().includes(searchTerm.toLowerCase());
+      question.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      question.level?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      question.subject?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesGrade = selectedGrade === "All Grades" || question.level === selectedGrade;
     
@@ -196,80 +219,88 @@ const QuestionBank = () => {
             </div>
           </div>
 
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Question Title</TableHead>
-                    <TableHead>Subject</TableHead>
-                    <TableHead>Level</TableHead>
-                    <TableHead>Term</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {currentQuestions.length > 0 ? (
-                    currentQuestions.map((question) => (
-                      <TableRow key={question.id}>
-                        <TableCell className="font-medium">{question.title}</TableCell>
-                        <TableCell>{question.subject}</TableCell>
-                        <TableCell>{question.level}</TableCell>
-                        <TableCell>{question.term}</TableCell>
-                        <TableCell>{question.date}</TableCell>
-                        <TableCell className="text-right">
-                          <Button className="bg-learnscape-blue text-white">View</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                        No questions match your search criteria. Try adjusting your filters.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-
-          <div className="mt-4 text-sm text-gray-500">
-            Showing {currentQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0} to {Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)} of {filteredQuestions.length} questions
-          </div>
-
-          {totalPages > 1 && (
-            <div className="mt-6">
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious 
-                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                    />
-                  </PaginationItem>
-                  
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        isActive={page === currentPage}
-                        onClick={() => setCurrentPage(page)}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  
-                  <PaginationItem>
-                    <PaginationNext 
-                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-learnscape-blue"></div>
             </div>
+          ) : (
+            <>
+              <Card>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Question Title</TableHead>
+                        <TableHead>Subject</TableHead>
+                        <TableHead>Level</TableHead>
+                        <TableHead>Term</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {currentQuestions.length > 0 ? (
+                        currentQuestions.map((question) => (
+                          <TableRow key={question.id}>
+                            <TableCell className="font-medium">{question.title}</TableCell>
+                            <TableCell>{question.subject}</TableCell>
+                            <TableCell>{question.level}</TableCell>
+                            <TableCell>{question.term}</TableCell>
+                            <TableCell>{question.date}</TableCell>
+                            <TableCell className="text-right">
+                              <Button className="bg-learnscape-blue text-white">View</Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            No questions match your search criteria. Try adjusting your filters.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+
+              <div className="mt-4 text-sm text-gray-500">
+                Showing {currentQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0} to {Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)} of {filteredQuestions.length} questions
+              </div>
+
+              {totalPages > 1 && (
+                <div className="mt-6">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            isActive={page === currentPage}
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
