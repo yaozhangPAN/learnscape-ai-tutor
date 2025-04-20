@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, HelpCircle } from "lucide-react";
@@ -72,7 +72,8 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     });
     
     // Dispatch event to open the chat
-    window.dispatchEvent(new CustomEvent("capyzen-chat-open"));
+    const event = new CustomEvent("capyzen-chat-open");
+    window.dispatchEvent(event);
     
     toast({
       title: "已转发到AI对话",

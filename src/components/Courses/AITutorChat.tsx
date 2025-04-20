@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +21,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const { pendingContext, clearContext } = useCapyzenChat();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Process pendingContext when it's available
   useEffect(() => {
@@ -31,8 +32,12 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
         const contextMessage = `我想请教关于这个问题:\n\n${question}\n\n我的回答是:\n${answer}\n\n我有什么可以改进的地方吗？`;
         setInputMessage(contextMessage);
         
-        // Optional: Auto-send the message
-        // handleSendMessage(contextMessage);
+        // Focus the textarea and adjust its height
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          textareaRef.current.style.height = 'auto';
+          textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
       }
       
       // Clear the context after using it
@@ -51,6 +56,11 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
     setMessages(prev => [...prev, newMessage]);
     setInputMessage('');
     
+    // Auto-resize textarea back to default
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+    }
+    
     // TODO: Send to AI API and get response
     setTimeout(() => {
       const mockResponse: Message = {
@@ -59,6 +69,13 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
       };
       setMessages(prev => [...prev, mockResponse]);
     }, 1000);
+  };
+
+  // Auto-resize textarea when input changes
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputMessage(e.target.value);
+    e.target.style.height = 'auto';
+    e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
   return (
@@ -102,9 +119,10 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
 
         <div className="flex gap-2 mt-auto">
           <Textarea
+            ref={textareaRef}
             placeholder="输入你的问题..."
             value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
+            onChange={handleTextareaChange}
             className="flex-1 resize-none"
             rows={3}
           />
