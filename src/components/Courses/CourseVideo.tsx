@@ -45,12 +45,14 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
           <video
             className="w-full h-full"
             controls
-            controlsList="nodownload"
+            controlsList="nodownload noplaybackrate"
+            onContextMenu={(e) => e.preventDefault()}
+            playsInline
             onLoadedData={() => setIsLoading(false)}
             poster="/placeholder.svg"
           >
             <source src={signedUrl} type="video/mp4" />
-            Your browser does not support the video tag.
+            您的浏览器不支持视频播放。
           </video>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
