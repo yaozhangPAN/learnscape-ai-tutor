@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+
+import React, { useEffect, useRef } from 'react';
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -14,6 +15,8 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
   const [isLoading, setIsLoading] = React.useState(true);
   const [signedUrl, setSignedUrl] = React.useState<string | null>(null);
   const { toast } = useToast();
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const getSignedUrl = async () => {
@@ -49,9 +52,31 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
       }
     };
 
+    // Setup fullscreen change event listener
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement && videoContainerRef.current) {
+        // Make sure watermark is part of fullscreen
+        console.log("Fullscreen entered");
+      }
+    };
+
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
   }, [toast]);
+
+  // Function to handle enter fullscreen request
+  const handleEnterFullscreen = () => {
+    if (videoContainerRef.current) {
+      if (videoContainerRef.current.requestFullscreen) {
+        videoContainerRef.current.requestFullscreen();
+      }
+    }
+  };
 
   return (
     <div 
@@ -60,10 +85,14 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
       onCut={(e) => e.preventDefault()}
       onPaste={(e) => e.preventDefault()}
     >
-      <div className="aspect-video relative">
+      <div 
+        ref={videoContainerRef}
+        className="aspect-video relative"
+      >
         {signedUrl ? (
           <>
             <video
+              ref={videoRef}
               className="w-full h-full"
               controls
               controlsList="nodownload noplaybackrate"
@@ -76,6 +105,8 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
                 WebkitUserSelect: 'none',
                 userSelect: 'none',
               }}
+              // Override default fullscreen behavior to use our container
+              onDoubleClick={handleEnterFullscreen}
             >
               <source src={signedUrl} type="video/mp4" />
               您的浏览器不支持视频播放。

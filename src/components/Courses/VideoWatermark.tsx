@@ -1,5 +1,5 @@
-
 import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
 
 interface VideoWatermarkProps {
   className?: string;
@@ -8,7 +8,15 @@ interface VideoWatermarkProps {
 export const VideoWatermark = ({ className }: VideoWatermarkProps) => {
   const { user } = useAuth();
   const email = user?.email || '';
-  const timestamp = new Date().toLocaleString();
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date().toLocaleString());
+    }, 60000);
+    
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div 
@@ -23,7 +31,7 @@ export const VideoWatermark = ({ className }: VideoWatermarkProps) => {
           className="text-white/30 text-sm font-medium rotate-[-30deg] transform scale-150 whitespace-nowrap"
           style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}
         >
-          {email} • {timestamp}
+          {email} • {currentTime}
         </div>
       </div>
     </div>
