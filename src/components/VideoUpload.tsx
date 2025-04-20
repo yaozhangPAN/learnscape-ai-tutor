@@ -7,9 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Progress } from '@/components/ui/progress';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 
-// Increased file size limit (2GB for free users, 5GB for pro users)
-const FREE_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
-const PRO_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
+// Set file size limit for admin users (2GB)
+const ADMIN_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
 
 interface VideoUploadProps {
   courseId: string;
@@ -17,7 +16,6 @@ interface VideoUploadProps {
 }
 
 export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSuccess }) => {
-  const { isPremium } = useSubscription();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -36,19 +34,18 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
-      const maxFileSize = isPremium ? PRO_MAX_FILE_SIZE : FREE_MAX_FILE_SIZE;
       
       // Check file size
       const fileSizeFormatted = formatFileSize(selectedFile.size);
       setFileSize(fileSizeFormatted);
       
-      const isValid = selectedFile.size <= maxFileSize;
+      const isValid = selectedFile.size <= ADMIN_MAX_FILE_SIZE;
       setIsValidSize(isValid);
       
       if (!isValid) {
         toast({
           title: "File too large",
-          description: `Maximum allowed size is ${formatFileSize(maxFileSize)}. Your file is ${fileSizeFormatted}.`,
+          description: `Maximum allowed size is ${formatFileSize(ADMIN_MAX_FILE_SIZE)}. Your file is ${fileSizeFormatted}.`,
           variant: "destructive"
         });
       }
@@ -80,11 +77,10 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       return;
     }
 
-    const maxFileSize = isPremium ? PRO_MAX_FILE_SIZE : FREE_MAX_FILE_SIZE;
     if (!isValidSize) {
       toast({
         title: "Error",
-        description: `File is too large. Maximum allowed size is ${formatFileSize(maxFileSize)}.`,
+        description: `File is too large. Maximum allowed size is ${formatFileSize(ADMIN_MAX_FILE_SIZE)}.`,
         variant: "destructive"
       });
       return;
@@ -125,9 +121,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
       let description = errorMessage;
       
-      // Check for specific error types
       if (errorMessage.includes("Payload too large")) {
-        description = "The file is too large for Supabase storage. Try using a smaller file (less than 2MB) or contact your administrator.";
+        description = `The file is too large. Maximum allowed size is ${formatFileSize(ADMIN_MAX_FILE_SIZE)}.`;
       }
       
       toast({
@@ -165,7 +160,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
             File size: {fileSize} {!isValidSize && " (exceeds maximum size)"}
           </p>
           <p className="text-gray-500">
-            Max allowed: {formatFileSize(maxFileSize)}
+            Max allowed: {formatFileSize(ADMIN_MAX_FILE_SIZE)}
           </p>
         </div>
       )}
