@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -20,6 +21,7 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
     try {
       console.log(`Checking if bucket '${bucketName}' exists...`);
       
+      // First, check if the bucket exists
       const { data: buckets, error: listError } = await supabase.storage.listBuckets();
       
       if (listError) {
@@ -41,7 +43,7 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         console.error(`Bucket '${bucketName}' does not exist`);
         toast({
           title: "存储桶错误",
-          description: `存储桶 '${bucketName}' 不存在。请联系管理员创建。`,
+          description: `存储桶 '${bucketName}' 不存在。需要在 Supabase 中创建此存储桶。`,
           variant: "destructive",
         });
         return false;
@@ -66,6 +68,11 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       }
       
       console.log(`Successfully verified access to bucket '${bucketName}'`);
+      toast({
+        title: "存储桶验证成功",
+        description: `成功验证对 '${bucketName}' 存储桶的访问权限。`,
+        variant: "success",
+      });
       return true;
     } catch (error) {
       console.error("Bucket check error:", error);
