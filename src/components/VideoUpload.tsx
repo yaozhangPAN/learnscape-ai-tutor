@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,8 @@ import { useSubscription } from '@/contexts/SubscriptionContext';
 
 // Set file size limit for admin users (2GB)
 const ADMIN_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
+// Supabase has a 50MB limit for free tier, 5GB for paid tier
+const SUPABASE_FREE_LIMIT = 50 * 1024 * 1024; // 50MB
 
 interface VideoUploadProps {
   courseId: string;
@@ -39,8 +42,18 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       const fileSizeFormatted = formatFileSize(selectedFile.size);
       setFileSize(fileSizeFormatted);
       
+      // Check against our admin size limit
       const isValid = selectedFile.size <= ADMIN_MAX_FILE_SIZE;
       setIsValidSize(isValid);
+      
+      // Also warn if file exceeds Supabase limits
+      if (selectedFile.size > SUPABASE_FREE_LIMIT) {
+        toast({
+          title: "Warning: Large File",
+          description: `This file (${fileSizeFormatted}) may exceed Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}. You might need a paid Supabase plan for this upload.`,
+          variant: "warning"
+        });
+      }
       
       if (!isValid) {
         toast({
@@ -86,6 +99,18 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       return;
     }
 
+    // Additional check for Supabase limits
+    if (file.size > SUPABASE_FREE_LIMIT) {
+      const proceedAnyway = window.confirm(
+        `This file (${formatFileSize(file.size)}) exceeds Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}. 
+        The upload may fail unless you have a paid Supabase plan. Do you want to proceed anyway?`
+      );
+      
+      if (!proceedAnyway) {
+        return;
+      }
+    }
+
     setUploading(true);
     setUploadProgress(0);
     
@@ -122,7 +147,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       let description = errorMessage;
       
       if (errorMessage.includes("Payload too large")) {
-        description = `The file is too large. Maximum allowed size is ${formatFileSize(ADMIN_MAX_FILE_SIZE)}.`;
+        description = `The file is too large for Supabase storage. Maximum file size for Supabase free tier is ${formatFileSize(SUPABASE_FREE_LIMIT)}. Please upgrade your Supabase plan or use a smaller file.`;
       }
       
       toast({
@@ -161,6 +186,9 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
           </p>
           <p className="text-gray-500">
             Max allowed: {formatFileSize(ADMIN_MAX_FILE_SIZE)}
+          </p>
+          <p className="text-amber-500">
+            Supabase free tier limit: {formatFileSize(SUPABASE_FREE_LIMIT)}
           </p>
         </div>
       )}
