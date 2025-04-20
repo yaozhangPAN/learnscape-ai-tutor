@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -6,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { AITutorChat } from './AITutorChat';
 
 interface HomeworkQuestion {
   id: string;
@@ -64,14 +64,12 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
         const transcript = result[0].transcript;
         
         if (result.isFinal) {
-          // Only add the final result to the answer
           setAnswer(prev => {
             const newText = prev ? prev + ' ' + transcript : transcript;
             return newText.trim();
           });
           interimTranscriptRef.current = '';
         } else {
-          // Store the interim result but don't update the answer yet
           interimTranscriptRef.current = transcript;
         }
       };
@@ -121,6 +119,10 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
     }
   };
 
+  const handleSubmitAnswer = () => {
+    // TODO: Submit answer to AI tutor for feedback
+  };
+
   return (
     <div className="space-y-4 mt-4">
       <div className="flex items-start gap-4">
@@ -143,6 +145,9 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
           )}
         </Button>
       </div>
+      <Button onClick={handleSubmitAnswer} className="w-full">
+        提交答案
+      </Button>
     </div>
   );
 };
@@ -154,22 +159,28 @@ export const CourseHomework: React.FC = () => {
         <CardTitle>课后作业</CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[600px] pr-4">
-          <div className="space-y-6">
-            {mockHomeworkQuestions.map((question) => (
-              <Card key={question.id} className="border-2 border-gray-200">
-                <CardHeader>
-                  <CardTitle className="text-lg">{question.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="whitespace-pre-wrap text-gray-700">{question.content}</div>
-                  <div className="font-medium text-gray-900">{question.question}</div>
-                  <QuestionAnswer questionId={question.id} />
-                </CardContent>
-              </Card>
-            ))}
+        <div className="grid md:grid-cols-2 gap-6">
+          <ScrollArea className="h-[600px] pr-4">
+            <div className="space-y-6">
+              {mockHomeworkQuestions.map((question) => (
+                <Card key={question.id} className="border-2 border-gray-200">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{question.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="whitespace-pre-wrap text-gray-700">{question.content}</div>
+                    <div className="font-medium text-gray-900">{question.question}</div>
+                    <QuestionAnswer questionId={question.id} />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </ScrollArea>
+          
+          <div>
+            <AITutorChat />
           </div>
-        </ScrollArea>
+        </div>
       </CardContent>
     </Card>
   );
