@@ -22,6 +22,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
   const [inputMessage, setInputMessage] = useState('');
   const { pendingContext, clearContext } = useCapyzenChat();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Process pendingContext when it's available
   useEffect(() => {
@@ -29,6 +30,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
       const { question, answer } = pendingContext;
       
       if (question && answer) {
+        console.log("Processing pending context:", pendingContext);
         const contextMessage = `我想请教关于这个问题:\n\n${question}\n\n我的回答是:\n${answer}\n\n我有什么可以改进的地方吗？`;
         setInputMessage(contextMessage);
         
@@ -68,6 +70,11 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
         content: '好的，让我看看这个问题...\n我建议你可以从文章中找出具体的描述和细节来支持你的回答。'
       };
       setMessages(prev => [...prev, mockResponse]);
+      
+      // Scroll to bottom after response
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
     }, 1000);
   };
 
@@ -76,6 +83,14 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
     setInputMessage(e.target.value);
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
+  };
+
+  // Handle Enter key to send message (Shift+Enter for new line)
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
   return (
@@ -91,7 +106,10 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+        <div 
+          ref={chatContainerRef}
+          className="flex-1 overflow-y-auto space-y-4 mb-4"
+        >
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 mt-12">
               <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-30" />
@@ -123,6 +141,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
             placeholder="输入你的问题..."
             value={inputMessage}
             onChange={handleTextareaChange}
+            onKeyDown={handleKeyDown}
             className="flex-1 resize-none"
             rows={3}
           />

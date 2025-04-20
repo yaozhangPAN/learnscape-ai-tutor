@@ -66,6 +66,11 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
 
   const handleForwardToChat = () => {
     // Use the forwardToChat function from useCapyzenChat hook
+    console.log("Forwarding to chat:", {
+      question: `${questionContent}\n${questionText}`,
+      answer
+    });
+    
     forwardToChat({
       question: `${questionContent}\n${questionText}`,
       answer

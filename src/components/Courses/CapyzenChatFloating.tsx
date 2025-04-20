@@ -11,6 +11,7 @@ export const CapyzenChatFloating: React.FC = () => {
   // Listen for the custom event to open the chat
   useEffect(() => {
     const handleChatOpen = () => {
+      console.log("Custom event received: capyzen-chat-open");
       setOpen(true);
     };
     
