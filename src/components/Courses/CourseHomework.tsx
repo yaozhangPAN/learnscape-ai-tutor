@@ -72,12 +72,12 @@ export const CourseHomework: React.FC = () => {
                     />
                   </div>
                   <div className="font-medium text-gray-900 mt-2 mb-2">
-                    请认真观察上面的图片，发挥想象力，用不少于80字写一段小故事（也可以合理使用图片中的词语和成语）。
+                    请认真观察上面的图片，发挥想象力，用不少于600字写一段小故事（也可以合理使用图片中的词语和成语）。
                   </div>
                   <HomeworkQuestionAnswer
                     questionId="img1"
                     questionContent="请根据以上图片内容与右侧词语写一段小故事。"
-                    questionText="至少80字，可以合理使用指定词语或成语。"
+                    questionText="至少600字，可以合理使用指定词语或成语。"
                   />
                 </CardContent>
               </Card>
