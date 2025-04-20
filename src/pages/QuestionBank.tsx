@@ -74,7 +74,8 @@ const QuestionBank = () => {
             level: item.level || 'Unknown',
             term: item.term || 'Unknown',
             date: item.created_at || new Date().toISOString(),
-            created_at: item.created_at
+            created_at: item.created_at,
+            content: item.content
           }));
           setQuestionData(formattedData);
           console.log('Fetched questions:', data);
