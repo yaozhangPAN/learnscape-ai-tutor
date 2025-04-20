@@ -1,9 +1,7 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { VideoWatermark } from "./VideoWatermark";
 
 interface CourseVideoProps {
   bucketName: string;
@@ -105,13 +103,11 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
                 WebkitUserSelect: 'none',
                 userSelect: 'none',
               }}
-              // Override default fullscreen behavior to use our container
               onDoubleClick={handleEnterFullscreen}
             >
               <source src={signedUrl} type="video/mp4" />
               您的浏览器不支持视频播放。
             </video>
-            <VideoWatermark className="z-10" />
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
