@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -189,12 +190,21 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({
           type="button"
           variant="default"
           onClick={handleAIFeedback}
-          loading={isLoading ? "圈圈加载" : undefined}
+          disabled={isLoading}
           className="flex items-center gap-1 whitespace-nowrap px-3 py-2"
           title="让Capyzen点评"
         >
-          <HelpCircle className="w-5 h-5 mr-1 text-blue-500" />
-          让Capyzen点评
+          {isLoading ? (
+            <>
+              <span className="animate-spin mr-1">⚪</span>
+              点评生成中...
+            </>
+          ) : (
+            <>
+              <HelpCircle className="w-5 h-5 mr-1 text-blue-500" />
+              让Capyzen点评
+            </>
+          )}
         </Button>
       </div>
       {aiComment && (
