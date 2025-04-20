@@ -63,17 +63,20 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         
         console.log(`Successfully created bucket '${bucketName}'`);
         
-        // Set public access policy for the new bucket
+        // Instead of calling an RPC, set the bucket policy directly through the storage API
         try {
-          const { error: policyError } = await supabase.rpc('create_public_bucket_policy', { 
-            bucket_name: bucketName 
+          // Set public policy for the bucket by allowing anonymous reads
+          const { error: updateError } = await supabase.storage.updateBucket(bucketName, {
+            public: true
           });
           
-          if (policyError) {
-            console.warn("Warning: Could not set public policy for bucket:", policyError);
+          if (updateError) {
+            console.warn("Warning: Could not set public policy for bucket:", updateError);
+          } else {
+            console.log(`Successfully set public access for bucket '${bucketName}'`);
           }
         } catch (policyErr) {
-          console.warn("Warning: Failed to call RPC for bucket policy:", policyErr);
+          console.warn("Warning: Failed to set bucket policy:", policyErr);
         }
       } else {
         console.log(`Bucket '${bucketName}' exists.`);
