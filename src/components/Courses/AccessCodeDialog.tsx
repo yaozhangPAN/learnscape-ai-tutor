@@ -75,7 +75,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
           content_type: "video_tutorial",
           price: 0,
           currency: "SGD",
-          user_id: user.id // Add the required user_id field
+          user_id: user.id // Explicitly add the user_id
         });
 
       if (purchaseError) {
