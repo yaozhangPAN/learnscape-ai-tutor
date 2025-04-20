@@ -8,8 +8,6 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 
 const QUESTIONS_PER_PAGE = 10;
@@ -41,8 +39,8 @@ const defaultQuestionData = [
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
 ];
 
-const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
-const subjects = ["All Subjects", "English", "Math", "Chinese", "Science"];
+const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6", "小六"];
+const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华文"];
 const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
 const QuestionBank = () => {
@@ -140,47 +138,6 @@ const QuestionBank = () => {
   const handleViewQuestion = (question) => {
     setSelectedQuestion(question);
     setDialogOpen(true);
-  };
-
-  const displayQuestionContent = (question) => {
-    if (!question?.content) return null;
-    
-    const content = typeof question.content === 'string' ? JSON.parse(question.content) : question.content;
-    
-    return (
-      <div className="space-y-6">
-        <div className="space-y-4">
-          <h3 className="font-medium text-lg">Question</h3>
-          <p className="text-gray-700">{content.question || content.text || 'No question text available.'}</p>
-        </div>
-
-        {content.options && Array.isArray(content.options) && content.options.length > 0 && (
-          <div className="space-y-4">
-            <h3 className="font-medium text-lg">Options</h3>
-            <RadioGroup defaultValue={content.correctAnswer}>
-              {content.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <RadioGroupItem value={option} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`}>{option}</Label>
-                </div>
-              ))}
-            </RadioGroup>
-            {content.correctAnswer && (
-              <div className="mt-4 text-green-600">
-                <p>Correct Answer: {content.correctAnswer}</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {content.explanation && (
-          <div className="space-y-2">
-            <h3 className="font-medium text-lg">Explanation</h3>
-            <p className="text-gray-700">{content.explanation}</p>
-          </div>
-        )}
-      </div>
-    );
   };
 
   return (
@@ -395,10 +352,12 @@ const QuestionBank = () => {
             <DialogTitle>{selectedQuestion?.title}</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            {selectedQuestion ? (
-              displayQuestionContent(selectedQuestion)
+            {selectedQuestion?.content ? (
+              <pre className="whitespace-pre-wrap font-mono bg-gray-50 p-4 rounded-md">
+                {selectedQuestion.content}
+              </pre>
             ) : (
-              <p className="text-gray-500">No content available for this question.</p>
+              <p className="text-gray-500">Test No content available for this question.</p>
             )}
           </div>
         </DialogContent>
