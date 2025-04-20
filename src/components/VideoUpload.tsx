@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 // Set file size limit for admin users (5GB)
 const ADMIN_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
@@ -15,6 +15,17 @@ const ADMIN_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
 const PRO_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
 // Supabase has a 50MB limit for free tier
 const SUPABASE_FREE_LIMIT = 50 * 1024 * 1024; // 50MB
+
+// S3 configuration
+const s3Config = {
+  region: 'us-east-1',
+  credentials: {
+    accessKeyId: 'your-access-key-id',  // In a real app, use environment variables
+    secretAccessKey: 'your-secret-access-key'  // In a real app, use environment variables
+  }
+};
+
+const S3_BUCKET_NAME = 'your-bucket-name'; // Replace with your actual bucket name
 
 interface VideoUploadProps {
   courseId: string;
@@ -75,6 +86,52 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     }
   };
 
+  // Simulate upload progress for better UX
+  const simulateProgress = () => {
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 5;
+      if (progress >= 95) {
+        clearInterval(interval);
+      }
+      setUploadProgress(progress);
+    }, 300);
+    
+    return () => clearInterval(interval);
+  };
+
+  const uploadToS3 = async (file: File) => {
+    try {
+      // Create S3 client
+      const s3Client = new S3Client(s3Config);
+      
+      // Generate a unique file name
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${courseId}-${uuidv4()}.${fileExt}`;
+      const key = `course-videos/${fileName}`;
+      
+      // Convert file to ArrayBuffer
+      const fileArrayBuffer = await file.arrayBuffer();
+      
+      // Create upload command
+      const uploadCommand = new PutObjectCommand({
+        Bucket: S3_BUCKET_NAME,
+        Key: key,
+        Body: new Uint8Array(fileArrayBuffer),
+        ContentType: file.type,
+      });
+      
+      // Send the upload command
+      await s3Client.send(uploadCommand);
+      
+      // Return the URL of the uploaded file
+      return `https://${S3_BUCKET_NAME}.s3.amazonaws.com/${key}`;
+    } catch (error) {
+      console.error("S3 Upload Error:", error);
+      throw error;
+    }
+  };
+
   const handleUpload = async () => {
     if (!file) {
       toast({
@@ -115,33 +172,39 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     setUploadProgress(0);
     
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${courseId}-${uuidv4()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      // Start simulating progress
+      // Start simulating progress for better UX
       const stopProgress = simulateProgress();
 
-      const { error: uploadError } = await supabase.storage
-        .from('course-videos')
-        .upload(filePath, file);
+      // Upload to S3
+      const fileUrl = await uploadToS3(file);
 
       // Stop simulating progress
       stopProgress();
       setUploadProgress(100);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      const { data } = supabase.storage.from('course-videos').getPublicUrl(filePath);
 
       toast({
         title: "Success",
         description: "Video uploaded successfully",
       });
 
-      onUploadSuccess && onUploadSuccess(data.publicUrl);
+      // Save the file reference in Supabase if needed
+      // This allows you to keep track of uploaded files in your database
+      const { error: dbError } = await supabase
+        .from('video_files')
+        .insert({
+          course_id: courseId,
+          file_url: fileUrl,
+          file_name: file.name,
+          file_size: file.size,
+          uploaded_by: user?.id
+        });
+
+      if (dbError) {
+        console.error("Error saving file reference:", dbError);
+        // Continue anyway since the file is uploaded
+      }
+
+      onUploadSuccess && onUploadSuccess(fileUrl);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
       let description = errorMessage;
