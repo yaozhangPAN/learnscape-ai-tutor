@@ -47,18 +47,14 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         upsert: false
       };
       
-      // Set up progress tracking
+      // Track progress manually
       let lastProgressEvent = 0;
-      let uploadPromise: Promise<string>;
       
-      // Use the standard Supabase upload method but track progress manually
-      uploadPromise = new Promise((resolve, reject) => {
-        // Use fetch to make a manual upload with progress tracking
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        const xhr = new XMLHttpRequest();
-        
+      // Set up a custom XMLHttpRequest to track progress
+      const xhr = new XMLHttpRequest();
+      
+      // Create a promise to track the upload completion
+      const uploadPromise = new Promise<string>((resolve, reject) => {
         // Set up progress handler
         xhr.upload.addEventListener('progress', (event) => {
           if (event.lengthComputable) {
@@ -72,6 +68,7 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         
         xhr.addEventListener('load', async () => {
           if (xhr.status >= 200 && xhr.status < 300) {
+            // Get the public URL after upload completes
             const { data } = supabase.storage
               .from('course-videos')
               .getPublicUrl(filePath);
@@ -82,31 +79,27 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         });
         
         xhr.addEventListener('error', () => {
-          reject(new Error('XHR upload failed'));
+          reject(new Error('Upload failed'));
         });
-        
-        // Get the Supabase URL for the upload
-        const supabaseUrl = supabase.storage.from('course-videos').getUploadUrl(filePath);
-        
-        // Configure and send the request
-        xhr.open('POST', supabaseUrl as unknown as string, true);
-        xhr.setRequestHeader('Authorization', `Bearer ${supabase.auth.getSession()}`);
-        xhr.send(formData);
       });
       
-      // Perform the actual upload with Supabase but without expecting progress
-      const { error } = await supabase.storage
+      // Get the upload URL using createSignedUploadUrl
+      const { data: signedUrlData, error: signedUrlError } = await supabase.storage
         .from('course-videos')
-        .upload(filePath, file, uploadOptions);
+        .createSignedUploadUrl(filePath);
       
-      if (error) throw error;
+      if (signedUrlError) throw signedUrlError;
       
-      // Return the public URL
-      const { data } = supabase.storage
-        .from('course-videos')
-        .getPublicUrl(filePath);
+      // Use the signed URL for the upload
+      const { signedUrl } = signedUrlData;
       
-      return data.publicUrl;
+      // Configure the request
+      xhr.open('PUT', signedUrl);
+      xhr.setRequestHeader('Content-Type', file.type);
+      xhr.send(file);
+      
+      // Wait for the upload to complete and get the public URL
+      return await uploadPromise;
     } catch (error) {
       console.error("Storage Upload Error:", error);
       if (error instanceof Error) {
