@@ -57,20 +57,15 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       if (isPremium) return true;
 
       // Check if the user has purchased this specific content
-      const { data, error } = await supabase
-        .from("purchased_content")
-        .select("*")
-        .eq("content_id", contentId)
-        .eq("content_type", contentType)
-        .eq("user_id", user.id);
+      const { data, error } = await supabase.functions.invoke("check-subscription", {
+        body: { contentId, contentType },
+      });
 
       if (error) {
-        console.error("Error checking purchased content:", error);
-        return false;
+        throw error;
       }
 
-      // If we found any matching records, the user has access
-      return data && data.length > 0;
+      return !!data?.purchasedContent;
     } catch (error: any) {
       console.error("Error checking content access:", error.message);
       return false;
