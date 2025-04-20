@@ -353,7 +353,7 @@ const QuestionBank = () => {
           <div className="mt-4">
             {selectedQuestion?.content ? (
               <pre className="whitespace-pre-wrap font-mono bg-gray-50 p-4 rounded-md">
-                selectedQuestion.content
+                {selectedQuestion.content}
               </pre>
             ) : (
               <p className="text-gray-500">No content available for this question.</p>
