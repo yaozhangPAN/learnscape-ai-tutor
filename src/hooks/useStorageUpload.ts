@@ -28,6 +28,19 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       
       console.log(`Starting upload for file: ${file.name}, size: ${file.size} bytes, type: ${file.type}`);
       
+      // Check if the course-videos bucket exists
+      const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
+      if (bucketsError) {
+        console.error("Error listing buckets:", bucketsError);
+        throw new Error(`存储桶检查失败: ${bucketsError.message}`);
+      }
+      
+      const hasCourseVideosBucket = buckets.some(bucket => bucket.name === 'course-videos');
+      if (!hasCourseVideosBucket) {
+        console.error("course-videos bucket not found");
+        throw new Error("存储桶 'course-videos' 不存在，请检查 Supabase 配置");
+      }
+      
       // Determine if we need chunked upload
       if (file.size > 100 * 1024 * 1024) { // If file is larger than 100MB
         console.log("Large file detected, using chunked upload strategy");
@@ -74,30 +87,53 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
           const { data } = supabase.storage
             .from('course-videos')
             .getPublicUrl(filePath);
+          
+          if (!data || !data.publicUrl) {
+            reject(new Error('Failed to get public URL for uploaded file'));
+            return;
+          }
+          
           resolve(data.publicUrl);
         } else {
-          reject(new Error(`Upload failed with status ${xhr.status}`));
+          reject(new Error(`Upload failed with status ${xhr.status}: ${xhr.statusText}`));
         }
       });
       
       xhr.addEventListener('error', () => {
-        reject(new Error('Upload failed'));
+        console.error('XHR upload error event triggered');
+        reject(new Error('网络错误，上传失败'));
+      });
+      
+      xhr.addEventListener('abort', () => {
+        reject(new Error('上传被中止'));
       });
     });
     
-    const { data: signedUrlData, error: signedUrlError } = await supabase.storage
-      .from('course-videos')
-      .createSignedUploadUrl(filePath);
-    
-    if (signedUrlError) throw signedUrlError;
-    
-    const { signedUrl } = signedUrlData;
-    
-    xhr.open('PUT', signedUrl);
-    xhr.setRequestHeader('Content-Type', file.type);
-    xhr.send(file);
-    
-    return await uploadPromise;
+    try {
+      const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+        .from('course-videos')
+        .createSignedUploadUrl(filePath);
+      
+      if (signedUrlError) {
+        console.error("Signed URL error:", signedUrlError);
+        throw signedUrlError;
+      }
+      
+      if (!signedUrlData || !signedUrlData.signedUrl) {
+        throw new Error('无法获取上传链接');
+      }
+      
+      const { signedUrl } = signedUrlData;
+      
+      xhr.open('PUT', signedUrl);
+      xhr.setRequestHeader('Content-Type', file.type);
+      xhr.send(file);
+      
+      return await uploadPromise;
+    } catch (error) {
+      console.error("Signed URL upload error:", error);
+      throw error;
+    }
   };
 
   // Chunked upload for large files
@@ -125,7 +161,14 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
           .from('course-videos')
           .createSignedUploadUrl(chunkPath);
         
-        if (signedUrlError) throw signedUrlError;
+        if (signedUrlError) {
+          console.error(`Error getting signed URL for chunk ${chunkIndex}:`, signedUrlError);
+          throw signedUrlError;
+        }
+        
+        if (!signedUrlData || !signedUrlData.signedUrl) {
+          throw new Error(`无法获取第 ${chunkIndex+1}/${totalChunks} 块的上传链接`);
+        }
         
         // Upload the chunk using the signed URL
         const response = await fetch(signedUrlData.signedUrl, {
@@ -137,7 +180,8 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         });
         
         if (!response.ok) {
-          throw new Error(`Failed to upload chunk ${chunkIndex}: ${response.statusText}`);
+          console.error(`Chunk ${chunkIndex} upload response:`, response);
+          throw new Error(`Failed to upload chunk ${chunkIndex+1}/${totalChunks}: ${response.statusText}`);
         }
         
         uploadedChunks++;
@@ -152,7 +196,7 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         console.log(`Uploaded chunk ${chunkIndex+1}/${totalChunks} (${formatBytes(chunkSize)})`);
       } catch (error) {
         console.error(`Error uploading chunk ${chunkIndex}:`, error);
-        throw error;
+        throw new Error(`第 ${chunkIndex+1}/${totalChunks} 块上传失败: ${error instanceof Error ? error.message : '未知错误'}`);
       }
     }
     
@@ -167,10 +211,14 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       .from('course-videos')
       .getPublicUrl(filePath);
     
+    if (!data || !data.publicUrl) {
+      throw new Error('无法获取上传文件的公共URL');
+    }
+    
     toast({
       title: "Success",
       description: "Large file upload completed successfully",
-      variant: "default",
+      variant: "success",
     });
     
     return data.publicUrl;

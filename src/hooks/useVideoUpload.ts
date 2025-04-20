@@ -54,7 +54,7 @@ export const useVideoUpload = ({ courseId, maxAllowedSize, onUploadSuccess }: Us
         description: "请选择视频文件并确保您已登录",
         variant: "destructive"
       });
-      return;
+      return false;
     }
 
     if (!isValidSize) {
@@ -63,7 +63,7 @@ export const useVideoUpload = ({ courseId, maxAllowedSize, onUploadSuccess }: Us
         description: `文件过大。最大允许大小为 ${formatFileSize(maxAllowedSize)}。`,
         variant: "destructive"
       });
-      return;
+      return false;
     }
 
     setUploading(true);
@@ -71,7 +71,22 @@ export const useVideoUpload = ({ courseId, maxAllowedSize, onUploadSuccess }: Us
     setError(null);
     
     try {
+      console.log(`Starting upload for file: ${file.name} (${formatFileSize(file.size)}) to course: ${courseId}`);
+      
+      // Check if storage bucket exists first
+      const { data: bucketData, error: bucketError } = await supabase.storage
+        .getBucket('course-videos');
+      
+      if (bucketError) {
+        console.error("Bucket check error:", bucketError);
+        if (bucketError.message.includes("does not exist")) {
+          throw new Error("存储桶 'course-videos' 不存在，请联系管理员");
+        }
+        throw bucketError;
+      }
+      
       const fileUrl = await uploadToStorage(file, courseId);
+      console.log("File uploaded successfully. URL:", fileUrl);
 
       const { error: insertError } = await supabase
         .from('video_files')
@@ -84,12 +99,14 @@ export const useVideoUpload = ({ courseId, maxAllowedSize, onUploadSuccess }: Us
         });
 
       if (insertError) {
+        console.error("Database insert error:", insertError);
         throw insertError;
       }
 
       toast({
         title: "成功",
         description: "视频已成功上传并关联到课程",
+        variant: "success",
       });
 
       onUploadSuccess && onUploadSuccess(fileUrl);
@@ -97,7 +114,15 @@ export const useVideoUpload = ({ courseId, maxAllowedSize, onUploadSuccess }: Us
       setFile(null);
       return true;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "发生未知错误";
+      console.error("Upload error:", error);
+      let errorMessage = "发生未知错误";
+      
+      if (error instanceof Error) {
+        console.error("Error message:", error.message);
+        console.error("Error stack:", error.stack);
+        errorMessage = error.message;
+      }
+      
       setError(errorMessage);
       
       toast({

@@ -19,6 +19,7 @@ export const AdminAlert = () => {
       <div className="mt-2 p-2 bg-blue-50 text-sm rounded border border-blue-200">
         <p className="font-medium text-blue-800">管理员模式</p>
         <p className="text-blue-600">您可以上传最大 {formatFileSize(ADMIN_MAX_FILE_SIZE)} 的视频文件</p>
+        <p className="text-xs text-blue-600 mt-1">注意：确保 Supabase 存储桶 'course-videos' 已创建并设置为公开</p>
       </div>
     </div>
   );

@@ -51,7 +51,11 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   });
 
   const handleUploadClick = async () => {
-    if (!user) return;
+    if (!user) {
+      console.error("Cannot upload: User not logged in");
+      return;
+    }
+    console.log(`Starting upload for course: ${courseId}`);
     const success = await handleUpload(user.id);
     if (success && fileInputRef.current) {
       fileInputRef.current.value = '';
