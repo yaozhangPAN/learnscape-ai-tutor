@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -38,8 +39,8 @@ const defaultQuestionData = [
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
 ];
 
-const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
-const subjects = ["All Subjects", "English", "Math", "Chinese", "Science"];
+const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6", "小六"];
+const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华文"];
 const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
 const QuestionBank = () => {
@@ -63,7 +64,18 @@ const QuestionBank = () => {
           console.error('Error fetching questions:', error);
           setQuestionData(defaultQuestionData);
         } else if (data && data.length > 0) {
-          setQuestionData(data);
+          // Map the data from Supabase to match the expected format
+          const formattedData = data.map(item => ({
+            id: typeof item.id === 'number' ? item.id : parseInt(item.id) || Math.floor(Math.random() * 1000),
+            title: item.title || 'Untitled',
+            subject: item.subject || 'Unknown',
+            type: typeof item.content === 'string' ? 'General' : 'Comprehensive',
+            level: item.level || 'Unknown',
+            term: item.term || 'Unknown',
+            date: item.created_at || new Date().toISOString(),
+            created_at: item.created_at
+          }));
+          setQuestionData(formattedData);
           console.log('Fetched questions:', data);
         } else {
           console.log('No data found in questions table, using default data');
@@ -104,6 +116,24 @@ const QuestionBank = () => {
 
   const handleFilterChange = () => {
     setCurrentPage(1);
+  };
+
+  // Helper function to format date strings
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    
+    try {
+      // Converting string to Date object first
+      const date = new Date(dateString);
+      // Check if the date is valid before formatting
+      if (isNaN(date.getTime())) {
+        return dateString.slice(0, 10).replace(/-/g, '/');
+      }
+      return date.toISOString().slice(0, 10).replace(/-/g, '/');
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Invalid date';
+    }
   };
 
   return (
@@ -247,7 +277,7 @@ const QuestionBank = () => {
                             <TableCell>{question.level}</TableCell>
                             <TableCell>{question.term}</TableCell>
                             <TableCell>
-                              {new Date(question.created_at).toISOString().slice(0, 10).replace(/-/g, '/')}
+                              {formatDate(question.date)}
                             </TableCell>
                             <TableCell className="text-right">
                               <Button className="bg-learnscape-blue text-white">View</Button>
