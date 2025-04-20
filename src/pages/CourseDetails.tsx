@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -98,7 +99,7 @@ const CourseDetails: React.FC = () => {
               className="w-full h-64 object-cover rounded-lg"
             />
             <div className="mt-4 space-y-2">
-              <div>课��等级: {course.level}</div>
+              <div>课程等级: {course.level}</div>
               <div>科目: {course.subject}</div>
               <div>持续时间: {course.duration}</div>
             </div>
