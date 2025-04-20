@@ -1,10 +1,12 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { useState } from "react";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -32,58 +34,61 @@ import LanguageArtsRedirect from "./components/LanguageArtsRedirect";
 import ReadingCoachRedirect from "./components/ReadingCoachRedirect";
 import CourseDetails from "./pages/CourseDetails";
 
-const queryClient = new QueryClient();
+const App = () => {
+  // Create a new QueryClient instance using useState to ensure it's stable between renders
+  const [queryClient] = useState(() => new QueryClient());
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <SubscriptionProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Login />} />
-              <Route path="/payment-success" element={<PaymentSuccess />} />
-              <Route path="/payment-canceled" element={<PaymentCanceled />} />
-              
-              <Route path="/video-tutorials" element={<Courses />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/mock-exam" element={<MockExam />} />
-              <Route path="/take-exam/:examId" element={<OnlineExam />} />
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/courses/:courseId" element={<CourseDetails />} />
-              <Route path="/worksheets" element={<Worksheets />} />
-              <Route path="/question-bank" element={<QuestionBank />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/referral" element={<Referral />} />
-              <Route path="/ai-tutor" element={<AITutor />} />
-              <Route path="/daily-plan" element={<DailyPlan />} />
-              <Route path="/zoom-courses" element={<ZoomCourses />} />
-              
-              {/* AI Module Routes */}
-              <Route path="/ai-tutor/writing-coach" element={<WritingCoach />} />
-              <Route path="/ai-tutor/oral-exam" element={<OralExamPractice />} />
-              <Route path="/ai-tutor/dictation-practice" element={<DictationPractice />} />
-              <Route path="/ai-tutor/tutor-me" element={<TutorMe />} />
-              <Route path="/ai-tutor/error-analysis" element={<ErrorAnalysis />} />
-              <Route path="/ai-tutor/snap-and-solve" element={<SnapAndSolve />} />
-              <Route path="/ai-tutor/vocabulary" element={<VocabularyBuilder />} />
-              <Route path="/ai-tutor/language-arts" element={<LanguageArtsRedirect />} />
-              <Route path="/ai-tutor/reading-coach" element={<ReadingCoachRedirect />} />
-              
-              {/* Redirect any /about requests to the home page */}
-              <Route path="/about" element={<Navigate to="/" replace />} />
-              
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </SubscriptionProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <SubscriptionProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Login />} />
+                <Route path="/payment-success" element={<PaymentSuccess />} />
+                <Route path="/payment-canceled" element={<PaymentCanceled />} />
+                
+                <Route path="/video-tutorials" element={<Courses />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/mock-exam" element={<MockExam />} />
+                <Route path="/take-exam/:examId" element={<OnlineExam />} />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/courses/:courseId" element={<CourseDetails />} />
+                <Route path="/worksheets" element={<Worksheets />} />
+                <Route path="/question-bank" element={<QuestionBank />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/referral" element={<Referral />} />
+                <Route path="/ai-tutor" element={<AITutor />} />
+                <Route path="/daily-plan" element={<DailyPlan />} />
+                <Route path="/zoom-courses" element={<ZoomCourses />} />
+                
+                {/* AI Module Routes */}
+                <Route path="/ai-tutor/writing-coach" element={<WritingCoach />} />
+                <Route path="/ai-tutor/oral-exam" element={<OralExamPractice />} />
+                <Route path="/ai-tutor/dictation-practice" element={<DictationPractice />} />
+                <Route path="/ai-tutor/tutor-me" element={<TutorMe />} />
+                <Route path="/ai-tutor/error-analysis" element={<ErrorAnalysis />} />
+                <Route path="/ai-tutor/snap-and-solve" element={<SnapAndSolve />} />
+                <Route path="/ai-tutor/vocabulary" element={<VocabularyBuilder />} />
+                <Route path="/ai-tutor/language-arts" element={<LanguageArtsRedirect />} />
+                <Route path="/ai-tutor/reading-coach" element={<ReadingCoachRedirect />} />
+                
+                {/* Redirect any /about requests to the home page */}
+                <Route path="/about" element={<Navigate to="/" replace />} />
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </SubscriptionProvider>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

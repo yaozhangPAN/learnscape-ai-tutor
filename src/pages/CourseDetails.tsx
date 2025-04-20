@@ -23,8 +23,8 @@ const CourseDetails: React.FC = () => {
   
   const course = mockCourses.find(c => c.id === courseId);
 
-  React.useEffect(() => {
-    const checkAdminStatus = async () => {
+  useEffect(() => {
+    const checkAdminStatus = () => {
       setIsAdmin(user?.email === 'admin@example.com');
     };
 
