@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -8,9 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createClient } from '@supabase/supabase-js'
-// Create a single supabase client for interacting with your database
-const supabase = createClient(process.env.PUBLIC_SUPABASE_URL, process.env.PUBLIC_SUPABASE_ANON_KEY);
+import { supabase } from "@/integrations/supabase/client";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -52,22 +49,17 @@ const QuestionBank = () => {
   const [selectedSubject, setSelectedSubject] = useState("All Subjects");
   const [selectedTerm, setSelectedTerm] = useState("All Terms");
 
-  // Apply all filters
   const filteredQuestions = questionData.filter(question => {
-    // Search term filter
     const matchesSearch = 
       question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.subject.toLowerCase().includes(searchTerm.toLowerCase());
     
-    // Grade filter
     const matchesGrade = selectedGrade === "All Grades" || question.level === selectedGrade;
     
-    // Subject filter
     const matchesSubject = selectedSubject === "All Subjects" || question.subject === selectedSubject;
     
-    // Term filter
     const matchesTerm = selectedTerm === "All Terms" || question.term === selectedTerm;
     
     return matchesSearch && matchesGrade && matchesSubject && matchesTerm;
@@ -79,7 +71,6 @@ const QuestionBank = () => {
     currentPage * QUESTIONS_PER_PAGE
   );
 
-  // Reset to first page when filters change
   const handleFilterChange = () => {
     setCurrentPage(1);
   };
@@ -88,7 +79,6 @@ const QuestionBank = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
-      {/* Banner */}
       <div className="bg-learnscape-darkBlue text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold mb-4">Question Bank</h1>
@@ -103,9 +93,7 @@ const QuestionBank = () => {
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">Question List</h2>
           
-          {/* Filters */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            {/* Search */}
             <div className="relative flex items-center col-span-1 md:col-span-4">
               <Search className="absolute left-3 h-5 w-5 text-gray-400" />
               <Input
@@ -120,7 +108,6 @@ const QuestionBank = () => {
               />
             </div>
             
-            {/* Subject Filter */}
             <div>
               <Select 
                 value={selectedSubject} 
@@ -142,7 +129,6 @@ const QuestionBank = () => {
               </Select>
             </div>
             
-            {/* Grade Filter */}
             <div>
               <Select 
                 value={selectedGrade} 
@@ -164,7 +150,6 @@ const QuestionBank = () => {
               </Select>
             </div>
             
-            {/* Term Filter */}
             <div>
               <Select 
                 value={selectedTerm} 
@@ -186,7 +171,6 @@ const QuestionBank = () => {
               </Select>
             </div>
             
-            {/* Clear Filters Button */}
             <div>
               <Button 
                 variant="outline" 
@@ -204,7 +188,6 @@ const QuestionBank = () => {
             </div>
           </div>
 
-          {/* Questions Table */}
           <Card>
             <CardContent className="p-0">
               <Table>
@@ -244,12 +227,10 @@ const QuestionBank = () => {
             </CardContent>
           </Card>
 
-          {/* Results count */}
           <div className="mt-4 text-sm text-gray-500">
             Showing {currentQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0} to {Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)} of {filteredQuestions.length} questions
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-6">
               <Pagination>
