@@ -10,6 +10,8 @@ import { UploadProgress } from './VideoUpload/UploadProgress';
 import { FileInfo } from './VideoUpload/FileInfo';
 import { formatFileSize, getMaxFileSize, SUPABASE_FREE_LIMIT, ADMIN_MAX_FILE_SIZE } from '@/utils/fileUtils';
 import { supabase } from '@/integrations/supabase/client';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { InfoCircle } from 'lucide-react';
 
 interface VideoUploadProps {
   courseId: string;
@@ -22,6 +24,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fileSize, setFileSize] = useState<string>('');
   const [isValidSize, setIsValidSize] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   const { user } = useAuth();
   const { isPremium } = useSubscription();
@@ -52,6 +55,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       const selectedFile = e.target.files[0];
       const fileSizeFormatted = formatFileSize(selectedFile.size);
       setFileSize(fileSizeFormatted);
+      setError(null);
       
       const isValid = selectedFile.size <= maxAllowedSize;
       setIsValidSize(isValid);
@@ -121,6 +125,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
 
     setUploading(true);
     setUploadProgress(0);
+    setError(null);
     
     try {
       const stopProgress = simulateProgress();
@@ -153,6 +158,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       onUploadSuccess && onUploadSuccess(fileUrl);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      setError(errorMessage);
+      
       toast({
         title: "Upload Error",
         description: errorMessage,
@@ -167,6 +174,24 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
 
   return (
     <div className="space-y-4">
+      {error && (
+        <Alert variant="destructive">
+          <AlertTitle>Upload Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+      
+      {isAdmin && (
+        <Alert>
+          <InfoCircle className="h-4 w-4" />
+          <AlertTitle>Demo Environment</AlertTitle>
+          <AlertDescription>
+            In this demo environment, very large file uploads (>100MB) will be simulated without actually transferring data.
+            In production, implement pre-signed URLs or multipart uploads for large files.
+          </AlertDescription>
+        </Alert>
+      )}
+      
       <div className="flex items-center space-x-2">
         <Input 
           type="file" 
