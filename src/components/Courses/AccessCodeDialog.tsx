@@ -28,101 +28,80 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
   const { user } = useAuth();
 
   const verifyCode = async () => {
+    if (!code.trim()) {
+      toast({
+        variant: "destructive",
+        title: "请输入访问码",
+        description: "请输入有效的访问码",
+      });
+      return;
+    }
+
     if (!user) {
       toast({
         variant: "destructive",
-        title: "需要登录",
-        description: "请先登录以使用访问码。",
+        title: "请先登录",
+        description: "您需要登录才能使用访问码",
       });
       return;
     }
 
     setIsVerifying(true);
     try {
-      console.log("Verifying access code for course:", courseId);
-      // First verify the access code exists and is valid
-      const { data: accessCode, error: accessCodeError } = await supabase
+      // Check if the access code exists and is active for this course
+      const { data, error } = await supabase
         .from("access_codes")
-        .select()
-        .eq("code", code)
+        .select("*")
+        .eq("code", code.trim())
         .eq("course_id", courseId)
         .eq("is_active", true)
         .single();
 
-      if (accessCodeError || !accessCode) {
-        console.error("Access code validation error:", accessCodeError);
+      if (error) {
+        console.error("Error verifying code:", error);
         toast({
           variant: "destructive",
-          title: "无效的访问码",
-          description: "请检查您的访问码并重试。",
+          title: "访问码无效",
+          description: "请检查您的访问码并重试",
         });
-        setIsVerifying(false);
         return;
       }
 
-      console.log("Access code validated successfully:", accessCode.id);
-
-      // Check if the user already has access to this content
-      const { data: existingAccess, error: existingAccessError } = await supabase
-        .from("purchased_content")
-        .select()
-        .eq("user_id", user.id)
-        .eq("content_id", courseId)
-        .eq("content_type", "video_tutorial");
-      
-      if (existingAccessError) {
-        console.error("Error checking existing access:", existingAccessError);
-      }
-      
-      if (existingAccess && existingAccess.length > 0) {
-        console.log("User already has access to this course");
-        toast({
-          title: "已经验证",
-          description: "您的访问码已经验证过，已有访问权限。",
-        });
-        onSuccess();
-        onOpenChange(false);
-        return;
-      }
-
-      // Since we can't use the RPC function due to TypeScript errors, let's use a direct insert instead
-      const { data: insertData, error: insertError } = await supabase
+      // Store the access in purchased_content table to give user access
+      const { error: purchaseError } = await supabase
         .from("purchased_content")
         .insert({
-          user_id: user.id,
           content_id: courseId,
-          content_type: 'video_tutorial',
+          content_type: "video_tutorial",
           price: 0,
-          currency: 'SGD',
-          payment_reference: `access_code:${code}`
-        })
-        .select();
+          currency: "SGD",
+          user_id: user.id // Add the required user_id field
+        });
 
-      if (insertError) {
-        console.error("Error recording access via direct insert:", insertError);
+      if (purchaseError) {
+        console.error("Error recording access:", purchaseError);
         toast({
           variant: "destructive",
-          title: "错误",
-          description: "记录您的访问权限时出错，请稍后再试。",
+          title: "处理错误",
+          description: "无法记录您的访问权限，请稍后再试",
         });
-        setIsVerifying(false);
         return;
       }
 
-      console.log("Access successfully recorded:", insertData);
       toast({
-        title: "验证成功！",
-        description: "访问码验证成功。",
+        title: "验证成功",
+        description: "访问码已验证，您现在可以观看课程内容",
       });
       
+      // Call the success callback to update the UI
       onSuccess();
       onOpenChange(false);
     } catch (error) {
       console.error("Error verifying code:", error);
       toast({
         variant: "destructive",
-        title: "错误",
-        description: "验证访问码时出错。",
+        title: "发生错误",
+        description: "验证访问码时出错",
       });
     } finally {
       setIsVerifying(false);
@@ -135,12 +114,12 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         <DialogHeader>
           <DialogTitle>输入访问码</DialogTitle>
           <DialogDescription>
-            请输入您的访问码以查看此内容。
+            请输入您的访问码以查看此内容
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <Input
-            placeholder="输入您的访问码"
+            placeholder="请输入访问码"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             className="w-full"

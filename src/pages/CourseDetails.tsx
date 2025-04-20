@@ -11,8 +11,6 @@ import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
 import { AccessCodeManager } from "@/components/Courses/AccessCodeManager";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
 
 const CourseDetails: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -20,9 +18,7 @@ const CourseDetails: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [accessCodeDialogOpen, setAccessCodeDialogOpen] = useState(false);
-  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
-  const { isPremium } = useSubscription();
-  const { toast } = useToast();
+  const { hasAccessToContent } = useSubscription();
   
   const course = mockCourses.find(c => c.id === courseId);
 
@@ -38,53 +34,15 @@ const CourseDetails: React.FC = () => {
     const checkAccess = async () => {
       if (!courseId || !user) {
         setHasAccess(false);
-        setIsCheckingAccess(false);
         return;
       }
 
-      try {
-        setIsCheckingAccess(true);
-        
-        // First check if user is premium
-        if (isPremium) {
-          console.log("User has premium access");
-          setHasAccess(true);
-          setIsCheckingAccess(false);
-          return;
-        }
-        
-        console.log("Checking purchased content for user:", user.id, "and course:", courseId);
-        // Then check if user has purchased this content directly
-        const { data, error } = await supabase
-          .from("purchased_content")
-          .select()
-          .eq("user_id", user.id)
-          .eq("content_id", courseId)
-          .eq("content_type", "video_tutorial");
-        
-        if (error) {
-          console.error("Error checking content access:", error);
-          toast({
-            variant: "destructive",
-            title: "错误",
-            description: "检查访问权限时出错。",
-          });
-          setIsCheckingAccess(false);
-          return;
-        }
-        
-        console.log("Access check result:", data);
-        // If there are any records, the user has access
-        setHasAccess(data && data.length > 0);
-      } catch (error) {
-        console.error("Error in checkAccess:", error);
-      } finally {
-        setIsCheckingAccess(false);
-      }
+      const access = await hasAccessToContent(courseId, "video_tutorial");
+      setHasAccess(access);
     };
 
     checkAccess();
-  }, [courseId, user, isPremium]);
+  }, [courseId, user, hasAccessToContent]);
 
   if (!course) {
     return <div>课程未找到</div>;
@@ -107,11 +65,7 @@ const CourseDetails: React.FC = () => {
             <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
             <p className="text-gray-600 mb-6">{course.description}</p>
             
-            {isCheckingAccess ? (
-              <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-learnscape-blue"></div>
-              </div>
-            ) : hasAccess || isAdmin ? (
+            {hasAccess || isAdmin ? (
               <CourseVideo
                 bucketName="course-videos"
                 filePath="PSLE-Chinese/PSLE.mp4"
