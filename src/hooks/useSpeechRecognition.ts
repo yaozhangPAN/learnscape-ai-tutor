@@ -25,10 +25,9 @@ export const useSpeechRecognition = () => {
         const result = event.results[current];
         const transcript = result[0].transcript;
         if (result.isFinal) {
-          onTranscriptUpdate(prev => {
-            const newText = prev ? prev + ' ' + transcript : transcript;
-            return newText.trim();
-          });
+          // Update by directly calling the function with the final transcript
+          // instead of passing a callback function
+          onTranscriptUpdate(transcript);
           interimTranscriptRef.current = '';
         } else {
           interimTranscriptRef.current = transcript;

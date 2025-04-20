@@ -30,7 +30,13 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     if (isRecording) {
       stopRecording();
     } else {
-      startRecording(setAnswer);
+      // Changed how we use startRecording to handle the transcript update
+      startRecording((transcript: string) => {
+        setAnswer(prev => {
+          const newText = prev ? prev + ' ' + transcript : transcript;
+          return newText.trim();
+        });
+      });
     }
   };
 
