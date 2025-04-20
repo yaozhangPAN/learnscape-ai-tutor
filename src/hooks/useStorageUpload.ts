@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -15,13 +14,12 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
   const [isCheckingBucket, setIsCheckingBucket] = useState(false);
   const { toast } = useToast();
 
-  // Helper function to check and create the bucket if it doesn't exist
+  // Helper function to check if the bucket exists and is accessible
   const checkAndCreateBucket = async (bucketName: string): Promise<boolean> => {
     setIsCheckingBucket(true);
     try {
       console.log(`Checking if bucket '${bucketName}' exists...`);
       
-      // First try to list all buckets to check if our bucket exists
       const { data: buckets, error: listError } = await supabase.storage.listBuckets();
       
       if (listError) {
@@ -37,49 +35,16 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         throw listError;
       }
       
-      // Check if our bucket exists in the list
       const bucketExists = buckets?.some(bucket => bucket.name === bucketName) || false;
       
       if (!bucketExists) {
-        console.log(`Bucket '${bucketName}' does not exist, attempting to create it...`);
-        
-        // Try to create the bucket
-        const { data: createdBucket, error: createError } = await supabase.storage.createBucket(bucketName, {
-          public: true // Making the bucket public for this example
+        console.error(`Bucket '${bucketName}' does not exist`);
+        toast({
+          title: "存储桶错误",
+          description: `存储桶 '${bucketName}' 不存在。请联系管理员创建。`,
+          variant: "destructive",
         });
-        
-        if (createError) {
-          console.error("Error creating bucket:", createError);
-          if (createError.message.includes("Permission denied")) {
-            toast({
-              title: "权限错误",
-              description: "您的账户没有创建存储桶的权限。请联系管理员创建 'course-videos' 存储桶。",
-              variant: "destructive",
-            });
-            return false;
-          }
-          throw createError;
-        }
-        
-        console.log(`Successfully created bucket '${bucketName}'`);
-        
-        // Instead of calling an RPC, set the bucket policy directly through the storage API
-        try {
-          // Set public policy for the bucket by allowing anonymous reads
-          const { error: updateError } = await supabase.storage.updateBucket(bucketName, {
-            public: true
-          });
-          
-          if (updateError) {
-            console.warn("Warning: Could not set public policy for bucket:", updateError);
-          } else {
-            console.log(`Successfully set public access for bucket '${bucketName}'`);
-          }
-        } catch (policyErr) {
-          console.warn("Warning: Failed to set bucket policy:", policyErr);
-        }
-      } else {
-        console.log(`Bucket '${bucketName}' exists.`);
+        return false;
       }
       
       // Verify we can list files in the bucket (permission check)
@@ -103,10 +68,10 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       console.log(`Successfully verified access to bucket '${bucketName}'`);
       return true;
     } catch (error) {
-      console.error("Bucket check/creation error:", error);
+      console.error("Bucket check error:", error);
       const errorMessage = error instanceof Error 
         ? error.message 
-        : "检查或创建存储桶时出错";
+        : "检查存储桶时出错";
       
       toast({
         title: "存储桶错误",
@@ -136,19 +101,22 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       }
       
       const fileExt = file.name.split('.').pop();
-      const fileName = `${courseId}-${uuidv4()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      if (!fileExt || !['mp4', 'm3u8'].includes(fileExt.toLowerCase())) {
+        throw new Error('只支持上传 .mp4 或 .m3u8 格式的视频文件');
+      }
+      
+      const fileName = `${courseId}/${uuidv4()}.${fileExt}`;
       
       console.log(`Starting upload for file: ${file.name}, size: ${file.size} bytes, type: ${file.type}`);
       
       // Determine if we need chunked upload
       if (file.size > 100 * 1024 * 1024) { // If file is larger than 100MB
         console.log("Large file detected, using chunked upload strategy");
-        return await uploadLargeFile(file, filePath);
+        return await uploadLargeFile(file, fileName);
       }
       
       // For smaller files, use direct signed URL upload
-      return await uploadWithSignedUrl(file, filePath);
+      return await uploadWithSignedUrl(file, fileName);
     } catch (error) {
       console.error("Storage Upload Error:", error);
       
@@ -186,16 +154,17 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       
       xhr.addEventListener('load', async () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          const { data } = supabase.storage
+          // For private buckets, we need to create a signed URL for access
+          const { data: signedUrl, error: signedUrlError } = await supabase.storage
             .from('course-videos')
-            .getPublicUrl(filePath);
+            .createSignedUrl(filePath, 31536000); // URL valid for 1 year
           
-          if (!data || !data.publicUrl) {
-            reject(new Error('Failed to get public URL for uploaded file'));
+          if (signedUrlError || !signedUrl?.signedUrl) {
+            reject(new Error('Failed to get signed URL for uploaded file'));
             return;
           }
           
-          resolve(data.publicUrl);
+          resolve(signedUrl.signedUrl);
         } else {
           reject(new Error(`Upload failed with status ${xhr.status}: ${xhr.statusText}`));
         }
