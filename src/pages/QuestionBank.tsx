@@ -40,7 +40,7 @@ const defaultQuestionData = [
 ];
 
 const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
-const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华文"];
+const subjects = ["All Subjects", "English", "Math", "Chinese", "Science"];
 const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
 const QuestionBank = () => {
