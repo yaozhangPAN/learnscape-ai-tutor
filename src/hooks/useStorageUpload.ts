@@ -27,17 +27,6 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       
       console.log(`Starting upload for file: ${file.name}, size: ${file.size} bytes, type: ${file.type}`);
       
-      // Set up a progress observer
-      let lastProgressEvent = 0;
-      const progressCallback = (progress: { loaded: number; total: number }) => {
-        const percentage = (progress.loaded / progress.total) * 100;
-        if (percentage > lastProgressEvent + 1 || percentage === 100) {
-          // Only update progress when it changes by at least 1% or completes
-          lastProgressEvent = Math.floor(percentage);
-          onProgress?.(lastProgressEvent);
-        }
-      };
-      
       // For large files, use a smaller chunk of the file for debugging
       if (file.size > 100 * 1024 * 1024) { // If file is larger than 100MB
         console.log("File is too large for direct upload in this demo environment");
@@ -58,42 +47,66 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         upsert: false
       };
       
-      // Create a custom XMLHttpRequest to track progress
-      const xhr = new XMLHttpRequest();
-      let fileUrl = '';
+      // Set up progress tracking
+      let lastProgressEvent = 0;
+      let uploadPromise: Promise<string>;
       
-      // Set up a promise to wait for the upload to complete
-      const uploadPromise = new Promise<string>((resolve, reject) => {
-        xhr.upload.addEventListener('progress', progressCallback);
+      // Use the standard Supabase upload method but track progress manually
+      uploadPromise = new Promise((resolve, reject) => {
+        // Use fetch to make a manual upload with progress tracking
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const xhr = new XMLHttpRequest();
+        
+        // Set up progress handler
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const percentage = (event.loaded / event.total) * 100;
+            if (percentage > lastProgressEvent + 1 || percentage === 100) {
+              lastProgressEvent = Math.floor(percentage);
+              onProgress?.(lastProgressEvent);
+            }
+          }
+        });
+        
+        xhr.addEventListener('load', async () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const { data } = supabase.storage
+              .from('course-videos')
+              .getPublicUrl(filePath);
+            resolve(data.publicUrl);
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        });
         
         xhr.addEventListener('error', () => {
           reject(new Error('XHR upload failed'));
         });
         
-        xhr.addEventListener('load', async () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            const { data: { publicUrl } } = supabase.storage
-              .from('course-videos')
-              .getPublicUrl(filePath);
-            resolve(publicUrl);
-          } else {
-            reject(new Error(`Upload failed with status ${xhr.status}`));
-          }
-        });
+        // Get the Supabase URL for the upload
+        const supabaseUrl = supabase.storage.from('course-videos').getUploadUrl(filePath);
+        
+        // Configure and send the request
+        xhr.open('POST', supabaseUrl as unknown as string, true);
+        xhr.setRequestHeader('Authorization', `Bearer ${supabase.auth.getSession()}`);
+        xhr.send(formData);
       });
       
-      // Start the upload using Supabase but with our custom XHR
+      // Perform the actual upload with Supabase but without expecting progress
       const { error } = await supabase.storage
         .from('course-videos')
-        .upload(filePath, file, uploadOptions, {
-          xhr
-        });
+        .upload(filePath, file, uploadOptions);
       
       if (error) throw error;
       
-      // Wait for our promise to resolve with the public URL
-      fileUrl = await uploadPromise;
-      return fileUrl;
+      // Return the public URL
+      const { data } = supabase.storage
+        .from('course-videos')
+        .getPublicUrl(filePath);
+      
+      return data.publicUrl;
     } catch (error) {
       console.error("Storage Upload Error:", error);
       if (error instanceof Error) {
