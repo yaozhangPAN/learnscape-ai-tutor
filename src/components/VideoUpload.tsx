@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +8,7 @@ import { useS3Upload } from '@/hooks/useS3Upload';
 import { UploadProgress } from './VideoUpload/UploadProgress';
 import { FileInfo } from './VideoUpload/FileInfo';
 import { formatFileSize, getMaxFileSize, SUPABASE_FREE_LIMIT } from '@/utils/fileUtils';
+import { supabase } from '@/integrations/supabase/client';
 
 interface VideoUploadProps {
   courseId: string;
@@ -72,10 +72,10 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   };
 
   const handleUpload = async () => {
-    if (!file) {
+    if (!file || !user) {
       toast({
         title: "Error",
-        description: "Please select a video file first",
+        description: "Please select a video file and ensure you're logged in",
         variant: "destructive"
       });
       return;
@@ -112,17 +112,23 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       stopProgress();
       setUploadProgress(100);
 
+      const { error: insertError } = await supabase
+        .from('video_files')
+        .insert({
+          course_id: courseId,
+          file_url: fileUrl,
+          file_name: file.name,
+          file_size: file.size,
+          uploaded_by: user.id
+        });
+
+      if (insertError) {
+        throw insertError;
+      }
+
       toast({
         title: "Success",
         description: "Video uploaded successfully",
-      });
-
-      console.log("Video upload completed:", {
-        course_id: courseId,
-        file_url: fileUrl,
-        file_name: file.name,
-        file_size: file.size,
-        uploaded_by: user?.id
       });
 
       onUploadSuccess && onUploadSuccess(fileUrl);

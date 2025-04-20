@@ -189,6 +189,36 @@ export type Database = {
         }
         Relationships: []
       }
+      video_files: {
+        Row: {
+          course_id: string
+          created_at: string
+          file_name: string
+          file_size: number
+          file_url: string
+          id: string
+          uploaded_by: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          file_name: string
+          file_size: number
+          file_url: string
+          id?: string
+          uploaded_by: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          file_name?: string
+          file_size?: number
+          file_url?: string
+          id?: string
+          uploaded_by?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
