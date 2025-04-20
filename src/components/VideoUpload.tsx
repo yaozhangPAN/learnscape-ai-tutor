@@ -6,11 +6,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { v4 as uuidv4 } from 'uuid';
 import { Progress } from '@/components/ui/progress';
+import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 
-// Set file size limit for admin users (2GB)
-const ADMIN_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
-// Supabase has a 50MB limit for free tier, 5GB for paid tier
+// Set file size limit for admin users (5GB)
+const ADMIN_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
+// Set file size limit for pro users (2GB)
+const PRO_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
+// Supabase has a 50MB limit for free tier
 const SUPABASE_FREE_LIMIT = 50 * 1024 * 1024; // 50MB
 
 interface VideoUploadProps {
@@ -25,6 +28,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const [fileSize, setFileSize] = useState<string>('');
   const [isValidSize, setIsValidSize] = useState(true);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { isPremium } = useSubscription();
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -38,46 +43,36 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
       
-      // Check file size
       const fileSizeFormatted = formatFileSize(selectedFile.size);
       setFileSize(fileSizeFormatted);
       
-      // Check against our admin size limit
-      const isValid = selectedFile.size <= ADMIN_MAX_FILE_SIZE;
+      // Determine max file size based on user type
+      const maxFileSize = user?.email === 'admin@example.com' 
+        ? ADMIN_MAX_FILE_SIZE 
+        : (isPremium ? PRO_MAX_FILE_SIZE : SUPABASE_FREE_LIMIT);
+      
+      const isValid = selectedFile.size <= maxFileSize;
       setIsValidSize(isValid);
       
-      // Also warn if file exceeds Supabase limits
+      // Warn about Supabase limits
       if (selectedFile.size > SUPABASE_FREE_LIMIT) {
         toast({
           title: "Warning: Large File",
-          description: `This file (${fileSizeFormatted}) may exceed Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}. You might need a paid Supabase plan for this upload.`,
-          variant: "warning"
+          description: `This file (${fileSizeFormatted}) may exceed Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}.`,
+          variant: "default"
         });
       }
       
       if (!isValid) {
         toast({
           title: "File too large",
-          description: `Maximum allowed size is ${formatFileSize(ADMIN_MAX_FILE_SIZE)}. Your file is ${fileSizeFormatted}.`,
+          description: `Maximum allowed size is ${formatFileSize(maxFileSize)}. Your file is ${fileSizeFormatted}.`,
           variant: "destructive"
         });
       }
       
       setFile(selectedFile);
     }
-  };
-
-  const simulateProgress = () => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 5;
-      if (progress >= 95) {
-        clearInterval(interval);
-      }
-      setUploadProgress(progress);
-    }, 300);
-    
-    return () => clearInterval(interval);
   };
 
   const handleUpload = async () => {
@@ -90,16 +85,21 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       return;
     }
 
+    // Determine max file size based on user type
+    const maxFileSize = user?.email === 'admin@example.com' 
+      ? ADMIN_MAX_FILE_SIZE 
+      : (isPremium ? PRO_MAX_FILE_SIZE : SUPABASE_FREE_LIMIT);
+
     if (!isValidSize) {
       toast({
         title: "Error",
-        description: `File is too large. Maximum allowed size is ${formatFileSize(ADMIN_MAX_FILE_SIZE)}.`,
+        description: `File is too large. Maximum allowed size is ${formatFileSize(maxFileSize)}.`,
         variant: "destructive"
       });
       return;
     }
 
-    // Additional check for Supabase limits
+    // Confirm large file uploads
     if (file.size > SUPABASE_FREE_LIMIT) {
       const proceedAnyway = window.confirm(
         `This file (${formatFileSize(file.size)}) exceeds Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}. 
@@ -185,7 +185,9 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
             File size: {fileSize} {!isValidSize && " (exceeds maximum size)"}
           </p>
           <p className="text-gray-500">
-            Max allowed: {formatFileSize(ADMIN_MAX_FILE_SIZE)}
+            Max allowed: {formatFileSize(user?.email === 'admin@example.com' 
+              ? ADMIN_MAX_FILE_SIZE 
+              : (isPremium ? PRO_MAX_FILE_SIZE : SUPABASE_FREE_LIMIT))}
           </p>
           <p className="text-amber-500">
             Supabase free tier limit: {formatFileSize(SUPABASE_FREE_LIMIT)}
