@@ -1,250 +1,19 @@
+
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { VideoUpload } from "@/components/VideoUpload";
 import { VideoUploadStatus } from "@/components/VideoUpload/VideoUploadStatus";
-import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Book, Clock, Star, Users, Video, Crown, Lock, BookOpen } from "lucide-react";
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
 import { supabase } from "@/integrations/supabase/client";
-
-type Course = {
-  id: string;
-  title: string;
-  description: string;
-  level: string;
-  subject: string;
-  duration: string;
-  rating: number;
-  students: number;
-  price: string;
-  isPremium: boolean;
-  image: string;
-  type?: string;
-  requiresAccessCode?: boolean;
-};
-
-const masterclassCourse = {
-  id: "psle-chinese-masterclass",
-  title: "PSLE 华文名师专项提分课",
-  description: "由资深华文名师主讲，针对PSLE华文考试重点难点进行专项训练，助你提升成绩。",
-  level: "p6",
-  subject: "chinese",
-  duration: "8 weeks",
-  rating: 4.9,
-  students: 156,
-  price: "S$599",
-  isPremium: true,
-  image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
-  type: "tutorial",
-  requiresAccessCode: true,
-};
-
-const mockCourses: Course[] = [
-  masterclassCourse,
-  {
-    id: "1",
-    title: "Primary 6 Mathematics - Problem Solving Strategies",
-    description: "Learn effective problem-solving techniques for PSLE Mathematics",
-    level: "p6",
-    subject: "mathematics",
-    duration: "10 weeks",
-    rating: 4.8,
-    students: 248,
-    price: "Free",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "2",
-    title: "Primary 6 Science - Mastering Energy Conversions",
-    description: "Comprehensive coverage of energy concepts for PSLE Science",
-    level: "p6",
-    subject: "science",
-    duration: "8 weeks",
-    rating: 4.7,
-    students: 173,
-    price: "S$399",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "3",
-    title: "Primary 6 English - Mastering Comprehension",
-    description: "Enhance reading and comprehension skills for PSLE English",
-    level: "p6",
-    subject: "english",
-    duration: "12 weeks",
-    rating: 4.9,
-    students: 215,
-    price: "S$499",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "4",
-    title: "Primary 6 Chinese - Vocabulary Building",
-    description: "Expand your Chinese vocabulary for PSLE Chinese examinations",
-    level: "p6",
-    subject: "chinese",
-    duration: "10 weeks",
-    rating: 4.6,
-    students: 142,
-    price: "S$599",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "5",
-    title: "Primary 5 Mathematics - Fractions and Decimals",
-    description: "Master the concepts of fractions and decimals",
-    level: "p5",
-    subject: "mathematics",
-    duration: "8 weeks",
-    rating: 4.7,
-    students: 186,
-    price: "Free",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "6",
-    title: "Primary 5 Science - Forces and Energy",
-    description: "Understand the fundamentals of forces and energy",
-    level: "p5",
-    subject: "science",
-    duration: "9 weeks",
-    rating: 4.5,
-    students: 167,
-    price: "Free",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1581093804475-577d72e73ef7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "7",
-    title: "Primary 6 Chinese - Mastering Comprehension",
-    description: "Improve your reading and understanding of Chinese texts for PSLE",
-    level: "p6",
-    subject: "chinese",
-    duration: "11 weeks",
-    rating: 4.8,
-    students: 156,
-    price: "S$399",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "8",
-    title: "Primary 6 Chinese - Mastering Composition",
-    description: "Develop essential writing skills for Chinese compositions in PSLE",
-    level: "p6",
-    subject: "chinese",
-    duration: "12 weeks",
-    rating: 4.9,
-    students: 168,
-    price: "S$499",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1449157291145-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "9",
-    title: "2024 PSLE Mathematics Paper Walkthrough",
-    description: "Detailed explanation of the 2024 PSLE Mathematics paper with step-by-step solutions",
-    level: "p6",
-    subject: "mathematics",
-    duration: "3 weeks",
-    rating: 4.9,
-    students: 312,
-    price: "S$40",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "past_paper"
-  },
-  {
-    id: "10",
-    title: "2024 PSLE Science Paper Walkthrough",
-    description: "Complete analysis and solutions for the 2024 PSLE Science examination",
-    level: "p6",
-    subject: "science",
-    duration: "3 weeks",
-    rating: 4.8,
-    students: 287,
-    price: "S$40",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "past_paper"
-  },
-  {
-    id: "11",
-    title: "2024 PSLE English Paper Walkthrough",
-    description: "Expert analysis of the 2024 PSLE English paper with model answers",
-    level: "p6",
-    subject: "english",
-    duration: "3 weeks",
-    rating: 4.7,
-    students: 254,
-    price: "S$40",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "past_paper"
-  },
-  {
-    id: "12",
-    title: "2023 PSLE Mathematics Paper Walkthrough",
-    description: "In-depth review of the 2023 PSLE Mathematics paper with strategies for similar questions",
-    level: "p6",
-    subject: "mathematics",
-    duration: "2 weeks",
-    rating: 4.9,
-    students: 398,
-    price: "S$40",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "past_paper"
-  },
-  {
-    id: "13",
-    title: "2023 PSLE Science Paper Walkthrough",
-    description: "Comprehensive examination of the 2023 PSLE Science paper with detailed explanations",
-    level: "p6",
-    subject: "science",
-    duration: "2 weeks",
-    rating: 4.8,
-    students: 345,
-    price: "S$40",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "past_paper"
-  },
-  {
-    id: "14",
-    title: "P5 Common Test - Mathematics Solutions",
-    description: "Expert guidance on typical Primary 5 mathematics assessment questions",
-    level: "p5",
-    subject: "mathematics",
-    duration: "1 week",
-    rating: 4.6,
-    students: 178,
-    price: "Free",
-    isPremium: false,
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "past_paper"
-  }
-];
+import { CourseCard } from "@/components/Courses/CourseCard";
+import { CourseFilters } from "@/components/Courses/CourseFilters";
+import { VideoDialog } from "@/components/Courses/VideoDialog";
+import { Course } from "@/types/course";
+import { mockCourses } from "@/data/mockCourses";
 
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
@@ -256,8 +25,8 @@ const Courses = () => {
   const [selectedAccessCodeCourse, setSelectedAccessCodeCourse] = useState<Course | null>(null);
   const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
   const [searchParams] = useSearchParams();
-  const contentId = searchParams.get("content");
   const [isAdmin, setIsAdmin] = useState(false);
+  const contentId = searchParams.get("content");
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -268,13 +37,6 @@ const Courses = () => {
     checkAdminStatus();
   }, []);
 
-  const filteredCourses = mockCourses.filter(
-    course => 
-      (selectedLevel === "all" || course.level === selectedLevel) && 
-      (selectedSubject === "all" || course.subject === selectedSubject) &&
-      (selectedType === "all" || course.type === selectedType)
-  );
-
   useEffect(() => {
     if (contentId) {
       const course = mockCourses.find(c => c.id === contentId);
@@ -284,6 +46,13 @@ const Courses = () => {
       }
     }
   }, [contentId]);
+
+  const filteredCourses = mockCourses.filter(
+    course => 
+      (selectedLevel === "all" || course.level === selectedLevel) && 
+      (selectedSubject === "all" || course.subject === selectedSubject) &&
+      (selectedType === "all" || course.type === selectedType)
+  );
 
   const handleWatchNow = async (course: Course) => {
     if (course.requiresAccessCode) {
@@ -336,99 +105,19 @@ const Courses = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Primary Level</h3>
-              <Tabs defaultValue="p6" onValueChange={setSelectedLevel}>
-                <TabsList className="grid grid-cols-3 w-full">
-                  <TabsTrigger value="p6">Primary 6</TabsTrigger>
-                  <TabsTrigger value="p5">Primary 5</TabsTrigger>
-                  <TabsTrigger value="all">All Levels</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Subject</h3>
-              <Tabs defaultValue="all" onValueChange={setSelectedSubject}>
-                <TabsList className="grid grid-cols-5 w-full">
-                  <TabsTrigger value="english">English</TabsTrigger>
-                  <TabsTrigger value="mathematics">Math</TabsTrigger>
-                  <TabsTrigger value="science">Science</TabsTrigger>
-                  <TabsTrigger value="chinese">Chinese</TabsTrigger>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Content Type</h3>
-              <Tabs defaultValue="all" onValueChange={setSelectedType}>
-                <TabsList className="grid grid-cols-3 w-full">
-                  <TabsTrigger value="tutorial">Tutorials</TabsTrigger>
-                  <TabsTrigger value="past_paper">Past Papers</TabsTrigger>
-                  <TabsTrigger value="all">All Types</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-          </div>
-        </div>
+        <CourseFilters
+          onLevelChange={setSelectedLevel}
+          onSubjectChange={setSelectedSubject}
+          onTypeChange={setSelectedType}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filteredCourses.map((course) => (
-            <Card key={course.id} className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
-              <div className="h-48 overflow-hidden relative">
-                <img 
-                  src={course.image} 
-                  alt={course.title} 
-                  className="w-full h-full object-cover transition-transform hover:scale-105"
-                />
-                {course.isPremium && (
-                  <div className="absolute top-2 right-2 bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
-                    <Crown className="h-3 w-3 mr-1" />
-                    Premium
-                  </div>
-                )}
-                {course.type === "past_paper" && (
-                  <div className="absolute top-2 left-2 bg-amber-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
-                    <BookOpen className="h-3 w-3 mr-1" />
-                    Past Paper
-                  </div>
-                )}
-              </div>
-              <CardContent className="pt-6">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded">
-                    {course.level.toUpperCase()} {course.subject}
-                  </div>
-                  <div className="flex items-center">
-                    <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                    <span className="ml-1 text-sm font-medium">{course.rating}</span>
-                  </div>
-                </div>
-                <h3 className="text-lg font-semibold mb-2 line-clamp-2">{course.title}</h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
-                <div className="flex flex-wrap gap-y-2 text-xs text-gray-500">
-                  <div className="flex items-center mr-4">
-                    <Clock className="h-3.5 w-3.5 mr-1" />
-                    <span>{course.duration}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Users className="h-3.5 w-3.5 mr-1" />
-                    <span>{course.students} students</span>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
-                <div className="font-semibold text-learnscape-blue">{course.price}</div>
-                <Button 
-                  className="bg-learnscape-blue hover:bg-blue-700"
-                  onClick={() => handleWatchNow(course)}
-                >
-                  <Video className="h-4 w-4 mr-2" />
-                  Watch Now
-                </Button>
-              </CardFooter>
-            </Card>
+            <CourseCard
+              key={course.id}
+              course={course}
+              onWatchNow={handleWatchNow}
+            />
           ))}
         </div>
 
@@ -464,51 +153,15 @@ const Courses = () => {
         }}
       />
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-4xl">
-          {selectedCourse && (
-            <>
-              <DialogHeader>
-                <DialogTitle>{selectedCourse.title}</DialogTitle>
-                <DialogDescription>{selectedCourse.description}</DialogDescription>
-              </DialogHeader>
-              
-              {(isPremium || !selectedCourse.isPremium || hasAccessToContent(selectedCourse.id, "video_tutorial")) ? (
-                <div className="aspect-video bg-black rounded-md overflow-hidden">
-                  <div className="w-full h-full flex items-center justify-center text-white">
-                    <div className="text-center">
-                      <Video className="h-16 w-16 mx-auto mb-4" />
-                      <p>Video player would be embedded here</p>
-                      <p className="text-sm text-gray-400 mt-2">
-                        This is a placeholder for the actual video content
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="aspect-video bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <Lock className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-                    <h3 className="text-xl font-semibold mb-2">Premium Content</h3>
-                    <p className="text-gray-600 mb-6">
-                      This video tutorial requires a purchase or premium subscription to access.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <Button onClick={handlePurchase}>
-                        Purchase ({selectedCourse.price})
-                      </Button>
-                      <Button variant="outline" onClick={handleSubscribe}>
-                        <Crown className="mr-2 h-4 w-4" />
-                        Subscribe to Premium
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      <VideoDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        course={selectedCourse}
+        isPremium={isPremium}
+        hasAccess={selectedCourse ? hasAccessToContent(selectedCourse.id, "video_tutorial") : false}
+        onSubscribe={handleSubscribe}
+        onPurchase={handlePurchase}
+      />
 
       {isAdmin && (
         <div className="container mx-auto px-4 py-4">
