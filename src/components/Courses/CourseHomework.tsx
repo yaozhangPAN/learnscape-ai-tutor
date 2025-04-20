@@ -43,6 +43,7 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [answer, setAnswer] = useState('');
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const interimTranscriptRef = useRef<string>('');
   const { toast } = useToast();
 
   const startRecording = async () => {
@@ -58,14 +59,21 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
       recognitionRef.current.lang = 'zh-CN';
 
       recognitionRef.current.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map(result => result[0].transcript)
-          .join('');
+        const current = event.resultIndex;
+        const result = event.results[current];
+        const transcript = result[0].transcript;
         
-        setAnswer(prev => {
-          const newText = prev ? prev + '\n' + transcript : transcript;
-          return newText;
-        });
+        if (result.isFinal) {
+          // Only add the final result to the answer
+          setAnswer(prev => {
+            const newText = prev ? prev + ' ' + transcript : transcript;
+            return newText.trim();
+          });
+          interimTranscriptRef.current = '';
+        } else {
+          // Store the interim result but don't update the answer yet
+          interimTranscriptRef.current = transcript;
+        }
       };
 
       recognitionRef.current.onerror = (event) => {
