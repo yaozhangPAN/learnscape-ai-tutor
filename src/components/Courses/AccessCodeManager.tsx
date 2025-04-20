@@ -34,10 +34,6 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
 
   const createAccessCode = async () => {
     try {
-      setLoading(true);
-      const newCode = generateCode();
-      
-      // Make sure the user is authenticated
       if (!user) {
         toast({
           variant: "destructive",
@@ -46,15 +42,21 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
         });
         return;
       }
-      
+
+      setLoading(true);
+      const newCode = generateCode();
+
       const { data, error } = await supabase
         .from('access_codes')
-        .insert({
-          code: newCode,
-          course_id: courseId,
-          created_by: user.id
-        })
-        .select('*')
+        .insert([
+          {
+            code: newCode,
+            course_id: courseId,
+            created_by: user.id,
+            is_active: true
+          }
+        ])
+        .select()
         .single();
 
       if (error) {
@@ -62,12 +64,14 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
         throw error;
       }
 
+      // Add the new code to the beginning of the list
       setCodes(prevCodes => [data, ...prevCodes]);
       toast({
         title: "访问码已生成",
         description: `新的访问码: ${newCode}`,
       });
     } catch (error: any) {
+      console.error("Full error:", error);
       toast({
         variant: "destructive",
         title: "错误",
@@ -114,7 +118,7 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">访问码管理</h2>
-        <Button onClick={createAccessCode} disabled={loading}>
+        <Button onClick={createAccessCode} disabled={loading || !user}>
           生成新访问码
         </Button>
       </div>
