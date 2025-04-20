@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CourseVideo } from "@/components/Courses/CourseVideo";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
+import { AccessCodeManager } from "@/components/Courses/AccessCodeManager";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
 
@@ -99,6 +100,12 @@ const CourseDetails: React.FC = () => {
               <div>科目: {course.subject}</div>
               <div>持续时间: {course.duration}</div>
             </div>
+
+            {isAdmin && (
+              <div className="mt-8">
+                <AccessCodeManager courseId={courseId || ''} />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -106,7 +113,7 @@ const CourseDetails: React.FC = () => {
       <AccessCodeDialog
         isOpen={accessCodeDialogOpen}
         onOpenChange={setAccessCodeDialogOpen}
-        courseId={courseId}
+        courseId={courseId || ''}
         onSuccess={handleAccessCodeSuccess}
       />
 
