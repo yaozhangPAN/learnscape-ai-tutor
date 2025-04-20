@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -154,34 +155,37 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
 
 export const CourseHomework: React.FC = () => {
   return (
-    <Card className="mt-8">
-      <CardHeader>
-        <CardTitle>课后作业</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid md:grid-cols-2 gap-6">
-          <ScrollArea className="h-[600px] pr-4">
-            <div className="space-y-6">
-              {mockHomeworkQuestions.map((question) => (
-                <Card key={question.id} className="border-2 border-gray-200">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{question.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="whitespace-pre-wrap text-gray-700">{question.content}</div>
-                    <div className="font-medium text-gray-900">{question.question}</div>
-                    <QuestionAnswer questionId={question.id} />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </ScrollArea>
-          
-          <div>
-            <AITutorChat />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle>课后作业</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[600px] pr-4">
+              <div className="space-y-6">
+                {mockHomeworkQuestions.map((question) => (
+                  <Card key={question.id} className="border-2 border-gray-200">
+                    <CardHeader>
+                      <CardTitle className="text-lg">{question.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="whitespace-pre-wrap text-gray-700">{question.content}</div>
+                      <div className="font-medium text-gray-900">{question.question}</div>
+                      <QuestionAnswer questionId={question.id} />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="lg:mt-8">
+        <AITutorChat />
+      </div>
+    </div>
   );
 };
+
