@@ -9,10 +9,13 @@ export const formatFileSize = (bytes: number): string => {
 
 // File size limits
 export const ADMIN_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
-export const PRO_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
+export const PRO_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB - Supabase Pro plan limit
 export const SUPABASE_FREE_LIMIT = 50 * 1024 * 1024; // 50MB
 
 export const getMaxFileSize = (isAdmin: boolean, isPremium: boolean): number => {
   if (isAdmin) return ADMIN_MAX_FILE_SIZE;
   return isPremium ? PRO_MAX_FILE_SIZE : SUPABASE_FREE_LIMIT;
 };
+
+// Chunk size for multipart uploads (5MB)
+export const CHUNK_SIZE = 5 * 1024 * 1024;
