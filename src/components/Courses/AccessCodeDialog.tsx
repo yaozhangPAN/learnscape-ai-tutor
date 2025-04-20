@@ -26,37 +26,70 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
   const { toast } = useToast();
 
   const verifyCode = async () => {
+    if (!code.trim()) {
+      toast({
+        variant: "destructive",
+        title: "请输入访问码",
+        description: "请输入有效的访问码",
+      });
+      return;
+    }
+
     setIsVerifying(true);
     try {
+      // Check if the access code exists and is active for this course
       const { data, error } = await supabase
         .from("access_codes")
-        .select()
-        .eq("code", code)
+        .select("*")
+        .eq("code", code.trim())
         .eq("course_id", courseId)
         .eq("is_active", true)
         .single();
 
-      if (error || !data) {
+      if (error) {
+        console.error("Error verifying code:", error);
         toast({
           variant: "destructive",
-          title: "Invalid access code",
-          description: "Please check your access code and try again.",
+          title: "访问码无效",
+          description: "请检查您的访问码并重试",
+        });
+        return;
+      }
+
+      // Store the access in purchased_content table to give user access
+      const { error: purchaseError } = await supabase
+        .from("purchased_content")
+        .insert({
+          content_id: courseId,
+          content_type: "video_tutorial",
+          price: 0,
+          currency: "SGD"
+        });
+
+      if (purchaseError) {
+        console.error("Error recording access:", purchaseError);
+        toast({
+          variant: "destructive",
+          title: "处理错误",
+          description: "无法记录您的访问权限，请稍后再试",
         });
         return;
       }
 
       toast({
-        title: "Success!",
-        description: "Access code verified successfully.",
+        title: "验证成功",
+        description: "访问码已验证，您现在可以观看课程内容",
       });
+      
+      // Call the success callback to update the UI
       onSuccess();
       onOpenChange(false);
     } catch (error) {
       console.error("Error verifying code:", error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "An error occurred while verifying your access code.",
+        title: "发生错误",
+        description: "验证访问码时出错",
       });
     } finally {
       setIsVerifying(false);
@@ -67,14 +100,14 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Enter Access Code</DialogTitle>
+          <DialogTitle>输入访问码</DialogTitle>
           <DialogDescription>
-            Please enter your access code to view this content.
+            请输入您的访问码以查看此内容
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <Input
-            placeholder="Enter your access code"
+            placeholder="请输入访问码"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             className="w-full"
@@ -82,10 +115,10 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            取消
           </Button>
           <Button onClick={verifyCode} disabled={!code || isVerifying}>
-            {isVerifying ? "Verifying..." : "Submit"}
+            {isVerifying ? "验证中..." : "提交"}
           </Button>
         </DialogFooter>
       </DialogContent>
