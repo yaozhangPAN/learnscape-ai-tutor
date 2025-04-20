@@ -79,8 +79,7 @@ export const CapyzenChatFloating: React.FC = () => {
       {!open && (
         <button
           className={cn(
-            "fixed z-50 bottom-8 right-6 bg-gradient-to-tr from-yellow-400 via-blue-400 to-orange-400 border-4 border-blue-400 shadow-2xl rounded-full w-28 h-28 flex items-center justify-center hover:scale-125 transition-all duration-300",
-            "ring-4 ring-orange-200 animate-pulse"
+            "fixed z-50 bottom-8 right-6 bg-gradient-to-tr from-yellow-400 via-blue-400 to-orange-400 border-4 border-blue-400 shadow-2xl rounded-full w-28 h-28 flex items-center justify-center hover:scale-125 transition-all duration-300"
           )}
           aria-label="打开AI对话"
           onClick={handleButtonClick}
