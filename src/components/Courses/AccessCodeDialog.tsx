@@ -48,8 +48,8 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
 
     setIsVerifying(true);
     try {
-      // Check if the access code exists and is active for this course
-      const { data, error } = await supabase
+      // Check if the access code exists and is active
+      const { data: accessCode, error: accessCodeError } = await supabase
         .from("access_codes")
         .select("*")
         .eq("code", code.trim())
@@ -57,8 +57,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         .eq("is_active", true)
         .single();
 
-      if (error) {
-        console.error("Error verifying code:", error);
+      if (accessCodeError || !accessCode) {
         toast({
           variant: "destructive",
           title: "访问码无效",
@@ -67,7 +66,25 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         return;
       }
 
-      // Store the access in purchased_content table to give user access
+      // Check if user already has access
+      const { data: existingAccess } = await supabase
+        .from("purchased_content")
+        .select("*")
+        .eq("content_id", courseId)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (existingAccess) {
+        toast({
+          title: "已有访问权限",
+          description: "您已经拥有此课程的访问权限",
+        });
+        onSuccess();
+        onOpenChange(false);
+        return;
+      }
+
+      // Grant access by inserting into purchased_content
       const { error: purchaseError } = await supabase
         .from("purchased_content")
         .insert({
@@ -75,7 +92,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
           content_type: "video_tutorial",
           price: 0,
           currency: "SGD",
-          user_id: user.id // Explicitly add the user_id
+          user_id: user.id
         });
 
       if (purchaseError) {
@@ -93,7 +110,6 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         description: "访问码已验证，您现在可以观看课程内容",
       });
       
-      // Call the success callback to update the UI
       onSuccess();
       onOpenChange(false);
     } catch (error) {
@@ -101,7 +117,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
       toast({
         variant: "destructive",
         title: "发生错误",
-        description: "验证访问码时出错",
+        description: "验证访问码时出错，请稍后再试",
       });
     } finally {
       setIsVerifying(false);
