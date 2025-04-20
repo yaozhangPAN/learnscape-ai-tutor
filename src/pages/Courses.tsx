@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -10,6 +9,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Book, Clock, Star, Users, Video, Crown, Lock, BookOpen } from "lucide-react";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
 
 type Course = {
   id: string;
@@ -23,10 +23,28 @@ type Course = {
   price: string;
   isPremium: boolean;
   image: string;
-  type?: string; // Added type property to distinguish course types
+  type?: string;
+  requiresAccessCode?: boolean;
+};
+
+const masterclassCourse = {
+  id: "psle-chinese-masterclass",
+  title: "PSLE 华文名师专项提分课",
+  description: "由资深华文名师主讲，针对PSLE华文考试重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "8 weeks",
+  rating: 4.9,
+  students: 156,
+  price: "S$599",
+  isPremium: true,
+  image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+  type: "tutorial",
+  requiresAccessCode: true,
 };
 
 const mockCourses: Course[] = [
+  masterclassCourse,
   {
     id: "1",
     title: "Primary 6 Mathematics - Problem Solving Strategies",
@@ -136,10 +154,9 @@ const mockCourses: Course[] = [
     students: 168,
     price: "S$499",
     isPremium: true,
-    image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+    image: "https://images.unsplash.com/photo-1449157291145-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
     type: "tutorial"
   },
-  // Past Paper Walkthrough courses - newly added
   {
     id: "9",
     title: "2024 PSLE Mathematics Paper Walkthrough",
@@ -229,9 +246,11 @@ const mockCourses: Course[] = [
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
-  const [selectedType, setSelectedType] = useState<string>("all"); // Added state for course type
+  const [selectedType, setSelectedType] = useState<string>("all");
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [accessCodeDialogOpen, setAccessCodeDialogOpen] = useState(false);
+  const [selectedAccessCodeCourse, setSelectedAccessCodeCourse] = useState<Course | null>(null);
   const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
   const [searchParams] = useSearchParams();
   const contentId = searchParams.get("content");
@@ -244,7 +263,6 @@ const Courses = () => {
   );
 
   useEffect(() => {
-    // If contentId is in URL params, find and select that course
     if (contentId) {
       const course = mockCourses.find(c => c.id === contentId);
       if (course) {
@@ -255,22 +273,24 @@ const Courses = () => {
   }, [contentId]);
 
   const handleWatchNow = async (course: Course) => {
+    if (course.requiresAccessCode) {
+      setSelectedAccessCodeCourse(course);
+      setAccessCodeDialogOpen(true);
+      return;
+    }
+
     if (!course.isPremium) {
-      // Free course, just open it
       setSelectedCourse(course);
       setDialogOpen(true);
       return;
     }
 
-    // Check if user has premium or has purchased this course
     const hasAccess = isPremium || await hasAccessToContent(course.id, "video_tutorial");
     
     if (hasAccess) {
-      // User has access, open the course
       setSelectedCourse(course);
       setDialogOpen(true);
     } else {
-      // User doesn't have access, prompt to purchase
       setSelectedCourse(course);
       setDialogOpen(true);
     }
@@ -421,7 +441,16 @@ const Courses = () => {
       </div>
       <Footer />
 
-      {/* Video preview dialog */}
+      <AccessCodeDialog
+        isOpen={accessCodeDialogOpen}
+        onOpenChange={setAccessCodeDialogOpen}
+        courseId={selectedAccessCodeCourse?.id || ""}
+        onSuccess={() => {
+          setSelectedCourse(selectedAccessCodeCourse);
+          setDialogOpen(true);
+        }}
+      />
+
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-4xl">
           {selectedCourse && (
@@ -431,10 +460,8 @@ const Courses = () => {
                 <DialogDescription>{selectedCourse.description}</DialogDescription>
               </DialogHeader>
               
-              {/* Content based on access */}
               {(isPremium || !selectedCourse.isPremium || hasAccessToContent(selectedCourse.id, "video_tutorial")) ? (
                 <div className="aspect-video bg-black rounded-md overflow-hidden">
-                  {/* This would be a real video player in a production app */}
                   <div className="w-full h-full flex items-center justify-center text-white">
                     <div className="text-center">
                       <Video className="h-16 w-16 mx-auto mb-4" />
