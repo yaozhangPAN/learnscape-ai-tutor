@@ -48,7 +48,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           <div key={key} className="flex items-center space-x-2 p-2">
                             <RadioGroupItem value={key} id={`${index}-${key}`} />
                             <label htmlFor={`${index}-${key}`} className="text-sm">
-                              {value as string}
+                              {typeof value === 'string' ? value : JSON.stringify(value)}
                             </label>
                           </div>
                         ))}
@@ -80,7 +80,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                   <div key={key} className="flex items-center space-x-2 p-2">
                     <RadioGroupItem value={key} id={key} />
                     <label htmlFor={key} className="text-sm">
-                      {value as string}
+                      {typeof value === 'string' ? value : JSON.stringify(value)}
                     </label>
                   </div>
                 ))}
@@ -110,4 +110,3 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 };
 
 export default QuestionViewer;
-
