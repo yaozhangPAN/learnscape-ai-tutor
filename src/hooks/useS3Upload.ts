@@ -15,13 +15,19 @@ const S3_BUCKET_NAME = 'your-bucket-name'; // Replace with your actual bucket na
 
 interface UseS3UploadOptions {
   onProgress?: (progress: number) => void;
+  maxFileSize?: number; // Add maxFileSize parameter
 }
 
-export const useS3Upload = ({ onProgress }: UseS3UploadOptions = {}) => {
+export const useS3Upload = ({ onProgress, maxFileSize }: UseS3UploadOptions = {}) => {
   const [isUploading, setIsUploading] = useState(false);
 
   const uploadToS3 = async (file: File, courseId: string): Promise<string> => {
     try {
+      // Validate file size if maxFileSize is provided
+      if (maxFileSize && file.size > maxFileSize) {
+        throw new Error(`File size exceeds the maximum allowed size of ${maxFileSize} bytes`);
+      }
+      
       setIsUploading(true);
       const s3Client = new S3Client(s3Config);
       

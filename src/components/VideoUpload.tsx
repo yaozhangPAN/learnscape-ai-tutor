@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -7,7 +8,7 @@ import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useS3Upload } from '@/hooks/useS3Upload';
 import { UploadProgress } from './VideoUpload/UploadProgress';
 import { FileInfo } from './VideoUpload/FileInfo';
-import { formatFileSize, getMaxFileSize, SUPABASE_FREE_LIMIT } from '@/utils/fileUtils';
+import { formatFileSize, getMaxFileSize, SUPABASE_FREE_LIMIT, ADMIN_MAX_FILE_SIZE } from '@/utils/fileUtils';
 import { supabase } from '@/integrations/supabase/client';
 
 interface VideoUploadProps {
@@ -24,8 +25,26 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const { toast } = useToast();
   const { user } = useAuth();
   const { isPremium } = useSubscription();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [maxAllowedSize, setMaxAllowedSize] = useState(SUPABASE_FREE_LIMIT);
+  
+  // Check if user is admin
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!user) return;
+      
+      setIsAdmin(user.email === 'admin@example.com');
+      const calculatedMaxSize = getMaxFileSize(user.email === 'admin@example.com', isPremium);
+      setMaxAllowedSize(calculatedMaxSize);
+    };
+    
+    checkAdminStatus();
+  }, [user, isPremium]);
+  
+  // Initialize S3 upload hook with the correct max file size
   const { uploadToS3, isUploading } = useS3Upload({
-    onProgress: setUploadProgress
+    onProgress: setUploadProgress,
+    maxFileSize: maxAllowedSize
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,11 +53,10 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       const fileSizeFormatted = formatFileSize(selectedFile.size);
       setFileSize(fileSizeFormatted);
       
-      const maxFileSize = getMaxFileSize(user?.email === 'admin@example.com', isPremium);
-      const isValid = selectedFile.size <= maxFileSize;
+      const isValid = selectedFile.size <= maxAllowedSize;
       setIsValidSize(isValid);
       
-      if (selectedFile.size > SUPABASE_FREE_LIMIT) {
+      if (selectedFile.size > SUPABASE_FREE_LIMIT && !isAdmin) {
         toast({
           title: "Warning: Large File",
           description: `This file (${fileSizeFormatted}) may exceed Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}.`,
@@ -49,7 +67,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       if (!isValid) {
         toast({
           title: "File too large",
-          description: `Maximum allowed size is ${formatFileSize(maxFileSize)}. Your file is ${fileSizeFormatted}.`,
+          description: `Maximum allowed size is ${formatFileSize(maxAllowedSize)}. Your file is ${fileSizeFormatted}.`,
           variant: "destructive"
         });
       }
@@ -81,18 +99,16 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       return;
     }
 
-    const maxFileSize = getMaxFileSize(user?.email === 'admin@example.com', isPremium);
-    
     if (!isValidSize) {
       toast({
         title: "Error",
-        description: `File is too large. Maximum allowed size is ${formatFileSize(maxFileSize)}.`,
+        description: `File is too large. Maximum allowed size is ${formatFileSize(maxAllowedSize)}.`,
         variant: "destructive"
       });
       return;
     }
 
-    if (file.size > SUPABASE_FREE_LIMIT) {
+    if (file.size > SUPABASE_FREE_LIMIT && !isAdmin) {
       const proceedAnyway = window.confirm(
         `This file (${formatFileSize(file.size)}) exceeds Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}. 
         The upload may fail unless you have a paid Supabase plan. Do you want to proceed anyway?`
@@ -108,6 +124,9 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     
     try {
       const stopProgress = simulateProgress();
+      
+      console.log("Uploading file with size:", file.size, "Max allowed size:", maxAllowedSize);
+      
       const fileUrl = await uploadToS3(file, courseId);
       stopProgress();
       setUploadProgress(100);
@@ -167,11 +186,18 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
         <FileInfo
           fileSize={fileSize}
           isValidSize={isValidSize}
-          maxAllowedSize={getMaxFileSize(user?.email === 'admin@example.com', isPremium)}
+          maxAllowedSize={maxAllowedSize}
         />
       )}
       
       {uploading && <UploadProgress progress={uploadProgress} />}
+      
+      {isAdmin && (
+        <div className="mt-2 p-2 bg-blue-50 text-sm rounded border border-blue-200">
+          <p className="font-medium text-blue-800">管理员模式</p>
+          <p className="text-blue-600">您可以上传最大 {formatFileSize(ADMIN_MAX_FILE_SIZE)} 的视频文件</p>
+        </div>
+      )}
     </div>
   );
 };
