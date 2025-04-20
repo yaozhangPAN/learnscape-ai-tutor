@@ -39,6 +39,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
 
     setIsVerifying(true);
     try {
+      console.log("Verifying access code for course:", courseId);
       // First verify the access code exists and is valid
       const { data: accessCode, error: accessCodeError } = await supabase
         .from("access_codes")
@@ -49,6 +50,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         .single();
 
       if (accessCodeError || !accessCode) {
+        console.error("Access code validation error:", accessCodeError);
         toast({
           variant: "destructive",
           title: "无效的访问码",
@@ -58,33 +60,47 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         return;
       }
 
-      // Now record this access in the purchased_content table
-      const { error: purchaseError } = await supabase
-        .from("purchased_content")
-        .insert({
-          user_id: user.id,
-          content_id: courseId,
-          content_type: "video_tutorial",
-          price: 0, // Free with access code
-          currency: "SGD",
-          payment_reference: `access_code:${code}`
-        });
+      console.log("Access code validated successfully:", accessCode.id);
 
-      if (purchaseError) {
-        console.error("Error recording access:", purchaseError);
-        
-        // Check if the record already exists (unique constraint violation)
-        if (purchaseError.code === "23505") { // Postgres unique constraint violation
-          // User already has access, so this is actually a success
-          toast({
-            title: "已经验证",
-            description: "您的访问码已经验证过，已有访问权限。",
-          });
-          onSuccess();
-          onOpenChange(false);
-          return;
+      // Check if the user already has access to this content
+      const { data: existingAccess, error: existingAccessError } = await supabase
+        .from("purchased_content")
+        .select()
+        .eq("user_id", user.id)
+        .eq("content_id", courseId)
+        .eq("content_type", "video_tutorial");
+      
+      if (existingAccessError) {
+        console.error("Error checking existing access:", existingAccessError);
+      }
+      
+      if (existingAccess && existingAccess.length > 0) {
+        console.log("User already has access to this course");
+        toast({
+          title: "已经验证",
+          description: "您的访问码已经验证过，已有访问权限。",
+        });
+        onSuccess();
+        onOpenChange(false);
+        return;
+      }
+
+      // Now record this access in the purchased_content table using RPC function
+      // This approach bypasses RLS policies for more reliable insertion
+      const { data: insertData, error: insertError } = await supabase.rpc(
+        'add_purchased_content',
+        {
+          p_user_id: user.id,
+          p_content_id: courseId,
+          p_content_type: 'video_tutorial',
+          p_price: 0,
+          p_currency: 'SGD',
+          p_payment_reference: `access_code:${code}`
         }
-        
+      );
+
+      if (insertError) {
+        console.error("Error recording access via RPC:", insertError);
         toast({
           variant: "destructive",
           title: "错误",
@@ -94,6 +110,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         return;
       }
 
+      console.log("Access successfully recorded:", insertData);
       toast({
         title: "验证成功！",
         description: "访问码验证成功。",

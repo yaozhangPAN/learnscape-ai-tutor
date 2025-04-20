@@ -21,7 +21,7 @@ const CourseDetails: React.FC = () => {
   const [hasAccess, setHasAccess] = useState(false);
   const [accessCodeDialogOpen, setAccessCodeDialogOpen] = useState(false);
   const [isCheckingAccess, setIsCheckingAccess] = useState(true);
-  const { hasAccessToContent, isPremium } = useSubscription();
+  const { isPremium } = useSubscription();
   const { toast } = useToast();
   
   const course = mockCourses.find(c => c.id === courseId);
@@ -47,11 +47,13 @@ const CourseDetails: React.FC = () => {
         
         // First check if user is premium
         if (isPremium) {
+          console.log("User has premium access");
           setHasAccess(true);
           setIsCheckingAccess(false);
           return;
         }
         
+        console.log("Checking purchased content for user:", user.id, "and course:", courseId);
         // Then check if user has purchased this content directly
         const { data, error } = await supabase
           .from("purchased_content")
@@ -71,6 +73,7 @@ const CourseDetails: React.FC = () => {
           return;
         }
         
+        console.log("Access check result:", data);
         // If there are any records, the user has access
         setHasAccess(data && data.length > 0);
       } catch (error) {
