@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AccessCodeDialogProps {
   isOpen: boolean;
@@ -24,11 +25,22 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
   const [code, setCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const verifyCode = async () => {
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "需要登录",
+        description: "请先登录以使用访问码。",
+      });
+      return;
+    }
+
     setIsVerifying(true);
     try {
-      const { data, error } = await supabase
+      // First verify the access code exists and is valid
+      const { data: accessCode, error: accessCodeError } = await supabase
         .from("access_codes")
         .select()
         .eq("code", code)
@@ -36,27 +48,65 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         .eq("is_active", true)
         .single();
 
-      if (error || !data) {
+      if (accessCodeError || !accessCode) {
         toast({
           variant: "destructive",
-          title: "Invalid access code",
-          description: "Please check your access code and try again.",
+          title: "无效的访问码",
+          description: "请检查您的访问码并重试。",
         });
+        setIsVerifying(false);
+        return;
+      }
+
+      // Now record this access in the purchased_content table
+      const { error: purchaseError } = await supabase
+        .from("purchased_content")
+        .insert({
+          user_id: user.id,
+          content_id: courseId,
+          content_type: "video_tutorial",
+          price: 0, // Free with access code
+          currency: "SGD",
+          payment_reference: `access_code:${code}`
+        });
+
+      if (purchaseError) {
+        console.error("Error recording access:", purchaseError);
+        
+        // Check if the record already exists (unique constraint violation)
+        if (purchaseError.code === "23505") { // Postgres unique constraint violation
+          // User already has access, so this is actually a success
+          toast({
+            title: "已经验证",
+            description: "您的访问码已经验证过，已有访问权限。",
+          });
+          onSuccess();
+          onOpenChange(false);
+          return;
+        }
+        
+        toast({
+          variant: "destructive",
+          title: "错误",
+          description: "记录您的访问权限时出错，请稍后再试。",
+        });
+        setIsVerifying(false);
         return;
       }
 
       toast({
-        title: "Success!",
-        description: "Access code verified successfully.",
+        title: "验证成功！",
+        description: "访问码验证成功。",
       });
+      
       onSuccess();
       onOpenChange(false);
     } catch (error) {
       console.error("Error verifying code:", error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "An error occurred while verifying your access code.",
+        title: "错误",
+        description: "验证访问码时出错。",
       });
     } finally {
       setIsVerifying(false);
@@ -67,14 +117,14 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Enter Access Code</DialogTitle>
+          <DialogTitle>输入访问码</DialogTitle>
           <DialogDescription>
-            Please enter your access code to view this content.
+            请输入您的访问码以查看此内容。
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <Input
-            placeholder="Enter your access code"
+            placeholder="输入您的访问码"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             className="w-full"
@@ -82,10 +132,10 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            取消
           </Button>
           <Button onClick={verifyCode} disabled={!code || isVerifying}>
-            {isVerifying ? "Verifying..." : "Submit"}
+            {isVerifying ? "验证中..." : "提交"}
           </Button>
         </DialogFooter>
       </DialogContent>
