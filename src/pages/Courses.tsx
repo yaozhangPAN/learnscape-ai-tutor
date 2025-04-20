@@ -11,6 +11,7 @@ import { Book, Clock, Star, Users, Video, Crown, Lock, BookOpen } from "lucide-r
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
+import { supabase } from "@/integrations/supabase/client";
 
 type Course = {
   id: string;
