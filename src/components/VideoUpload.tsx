@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,9 +5,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { v4 as uuidv4 } from 'uuid';
 import { Progress } from '@/components/ui/progress';
+import { useSubscription } from '@/contexts/SubscriptionContext';
 
-// Maximum file size in bytes (2MB for testing, adjust as needed)
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+// Increased file size limit for pro users (5GB)
+const FREE_MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const PRO_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
 
 interface VideoUploadProps {
   courseId: string;
@@ -16,6 +17,7 @@ interface VideoUploadProps {
 }
 
 export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSuccess }) => {
+  const { isPremium } = useSubscription();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -34,6 +36,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
+      const MAX_FILE_SIZE = isPremium ? PRO_MAX_FILE_SIZE : FREE_MAX_FILE_SIZE;
       
       // Check file size
       const fileSizeFormatted = formatFileSize(selectedFile.size);
