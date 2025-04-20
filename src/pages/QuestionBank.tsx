@@ -8,6 +8,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 
 const QUESTIONS_PER_PAGE = 10;
@@ -138,6 +139,44 @@ const QuestionBank = () => {
   const handleViewQuestion = (question) => {
     setSelectedQuestion(question);
     setDialogOpen(true);
+  };
+
+  const renderQuestionContent = (content: any) => {
+    if (!content) return <p className="text-gray-500">No content available for this question.</p>;
+
+    try {
+      const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
+      
+      return (
+        <div className="space-y-6">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-lg font-medium mb-2">Question:</h3>
+            <pre className="whitespace-pre-wrap font-mono text-sm">
+              {JSON.stringify(parsedContent.question, null, 2)}
+            </pre>
+          </div>
+
+          {parsedContent.options && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">Options:</h3>
+              <RadioGroup defaultValue={parsedContent.correctAnswer}>
+                {Object.entries(parsedContent.options).map(([key, value]) => (
+                  <div key={key} className="flex items-center space-x-2 p-2">
+                    <RadioGroupItem value={key} id={key} />
+                    <label htmlFor={key} className="text-sm">
+                      {value as string}
+                    </label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          )}
+        </div>
+      );
+    } catch (error) {
+      console.error('Error parsing question content:', error);
+      return <p className="text-red-500">Error displaying question content</p>;
+    }
   };
 
   return (
@@ -352,13 +391,7 @@ const QuestionBank = () => {
             <DialogTitle>{selectedQuestion?.title}</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            {selectedQuestion?.content ? (
-              <pre className="whitespace-pre-wrap font-mono bg-gray-50 p-4 rounded-md">
-                {selectedQuestion.content}
-              </pre>
-            ) : (
-              <p className="text-gray-500">Test No content available for this question.</p>
-            )}
+            {selectedQuestion && renderQuestionContent(selectedQuestion.content)}
           </div>
         </DialogContent>
       </Dialog>
