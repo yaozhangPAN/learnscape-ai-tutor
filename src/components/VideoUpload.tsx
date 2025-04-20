@@ -1,31 +1,14 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/components/ui/use-toast';
-import { v4 as uuidv4 } from 'uuid';
-import { Progress } from '@/components/ui/progress';
+import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-
-// Set file size limit for admin users (5GB)
-const ADMIN_MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
-// Set file size limit for pro users (2GB)
-const PRO_MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
-// Supabase has a 50MB limit for free tier
-const SUPABASE_FREE_LIMIT = 50 * 1024 * 1024; // 50MB
-
-// S3 configuration
-const s3Config = {
-  region: 'us-east-1',
-  credentials: {
-    accessKeyId: 'your-access-key-id',  // In a real app, use environment variables
-    secretAccessKey: 'your-secret-access-key'  // In a real app, use environment variables
-  }
-};
-
-const S3_BUCKET_NAME = 'your-bucket-name'; // Replace with your actual bucket name
+import { useS3Upload } from '@/hooks/useS3Upload';
+import { UploadProgress } from './VideoUpload/UploadProgress';
+import { FileInfo } from './VideoUpload/FileInfo';
+import { formatFileSize, getMaxFileSize, SUPABASE_FREE_LIMIT } from '@/utils/fileUtils';
 
 interface VideoUploadProps {
   courseId: string;
@@ -41,31 +24,20 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const { toast } = useToast();
   const { user } = useAuth();
   const { isPremium } = useSubscription();
-
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  const { uploadToS3, isUploading } = useS3Upload({
+    onProgress: setUploadProgress
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
-      
       const fileSizeFormatted = formatFileSize(selectedFile.size);
       setFileSize(fileSizeFormatted);
       
-      // Determine max file size based on user type
-      const maxFileSize = user?.email === 'admin@example.com' 
-        ? ADMIN_MAX_FILE_SIZE 
-        : (isPremium ? PRO_MAX_FILE_SIZE : SUPABASE_FREE_LIMIT);
-      
+      const maxFileSize = getMaxFileSize(user?.email === 'admin@example.com', isPremium);
       const isValid = selectedFile.size <= maxFileSize;
       setIsValidSize(isValid);
       
-      // Warn about Supabase limits
       if (selectedFile.size > SUPABASE_FREE_LIMIT) {
         toast({
           title: "Warning: Large File",
@@ -99,38 +71,6 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     return () => clearInterval(interval);
   };
 
-  const uploadToS3 = async (file: File) => {
-    try {
-      // Create S3 client
-      const s3Client = new S3Client(s3Config);
-      
-      // Generate a unique file name
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${courseId}-${uuidv4()}.${fileExt}`;
-      const key = `course-videos/${fileName}`;
-      
-      // Convert file to ArrayBuffer
-      const fileArrayBuffer = await file.arrayBuffer();
-      
-      // Create upload command
-      const uploadCommand = new PutObjectCommand({
-        Bucket: S3_BUCKET_NAME,
-        Key: key,
-        Body: new Uint8Array(fileArrayBuffer),
-        ContentType: file.type,
-      });
-      
-      // Send the upload command
-      await s3Client.send(uploadCommand);
-      
-      // Return the URL of the uploaded file
-      return `https://${S3_BUCKET_NAME}.s3.amazonaws.com/${key}`;
-    } catch (error) {
-      console.error("S3 Upload Error:", error);
-      throw error;
-    }
-  };
-
   const handleUpload = async () => {
     if (!file) {
       toast({
@@ -141,11 +81,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       return;
     }
 
-    // Determine max file size based on user type
-    const maxFileSize = user?.email === 'admin@example.com' 
-      ? ADMIN_MAX_FILE_SIZE 
-      : (isPremium ? PRO_MAX_FILE_SIZE : SUPABASE_FREE_LIMIT);
-
+    const maxFileSize = getMaxFileSize(user?.email === 'admin@example.com', isPremium);
+    
     if (!isValidSize) {
       toast({
         title: "Error",
@@ -155,7 +92,6 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       return;
     }
 
-    // Confirm large file uploads
     if (file.size > SUPABASE_FREE_LIMIT) {
       const proceedAnyway = window.confirm(
         `This file (${formatFileSize(file.size)}) exceeds Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}. 
@@ -171,13 +107,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     setUploadProgress(0);
     
     try {
-      // Start simulating progress for better UX
       const stopProgress = simulateProgress();
-
-      // Upload to S3
-      const fileUrl = await uploadToS3(file);
-
-      // Stop simulating progress
+      const fileUrl = await uploadToS3(file, courseId);
       stopProgress();
       setUploadProgress(100);
 
@@ -186,9 +117,6 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
         description: "Video uploaded successfully",
       });
 
-      // Note: The video_files table doesn't exist yet in the database schema
-      // When you're ready to store video references, you'll need to create this table
-      // For now, we'll log the information that would be stored
       console.log("Video upload completed:", {
         course_id: courseId,
         file_url: fileUrl,
@@ -197,21 +125,12 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
         uploaded_by: user?.id
       });
 
-      // You can store this data in purchased_content or another existing table if needed
-      // or create a new video_files table in the future
-
       onUploadSuccess && onUploadSuccess(fileUrl);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-      let description = errorMessage;
-      
-      if (errorMessage.includes("Payload too large")) {
-        description = `The file is too large for Supabase storage. Maximum file size for Supabase free tier is ${formatFileSize(SUPABASE_FREE_LIMIT)}. Please upgrade your Supabase plan or use a smaller file.`;
-      }
-      
       toast({
         title: "Upload Error",
-        description,
+        description: errorMessage,
         variant: "destructive"
       });
       
@@ -239,27 +158,14 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       </div>
       
       {file && (
-        <div className="text-sm">
-          <p className={!isValidSize ? "text-red-500" : "text-gray-500"}>
-            File size: {fileSize} {!isValidSize && " (exceeds maximum size)"}
-          </p>
-          <p className="text-gray-500">
-            Max allowed: {formatFileSize(user?.email === 'admin@example.com' 
-              ? ADMIN_MAX_FILE_SIZE 
-              : (isPremium ? PRO_MAX_FILE_SIZE : SUPABASE_FREE_LIMIT))}
-          </p>
-          <p className="text-amber-500">
-            Supabase free tier limit: {formatFileSize(SUPABASE_FREE_LIMIT)}
-          </p>
-        </div>
+        <FileInfo
+          fileSize={fileSize}
+          isValidSize={isValidSize}
+          maxAllowedSize={getMaxFileSize(user?.email === 'admin@example.com', isPremium)}
+        />
       )}
       
-      {uploading && (
-        <div className="space-y-2">
-          <Progress value={uploadProgress} className="h-2" />
-          <p className="text-sm text-gray-500 text-center">{uploadProgress}%</p>
-        </div>
-      )}
+      {uploading && <UploadProgress progress={uploadProgress} />}
     </div>
   );
 };
