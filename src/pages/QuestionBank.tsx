@@ -246,7 +246,9 @@ const QuestionBank = () => {
                             <TableCell>{question.subject}</TableCell>
                             <TableCell>{question.level}</TableCell>
                             <TableCell>{question.term}</TableCell>
-                            <TableCell>{question.created_at.toLocaleDateString()}</TableCell>
+                            <TableCell>
+                              {new Date(question.created_at).toISOString().slice(0, 10).replace(/-/g, '/')}
+                            </TableCell>
                             <TableCell className="text-right">
                               <Button className="bg-learnscape-blue text-white">View</Button>
                             </TableCell>
