@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 interface HomeworkQuestion {
   id: string;
@@ -41,19 +42,33 @@ interface QuestionAnswerProps {
 const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [answer, setAnswer] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
-
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  };
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<BlobPart[]>([]);
+  const supabase = useSupabaseClient();
 
   const startRecording = async () => {
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      chunksRef.current = [];
+
+      mediaRecorderRef.current.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunksRef.current.push(e.data);
+        }
+      };
+
+      mediaRecorderRef.current.onstop = async () => {
+        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        await processAudioToText(audioBlob);
+        
+        // Stop all tracks
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorderRef.current.start();
       setIsRecording(true);
       toast({
         title: "录音已开始",
@@ -69,12 +84,60 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
   };
 
   const stopRecording = () => {
-    setIsRecording(false);
-    toast({
-      title: "录音已结束",
-      description: "正在处理您的回答...",
-    });
-    // Here we'll later integrate with voice-to-text API
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      setIsProcessing(true);
+      toast({
+        title: "录音已结束",
+        description: "正在处理您的回答...",
+      });
+    }
+  };
+
+  const processAudioToText = async (audioBlob: Blob) => {
+    try {
+      // Convert blob to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      reader.onloadend = async () => {
+        const base64Audio = reader.result?.toString().split(',')[1];
+        
+        if (!base64Audio) throw new Error('Failed to convert audio to base64');
+
+        const { data, error } = await supabase.functions.invoke('voice-to-text', {
+          body: { audio: base64Audio }
+        });
+
+        if (error) throw error;
+
+        if (data.text) {
+          setAnswer(prev => prev + (prev ? '\n' : '') + data.text);
+          toast({
+            title: "语音转文字成功",
+            description: "已将您的回答添加到文本框中",
+          });
+        }
+
+        setIsProcessing(false);
+      };
+    } catch (error) {
+      console.error('Error processing audio:', error);
+      toast({
+        title: "处理失败",
+        description: "无法将语音转换为文字，请重试",
+        variant: "destructive",
+      });
+      setIsProcessing(false);
+    }
+  };
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
   };
 
   return (
@@ -90,6 +153,7 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
           variant={isRecording ? "destructive" : "secondary"}
           size="icon"
           onClick={toggleRecording}
+          disabled={isProcessing}
           className="mt-1"
         >
           {isRecording ? (
