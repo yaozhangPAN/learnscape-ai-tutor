@@ -1,9 +1,8 @@
-
 import React, { useEffect } from 'react';
-import { Button } from "@/components/ui/button";
-import { Loader2, Play } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { VideoWatermark } from "./VideoWatermark";
 
 interface CourseVideoProps {
   bucketName: string;
@@ -41,7 +40,6 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
   }, [bucketName, filePath]);
 
   useEffect(() => {
-    // Add listener for visibility change
     const handleVisibilityChange = () => {
       if (document.hidden) {
         toast({
@@ -62,25 +60,28 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
       onCut={(e) => e.preventDefault()}
       onPaste={(e) => e.preventDefault()}
     >
-      <div className="aspect-video">
+      <div className="aspect-video relative">
         {signedUrl ? (
-          <video
-            className="w-full h-full"
-            controls
-            controlsList="nodownload noplaybackrate"
-            onContextMenu={(e) => e.preventDefault()}
-            playsInline
-            onLoadedData={() => setIsLoading(false)}
-            poster="/placeholder.svg"
-            style={{ 
-              WebkitTouchCallout: 'none',
-              WebkitUserSelect: 'none',
-              userSelect: 'none',
-            }}
-          >
-            <source src={signedUrl} type="video/mp4" />
-            您的浏览器不支持视频播放。
-          </video>
+          <>
+            <video
+              className="w-full h-full"
+              controls
+              controlsList="nodownload noplaybackrate"
+              onContextMenu={(e) => e.preventDefault()}
+              playsInline
+              onLoadedData={() => setIsLoading(false)}
+              poster="/placeholder.svg"
+              style={{ 
+                WebkitTouchCallout: 'none',
+                WebkitUserSelect: 'none',
+                userSelect: 'none',
+              }}
+            >
+              <source src={signedUrl} type="video/mp4" />
+              您的浏览器不支持视频播放。
+            </video>
+            <VideoWatermark className="z-10" />
+          </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-white" />
