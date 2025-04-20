@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const QUESTIONS_PER_PAGE = 10;
 
+/*
 const questionData = [
   { id: 1, title: "Grade 6 - Reading Comprehension - 1", subject: "English", type: "Reading", level: "Primary 6", term: "CA1", date: "2025-03-01" },
   { id: 2, title: "Grade 6 - Grammar Practice - 1", subject: "English", type: "Grammar", level: "Primary 6", term: "CA1", date: "2025-03-05" },
@@ -37,6 +38,13 @@ const questionData = [
   { id: 23, title: "Grade 5 - Materials and Matter", subject: "Science", type: "Chemistry", level: "Primary 5", term: "CA2", date: "2025-03-17" },
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
 ];
+*/
+
+const { questionData, error } = await supabase
+      .from('questions')
+      .select()
+      .eq('title', '南洋小学小六华文-短文填空');
+
 
 const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
 const subjects = ["All Subjects", "English", "Math", "Chinese", "Science"];
