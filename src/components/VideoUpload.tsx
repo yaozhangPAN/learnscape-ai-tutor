@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +10,7 @@ import { FileInfo } from './VideoUpload/FileInfo';
 import { formatFileSize, getMaxFileSize, SUPABASE_FREE_LIMIT, ADMIN_MAX_FILE_SIZE } from '@/utils/fileUtils';
 import { supabase } from '@/integrations/supabase/client';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { InfoCircle } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 interface VideoUploadProps {
   courseId: string;
@@ -31,7 +30,6 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const [isAdmin, setIsAdmin] = useState(false);
   const [maxAllowedSize, setMaxAllowedSize] = useState(SUPABASE_FREE_LIMIT);
   
-  // Check if user is admin
   useEffect(() => {
     const checkAdminStatus = async () => {
       if (!user) return;
@@ -152,7 +150,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       
       {isAdmin && (
         <Alert>
-          <InfoCircle className="h-4 w-4" />
+          <Info className="h-4 w-4" />
           <AlertTitle>Demo Environment</AlertTitle>
           <AlertDescription>
             In this demo environment, very large file uploads (&gt;100MB) will be simulated without actually transferring data.
