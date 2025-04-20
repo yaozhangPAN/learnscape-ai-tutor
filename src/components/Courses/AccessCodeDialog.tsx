@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AccessCodeDialogProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
   const [code, setCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const verifyCode = async () => {
     if (!code.trim()) {
@@ -31,6 +33,15 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         variant: "destructive",
         title: "请输入访问码",
         description: "请输入有效的访问码",
+      });
+      return;
+    }
+
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "请先登录",
+        description: "您需要登录才能使用访问码",
       });
       return;
     }
@@ -63,7 +74,8 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
           content_id: courseId,
           content_type: "video_tutorial",
           price: 0,
-          currency: "SGD"
+          currency: "SGD",
+          user_id: user.id // Add the required user_id field
         });
 
       if (purchaseError) {
