@@ -44,6 +44,21 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
         }
         
         console.log("Successfully verified 'course-videos' bucket exists");
+        
+        // Test bucket permissions by attempting to get bucket details
+        const { error: permissionError } = await supabase.storage
+          .from('course-videos')
+          .list('', { limit: 1 });
+          
+        if (permissionError) {
+          console.error("Permission check error:", permissionError);
+          if (permissionError.message.includes("Permission denied")) {
+            throw new Error("您没有上传到 'course-videos' 的权限。请检查您的账户权限。");
+          }
+          throw new Error(`存储桶权限检查失败: ${permissionError.message}`);
+        }
+        
+        console.log("Successfully verified bucket permissions");
       } catch (bucketCheckError) {
         console.error("Detailed bucket check error:", bucketCheckError);
         throw new Error("无法访问 'course-videos' 存储桶。请检查 Supabase 配置。");
