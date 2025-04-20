@@ -1,12 +1,9 @@
 
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { VideoUpload } from "@/components/VideoUpload";
-import { VideoUploadStatus } from "@/components/VideoUpload/VideoUploadStatus";
 import { mockCourses } from "@/data/mockCourses";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
 const CourseDetails: React.FC = () => {
@@ -36,19 +33,6 @@ const CourseDetails: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
             <p className="text-gray-600 mb-6">{course.description}</p>
-            
-            {isAdmin && (
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h2 className="text-xl font-semibold mb-4">管理员视频上传</h2>
-                <VideoUpload 
-                  courseId={course.id} 
-                  onUploadSuccess={(videoUrl) => {
-                    console.log('Video uploaded:', videoUrl);
-                  }}
-                />
-                <VideoUploadStatus courseId={course.id} />
-              </div>
-            )}
           </div>
           
           <div>
