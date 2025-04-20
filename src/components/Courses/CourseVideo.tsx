@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Loader2, Play } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 interface CourseVideoProps {
   bucketName: string;
@@ -13,6 +14,7 @@ interface CourseVideoProps {
 export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, title }) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [signedUrl, setSignedUrl] = React.useState<string | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     const getSignedUrl = async () => {
@@ -38,8 +40,28 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
     getSignedUrl();
   }, [bucketName, filePath]);
 
+  useEffect(() => {
+    // Add listener for visibility change
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        toast({
+          title: "提示",
+          description: "为保护课程内容，切换标签页时视频将暂停播放",
+        });
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [toast]);
+
   return (
-    <div className="relative rounded-lg overflow-hidden bg-gray-900">
+    <div 
+      className="relative rounded-lg overflow-hidden bg-gray-900"
+      onCopy={(e) => e.preventDefault()}
+      onCut={(e) => e.preventDefault()}
+      onPaste={(e) => e.preventDefault()}
+    >
       <div className="aspect-video">
         {signedUrl ? (
           <video
@@ -50,6 +72,11 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
             playsInline
             onLoadedData={() => setIsLoading(false)}
             poster="/placeholder.svg"
+            style={{ 
+              WebkitTouchCallout: 'none',
+              WebkitUserSelect: 'none',
+              userSelect: 'none',
+            }}
           >
             <source src={signedUrl} type="video/mp4" />
             您的浏览器不支持视频播放。
