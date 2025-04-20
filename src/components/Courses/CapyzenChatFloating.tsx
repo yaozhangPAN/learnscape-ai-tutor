@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AITutorChat } from "./AITutorChat";
 import { X } from "lucide-react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -7,6 +7,21 @@ import { cn } from "@/lib/utils";
 
 export const CapyzenChatFloating: React.FC = () => {
   const [open, setOpen] = useState(false);
+
+  // Listen for the custom event to open the chat
+  useEffect(() => {
+    const handleChatOpen = () => {
+      setOpen(true);
+    };
+    
+    // Add event listener for the custom event
+    window.addEventListener("capyzen-chat-open", handleChatOpen);
+    
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("capyzen-chat-open", handleChatOpen);
+    };
+  }, []);
 
   // 固定右下角浮动ICON，展开后出现完整聊天面板
   return (

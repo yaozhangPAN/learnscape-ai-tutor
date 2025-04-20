@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CapyzenComment } from "./CapyzenComment";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
+import { useCapyzenChat } from "@/hooks/useCapyzenChat";
 import type { QuestionAnswerProps } from "./types";
 
 const mockGetAIFeedback = async (question: string, answer: string): Promise<string> => {
@@ -25,6 +26,7 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { isRecording, startRecording, stopRecording } = useSpeechRecognition();
+  const { forwardToChat } = useCapyzenChat();
 
   const toggleRecording = () => {
     if (isRecording) {
@@ -63,14 +65,20 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
   };
 
   const handleForwardToChat = () => {
-    localStorage.setItem(
-      "capyzen-chat-forward",
-      JSON.stringify({
-        question: `${questionContent}\n${questionText}`,
-        answer
-      })
-    );
+    // Use the forwardToChat function from useCapyzenChat hook
+    forwardToChat({
+      question: `${questionContent}\n${questionText}`,
+      answer
+    });
+    
+    // Dispatch event to open the chat
     window.dispatchEvent(new CustomEvent("capyzen-chat-open"));
+    
+    toast({
+      title: "已转发到AI对话",
+      description: "请在右下角聊天窗口中继续咨询",
+      variant: "success",
+    });
   };
 
   return (
