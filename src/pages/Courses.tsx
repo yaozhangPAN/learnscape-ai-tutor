@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { VideoUpload } from "@/components/VideoUpload";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -254,6 +255,16 @@ const Courses = () => {
   const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
   const [searchParams] = useSearchParams();
   const contentId = searchParams.get("content");
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsAdmin(user?.email === 'admin@example.com');
+    };
+
+    checkAdminStatus();
+  }, []);
 
   const filteredCourses = mockCourses.filter(
     course => 
@@ -496,6 +507,18 @@ const Courses = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {isAdmin && (
+        <div className="container mx-auto px-4 py-4">
+          <h2 className="text-2xl font-bold mb-4">Upload Video</h2>
+          <VideoUpload 
+            courseId="psle-chinese-masterclass" 
+            onUploadSuccess={(videoUrl) => {
+              console.log('Video uploaded:', videoUrl);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
