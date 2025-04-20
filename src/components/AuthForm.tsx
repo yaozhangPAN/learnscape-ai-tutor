@@ -63,7 +63,7 @@ const AuthForm = () => {
     setIsLoading(true);
     
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data: authData } = await supabase.auth.signInWithPassword({
         email: data.email,
         password: data.password,
       });
@@ -72,10 +72,21 @@ const AuthForm = () => {
         throw error;
       }
 
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to Learnscape!",
-      });
+      // Enhanced admin check
+      const { data: { user } } = await supabase.auth.getUser();
+      const isAdmin = user?.email === 'admin@example.com';
+
+      if (isAdmin) {
+        toast({
+          title: "Admin Login Successful",
+          description: "Welcome, Administrator!",
+        });
+      } else {
+        toast({
+          title: "Login Successful",
+          description: "Welcome back to Learnscape!",
+        });
+      }
       
       // Redirect to dashboard
       navigate("/dashboard");
