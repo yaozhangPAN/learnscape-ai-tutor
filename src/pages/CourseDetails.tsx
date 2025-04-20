@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -63,8 +62,15 @@ const CourseDetails: React.FC = () => {
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-8">
-            <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
-            <p className="text-gray-600 mb-6">{course.description}</p>
+            <div>
+              <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
+              <p className="text-gray-600 mb-2">{course.description}</p>
+              <div className="text-gray-600 space-y-1">
+                <div>课程等级: {course.level}</div>
+                <div>科目: {course.subject}</div>
+                <div>持续时间: {course.duration}</div>
+              </div>
+            </div>
             
             {hasAccess || isAdmin ? (
               <CourseVideo
@@ -92,24 +98,11 @@ const CourseDetails: React.FC = () => {
             <CourseHomework />
           </div>
           
-          <div>
-            <img 
-              src={course.image} 
-              alt={course.title} 
-              className="w-full h-64 object-cover rounded-lg"
-            />
-            <div className="mt-4 space-y-2">
-              <div>课程等级: {course.level}</div>
-              <div>科目: {course.subject}</div>
-              <div>持续时间: {course.duration}</div>
+          {isAdmin && (
+            <div>
+              <AccessCodeManager courseId={courseId || ''} />
             </div>
-
-            {isAdmin && (
-              <div className="mt-8">
-                <AccessCodeManager courseId={courseId || ''} />
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
 
