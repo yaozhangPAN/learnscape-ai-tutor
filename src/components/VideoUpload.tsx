@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -187,10 +188,9 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
         description: "Video uploaded successfully",
       });
 
-      // Save the file reference in Supabase if needed
-      // This allows you to keep track of uploaded files in your database
-      const { error: dbError } = await supabase
-        .from('video_files')
+      // Save the file reference in Supabase
+      const { data, error: dbError } = await supabase
+        .from('video_files') // Update this to use the correct table name
         .insert({
           course_id: courseId,
           file_url: fileUrl,
