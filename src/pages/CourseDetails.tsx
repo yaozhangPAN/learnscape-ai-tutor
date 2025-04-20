@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -11,6 +10,7 @@ import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
 import { AccessCodeManager } from "@/components/Courses/AccessCodeManager";
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
+import { CourseHomework } from "@/components/Courses/CourseHomework";
 
 const CourseDetails: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -61,7 +61,7 @@ const CourseDetails: React.FC = () => {
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8">
-          <div>
+          <div className="space-y-8">
             <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
             <p className="text-gray-600 mb-6">{course.description}</p>
             
@@ -87,6 +87,8 @@ const CourseDetails: React.FC = () => {
                 </div>
               </div>
             )}
+
+            <CourseHomework />
           </div>
           
           <div>
@@ -96,7 +98,7 @@ const CourseDetails: React.FC = () => {
               className="w-full h-64 object-cover rounded-lg"
             />
             <div className="mt-4 space-y-2">
-              <div>课程等级: {course.level}</div>
+              <div>课��等级: {course.level}</div>
               <div>科目: {course.subject}</div>
               <div>持续时间: {course.duration}</div>
             </div>
