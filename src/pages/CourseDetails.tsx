@@ -35,9 +35,9 @@ const CourseDetails: React.FC = () => {
             <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
             <p className="text-gray-600 mb-6">{course.description}</p>
             
-            {/* Add your video URL here */}
             <CourseVideo
-              videoUrl="https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/your-bucket/your-video-path"
+              bucketName="course-videos"
+              filePath="your-video-path.mp4"
               title={course.title}
             />
           </div>
