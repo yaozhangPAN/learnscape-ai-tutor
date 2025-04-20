@@ -32,6 +32,10 @@ const registerSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+// Admin credentials
+const ADMIN_EMAIL = "admin@example.com";
+const ADMIN_PASSWORD = "admin123";
+
 const AuthForm = () => {
   const [activeTab, setActiveTab] = useState<string>("login");
   const [isLoading, setIsLoading] = useState(false);
@@ -63,25 +67,64 @@ const AuthForm = () => {
     setIsLoading(true);
     
     try {
-      const { error, data: authData } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      // Enhanced admin check
-      const { data: { user } } = await supabase.auth.getUser();
-      const isAdmin = user?.email === 'admin@example.com';
-
+      // Check if user is trying to login as admin
+      const isAdmin = data.email === ADMIN_EMAIL && data.password === ADMIN_PASSWORD;
+      
       if (isAdmin) {
+        // Admin login - create a special session
+        const { error } = await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (error) {
+          // If admin doesn't exist yet, create admin account
+          if (error.message.includes("Invalid login credentials")) {
+            const { error: signUpError } = await supabase.auth.signUp({
+              email: ADMIN_EMAIL,
+              password: ADMIN_PASSWORD,
+              options: {
+                data: {
+                  name: "Administrator",
+                  userType: "teacher",
+                }
+              }
+            });
+
+            if (signUpError) {
+              throw signUpError;
+            }
+
+            // Try logging in again
+            const { error: retryError } = await supabase.auth.signInWithPassword({
+              email: ADMIN_EMAIL,
+              password: ADMIN_PASSWORD,
+            });
+
+            if (retryError) {
+              throw retryError;
+            }
+          } else {
+            throw error;
+          }
+        }
+
         toast({
           title: "Admin Login Successful",
           description: "Welcome, Administrator!",
+          variant: "success",
         });
       } else {
+        // Regular user login
+        const { error } = await supabase.auth.signInWithPassword({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (error) {
+          throw error;
+        }
+
         toast({
           title: "Login Successful",
           description: "Welcome back to Learnscape!",
