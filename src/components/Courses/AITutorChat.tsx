@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,28 +16,44 @@ interface AITutorChatProps {
   onSubmitHomework?: (answer: string) => void;
 }
 
+const getAIChatReply = async (messages: { role: 'user' | 'assistant'; content: string }[]): Promise<string> => {
+  try {
+    const response = await fetch(
+      "https://xfwnjocfdvuocvwjopke.supabase.co/functions/v1/ai-capyzen-feedback",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "chat",
+          messages,
+        }),
+      }
+    );
+    const data = await response.json();
+    if (data.reply) return data.reply;
+    return "AI助教暂时无法回复，请稍后再试。";
+  } catch (e) {
+    return "AI助教服务器异常，请稍后再试。";
+  }
+};
+
 export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const { pendingContext, clearContext } = useCapyzenChat();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [isBotReplying, setIsBotReplying] = useState(false);
 
-  // Process pendingContext when it's available
   useEffect(() => {
     if (pendingContext) {
       const { question, answer } = pendingContext;
-      
       if (question && answer) {
         console.log("Processing pending context:", pendingContext);
-        // Format the message with question and answer
         const contextMessage = `我想请教关于这个问题:\n\n${question}\n\n我的回答是:\n${answer}\n\n我有什么可以改进的地方吗？`;
-        
-        // Set the input message
         setInputMessage(contextMessage);
-        
-        // Focus the textarea and adjust its height after a short delay
-        // to ensure the DOM has updated
         setTimeout(() => {
           if (textareaRef.current) {
             textareaRef.current.focus();
@@ -47,51 +62,47 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
           }
         }, 100);
       }
-      
-      // Clear the context after using it
       clearContext();
     }
   }, [pendingContext, clearContext]);
 
-  const handleSendMessage = (messageToSend = inputMessage) => {
-    if (!messageToSend.trim()) return;
-
-    const newMessage: Message = {
-      role: 'user',
-      content: messageToSend
+  const handleSendMessage = async (messageToSend = inputMessage) => {
+    if (!messageToSend.trim() || isBotReplying) return;
+    const userMessage: Message = {
+      role: "user",
+      content: messageToSend,
     };
-
-    setMessages(prev => [...prev, newMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
-    
-    // Auto-resize textarea back to default
+    setIsBotReplying(true);
+
+    const history = [...messages, userMessage].slice(-6);
+    const formattedHistory = history.map(m => ({
+      role: m.role,
+      content: m.content,
+    }));
+
+    const aiContent = await getAIChatReply(formattedHistory);
+    setMessages(prev => [...prev, { role: "assistant", content: aiContent }]);
+    setIsBotReplying(false);
+
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
     }
-    
-    // TODO: Send to AI API and get response
+
     setTimeout(() => {
-      const mockResponse: Message = {
-        role: 'assistant',
-        content: '好的，让我看看这个问题...\n我建议你可以从文章中找出具体的描述和细节来支持你的回答。'
-      };
-      setMessages(prev => [...prev, mockResponse]);
-      
-      // Scroll to bottom after response
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       }
-    }, 1000);
+    }, 150);
   };
 
-  // Auto-resize textarea when input changes
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputMessage(e.target.value);
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
-  // Handle Enter key to send message (Shift+Enter for new line)
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -112,7 +123,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
           </div>
         </div>
 
-        <div 
+        <div
           ref={chatContainerRef}
           className="flex-1 overflow-y-auto space-y-4 mb-4"
         >
@@ -150,11 +161,15 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
             onKeyDown={handleKeyDown}
             className="flex-1 resize-none"
             rows={3}
+            disabled={isBotReplying}
           />
-          <Button onClick={() => handleSendMessage()} size="icon" className="self-end">
+          <Button onClick={() => handleSendMessage()} size="icon" className="self-end" disabled={isBotReplying || !inputMessage.trim()}>
             <Send className="h-4 w-4" />
           </Button>
         </div>
+        {isBotReplying && (
+          <div className="text-center text-gray-400 text-sm mt-1">AI助教正在思考…</div>
+        )}
       </CardContent>
     </Card>
   );

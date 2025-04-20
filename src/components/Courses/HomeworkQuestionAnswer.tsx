@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -9,11 +8,28 @@ import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { useCapyzenChat } from "@/hooks/useCapyzenChat";
 import type { QuestionAnswerProps } from "./types";
 
-const mockGetAIFeedback = async (question: string, answer: string): Promise<string> => {
-  return new Promise((res) => setTimeout(() =>
-    res(`Capyzen点评：你的答案体现了对问题的理解，但可以补充更多细节。例如：……"`),
-    1300
-  ));
+const getAIFeedback = async (question: string, answer: string): Promise<string> => {
+  try {
+    const response = await fetch(
+      "https://xfwnjocfdvuocvwjopke.supabase.co/functions/v1/ai-capyzen-feedback",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "feedback",
+          question,
+          answer,
+        }),
+      }
+    );
+    const data = await response.json();
+    if (data.feedback) return data.feedback;
+    return "Capyzen点评：AI助教暂时无法点评，请稍后再试。";
+  } catch (e) {
+    return "Capyzen点评：服务器异常，请稍后再试。";
+  }
 };
 
 export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
@@ -32,7 +48,6 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     if (isRecording) {
       stopRecording();
     } else {
-      // Changed how we use startRecording to handle the transcript update
       startRecording((transcript: string) => {
         setAnswer(prev => {
           const newText = prev ? prev + ' ' + transcript : transcript;
@@ -52,7 +67,7 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     }
     setIsLoading(true);
     setAiComment(null);
-    const feedback = await mockGetAIFeedback(
+    const feedback = await getAIFeedback(
       `${questionContent}\n${questionText}`,
       answer
     );
@@ -65,7 +80,6 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
   };
 
   const handleForwardToChat = () => {
-    // First, forward the content to the chat context
     console.log("Forwarding to chat:", {
       question: `${questionContent}\n${questionText}`,
       answer
@@ -75,11 +89,8 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
       question: `${questionContent}\n${questionText}`,
       answer
     });
-    
-    // Then, dispatch custom event to open the chat dialog
     const event = new CustomEvent("capyzen-chat-open");
     window.dispatchEvent(event);
-    
     toast({
       title: "已转发到AI对话",
       description: "请在右下角聊天窗口中继续咨询",
