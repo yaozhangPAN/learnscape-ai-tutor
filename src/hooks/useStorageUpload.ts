@@ -28,17 +28,19 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       
       console.log(`Starting upload for file: ${file.name}, size: ${file.size} bytes, type: ${file.type}`);
       
-      // Check if the course-videos bucket exists
-      const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
-      if (bucketsError) {
-        console.error("Error listing buckets:", bucketsError);
-        throw new Error(`存储桶检查失败: ${bucketsError.message}`);
-      }
-      
-      const hasCourseVideosBucket = buckets.some(bucket => bucket.name === 'course-videos');
-      if (!hasCourseVideosBucket) {
-        console.error("course-videos bucket not found");
-        throw new Error("存储桶 'course-videos' 不存在，请检查 Supabase 配置");
+      // Explicit bucket check with more detailed error handling
+      try {
+        const { data: bucket, error: bucketError } = await supabase.storage
+          .from('course-videos')
+          .getBucket();
+        
+        if (bucketError) {
+          console.error("Bucket check error:", bucketError);
+          throw new Error(`存储桶检查失败: ${bucketError.message}`);
+        }
+      } catch (bucketCheckError) {
+        console.error("Detailed bucket check error:", bucketCheckError);
+        throw new Error("无法访问 'course-videos' 存储桶。请检查 Supabase 配置。");
       }
       
       // Determine if we need chunked upload
@@ -51,15 +53,17 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       return await uploadWithSignedUrl(file, filePath);
     } catch (error) {
       console.error("Storage Upload Error:", error);
-      if (error instanceof Error) {
-        console.error("Error message:", error.message);
-        console.error("Error stack:", error.stack);
-      }
+      
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "上传文件时发生未知错误";
+      
       toast({
-        title: "Upload Failed",
-        description: error instanceof Error ? error.message : "An unknown error occurred during file upload",
+        title: "上传错误",
+        description: errorMessage,
         variant: "destructive",
       });
+      
       throw error;
     } finally {
       setIsUploading(false);
