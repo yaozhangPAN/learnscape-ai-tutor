@@ -1,16 +1,15 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Video, Users, Calendar, Clock, Crown, Lock, BookOpen } from "lucide-react";
-import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import ZoomSessionCard from "@/components/ZoomCourses/ZoomSessionCard";
 import UpcomingSessions from "@/components/ZoomCourses/UpcomingSessions";
+import ZoomCourseFilters from "@/components/ZoomCourses/ZoomCourseFilters";
+import ZoomCourseGrid from "@/components/ZoomCourses/ZoomCourseGrid";
+import { Button } from "@/components/ui/button";
+import { Users, Calendar, Clock } from "lucide-react";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 
 const mockZoomCourses = [
   {
@@ -178,7 +177,6 @@ const ZoomCourses = () => {
 
   const handleEnroll = async () => {
     if (!selectedCourse) return;
-    
     const checkoutUrl = await startCheckoutSession("zoom_session", selectedCourse.id);
     if (checkoutUrl) {
       window.location.href = checkoutUrl;
@@ -206,42 +204,17 @@ const ZoomCourses = () => {
           onJoinSession={handleJoinSession} 
         />
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Primary Level</h3>
-              <Tabs defaultValue="p6" onValueChange={setSelectedLevel}>
-                <TabsList className="grid grid-cols-3 w-full">
-                  <TabsTrigger value="p6">Primary 6</TabsTrigger>
-                  <TabsTrigger value="p5">Primary 5</TabsTrigger>
-                  <TabsTrigger value="all">All Levels</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Subject</h3>
-              <Tabs defaultValue="all" onValueChange={setSelectedSubject}>
-                <TabsList className="grid grid-cols-5 w-full">
-                  <TabsTrigger value="english">English</TabsTrigger>
-                  <TabsTrigger value="mathematics">Math</TabsTrigger>
-                  <TabsTrigger value="science">Science</TabsTrigger>
-                  <TabsTrigger value="chinese">Chinese</TabsTrigger>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-          </div>
-        </div>
+        <ZoomCourseFilters
+          selectedLevel={selectedLevel}
+          selectedSubject={selectedSubject}
+          onLevelChange={setSelectedLevel}
+          onSubjectChange={setSelectedSubject}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {filteredCourses.map((course) => (
-            <ZoomSessionCard 
-              key={course.id} 
-              course={course} 
-              onViewDetails={() => handleViewDetails(course)} 
-            />
-          ))}
-        </div>
+        <ZoomCourseGrid
+          courses={filteredCourses}
+          onViewDetails={handleViewDetails}
+        />
 
         <Pagination>
           <PaginationContent>
