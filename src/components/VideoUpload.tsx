@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -29,6 +30,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const { isPremium } = useSubscription();
   const [isAdmin, setIsAdmin] = useState(false);
   const [maxAllowedSize, setMaxAllowedSize] = useState(SUPABASE_FREE_LIMIT);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -158,7 +160,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
           <Info className="h-4 w-4" />
           <AlertTitle>Demo 环境</AlertTitle>
           <AlertDescription>
-            在此演示环境中，非常大的文件上传（>100MB）将被模拟，而不实际传输数据。
+            在此演示环境中，非常大的文件上传（&gt;100MB）将被模拟，而不实际传输数据。
             在生产环境中，为大文件使用预签名 URL 或分片上传。
           </AlertDescription>
         </Alert>
@@ -167,6 +169,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       <div className="flex items-center space-x-2">
         <Input 
           type="file" 
+          ref={fileInputRef}
           accept="video/*" 
           onChange={handleFileChange} 
           disabled={uploading}
