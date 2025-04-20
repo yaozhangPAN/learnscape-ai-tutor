@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -26,6 +27,9 @@ const mockHomeworkQuestions: HomeworkQuestion[] = [
   }
 ];
 
+// 新增“看图作文”题
+const compositionImage = "/lovable-uploads/79c5dc6f-48f4-4be9-bc6a-08855242b9b2.png";
+
 export const CourseHomework: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto">
@@ -52,6 +56,31 @@ export const CourseHomework: React.FC = () => {
                   </CardContent>
                 </Card>
               ))}
+
+              {/* 新增图片作文题 */}
+              <Card className="border-2 border-purple-200 shadow-md">
+                <CardHeader>
+                  <CardTitle className="text-lg text-purple-700">看图作文题</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-center">
+                    <img
+                      src={compositionImage}
+                      alt="看图作文"
+                      className="rounded max-w-full max-h-[340px] shadow-lg border border-gray-300"
+                      style={{ background: "#fff" }}
+                    />
+                  </div>
+                  <div className="font-medium text-gray-900 mt-2 mb-2">
+                    请认真观察上面的图片，发挥想象力，用不少于80字写一段小故事（也可以合理使用图片中的词语和成语）。
+                  </div>
+                  <HomeworkQuestionAnswer
+                    questionId="img1"
+                    questionContent="请根据以上图片内容与右侧词语写一段小故事。"
+                    questionText="至少80字，可以合理使用指定词语或成语。"
+                  />
+                </CardContent>
+              </Card>
             </div>
           </ScrollArea>
         </CardContent>

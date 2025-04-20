@@ -29,7 +29,8 @@ export const CapyzenChatFloating: React.FC = () => {
                   const url = await startCheckoutSession("premium_subscription");
                   if (url) window.location.href = url;
                 }}
-                className="text-blue-600 underline hover:text-orange-500"
+                className="text-white bg-gradient-to-r from-blue-500 to-orange-400 rounded-lg px-3 py-1 mt-1 font-semibold shadow hover:scale-105 transition-all"
+                style={{ maxWidth: 130 }}
               >
                 立即开通
               </button>
@@ -61,7 +62,8 @@ export const CapyzenChatFloating: React.FC = () => {
                 const url = await startCheckoutSession("premium_subscription");
                 if (url) window.location.href = url;
               }}
-              className="text-blue-600 underline hover:text-orange-500"
+              className="text-white bg-gradient-to-r from-blue-500 to-orange-400 rounded-lg px-3 py-1 mt-1 font-semibold shadow hover:scale-105 transition-all"
+              style={{ maxWidth: 130 }}
             >
               立即开通
             </button>
@@ -76,12 +78,15 @@ export const CapyzenChatFloating: React.FC = () => {
     <>
       {!open && (
         <button
-          className="fixed z-50 bottom-8 right-6 bg-white border border-blue-100 shadow-lg rounded-full w-20 h-20 flex items-center justify-center hover:scale-110 transition-all"
+          className={cn(
+            "fixed z-50 bottom-8 right-6 bg-gradient-to-tr from-yellow-400 via-blue-400 to-orange-400 border-4 border-blue-400 shadow-2xl rounded-full w-28 h-28 flex items-center justify-center hover:scale-125 transition-all duration-300",
+            "ring-4 ring-orange-200 animate-pulse"
+          )}
           aria-label="打开AI对话"
           onClick={handleButtonClick}
-          style={{ boxShadow: "0 6px 24px #3b82f666" }}
+          style={{ boxShadow: "0 10px 40px 0 #3b82f6aa" }}
         >
-          <Avatar className="h-16 w-16 border-2 border-blue-300 shadow-md">
+          <Avatar className="h-24 w-24 border-4 border-white shadow-xl">
             <AvatarImage src="/lovable-uploads/95142e5e-0a24-4687-a2d3-c0eb68cdb485.png" alt="Capyzen" />
           </Avatar>
         </button>
