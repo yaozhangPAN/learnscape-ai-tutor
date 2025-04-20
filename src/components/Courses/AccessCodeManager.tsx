@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -86,7 +86,7 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
   };
 
   // Load access codes when component mounts
-  useState(() => {
+  useEffect(() => {
     loadAccessCodes();
   }, [courseId]);
 
