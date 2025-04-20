@@ -39,7 +39,7 @@ const defaultQuestionData = [
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
 ];
 
-const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6", "小六"];
+const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6"];
 const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华文"];
 const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
