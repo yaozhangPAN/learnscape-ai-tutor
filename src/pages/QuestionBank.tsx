@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
+import QuestionViewer from "@/components/QuestionBank/QuestionViewer";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -385,16 +386,11 @@ const QuestionBank = () => {
         </div>
       </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{selectedQuestion?.title}</DialogTitle>
-          </DialogHeader>
-          <div className="mt-4">
-            {selectedQuestion && renderQuestionContent(selectedQuestion.content)}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <QuestionViewer
+        isOpen={dialogOpen}
+        onOpenChange={setDialogOpen}
+        question={selectedQuestion}
+      />
     </div>
   );
 };
