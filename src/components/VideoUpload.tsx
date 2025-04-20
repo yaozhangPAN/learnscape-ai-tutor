@@ -10,6 +10,7 @@ import { FileInfo } from './VideoUpload/FileInfo';
 import { UploadProgress } from './VideoUpload/UploadProgress';
 import { AdminAlert } from './VideoUpload/AdminAlert';
 import { getMaxFileSize, SUPABASE_FREE_LIMIT } from '@/utils/fileUtils';
+import { useStorageUpload } from '@/hooks/useStorageUpload';
 
 interface VideoUploadProps {
   courseId: string;
@@ -21,7 +22,11 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const { isPremium } = useSubscription();
   const [isAdmin, setIsAdmin] = useState(false);
   const [maxAllowedSize, setMaxAllowedSize] = useState(SUPABASE_FREE_LIMIT);
+  const [checkingBucket, setCheckingBucket] = useState(false);
+  const [bucketStatus, setBucketStatus] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const { checkAndCreateBucket } = useStorageUpload();
   
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -61,6 +66,22 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       fileInputRef.current.value = '';
     }
   };
+  
+  const checkBucketAccess = async () => {
+    setCheckingBucket(true);
+    setBucketStatus(null);
+    try {
+      const success = await checkAndCreateBucket('course-videos');
+      setBucketStatus(success ? 
+        "存储桶验证成功！您有权限访问和上传文件。" : 
+        "存储桶权限检查失败。请查看控制台获取详细错误信息。");
+    } catch (error) {
+      console.error("Error checking bucket:", error);
+      setBucketStatus("检查存储桶时出错: " + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      setCheckingBucket(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -72,6 +93,26 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       )}
       
       {isAdmin && <AdminAlert />}
+      
+      {isAdmin && (
+        <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <h3 className="text-sm font-medium text-blue-800 mb-2">存储桶诊断</h3>
+          <Button 
+            onClick={checkBucketAccess}
+            size="sm"
+            variant="outline"
+            disabled={checkingBucket}
+          >
+            {checkingBucket ? "检查中..." : "检查存储桶权限"}
+          </Button>
+          
+          {bucketStatus && (
+            <div className="mt-2 text-sm p-2 bg-white rounded border">
+              {bucketStatus}
+            </div>
+          )}
+        </div>
+      )}
       
       <div className="flex items-center space-x-2">
         <Input 

@@ -73,18 +73,7 @@ export const useVideoUpload = ({ courseId, maxAllowedSize, onUploadSuccess }: Us
     try {
       console.log(`Starting upload for file: ${file.name} (${formatFileSize(file.size)}) to course: ${courseId}`);
       
-      // Check if storage bucket exists first
-      const { data: bucketData, error: bucketError } = await supabase.storage
-        .getBucket('course-videos');
-      
-      if (bucketError) {
-        console.error("Bucket check error:", bucketError);
-        if (bucketError.message.includes("does not exist")) {
-          throw new Error("存储桶 'course-videos' 不存在，请联系管理员");
-        }
-        throw bucketError;
-      }
-      
+      // The bucket check is now handled in the uploadToStorage function
       const fileUrl = await uploadToStorage(file, courseId);
       console.log("File uploaded successfully. URL:", fileUrl);
 

@@ -12,7 +12,109 @@ interface UseStorageUploadOptions {
 
 export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOptions = {}) => {
   const [isUploading, setIsUploading] = useState(false);
+  const [isCheckingBucket, setIsCheckingBucket] = useState(false);
   const { toast } = useToast();
+
+  // Helper function to check and create the bucket if it doesn't exist
+  const checkAndCreateBucket = async (bucketName: string): Promise<boolean> => {
+    setIsCheckingBucket(true);
+    try {
+      console.log(`Checking if bucket '${bucketName}' exists...`);
+      
+      // First try to list all buckets to check if our bucket exists
+      const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+      
+      if (listError) {
+        console.error("Error listing buckets:", listError);
+        if (listError.message.includes("Permission denied")) {
+          toast({
+            title: "权限错误",
+            description: "您的账户没有列出存储桶的权限。请检查 Supabase API 密钥和权限设置。",
+            variant: "destructive",
+          });
+          return false;
+        }
+        throw listError;
+      }
+      
+      // Check if our bucket exists in the list
+      const bucketExists = buckets?.some(bucket => bucket.name === bucketName) || false;
+      
+      if (!bucketExists) {
+        console.log(`Bucket '${bucketName}' does not exist, attempting to create it...`);
+        
+        // Try to create the bucket
+        const { data: createdBucket, error: createError } = await supabase.storage.createBucket(bucketName, {
+          public: true // Making the bucket public for this example
+        });
+        
+        if (createError) {
+          console.error("Error creating bucket:", createError);
+          if (createError.message.includes("Permission denied")) {
+            toast({
+              title: "权限错误",
+              description: "您的账户没有创建存储桶的权限。请联系管理员创建 'course-videos' 存储桶。",
+              variant: "destructive",
+            });
+            return false;
+          }
+          throw createError;
+        }
+        
+        console.log(`Successfully created bucket '${bucketName}'`);
+        
+        // Set public access policy for the new bucket
+        try {
+          const { error: policyError } = await supabase.rpc('create_public_bucket_policy', { 
+            bucket_name: bucketName 
+          });
+          
+          if (policyError) {
+            console.warn("Warning: Could not set public policy for bucket:", policyError);
+          }
+        } catch (policyErr) {
+          console.warn("Warning: Failed to call RPC for bucket policy:", policyErr);
+        }
+      } else {
+        console.log(`Bucket '${bucketName}' exists.`);
+      }
+      
+      // Verify we can list files in the bucket (permission check)
+      const { error: listFilesError } = await supabase.storage
+        .from(bucketName)
+        .list('', { limit: 1 });
+        
+      if (listFilesError) {
+        console.error("Error listing files in bucket:", listFilesError);
+        if (listFilesError.message.includes("Permission denied")) {
+          toast({
+            title: "权限错误",
+            description: `您的账户没有访问 '${bucketName}' 存储桶的权限。请检查存储桶权限设置。`,
+            variant: "destructive",
+          });
+          return false;
+        }
+        throw listFilesError;
+      }
+      
+      console.log(`Successfully verified access to bucket '${bucketName}'`);
+      return true;
+    } catch (error) {
+      console.error("Bucket check/creation error:", error);
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "检查或创建存储桶时出错";
+      
+      toast({
+        title: "存储桶错误",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      return false;
+    } finally {
+      setIsCheckingBucket(false);
+    }
+  };
 
   const uploadToStorage = async (file: File, courseId: string): Promise<string> => {
     try {
@@ -22,47 +124,19 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
       
       setIsUploading(true);
       
+      // Check if the bucket exists and we have permission to access it
+      const bucketName = 'course-videos';
+      const bucketAccessible = await checkAndCreateBucket(bucketName);
+      
+      if (!bucketAccessible) {
+        throw new Error(`无法访问或创建 '${bucketName}' 存储桶。请检查 Supabase 配置和权限。`);
+      }
+      
       const fileExt = file.name.split('.').pop();
       const fileName = `${courseId}-${uuidv4()}.${fileExt}`;
       const filePath = `${fileName}`;
       
       console.log(`Starting upload for file: ${file.name}, size: ${file.size} bytes, type: ${file.type}`);
-      
-      // Bucket check with more detailed error handling using listBuckets
-      try {
-        const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
-        
-        if (bucketsError) {
-          console.error("Bucket listing error:", bucketsError);
-          throw new Error(`存储桶检查失败: ${bucketsError.message}`);
-        }
-        
-        const courseVideosBucket = buckets.find(bucket => bucket.name === 'course-videos');
-        if (!courseVideosBucket) {
-          console.error("course-videos bucket not found in available buckets:", buckets.map(b => b.name));
-          throw new Error("存储桶 'course-videos' 不存在。请检查 Supabase 配置。");
-        }
-        
-        console.log("Successfully verified 'course-videos' bucket exists");
-        
-        // Test bucket permissions by attempting to get bucket details
-        const { error: permissionError } = await supabase.storage
-          .from('course-videos')
-          .list('', { limit: 1 });
-          
-        if (permissionError) {
-          console.error("Permission check error:", permissionError);
-          if (permissionError.message.includes("Permission denied")) {
-            throw new Error("您没有上传到 'course-videos' 的权限。请检查您的账户权限。");
-          }
-          throw new Error(`存储桶权限检查失败: ${permissionError.message}`);
-        }
-        
-        console.log("Successfully verified bucket permissions");
-      } catch (bucketCheckError) {
-        console.error("Detailed bucket check error:", bucketCheckError);
-        throw new Error("无法访问 'course-videos' 存储桶。请检查 Supabase 配置。");
-      }
       
       // Determine if we need chunked upload
       if (file.size > 100 * 1024 * 1024) { // If file is larger than 100MB
@@ -260,6 +334,8 @@ export const useStorageUpload = ({ onProgress, maxFileSize }: UseStorageUploadOp
 
   return {
     uploadToStorage,
-    isUploading
+    isUploading,
+    isCheckingBucket,
+    checkAndCreateBucket
   };
 };
