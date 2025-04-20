@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 interface HomeworkQuestion {
   id: string;
@@ -42,93 +41,66 @@ interface QuestionAnswerProps {
 const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [answer, setAnswer] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const { toast } = useToast();
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<BlobPart[]>([]);
-  const supabase = useSupabaseClient();
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      chunksRef.current = [];
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        throw new Error("Speech recognition is not supported in this browser");
+      }
 
-      mediaRecorderRef.current.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunksRef.current.push(e.data);
-        }
-      };
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'zh-CN';
 
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        await processAudioToText(audioBlob);
+      recognitionRef.current.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
         
-        // Stop all tracks
-        stream.getTracks().forEach(track => track.stop());
+        setAnswer(prev => {
+          const newText = prev ? prev + '\n' + transcript : transcript;
+          return newText;
+        });
       };
 
-      mediaRecorderRef.current.start();
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        toast({
+          title: "录音出错",
+          description: "请重试",
+          variant: "destructive",
+        });
+        stopRecording();
+      };
+
+      recognitionRef.current.start();
       setIsRecording(true);
       toast({
         title: "录音已开始",
         description: "请开始说话...",
       });
     } catch (error) {
+      console.error('Error starting recording:', error);
       toast({
         title: "无法开始录音",
-        description: "请确保允许使用麦克风",
+        description: "请确保允许使用麦克风，并使用支持的浏览器",
         variant: "destructive",
       });
     }
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
+    if (recognitionRef.current && isRecording) {
+      recognitionRef.current.stop();
       setIsRecording(false);
-      setIsProcessing(true);
       toast({
         title: "录音已结束",
-        description: "正在处理您的回答...",
+        description: "已将您的回答添加到文本框中",
       });
-    }
-  };
-
-  const processAudioToText = async (audioBlob: Blob) => {
-    try {
-      // Convert blob to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(audioBlob);
-      reader.onloadend = async () => {
-        const base64Audio = reader.result?.toString().split(',')[1];
-        
-        if (!base64Audio) throw new Error('Failed to convert audio to base64');
-
-        const { data, error } = await supabase.functions.invoke('voice-to-text', {
-          body: { audio: base64Audio }
-        });
-
-        if (error) throw error;
-
-        if (data.text) {
-          setAnswer(prev => prev + (prev ? '\n' : '') + data.text);
-          toast({
-            title: "语音转文字成功",
-            description: "已将您的回答添加到文本框中",
-          });
-        }
-
-        setIsProcessing(false);
-      };
-    } catch (error) {
-      console.error('Error processing audio:', error);
-      toast({
-        title: "处理失败",
-        description: "无法将语音转换为文字，请重试",
-        variant: "destructive",
-      });
-      setIsProcessing(false);
     }
   };
 
@@ -153,7 +125,6 @@ const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
           variant={isRecording ? "destructive" : "secondary"}
           size="icon"
           onClick={toggleRecording}
-          disabled={isProcessing}
           className="mt-1"
         >
           {isRecording ? (
