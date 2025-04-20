@@ -1,20 +1,9 @@
-
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Mic, MicOff, HelpCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { CapyzenComment } from "./CapyzenComment";
+import { HomeworkQuestionAnswer } from "./HomeworkQuestionAnswer";
 import { CapyzenChatFloating } from "./CapyzenChatFloating";
-
-interface HomeworkQuestion {
-  id: string;
-  title: string;
-  content: string;
-  question: string;
-}
+import type { HomeworkQuestion } from "./types";
 
 const mockHomeworkQuestions: HomeworkQuestion[] = [
   {
@@ -37,183 +26,6 @@ const mockHomeworkQuestions: HomeworkQuestion[] = [
   }
 ];
 
-const mockGetAIFeedback = async (question: string, answer: string): Promise<string> => {
-  return new Promise((res) => setTimeout(() =>
-    res(`Capyzen点评：你的答案体现了对问题的理解，但可以补充更多细节。例如：……”`),
-    1300
-  ));
-};
-
-interface QuestionAnswerProps {
-  questionId: string;
-  questionContent: string;
-  questionText: string;
-}
-
-const QuestionAnswer: React.FC<QuestionAnswerProps> = ({
-  questionId, questionContent, questionText
-}) => {
-  const [isRecording, setIsRecording] = useState(false);
-  const [answer, setAnswer] = useState('');
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const interimTranscriptRef = useRef<string>('');
-  const { toast } = useToast();
-  const [aiComment, setAiComment] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const startRecording = async () => {
-    try {
-      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognitionAPI) {
-        throw new Error("Speech recognition is not supported in this browser");
-      }
-
-      recognitionRef.current = new SpeechRecognitionAPI();
-      recognitionRef.current.continuous = true;
-      recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'zh-CN';
-
-      recognitionRef.current.onresult = (event) => {
-        const current = event.resultIndex;
-        const result = event.results[current];
-        const transcript = result[0].transcript;
-        if (result.isFinal) {
-          setAnswer(prev => {
-            const newText = prev ? prev + ' ' + transcript : transcript;
-            return newText.trim();
-          });
-          interimTranscriptRef.current = '';
-        } else {
-          interimTranscriptRef.current = transcript;
-        }
-      };
-
-      recognitionRef.current.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        toast({
-          title: "录音出错",
-          description: "请重试",
-          variant: "destructive",
-        });
-        stopRecording();
-      };
-
-      recognitionRef.current.start();
-      setIsRecording(true);
-      toast({
-        title: "录音已开始",
-        description: "请开始说话...",
-      });
-    } catch (error) {
-      console.error('Error starting recording:', error);
-      toast({
-        title: "无法开始录音",
-        description: "请确保允许使用麦克风，并使用支持的浏览器",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const stopRecording = () => {
-    if (recognitionRef.current && isRecording) {
-      recognitionRef.current.stop();
-      setIsRecording(false);
-      toast({
-        title: "录音已结束",
-        description: "已将您的回答添加到文本框中",
-      });
-    }
-  };
-
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  };
-
-  const handleAIFeedback = async () => {
-    if (!answer.trim()) {
-      toast({
-        title: "请输入答案后再点评",
-        variant: "destructive"
-      });
-      return;
-    }
-    setIsLoading(true);
-    setAiComment(null);
-    const feedback = await mockGetAIFeedback(
-      `${questionContent}\n${questionText}`, answer
-    );
-    setAiComment(feedback);
-    setIsLoading(false);
-    toast({
-      title: "点评已生成",
-      variant: "success",
-    });
-  };
-
-  const handleForwardToChat = () => {
-    localStorage.setItem(
-      "capyzen-chat-forward",
-      JSON.stringify({
-        question: `${questionContent}\n${questionText}`,
-        answer
-      })
-    );
-    window.dispatchEvent(new CustomEvent("capyzen-chat-open"));
-  };
-
-  return (
-    <div className="space-y-2 mt-4">
-      <div className="flex items-end gap-2">
-        <Textarea
-          placeholder="在此输入您的答案..."
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          className="flex-1"
-        />
-        <Button
-          variant={isRecording ? "destructive" : "secondary"}
-          size="icon"
-          onClick={toggleRecording}
-          className="mt-1"
-        >
-          {isRecording ? (
-            <MicOff className="h-4 w-4" />
-          ) : (
-            <Mic className="h-4 w-4" />
-          )}
-        </Button>
-        <Button
-          type="button"
-          variant="default"
-          onClick={handleAIFeedback}
-          disabled={isLoading}
-          className="flex items-center gap-1 whitespace-nowrap px-3 py-2"
-          title="让Capyzen点评"
-        >
-          {isLoading ? (
-            <>
-              <span className="animate-spin mr-1">⚪</span>
-              点评生成中...
-            </>
-          ) : (
-            <>
-              <HelpCircle className="w-5 h-5 mr-1 text-blue-500" />
-              让Capyzen点评
-            </>
-          )}
-        </Button>
-      </div>
-      {aiComment && (
-        <CapyzenComment feedback={aiComment} onForwardToChat={handleForwardToChat} />
-      )}
-    </div>
-  );
-};
-
 export const CourseHomework: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto">
@@ -232,7 +44,7 @@ export const CourseHomework: React.FC = () => {
                   <CardContent className="space-y-4">
                     <div className="whitespace-pre-wrap text-gray-700">{question.content}</div>
                     <div className="font-medium text-gray-900">{question.question}</div>
-                    <QuestionAnswer
+                    <HomeworkQuestionAnswer
                       questionId={question.id}
                       questionContent={question.content}
                       questionText={question.question}
