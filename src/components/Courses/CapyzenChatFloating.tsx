@@ -4,15 +4,19 @@ import { AITutorChat } from "./AITutorChat";
 import { X } from "lucide-react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 
 export const CapyzenChatFloating: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const { isPremium } = useSubscription();
 
   // Listen for the custom event to open the chat
   useEffect(() => {
     const handleChatOpen = () => {
       console.log("Custom event received: capyzen-chat-open");
-      setOpen(true);
+      if (isPremium) {
+        setOpen(true);
+      }
     };
     
     // Add event listener for the custom event
@@ -22,7 +26,11 @@ export const CapyzenChatFloating: React.FC = () => {
     return () => {
       window.removeEventListener("capyzen-chat-open", handleChatOpen);
     };
-  }, []);
+  }, [isPremium]);
+
+  if (!isPremium) {
+    return null; // 不显示悬浮聊天入口给非付费用户
+  }
 
   // 固定右下角浮动ICON，展开后出现完整聊天面板
   return (
