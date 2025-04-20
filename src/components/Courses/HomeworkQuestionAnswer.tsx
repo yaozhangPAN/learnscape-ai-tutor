@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ const getAIFeedback = async (question: string, answer: string): Promise<string> 
     if (data.feedback) return data.feedback;
     return "Capyzen点评：AI助教暂时无法点评，请稍后再试。";
   } catch (e) {
+    console.error("Error getting AI feedback:", e);
     return "Capyzen点评：服务器异常，请稍后再试。";
   }
 };

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ const getAIChatReply = async (messages: { role: 'user' | 'assistant'; content: s
     if (data.reply) return data.reply;
     return "AI助教暂时无法回复，请稍后再试。";
   } catch (e) {
+    console.error("Error getting AI chat reply:", e);
     return "AI助教服务器异常，请稍后再试。";
   }
 };
