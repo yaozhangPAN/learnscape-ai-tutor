@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AccessCode {
   id: string;
@@ -25,6 +26,7 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
   const [codes, setCodes] = useState<AccessCode[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const generateCode = () => {
     return Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -35,19 +37,32 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
       setLoading(true);
       const newCode = generateCode();
       
+      // Make sure the user is authenticated
+      if (!user) {
+        toast({
+          variant: "destructive",
+          title: "错误",
+          description: "您需要登录才能生成访问码",
+        });
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('access_codes')
         .insert({
           code: newCode,
           course_id: courseId,
-          created_by: (await supabase.auth.getUser()).data.user?.id
+          created_by: user.id
         })
         .select('*')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating access code:", error);
+        throw error;
+      }
 
-      setCodes([...codes, data]);
+      setCodes(prevCodes => [data, ...prevCodes]);
       toast({
         title: "访问码已生成",
         description: `新的访问码: ${newCode}`,
@@ -72,7 +87,10 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
         .eq('course_id', courseId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error loading access codes:", error);
+        throw error;
+      }
       setCodes(data);
     } catch (error: any) {
       toast({
@@ -85,9 +103,11 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
     }
   };
 
-  // Load access codes when component mounts
+  // Load access codes when component mounts or courseId changes
   useEffect(() => {
-    loadAccessCodes();
+    if (courseId) {
+      loadAccessCodes();
+    }
   }, [courseId]);
 
   return (
@@ -108,17 +128,25 @@ export const AccessCodeManager = ({ courseId }: { courseId: string }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {codes.map((code) => (
-            <TableRow key={code.id}>
-              <TableCell className="font-mono">{code.code}</TableCell>
-              <TableCell>
-                {new Date(code.created_at).toLocaleDateString('zh-CN')}
-              </TableCell>
-              <TableCell>
-                {code.is_active ? '有效' : '已停用'}
+          {codes.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={3} className="text-center py-4 text-gray-500">
+                暂无访问码
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            codes.map((code) => (
+              <TableRow key={code.id}>
+                <TableCell className="font-mono">{code.code}</TableCell>
+                <TableCell>
+                  {new Date(code.created_at).toLocaleDateString('zh-CN')}
+                </TableCell>
+                <TableCell>
+                  {code.is_active ? '有效' : '已停用'}
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
