@@ -85,22 +85,21 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         return;
       }
 
-      // Now record this access in the purchased_content table using RPC function
-      // This approach bypasses RLS policies for more reliable insertion
-      const { data: insertData, error: insertError } = await supabase.rpc(
-        'add_purchased_content',
-        {
-          p_user_id: user.id,
-          p_content_id: courseId,
-          p_content_type: 'video_tutorial',
-          p_price: 0,
-          p_currency: 'SGD',
-          p_payment_reference: `access_code:${code}`
-        }
-      );
+      // Since we can't use the RPC function due to TypeScript errors, let's use a direct insert instead
+      const { data: insertData, error: insertError } = await supabase
+        .from("purchased_content")
+        .insert({
+          user_id: user.id,
+          content_id: courseId,
+          content_type: 'video_tutorial',
+          price: 0,
+          currency: 'SGD',
+          payment_reference: `access_code:${code}`
+        })
+        .select();
 
       if (insertError) {
-        console.error("Error recording access via RPC:", insertError);
+        console.error("Error recording access via direct insert:", insertError);
         toast({
           variant: "destructive",
           title: "错误",
