@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { VideoUpload } from "@/components/VideoUpload";
+import { VideoUploadStatus } from "@/components/VideoUpload/VideoUploadStatus";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -512,12 +513,15 @@ const Courses = () => {
       {isAdmin && (
         <div className="container mx-auto px-4 py-4">
           <h2 className="text-2xl font-bold mb-4">Upload Video</h2>
-          <VideoUpload 
-            courseId="psle-chinese-masterclass" 
-            onUploadSuccess={(videoUrl) => {
-              console.log('Video uploaded:', videoUrl);
-            }}
-          />
+          <div className="space-y-4">
+            <VideoUpload 
+              courseId="psle-chinese-masterclass" 
+              onUploadSuccess={(videoUrl) => {
+                console.log('Video uploaded:', videoUrl);
+              }}
+            />
+            <VideoUploadStatus courseId="psle-chinese-masterclass" />
+          </div>
         </div>
       )}
     </div>
