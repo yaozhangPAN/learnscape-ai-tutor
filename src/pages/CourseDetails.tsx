@@ -5,6 +5,7 @@ import { mockCourses } from "@/data/mockCourses";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
+import { CourseVideo } from "@/components/Courses/CourseVideo";
 
 const CourseDetails: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -33,6 +34,12 @@ const CourseDetails: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
             <p className="text-gray-600 mb-6">{course.description}</p>
+            
+            {/* Add your video URL here */}
+            <CourseVideo
+              videoUrl="https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/your-bucket/your-video-path"
+              title={course.title}
+            />
           </div>
           
           <div>
