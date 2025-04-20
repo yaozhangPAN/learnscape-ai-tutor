@@ -4,13 +4,11 @@ import { mockCourses } from "@/data/mockCourses";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
-import { CourseVideo } from "@/components/Courses/CourseVideo";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
 import { AccessCodeManager } from "@/components/Courses/AccessCodeManager";
-import { Button } from "@/components/ui/button";
-import { Lock } from "lucide-react";
-import { CourseHomework } from "@/components/Courses/CourseHomework";
+import { CourseHeader } from "@/components/Courses/CourseHeader";
+import { CourseContent } from "@/components/Courses/CourseContent";
 
 const CourseDetails: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -62,40 +60,14 @@ const CourseDetails: React.FC = () => {
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-8">
-            <div>
-              <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-4">{course.title}</h1>
-              <p className="text-gray-600 mb-2">{course.description}</p>
-              <div className="text-gray-600 space-y-1">
-                <div>课程等级: {course.level}</div>
-                <div>科目: {course.subject}</div>
-                <div>持续时间: {course.duration}</div>
-              </div>
-            </div>
-            
-            {hasAccess || isAdmin ? (
-              <CourseVideo
-                bucketName="course-videos"
-                filePath="PSLE-Chinese/PSLE.mp4"
-                title={course.title}
-              />
-            ) : (
-              <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center p-8">
-                  <Lock className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-                  <h3 className="text-xl font-semibold mb-2">需要访问权限</h3>
-                  <p className="text-gray-600 mb-6">
-                    您需要购买此课程或输入访问码才能观看此视频。
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <Button onClick={handleAccessCodeCheck}>
-                      输入访问码
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <CourseHomework />
+            <CourseHeader course={course} />
+            <CourseContent
+              hasAccess={hasAccess}
+              isAdmin={isAdmin}
+              courseId={courseId || ''}
+              courseTitle={course.title}
+              onAccessCodeCheck={handleAccessCodeCheck}
+            />
           </div>
           
           {isAdmin && (
@@ -112,7 +84,6 @@ const CourseDetails: React.FC = () => {
         courseId={courseId || ''}
         onSuccess={handleAccessCodeSuccess}
       />
-
       <Footer />
     </div>
   );
