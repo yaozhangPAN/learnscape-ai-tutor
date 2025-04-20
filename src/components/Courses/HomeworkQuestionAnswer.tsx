@@ -143,14 +143,14 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           className="flex-1"
-          disabled={!isPremium}
+          disabled={false} // Changed from disabled={!isPremium} to allow free users to input answers
         />
         <Button
           variant={isRecording ? "destructive" : "secondary"}
           size="icon"
           onClick={toggleRecording}
           className="mt-1"
-          disabled={!isPremium || loadingSubscription}
+          disabled={isRecording ? false : loadingSubscription} // Fixed to allow clicking when not recording
         >
           {isRecording ? (
             <MicOff className="h-4 w-4" />
