@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -154,7 +155,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
           <InfoCircle className="h-4 w-4" />
           <AlertTitle>Demo Environment</AlertTitle>
           <AlertDescription>
-            In this demo environment, very large file uploads (>100MB) will be simulated without actually transferring data.
+            In this demo environment, very large file uploads (&gt;100MB) will be simulated without actually transferring data.
             In production, implement pre-signed URLs or multipart uploads for large files.
           </AlertDescription>
         </Alert>
