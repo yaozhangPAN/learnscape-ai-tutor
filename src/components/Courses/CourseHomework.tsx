@@ -1,7 +1,10 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Mic, MicOff } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface HomeworkQuestion {
   id: string;
@@ -31,6 +34,75 @@ const mockHomeworkQuestions: HomeworkQuestion[] = [
   }
 ];
 
+interface QuestionAnswerProps {
+  questionId: string;
+}
+
+const QuestionAnswer: React.FC<QuestionAnswerProps> = ({ questionId }) => {
+  const [isRecording, setIsRecording] = useState(false);
+  const [answer, setAnswer] = useState('');
+  const { toast } = useToast();
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      setIsRecording(true);
+      toast({
+        title: "录音已开始",
+        description: "请开始说话...",
+      });
+    } catch (error) {
+      toast({
+        title: "无法开始录音",
+        description: "请确保允许使用麦克风",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const stopRecording = () => {
+    setIsRecording(false);
+    toast({
+      title: "录音已结束",
+      description: "正在处理您的回答...",
+    });
+    // Here we'll later integrate with voice-to-text API
+  };
+
+  return (
+    <div className="space-y-4 mt-4">
+      <div className="flex items-start gap-4">
+        <Textarea
+          placeholder="在此输入您的答案..."
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          className="flex-1"
+        />
+        <Button
+          variant={isRecording ? "destructive" : "secondary"}
+          size="icon"
+          onClick={toggleRecording}
+          className="mt-1"
+        >
+          {isRecording ? (
+            <MicOff className="h-4 w-4" />
+          ) : (
+            <Mic className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+    </div>
+  );
+};
+
 export const CourseHomework: React.FC = () => {
   return (
     <Card className="mt-8">
@@ -48,6 +120,7 @@ export const CourseHomework: React.FC = () => {
                 <CardContent className="space-y-4">
                   <div className="whitespace-pre-wrap text-gray-700">{question.content}</div>
                   <div className="font-medium text-gray-900">{question.question}</div>
+                  <QuestionAnswer questionId={question.id} />
                 </CardContent>
               </Card>
             ))}
