@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const QUESTIONS_PER_PAGE = 10;
@@ -51,6 +51,8 @@ const QuestionBank = () => {
   const [selectedTerm, setSelectedTerm] = useState("All Terms");
   const [questionData, setQuestionData] = useState(defaultQuestionData);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -64,7 +66,6 @@ const QuestionBank = () => {
           console.error('Error fetching questions:', error);
           setQuestionData(defaultQuestionData);
         } else if (data && data.length > 0) {
-          // Map the data from Supabase to match the expected format
           const formattedData = data.map(item => ({
             id: typeof item.id === 'number' ? item.id : parseInt(item.id) || Math.floor(Math.random() * 1000),
             title: item.title || 'Untitled',
@@ -118,14 +119,11 @@ const QuestionBank = () => {
     setCurrentPage(1);
   };
 
-  // Helper function to format date strings
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     
     try {
-      // Converting string to Date object first
       const date = new Date(dateString);
-      // Check if the date is valid before formatting
       if (isNaN(date.getTime())) {
         return dateString.slice(0, 10).replace(/-/g, '/');
       }
@@ -134,6 +132,11 @@ const QuestionBank = () => {
       console.error('Error formatting date:', error);
       return 'Invalid date';
     }
+  };
+
+  const handleViewQuestion = (question) => {
+    setSelectedQuestion(question);
+    setDialogOpen(true);
   };
 
   return (
@@ -280,7 +283,12 @@ const QuestionBank = () => {
                               {formatDate(question.date)}
                             </TableCell>
                             <TableCell className="text-right">
-                              <Button className="bg-learnscape-blue text-white">View</Button>
+                              <Button 
+                                className="bg-learnscape-blue text-white"
+                                onClick={() => handleViewQuestion(question)}
+                              >
+                                View
+                              </Button>
                             </TableCell>
                           </TableRow>
                         ))
@@ -336,6 +344,23 @@ const QuestionBank = () => {
           )}
         </div>
       </div>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{selectedQuestion?.title}</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            {selectedQuestion?.content ? (
+              <pre className="whitespace-pre-wrap font-mono bg-gray-50 p-4 rounded-md">
+                {JSON.stringify(selectedQuestion.content, null, 2)}
+              </pre>
+            ) : (
+              <p className="text-gray-500">No content available for this question.</p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
