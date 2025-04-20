@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -37,12 +36,11 @@ const CourseDetails: React.FC = () => {
             
             <CourseVideo
               bucketName="course-videos"
-              filePath="PSLE-Chinese/your-specific-video-file.mp4"
+              filePath="PSLE-Chinese/PSLE.mp4"
               title={course.title}
             />
           </div>
           
-          {/* ... 保持其他代码不变 */}
           <div>
             <img 
               src={course.image} 
@@ -63,4 +61,3 @@ const CourseDetails: React.FC = () => {
 };
 
 export default CourseDetails;
-
