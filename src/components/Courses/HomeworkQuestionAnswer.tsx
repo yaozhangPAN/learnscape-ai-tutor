@@ -65,7 +65,7 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
   };
 
   const handleForwardToChat = () => {
-    // Use the forwardToChat function from useCapyzenChat hook
+    // First, forward the content to the chat context
     console.log("Forwarding to chat:", {
       question: `${questionContent}\n${questionText}`,
       answer
@@ -76,7 +76,7 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
       answer
     });
     
-    // Dispatch event to open the chat
+    // Then, dispatch custom event to open the chat dialog
     const event = new CustomEvent("capyzen-chat-open");
     window.dispatchEvent(event);
     

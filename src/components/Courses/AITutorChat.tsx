@@ -31,15 +31,21 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
       
       if (question && answer) {
         console.log("Processing pending context:", pendingContext);
+        // Format the message with question and answer
         const contextMessage = `我想请教关于这个问题:\n\n${question}\n\n我的回答是:\n${answer}\n\n我有什么可以改进的地方吗？`;
+        
+        // Set the input message
         setInputMessage(contextMessage);
         
-        // Focus the textarea and adjust its height
-        if (textareaRef.current) {
-          textareaRef.current.focus();
-          textareaRef.current.style.height = 'auto';
-          textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-        }
+        // Focus the textarea and adjust its height after a short delay
+        // to ensure the DOM has updated
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.focus();
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+          }
+        }, 100);
       }
       
       // Clear the context after using it
