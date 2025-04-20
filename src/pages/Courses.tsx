@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { VideoUpload } from "@/components/VideoUpload";
@@ -14,6 +13,7 @@ import { CourseFilters } from "@/components/Courses/CourseFilters";
 import { VideoDialog } from "@/components/Courses/VideoDialog";
 import { Course } from "@/types/course";
 import { mockCourses } from "@/data/mockCourses";
+import { Link } from "react-router-dom";
 
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
@@ -121,11 +121,16 @@ const Courses = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {filteredCourses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              onWatchNow={handleWatchNow}
-            />
+            <Link 
+              to={`/courses/${course.id}`} 
+              className="block hover:opacity-80 transition-opacity"
+            >
+              <CourseCard
+                key={course.id}
+                course={course}
+                onWatchNow={handleWatchNow}
+              />
+            </Link>
           ))}
         </div>
 

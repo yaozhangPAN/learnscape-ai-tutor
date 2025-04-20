@@ -30,6 +30,7 @@ import PaymentCanceled from "./pages/PaymentCanceled";
 import VocabularyBuilder from "./pages/VocabularyBuilder";
 import LanguageArtsRedirect from "./components/LanguageArtsRedirect";
 import ReadingCoachRedirect from "./components/ReadingCoachRedirect";
+import CourseDetails from "./pages/CourseDetails";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => (
               <Route path="/mock-exam" element={<MockExam />} />
               <Route path="/take-exam/:examId" element={<OnlineExam />} />
               <Route path="/courses" element={<Courses />} />
+              <Route path="/courses/:courseId" element={<CourseDetails />} />
               <Route path="/worksheets" element={<Worksheets />} />
               <Route path="/question-bank" element={<QuestionBank />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
