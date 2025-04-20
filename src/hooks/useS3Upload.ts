@@ -1,19 +1,17 @@
-
 import { useState } from 'react';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
 import { useToast } from '@/hooks/use-toast';
 
-// S3 Configuration - in production, these should be environment variables
 const s3Config = {
-  region: 'us-east-1',
+  region: 'ap-southeast-1', // Singapore region
   credentials: {
-    accessKeyId: 'your-access-key-id',  // In a real app, use environment variables
-    secretAccessKey: 'your-secret-access-key'  // In a real app, use environment variables
+    accessKeyId: 'YOUR_ACCESS_KEY_ID',     // We'll get this from Supabase secrets
+    secretAccessKey: 'YOUR_SECRET_ACCESS_KEY'  // We'll get this from Supabase secrets
   }
 };
 
-const S3_BUCKET_NAME = 'your-bucket-name'; // Replace with your actual bucket name
+const S3_BUCKET_NAME = 'your-bucket-name'; // We'll get this from Supabase secrets
 
 interface UseS3UploadOptions {
   onProgress?: (progress: number) => void;
