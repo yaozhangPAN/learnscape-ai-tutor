@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -87,7 +86,6 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     }
   };
 
-  // Simulate upload progress for better UX
   const simulateProgress = () => {
     let progress = 0;
     const interval = setInterval(() => {
@@ -188,21 +186,19 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
         description: "Video uploaded successfully",
       });
 
-      // Save the file reference in Supabase
-      const { data, error: dbError } = await supabase
-        .from('video_files') // Update this to use the correct table name
-        .insert({
-          course_id: courseId,
-          file_url: fileUrl,
-          file_name: file.name,
-          file_size: file.size,
-          uploaded_by: user?.id
-        });
+      // Note: The video_files table doesn't exist yet in the database schema
+      // When you're ready to store video references, you'll need to create this table
+      // For now, we'll log the information that would be stored
+      console.log("Video upload completed:", {
+        course_id: courseId,
+        file_url: fileUrl,
+        file_name: file.name,
+        file_size: file.size,
+        uploaded_by: user?.id
+      });
 
-      if (dbError) {
-        console.error("Error saving file reference:", dbError);
-        // Continue anyway since the file is uploaded
-      }
+      // You can store this data in purchased_content or another existing table if needed
+      // or create a new video_files table in the future
 
       onUploadSuccess && onUploadSuccess(fileUrl);
     } catch (error) {
