@@ -27,6 +27,7 @@ const Courses = () => {
   const [searchParams] = useSearchParams();
   const [isAdmin, setIsAdmin] = useState(false);
   const contentId = searchParams.get("content");
+  const [hasAccessToSelected, setHasAccessToSelected] = useState(false);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -47,6 +48,18 @@ const Courses = () => {
     }
   }, [contentId]);
 
+  // Check access whenever selected course changes
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (selectedCourse) {
+        const access = isPremium || await hasAccessToContent(selectedCourse.id, "video_tutorial");
+        setHasAccessToSelected(access);
+      }
+    };
+    
+    checkAccess();
+  }, [selectedCourse, isPremium, hasAccessToContent]);
+
   const filteredCourses = mockCourses.filter(
     course => 
       (selectedLevel === "all" || course.level === selectedLevel) && 
@@ -61,19 +74,14 @@ const Courses = () => {
       return;
     }
 
-    if (!course.isPremium) {
-      setSelectedCourse(course);
-      setDialogOpen(true);
-      return;
-    }
-
-    const hasAccess = isPremium || await hasAccessToContent(course.id, "video_tutorial");
+    setSelectedCourse(course);
     
-    if (hasAccess) {
-      setSelectedCourse(course);
+    if (course.isPremium) {
+      // We will check access in the useEffect
       setDialogOpen(true);
     } else {
-      setSelectedCourse(course);
+      // No need to check access for non-premium courses
+      setHasAccessToSelected(true);
       setDialogOpen(true);
     }
   };
@@ -158,7 +166,7 @@ const Courses = () => {
         onOpenChange={setDialogOpen}
         course={selectedCourse}
         isPremium={isPremium}
-        hasAccess={selectedCourse ? hasAccessToContent(selectedCourse.id, "video_tutorial") : false}
+        hasAccess={hasAccessToSelected}
         onSubscribe={handleSubscribe}
         onPurchase={handlePurchase}
       />
