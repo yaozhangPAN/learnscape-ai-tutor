@@ -59,16 +59,16 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       
       if (selectedFile.size > SUPABASE_FREE_LIMIT && !isAdmin) {
         toast({
-          title: "Warning: Large File",
-          description: `This file (${fileSizeFormatted}) may exceed Supabase's free tier limit of ${formatFileSize(SUPABASE_FREE_LIMIT)}.`,
+          title: "警告: 大文件",
+          description: `此文件 (${fileSizeFormatted}) 可能超过 Supabase 的免费试用版限制 ${formatFileSize(SUPABASE_FREE_LIMIT)}.`,
           variant: "default"
         });
       }
       
       if (!isValid) {
         toast({
-          title: "File too large",
-          description: `Maximum allowed size is ${formatFileSize(maxAllowedSize)}. Your file is ${fileSizeFormatted}.`,
+          title: "文件过大",
+          description: `最大允许大小为 ${formatFileSize(maxAllowedSize)}. 您的文件为 ${fileSizeFormatted}.`,
           variant: "destructive"
         });
       }
@@ -80,8 +80,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
   const handleUpload = async () => {
     if (!file || !user) {
       toast({
-        title: "Error",
-        description: "Please select a video file and ensure you're logged in",
+        title: "错误",
+        description: "请选择视频文件并确保您已登录",
         variant: "destructive"
       });
       return;
@@ -89,8 +89,8 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
 
     if (!isValidSize) {
       toast({
-        title: "Error",
-        description: `File is too large. Maximum allowed size is ${formatFileSize(maxAllowedSize)}.`,
+        title: "错误",
+        description: `文件过大。最大允许大小为 ${formatFileSize(maxAllowedSize)}。`,
         variant: "destructive"
       });
       return;
@@ -118,17 +118,22 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       }
 
       toast({
-        title: "Success",
-        description: "Video uploaded successfully",
+        title: "成功",
+        description: "视频已成功上传并关联到课程",
       });
 
       onUploadSuccess && onUploadSuccess(fileUrl);
+      
+      setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      const errorMessage = error instanceof Error ? error.message : "发生未知错误";
       setError(errorMessage);
       
       toast({
-        title: "Upload Error",
+        title: "上传错误",
         description: errorMessage,
         variant: "destructive"
       });
@@ -143,7 +148,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
     <div className="space-y-4">
       {error && (
         <Alert variant="destructive">
-          <AlertTitle>Upload Error</AlertTitle>
+          <AlertTitle>上传错误</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -151,10 +156,10 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
       {isAdmin && (
         <Alert>
           <Info className="h-4 w-4" />
-          <AlertTitle>Demo Environment</AlertTitle>
+          <AlertTitle>Demo 环境</AlertTitle>
           <AlertDescription>
-            In this demo environment, very large file uploads (&gt;100MB) will be simulated without actually transferring data.
-            In production, implement pre-signed URLs or multipart uploads for large files.
+            在此演示环境中，非常大的文件上传（>100MB）将被模拟，而不实际传输数据。
+            在生产环境中，为大文件使用预签名 URL 或分片上传。
           </AlertDescription>
         </Alert>
       )}
@@ -170,7 +175,7 @@ export const VideoUpload: React.FC<VideoUploadProps> = ({ courseId, onUploadSucc
           onClick={handleUpload} 
           disabled={!file || uploading || !isValidSize}
         >
-          {uploading ? "Uploading..." : "Upload Video"}
+          {uploading ? "上传中..." : "上传视频"}
         </Button>
       </div>
       

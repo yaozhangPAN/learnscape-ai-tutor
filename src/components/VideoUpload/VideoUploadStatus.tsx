@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,23 @@ import { useToast } from '@/hooks/use-toast';
 export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const [uploadCount, setUploadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchUploadCount = async () => {
+      if (!user) return;
+      
+      const { count } = await supabase
+        .from('video_files')
+        .select('*', { count: 'exact', head: true })
+        .eq('course_id', courseId)
+        .eq('uploaded_by', user.id);
+        
+      setUploadCount(count || 0);
+    };
+
+    fetchUploadCount();
+  }, [courseId, user]);
 
   const checkUploadStatus = async () => {
     if (!user) {
@@ -34,7 +51,10 @@ export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) 
         const latestUpload = data[0];
         toast({
           title: "上传状态",
-          description: `最近上传的视频: ${latestUpload.file_name}, 大小: ${(latestUpload.file_size / 1024 / 1024).toFixed(2)} MB`,
+          description: `最近上传的视频: ${latestUpload.file_name}
+                       课程 ID: ${latestUpload.course_id}
+                       大小: ${(latestUpload.file_size / 1024 / 1024).toFixed(2)} MB
+                       总共上传: ${uploadCount} 个视频`,
           variant: "default"
         });
       } else {
@@ -54,8 +74,10 @@ export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) 
   };
 
   return (
-    <Button onClick={checkUploadStatus} variant="outline">
-      检查上传状态
-    </Button>
+    <div className="space-y-2">
+      <Button onClick={checkUploadStatus} variant="outline">
+        查看上传状态 ({uploadCount} 个视频)
+      </Button>
+    </div>
   );
 };
