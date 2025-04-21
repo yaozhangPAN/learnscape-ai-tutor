@@ -305,14 +305,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 
                           return (
                             <span className={`inline-block px-3 py-1 rounded text-xs ${isCorrect ? 'bg-[#F2FCE2]' : 'bg-[#ea384c]'} ${isCorrect ? 'text-green-900 border border-green-200' : 'text-white'}`}>
-                              <span className="font-semibold mr-1">Question ID:</span>
-                              <span className="mr-3">{questionId}</span>
-                              <span className="font-semibold mr-1">Value:</span>
-                              <span className="mr-3">{questionValue}</span>
-                              <span className="font-semibold mr-1">Correct Value:</span>
-                              <span className="mr-3">{correctValue}</span>
-                              <span className="font-semibold mr-1">Result:</span>
-                              <span>{isCorrect ? "Correct" : "Wrong"}</span>
+                              <span className="font-semibold mr-1">{isCorrect ? "Correct" : "Wrong, the answer is: " + correctValue}</span>
                             </span>
                           );
                         })()
