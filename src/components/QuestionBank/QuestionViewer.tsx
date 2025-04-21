@@ -36,7 +36,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
           <div className="space-y-8">
             {parsedContent.topic && (
               <div className="mb-6 mt-2">
-                <h2 className="text-2xl font-semibold text-learnscape-blue">
+                <h2 className="text-lg font-medium mb-2">
                   {parsedContent.topic}
                 </h2>
               </div>
