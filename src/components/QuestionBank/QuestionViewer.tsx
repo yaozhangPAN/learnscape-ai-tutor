@@ -43,7 +43,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                   {questionItem.options && (
                     <div className="space-y-4">
                       <RadioGroup defaultValue={questionItem.correctAnswer}>
-                        {Object.entries(questionItem.options).map((optionItem, optionIndex) => (
+                        {questionItem.options.map((optionItem, optionIndex) => (
                           <div key={optionIndex} className="flex items-center space-x-2 p-2">
                             <RadioGroupItem value={optionIndex} id={`${index}-${optionIndex}`} />
                             <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
