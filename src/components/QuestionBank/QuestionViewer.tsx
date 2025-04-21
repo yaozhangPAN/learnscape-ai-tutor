@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -182,7 +181,7 @@ const anwser = [
   },
   {
     id: "Q40",
-    value: "我认为当父母看到孩子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
+    value: "我认为当父母看到���子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
   }
 ];
 
@@ -192,19 +191,17 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
   question
 }) => {
   const { user } = useAuth();
-  // Track submission state and current value for each question item
   const [submittedIndexes, setSubmittedIndexes] = useState<{[key: number]: boolean}>({});
-  const [selectedOptions, setSelectedOptions] = useState<{[key: number]: string}>({});
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: number]: { value: string; optionId: string } | undefined
+  }>({});
 
-  // Renders topic with line breaks and HTML
   const renderTopicWithLineBreaks = (topic: string) => {
     if (!topic) return null;
-    // Replace \n with <br/> for HTML rendering
     const html = topic.replace(/\n/g, "<br />");
     return (
       <div
         className="text-base mb-2"
-        // Be careful here: this will render HTML. Only use on trusted content!
         dangerouslySetInnerHTML={{ __html: html }}
       />
     );
@@ -226,14 +223,14 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
             )}
             {parsedContent.questionList.map((questionItem, index) => {
               const isSubmitted = submittedIndexes[index] || false;
-              const selectedValue = selectedOptions[index] ?? "";
+              const selectedObj = selectedOptions[index];
+              const selectedValue = selectedObj?.value ?? "";
 
               return (
                 <div key={index} className="border-b pb-6 last:border-b-0">
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                     <p className="text-sm mb-4">{questionItem.question}</p>
-                    {/* Text box if options is an empty array, else show RadioGroup */}
                     {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
                       <Input
                         placeholder="Type your answer here"
@@ -244,9 +241,17 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                       <div className="space-y-4">
                         <RadioGroup
                           value={selectedValue}
-                          onValueChange={(val) =>
-                            setSelectedOptions((prev) => ({ ...prev, [index]: val }))
-                          }
+                          onValueChange={(val) => {
+                            setSelectedOptions((prev) => ({
+                              ...prev,
+                              [index]: {
+                                value: val,
+                                optionId: questionItem?.options?.[parseInt(val)]?.id
+                                  ? `${questionItem.id}-${questionItem.options[parseInt(val)].id}`
+                                  : `${questionItem.id}-${val}`
+                              }
+                            }));
+                          }}
                           disabled={isSubmitted}
                         >
                           {questionItem.options.map((optionItem, optionIndex) => (
@@ -267,7 +272,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                       </div>
                     ) : null}
 
-                    {/* Submit button, only enabled if logged in */}
                     <div className="mt-4 flex items-center gap-3">
                       <Button
                         variant="default"
@@ -288,6 +292,13 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                         </span>
                       )}
                     </div>
+                    <div className="mt-2">
+                      {(selectedObj?.optionId || selectedObj?.value) && (
+                        <span className="inline-block px-3 py-1 bg-learnscape-darkBlue text-white rounded text-xs">
+                          Selected Option ID: {selectedObj?.optionId}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -296,7 +307,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
         );
       }
 
-      // Fallback for single question format
       return (
         <div className="space-y-6">
           <div className="bg-gray-50 p-4 rounded-lg">
@@ -325,4 +335,3 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 };
 
 export default QuestionViewer;
-
