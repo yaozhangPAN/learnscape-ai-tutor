@@ -4,6 +4,7 @@ export interface HomeworkQuestion {
   title: string;
   content: string;
   question: string;
+  imageUrl?: string;
 }
 
 export interface QuestionAnswerProps {

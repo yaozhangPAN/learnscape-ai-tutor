@@ -24,13 +24,18 @@ export const CourseHomework: React.FC = () => {
         if (error) throw error;
 
         // Transform Supabase data to match HomeworkQuestion type
-        const transformedQuestions: HomeworkQuestion[] = data.map(question => ({
-          id: question.id,
-          title: question.title,
-          content: question.content.content,
-          question: question.content.question,
-          imageUrl: question.content.image_url
-        }));
+        const transformedQuestions: HomeworkQuestion[] = data.map(question => {
+          // Handle content as a safe JSON object with fallbacks
+          const contentObj = typeof question.content === 'object' ? question.content : {};
+          
+          return {
+            id: question.id,
+            title: question.title || '',
+            content: contentObj?.content || '',
+            question: contentObj?.question || '',
+            imageUrl: contentObj?.image_url || undefined
+          };
+        });
 
         setHomeworkQuestions(transformedQuestions);
       } catch (error) {
