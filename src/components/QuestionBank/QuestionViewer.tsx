@@ -43,6 +43,46 @@ const anwser = [
   {
     id: "Q5",
     value: "3"
+  },
+  {
+    id: "Q6",
+    value: "1"
+  },
+  {
+    id: "Q7",
+    value: "4"
+  },
+  {
+    id: "Q8",
+    value: "4"
+  },
+  {
+    id: "Q9",
+    value: "3"
+  },
+  {
+    id: "Q10",
+    value: "2"
+  },
+  {
+    id: "Q11",
+    value: "1"
+  },
+  {
+    id: "Q12",
+    value: "3"
+  },
+  {
+    id: "Q13",
+    value: "2"
+  },
+  {
+    id: "Q14",
+    value: "4"
+  },
+  {
+    id: "Q15",
+    value: "3"
   }
 ];
 
