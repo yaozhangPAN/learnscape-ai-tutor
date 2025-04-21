@@ -246,8 +246,8 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                               ...prev,
                               [index]: {
                                 value: val,
-                                optionId: questionItem?.options?.[parseInt(val)]?.id
-                                  ? `${questionItem.id}-${questionItem.options[parseInt(val)].id}`
+                                optionId: questionItem?.options?.[parseInt(val)]?.key
+                                  ? `${questionItem.id}-${questionItem.options[parseInt(val)].key}`
                                   : `${questionItem.id}-${val}`
                               }
                             }));
@@ -258,10 +258,10 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                             <div key={optionIndex} className="flex items-center space-x-2 p-2">
                               <RadioGroupItem
                                 value={String(optionIndex)}
-                                id={`${index}-${optionItem.key}`}
+                                id={`${index}-${optionIndex}`}
                                 disabled={isSubmitted}
                               />
-                              <label htmlFor={`${index}-${optionItem.key}`} className="text-sm">
+                              <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
                                 {typeof optionItem.value === 'string'
                                   ? optionItem.value
                                   : JSON.stringify(optionItem.value)}
