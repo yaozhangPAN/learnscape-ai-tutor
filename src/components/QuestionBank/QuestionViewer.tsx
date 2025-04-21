@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -272,85 +273,89 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                         )}
                       </>
                     ) : questionItem.options ? (
-                      <div className="space-y-4">
-                        <RadioGroup
-                          value={selectedValue}
-                          onValueChange={(val) => {
-                            setSelectedOptions((prev) => ({
-                              ...prev,
-                              [index]: {
-                                value: val,
-                                optionId: questionItem?.options?.[parseInt(val)]?.key
-                                  ? `${questionItem.id}-${questionItem.options[parseInt(val)].key}`
-                                  : `${questionItem.id}-${val}`
-                              }
-                            }));
-                          }}
-                          disabled={isSubmitted}
-                        >
-                          {questionItem.options.map((optionItem, optionIndex) => (
-                            <div key={optionIndex} className="flex items-center space-x-2 p-2">
-                              <RadioGroupItem
-                                value={String(optionIndex)}
-                                id={`${index}-${optionIndex}`}
-                                disabled={isSubmitted}
-                              />
-                              <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
-                                {typeof optionItem.value === 'string'
-                                  ? optionItem.value
-                                  : JSON.stringify(optionItem.value)}
-                              </label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </div>
-                      <div className="mt-4 flex items-center gap-3">
-                        <Button
-                          variant="default"
-                          className="bg-learnscape-blue text-white"
-                          disabled={!user || isSubmitted}
-                          onClick={() => {
-                            setSubmittedIndexes((prev) => ({
-                              ...prev,
-                              [index]: true
-                            }));
-                          }}
-                        >
-                          Submit
-                        </Button>
-                        {!user && (
-                          <span className="text-xs text-gray-500">
-                            Please log in to submit your answer.
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-2">
-                        {isSubmitted && selectedObj?.optionId && (
-                          (() => {
-                            const [questionId, questionValue] = selectedObj.optionId.split("-");
-                            const answerObj = anwser.find(a => a.id === questionId);
-                            const correctValue = answerObj ? answerObj.value : "N/A";
-                            const isCorrect = questionValue === correctValue;
-                            const labelBg =
-                              isCorrect
-                                ? "bg-green-200 text-green-900"
-                                : "bg-red-500 text-white";
-  
-                            return (
-                              <span className={`inline-block px-3 py-1 rounded text-xs ${labelBg}`}>
-                                <span className="font-semibold mr-1">
-                                  {isCorrect ? "Correct" : "Wrong"}
-                                </span>
-                                {!isCorrect && (
-                                  <span>
-                                    , the correct answer is: <span className="font-semibold">{correctValue}</span>
+                      <>
+                        <div className="space-y-4">
+                          <RadioGroup
+                            value={selectedValue}
+                            onValueChange={(val) => {
+                              setSelectedOptions((prev) => ({
+                                ...prev,
+                                [index]: {
+                                  value: val,
+                                  optionId: questionItem?.options?.[parseInt(val)]?.key
+                                    ? `${questionItem.id}-${questionItem.options[parseInt(val)].key}`
+                                    : `${questionItem.id}-${val}`
+                                }
+                              }));
+                            }}
+                            disabled={isSubmitted}
+                          >
+                            {questionItem.options.map((optionItem, optionIndex) => (
+                              <div key={optionIndex} className="flex items-center space-x-2 p-2">
+                                <RadioGroupItem
+                                  value={String(optionIndex)}
+                                  id={`${index}-${optionIndex}`}
+                                  disabled={isSubmitted}
+                                />
+                                <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
+                                  {typeof optionItem.value === 'string'
+                                    ? optionItem.value
+                                    : JSON.stringify(optionItem.value)}
+                                </label>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </div>
+
+                        <div className="mt-4 flex items-center gap-3">
+                          <Button
+                            variant="default"
+                            className="bg-learnscape-blue text-white"
+                            disabled={!user || isSubmitted}
+                            onClick={() => {
+                              setSubmittedIndexes((prev) => ({
+                                ...prev,
+                                [index]: true
+                              }));
+                            }}
+                          >
+                            Submit
+                          </Button>
+                          {!user && (
+                            <span className="text-xs text-gray-500">
+                              Please log in to submit your answer.
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="mt-2">
+                          {isSubmitted && selectedObj?.optionId && (
+                            (() => {
+                              const [questionId, questionValue] = selectedObj.optionId.split("-");
+                              const answerObj = anwser.find(a => a.id === questionId);
+                              const correctValue = answerObj ? answerObj.value : "N/A";
+                              const isCorrect = questionValue === correctValue;
+                              const labelBg =
+                                isCorrect
+                                  ? "bg-green-200 text-green-900"
+                                  : "bg-red-500 text-white";
+    
+                              return (
+                                <span className={`inline-block px-3 py-1 rounded text-xs ${labelBg}`}>
+                                  <span className="font-semibold mr-1">
+                                    {isCorrect ? "Correct" : "Wrong"}
                                   </span>
-                                )}
-                              </span>
-                            );
-                          })()
-                        )}
-                      </div>
+                                  {!isCorrect && (
+                                    <span>
+                                      , the correct answer is: <span className="font-semibold">{correctValue}</span>
+                                    </span>
+                                  )}
+                                </span>
+                              );
+                            })()
+                          )}
+                        </div>
+                      </>
                     ) : null}
                   </div>
                 </div>
