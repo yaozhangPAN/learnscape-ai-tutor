@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface Question {
   id: number;
@@ -30,10 +29,8 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 }) => {
   const { user } = useAuth();
 
-  // Renders topic with line breaks and HTML
   const renderTopicWithLineBreaks = (topic: string) => {
     if (!topic) return null;
-    // Replace \n with <br/> for HTML rendering
     const html = topic.replace(/\n/g, "<br />");
     return (
       <div
@@ -50,7 +47,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
       const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
 
       if (Array.isArray(parsedContent.questionList)) {
-        // Hold selected answer state per question
         const [selected, setSelected] = useState<{ [questionIdx: number]: string }>({});
         const [textAnswer, setTextAnswer] = useState<{ [questionIdx: number]: string }>({});
 
@@ -67,7 +63,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                   <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                   <p className="text-sm mb-4">{questionItem.question}</p>
                   
-                  {/* Text box if options is an empty array, else show ToggleGroup as button group */}
                   {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
                     <Input
                       placeholder="Type your answer here"
@@ -77,26 +72,23 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                     />
                   ) : Array.isArray(questionItem.options) ? (
                     <div className="space-y-4">
-                      <ToggleGroup
-                        type="single"
+                      <RadioGroup
                         value={selected[index] ?? ""}
                         onValueChange={val => setSelected(prev => ({ ...prev, [index]: val }))}
-                        className="flex gap-2"
+                        className="flex gap-3"
                       >
                         {questionItem.options.map((optionItem, optionIndex) => (
-                          <ToggleGroupItem
-                            key={optionIndex}
-                            value={String(optionIndex)}
-                            className="flex-1 px-4 py-2 rounded shadow border border-gray-200 bg-white hover:bg-gray-100 text-center"
-                          >
-                            {typeof optionItem.value === 'string' ? optionItem.value : JSON.stringify(optionItem.value)}
-                          </ToggleGroupItem>
+                          <div key={optionIndex} className="flex items-center space-x-2 p-2">
+                            <RadioGroupItem value={String(optionIndex)} id={`${index}-${optionIndex}`} />
+                            <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
+                              {typeof optionItem.value === 'string' ? optionItem.value : JSON.stringify(optionItem.value)}
+                            </label>
+                          </div>
                         ))}
-                      </ToggleGroup>
+                      </RadioGroup>
                     </div>
                   ) : null}
 
-                  {/* Submit button, only enabled if logged in */}
                   <div className="mt-4 flex items-center gap-3">
                     <Button
                       variant="default"
@@ -118,7 +110,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
         );
       }
 
-      // Fallback for single question format
       return (
         <div className="space-y-6">
           <div className="bg-gray-50 p-4 rounded-lg">
