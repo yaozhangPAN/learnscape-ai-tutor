@@ -25,13 +25,18 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
   onOpenChange,
   question
 }) => {
+  // Renders topic with line breaks and HTML
   const renderTopicWithLineBreaks = (topic: string) => {
-    return topic.split('\n').map((line, index) => (
-      <React.Fragment key={index}>
-        {line}
-        {index < topic.split('\n').length - 1 && <br />}
-      </React.Fragment>
-    ));
+    if (!topic) return null;
+    // Replace \n with <br/> for HTML rendering
+    const html = topic.replace(/\n/g, "<br />");
+    return (
+      <div
+        className="text-base mb-2"
+        // Be careful here: this will render HTML. Only use on trusted content!
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
   };
 
   const renderQuestionContent = (content: any) => {
@@ -39,21 +44,19 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 
     try {
       const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
-      
+
       if (Array.isArray(parsedContent.questionList)) {
         return (
           <div className="space-y-8">
             {parsedContent.topic && (
               <div className="mb-6 mt-2">
-                <h2 className="text-lg font-medium mb-2">
-                  {renderTopicWithLineBreaks(parsedContent.topic)}
-                </h2>
+                {renderTopicWithLineBreaks(parsedContent.topic)}
               </div>
             )}
             {parsedContent.questionList.map((questionItem, index) => (
               <div key={index} className="border-b pb-6 last:border-b-0">
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-medium mb-2">{questionItem.id}:</h3>
+                  <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                   <p className="text-sm mb-4">{questionItem.question}</p>
 
                   {questionItem.options && (
@@ -81,7 +84,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
       return (
         <div className="space-y-6">
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium mb-2">Internal Error</h3>
+            <div className="text-base font-medium mb-2">Internal Error</div>
           </div>
         </div>
       );
@@ -106,4 +109,3 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 };
 
 export default QuestionViewer;
-
