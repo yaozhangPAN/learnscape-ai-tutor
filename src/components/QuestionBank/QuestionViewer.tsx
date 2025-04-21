@@ -258,7 +258,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                             <div key={optionIndex} className="flex items-center space-x-2 p-2">
                               <RadioGroupItem
                                 value={String(optionIndex)}
-                                id={`${index}-${optionIndex}`}
+                                id={`${index}-${optionItem.key}`}
                                 disabled={isSubmitted}
                               />
                               <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
