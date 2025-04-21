@@ -296,12 +296,16 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                       {isSubmitted && selectedObj?.optionId && (
                         (() => {
                           const [questionId, questionValue] = selectedObj.optionId.split("-");
+                          const answerObj = anwser.find(a => a.id === questionId);
+                          const correctValue = answerObj ? answerObj.value : "N/A";
                           return (
                             <span className="inline-block px-3 py-1 bg-learnscape-darkBlue text-white rounded text-xs">
                               <span className="font-semibold mr-1">Question ID:</span>
                               <span className="mr-3">{questionId}</span>
                               <span className="font-semibold mr-1">Value:</span>
-                              <span>{questionValue}</span>
+                              <span className="mr-3">{questionValue}</span>
+                              <span className="font-semibold mr-1">Correct Value:</span>
+                              <span>{correctValue}</span>
                             </span>
                           );
                         })()
