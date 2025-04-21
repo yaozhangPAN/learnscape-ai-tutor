@@ -65,26 +65,8 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
       return (
         <div className="space-y-6">
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium mb-2">Question:</h3>
-            <pre className="whitespace-pre-wrap font-mono text-sm">
-              {JSON.stringify(parsedContent.questionList.question, null, 2)}
-            </pre>
+            <h3 className="text-lg font-medium mb-2">Internal Error</h3>
           </div>
-
-          {parsedContent.questionList.options && (
-            <div className="space-y-4">
-              <RadioGroup defaultValue={parsedContent.questionList.correctAnswer}>
-                {Object.entries(parsedContent.questionList.options).map(([key, value]) => (
-                  <div key={key} className="flex items-center space-x-2 p-2">
-                    <RadioGroupItem value={key} id={key} />
-                    <label htmlFor={key} className="text-sm">
-                      {typeof value === 'string' ? value : JSON.stringify(value)}
-                    </label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          )}
         </div>
       );
     } catch (error) {
