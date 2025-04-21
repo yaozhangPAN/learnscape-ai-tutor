@@ -181,7 +181,7 @@ const anwser = [
   },
   {
     id: "Q40",
-    value: "我认为当父母看到子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
+    value: "我认为当父母看到子懂得为自己的行为��责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
   }
 ];
 
@@ -216,11 +216,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
       if (Array.isArray(parsedContent.questionList)) {
         return (
           <div className="space-y-8">
-            {parsedContent.topic && (
-              <div className="mb-6 mt-2">
-                {renderTopicWithLineBreaks(parsedContent.topic)}
-              </div>
-            )}
             {parsedContent.questionList.map((questionItem, index) => {
               const isSubmitted = submittedIndexes[index] || false;
               const selectedObj = selectedOptions[index];
@@ -242,11 +237,26 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           disabled={isSubmitted}
                         />
                     
-                        {!user && (
-                          <span className="text-xs text-gray-500 mt-2 block">
-                            Please log in to submit your answer.
-                          </span>
-                        )}
+                        <div className="mt-4 flex items-center gap-3">
+                          <Button
+                            variant="default"
+                            className="bg-learnscape-blue text-white"
+                            disabled={!user || isSubmitted}
+                            onClick={() => {
+                              setSubmittedIndexes((prev) => ({
+                                ...prev,
+                                [index]: true
+                              }));
+                            }}
+                          >
+                            Submit
+                          </Button>
+                          {!user && (
+                            <span className="text-xs text-gray-500">
+                              Please log in to submit your answer.
+                            </span>
+                          )}
+                        </div>
                     
                         {isSubmitted && (
                           <div className="mt-3">
@@ -288,6 +298,52 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                             </div>
                           ))}
                         </RadioGroup>
+
+                        <div className="mt-4 flex items-center gap-3">
+                          <Button
+                            variant="default"
+                            className="bg-learnscape-blue text-white"
+                            disabled={!user || isSubmitted}
+                            onClick={() => {
+                              setSubmittedIndexes((prev) => ({
+                                ...prev,
+                                [index]: true
+                              }));
+                            }}
+                          >
+                            Submit
+                          </Button>
+                          {!user && (
+                            <span className="text-xs text-gray-500">
+                              Please log in to submit your answer.
+                            </span>
+                          )}
+                        </div>
+                        {isSubmitted && selectedObj?.optionId && (
+                          (() => {
+                            const [questionId, questionValue] = selectedObj.optionId.split("-");
+                            const answerObj = anwser.find(a => a.id === questionId);
+                            const correctValue = answerObj ? answerObj.value : "N/A";
+                            const isCorrect = questionValue === correctValue;
+                            const labelBg =
+                              isCorrect
+                                ? "bg-green-200 text-green-900"
+                                : "bg-red-500 text-white";
+
+                            return (
+                              <span className={`inline-block px-3 py-1 rounded text-xs ${labelBg}`}>
+                                <span className="font-semibold mr-1">
+                                  {isCorrect ? "Correct" : "Wrong"}
+                                </span>
+                                {!isCorrect && (
+                                  <span>
+                                    , the correct answer is: <span className="font-semibold">{correctValue}</span>
+                                  </span>
+                                )}
+                              </span>
+                            );
+                          })()
+                        )}
                       </div>
                     ) : null}
                   </div>
