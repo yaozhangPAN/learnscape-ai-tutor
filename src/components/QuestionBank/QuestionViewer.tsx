@@ -37,7 +37,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
             {parsedContent.questionList.map((questionItem, index) => (
               <div key={index} className="border-b pb-6 last:border-b-0">
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-medium mb-2">Question {index + 1}:</h3>
+                  <h3 className="text-lg font-medium mb-2">{questionItem.id}:</h3>
                   <p className="text-sm mb-4">{questionItem.question}</p>
 
                   {questionItem.options && (
