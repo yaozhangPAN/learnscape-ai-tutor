@@ -181,7 +181,7 @@ const anwser = [
   },
   {
     id: "Q40",
-    value: "我认为当父母看到�����子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
+    value: "我认为当父母看到子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
   }
 ];
 
@@ -241,6 +241,28 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           className="w-full mt-2"
                           disabled={isSubmitted}
                         />
+                    
+                        <div className="mt-4 flex items-center gap-3">
+                          <Button
+                            variant="default"
+                            className="bg-learnscape-blue text-white"
+                            disabled={!user || isSubmitted}
+                            onClick={() => {
+                              setSubmittedIndexes((prev) => ({
+                                ...prev,
+                                [index]: true
+                              }));
+                            }}
+                          >
+                            Submit
+                          </Button>
+                          {!user && (
+                            <span className="text-xs text-gray-500">
+                              Please log in to submit your answer.
+                            </span>
+                          )}
+                        </div>
+                    
                         {isSubmitted && (
                           <div className="mt-3">
                             <span className="inline-block px-3 py-1 rounded text-xs bg-gray-200 text-gray-700">
