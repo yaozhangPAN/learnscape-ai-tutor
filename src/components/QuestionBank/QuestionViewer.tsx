@@ -23,6 +23,29 @@ interface QuestionViewerProps {
   question: Question | null;
 }
 
+const anwser[] = [
+  {
+    id: "Q1",
+    value: "2"
+  },
+  {
+    id: "Q2",
+    value: "1"
+  },
+  {
+    id: "Q3",
+    value: "4"
+  },
+  {
+    id: "Q4",
+    value: "3"
+  },
+  {
+    id: "Q5",
+    value: "3"
+  }
+];
+
 const QuestionViewer: React.FC<QuestionViewerProps> = ({
   isOpen,
   onOpenChange,
@@ -72,7 +95,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                     />
                   ) : questionItem.options ? (
                     <div className="space-y-4">
-                      <RadioGroup>
+                      <RadioGroup defaultValue={questionItem.correctAnswer}>
                         {questionItem.options.map((optionItem, optionIndex) => (
                           <div key={optionIndex} className="flex items-center space-x-2 p-2">
                             <RadioGroupItem value={optionIndex} id={`${index}-${optionIndex}`} />
