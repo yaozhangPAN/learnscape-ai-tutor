@@ -42,13 +42,12 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 
                   {questionItem.options && (
                     <div className="space-y-4">
-                      <h4 className="font-medium">Options:</h4>
                       <RadioGroup defaultValue={questionItem.correctAnswer}>
-                        {Object.entries(questionItem.options).map(([key, value]) => (
-                          <div key={key} className="flex items-center space-x-2 p-2">
-                            <RadioGroupItem value={key} id={`${index}-${key}`} />
-                            <label htmlFor={`${index}-${key}`} className="text-sm">
-                              {typeof value === 'string' ? value : JSON.stringify(value)}
+                        {Object.entries(questionItem.options).map((optionItem, optionIndex) => (
+                          <div key={optionIndex} className="flex items-center space-x-2 p-2">
+                            <RadioGroupItem value={optionIndex} id={`${index}-${optionIndex}`} />
+                            <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
+                              {typeof optionItem.value === 'string' ? optionItem.value : JSON.stringify(optionItem.value)}
                             </label>
                           </div>
                         ))}
@@ -74,7 +73,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 
           {parsedContent.questionList.options && (
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Options:</h3>
               <RadioGroup defaultValue={parsedContent.questionList.correctAnswer}>
                 {Object.entries(parsedContent.questionList.options).map(([key, value]) => (
                   <div key={key} className="flex items-center space-x-2 p-2">
