@@ -181,7 +181,7 @@ const anwser = [
   },
   {
     id: "Q40",
-    value: "我认为当父母看到���子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
+    value: "我认为当父母看到�����子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
   }
 ];
 
@@ -298,14 +298,21 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           const [questionId, questionValue] = selectedObj.optionId.split("-");
                           const answerObj = anwser.find(a => a.id === questionId);
                           const correctValue = answerObj ? answerObj.value : "N/A";
+                          const isCorrect = questionValue === correctValue;
+                          const resultLabelStyle = isCorrect
+                            ? "bg-[#F2FCE2] text-green-900 border border-green-200"
+                            : "bg-[#ea384c] text-white";
+
                           return (
-                            <span className="inline-block px-3 py-1 bg-learnscape-darkBlue text-white rounded text-xs">
+                            <span className={`inline-block px-3 py-1 rounded text-xs ${isCorrect ? 'bg-[#F2FCE2]' : 'bg-[#ea384c]'} ${isCorrect ? 'text-green-900 border border-green-200' : 'text-white'}`}>
                               <span className="font-semibold mr-1">Question ID:</span>
                               <span className="mr-3">{questionId}</span>
                               <span className="font-semibold mr-1">Value:</span>
                               <span className="mr-3">{questionValue}</span>
                               <span className="font-semibold mr-1">Correct Value:</span>
-                              <span>{correctValue}</span>
+                              <span className="mr-3">{correctValue}</span>
+                              <span className="font-semibold mr-1">Result:</span>
+                              <span>{isCorrect ? "Correct" : "Wrong"}</span>
                             </span>
                           );
                         })()
