@@ -241,11 +241,13 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           className="w-full mt-2"
                           disabled={isSubmitted}
                         />
-                        <div className="mt-3">
-                          <span className="inline-block px-3 py-1 rounded text-xs bg-gray-200 text-gray-700">
-                            Correct Answer: <span className="font-semibold">{correctValue}</span>
-                          </span>
-                        </div>
+                        {isSubmitted && (
+                          <div className="mt-3">
+                            <span className="inline-block px-3 py-1 rounded text-xs bg-gray-200 text-gray-700">
+                              Correct Answer: <span className="font-semibold">{correctValue}</span>
+                            </span>
+                          </div>
+                        )}
                       </>
                     ) : questionItem.options ? (
                       <div className="space-y-4">
