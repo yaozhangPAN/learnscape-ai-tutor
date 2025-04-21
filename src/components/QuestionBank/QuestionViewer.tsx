@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
@@ -29,12 +30,15 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 }) => {
   const { user } = useAuth();
 
+  // Renders topic with line breaks and HTML
   const renderTopicWithLineBreaks = (topic: string) => {
     if (!topic) return null;
+    // Replace \n with <br/> for HTML rendering
     const html = topic.replace(/\n/g, "<br />");
     return (
       <div
         className="text-base mb-2"
+        // Be careful here: this will render HTML. Only use on trusted content!
         dangerouslySetInnerHTML={{ __html: html }}
       />
     );
@@ -47,9 +51,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
       const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
 
       if (Array.isArray(parsedContent.questionList)) {
-        const [selected, setSelected] = useState<{ [questionIdx: number]: string }>({});
-        const [textAnswer, setTextAnswer] = useState<{ [questionIdx: number]: string }>({});
-
         return (
           <div className="space-y-8">
             {parsedContent.topic && (
@@ -62,24 +63,19 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                   <p className="text-sm mb-4">{questionItem.question}</p>
-                  
+
+                  {/* Text box if options is an empty array, else show RadioGroup */}
                   {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
                     <Input
                       placeholder="Type your answer here"
                       className="w-full mt-2"
-                      value={textAnswer[index] || ""}
-                      onChange={e => setTextAnswer(prev => ({ ...prev, [index]: e.target.value }))}
                     />
-                  ) : Array.isArray(questionItem.options) ? (
+                  ) : questionItem.options ? (
                     <div className="space-y-4">
-                      <RadioGroup
-                        value={selected[index] ?? ""}
-                        onValueChange={val => setSelected(prev => ({ ...prev, [index]: val }))}
-                        className="flex gap-3"
-                      >
+                      <RadioGroup>
                         {questionItem.options.map((optionItem, optionIndex) => (
                           <div key={optionIndex} className="flex items-center space-x-2 p-2">
-                            <RadioGroupItem value={String(optionIndex)} id={`${index}-${optionIndex}`} />
+                            <RadioGroupItem value={optionIndex} id={`${index}-${optionIndex}`} />
                             <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
                               {typeof optionItem.value === 'string' ? optionItem.value : JSON.stringify(optionItem.value)}
                             </label>
@@ -89,6 +85,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                     </div>
                   ) : null}
 
+                  {/* Submit button, only enabled if logged in */}
                   <div className="mt-4 flex items-center gap-3">
                     <Button
                       variant="default"
@@ -110,6 +107,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
         );
       }
 
+      // Fallback for single question format
       return (
         <div className="space-y-6">
           <div className="bg-gray-50 p-4 rounded-lg">
@@ -138,3 +136,4 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 };
 
 export default QuestionViewer;
+
