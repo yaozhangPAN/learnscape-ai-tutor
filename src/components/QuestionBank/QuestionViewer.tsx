@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
@@ -192,6 +192,9 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
   question
 }) => {
   const { user } = useAuth();
+  // Track submission state and current value for each question item
+  const [submittedIndexes, setSubmittedIndexes] = useState<{[key: number]: boolean}>({});
+  const [selectedOptions, setSelectedOptions] = useState<{[key: number]: string}>({});
 
   // Renders topic with line breaks and HTML
   const renderTopicWithLineBreaks = (topic: string) => {
@@ -221,51 +224,74 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                 {renderTopicWithLineBreaks(parsedContent.topic)}
               </div>
             )}
-            {parsedContent.questionList.map((questionItem, index) => (
-              <div key={index} className="border-b pb-6 last:border-b-0">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-base font-medium mb-2">{questionItem.id}:</div>
-                  <p className="text-sm mb-4">{questionItem.question}</p>
+            {parsedContent.questionList.map((questionItem, index) => {
+              const isSubmitted = submittedIndexes[index] || false;
+              const selectedValue = selectedOptions[index] ?? "";
 
-                  {/* Text box if options is an empty array, else show RadioGroup */}
-                  {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
-                    <Input
-                      placeholder="Type your answer here"
-                      className="w-full mt-2"
-                    />
-                  ) : questionItem.options ? (
-                    <div className="space-y-4">
-                      <RadioGroup defaultValue={questionItem.correctAnswer}>
-                        {questionItem.options.map((optionItem, optionIndex) => (
-                          <div key={optionIndex} className="flex items-center space-x-2 p-2">
-                            <RadioGroupItem value={optionIndex} id={`${index}-${optionIndex}`} />
-                            <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
-                              {typeof optionItem.value === 'string' ? optionItem.value : JSON.stringify(optionItem.value)}
-                            </label>
-                          </div>
-                        ))}
-                      </RadioGroup>
+              return (
+                <div key={index} className="border-b pb-6 last:border-b-0">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="text-base font-medium mb-2">{questionItem.id}:</div>
+                    <p className="text-sm mb-4">{questionItem.question}</p>
+                    {/* Text box if options is an empty array, else show RadioGroup */}
+                    {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
+                      <Input
+                        placeholder="Type your answer here"
+                        className="w-full mt-2"
+                        disabled={isSubmitted}
+                      />
+                    ) : questionItem.options ? (
+                      <div className="space-y-4">
+                        <RadioGroup
+                          value={selectedValue}
+                          onValueChange={(val) =>
+                            setSelectedOptions((prev) => ({ ...prev, [index]: val }))
+                          }
+                          disabled={isSubmitted}
+                        >
+                          {questionItem.options.map((optionItem, optionIndex) => (
+                            <div key={optionIndex} className="flex items-center space-x-2 p-2">
+                              <RadioGroupItem
+                                value={String(optionIndex)}
+                                id={`${index}-${optionIndex}`}
+                                disabled={isSubmitted}
+                              />
+                              <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
+                                {typeof optionItem.value === 'string'
+                                  ? optionItem.value
+                                  : JSON.stringify(optionItem.value)}
+                              </label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </div>
+                    ) : null}
+
+                    {/* Submit button, only enabled if logged in */}
+                    <div className="mt-4 flex items-center gap-3">
+                      <Button
+                        variant="default"
+                        className="bg-learnscape-blue text-white"
+                        disabled={!user || isSubmitted}
+                        onClick={() => {
+                          setSubmittedIndexes((prev) => ({
+                            ...prev,
+                            [index]: true
+                          }));
+                        }}
+                      >
+                        Submit
+                      </Button>
+                      {!user && (
+                        <span className="text-xs text-gray-500">
+                          Please log in to submit your answer.
+                        </span>
+                      )}
                     </div>
-                  ) : null}
-
-                  {/* Submit button, only enabled if logged in */}
-                  <div className="mt-4 flex items-center gap-3">
-                    <Button
-                      variant="default"
-                      className="bg-learnscape-blue text-white"
-                      disabled={!user}
-                    >
-                      Submit
-                    </Button>
-                    {!user && (
-                      <span className="text-xs text-gray-500">
-                        Please log in to submit your answer.
-                      </span>
-                    )}
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         );
       }
