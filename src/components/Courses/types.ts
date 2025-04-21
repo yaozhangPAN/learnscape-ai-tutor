@@ -11,4 +11,5 @@ export interface QuestionAnswerProps {
   questionId: string;
   questionContent: string;
   questionText: string;
+  imageUrl?: string;
 }

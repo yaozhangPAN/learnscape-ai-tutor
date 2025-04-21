@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import { useCapyzenChat } from "@/hooks/useCapyzenChat";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import type { QuestionAnswerProps } from "./types";
 
-const getAIFeedback = async (question: string, answer: string): Promise<string> => {
+const getAIFeedback = async (question: string, answer: string, imageUrl?: string): Promise<string> => {
   try {
     const response = await fetch(
       "https://xfwnjocfdvuocvwjopke.supabase.co/functions/v1/ai-capyzen-feedback",
@@ -23,6 +22,7 @@ const getAIFeedback = async (question: string, answer: string): Promise<string> 
           type: "feedback",
           question,
           answer,
+          imageUrl,
         }),
       }
     );
@@ -38,7 +38,8 @@ const getAIFeedback = async (question: string, answer: string): Promise<string> 
 export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
   questionId,
   questionContent,
-  questionText
+  questionText,
+  imageUrl
 }) => {
   const [answer, setAnswer] = useState('');
   const [aiComment, setAiComment] = useState<string | null>(null);
@@ -89,7 +90,8 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     setAiComment(null);
     const feedback = await getAIFeedback(
       `${questionContent}\n${questionText}`,
-      answer
+      answer,
+      imageUrl
     );
     setAiComment(feedback);
     setIsLoading(false);
@@ -99,7 +101,6 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     });
   };
 
-  // 付费限制说明
   const premiumHint = (
     <div className="flex items-center text-xs text-orange-600 mt-2 gap-1">
       <Lock className="w-4 h-4 mr-1" />

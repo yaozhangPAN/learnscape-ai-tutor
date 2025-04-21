@@ -25,15 +25,24 @@ export const CourseHomework: React.FC = () => {
 
         // Transform Supabase data to match HomeworkQuestion type
         const transformedQuestions: HomeworkQuestion[] = data.map(question => {
-          // Handle content as a safe JSON object with fallbacks
-          const contentObj = typeof question.content === 'object' ? question.content : {};
-          
+          // Parse content safely
+          let parsedContent = {};
+          if (typeof question.content === 'string') {
+            try {
+              parsedContent = JSON.parse(question.content);
+            } catch (e) {
+              console.error('Error parsing content:', e);
+            }
+          } else if (question.content && typeof question.content === 'object') {
+            parsedContent = question.content;
+          }
+
           return {
             id: question.id,
             title: question.title || '',
-            content: contentObj?.content || '',
-            question: contentObj?.question || '',
-            imageUrl: contentObj?.image_url || undefined
+            content: parsedContent?.content || '',
+            question: parsedContent?.question || '',
+            imageUrl: parsedContent?.image_url || undefined
           };
         });
 
@@ -85,6 +94,7 @@ export const CourseHomework: React.FC = () => {
                       questionId={question.id}
                       questionContent={question.content}
                       questionText={question.question}
+                      imageUrl={question.imageUrl}
                     />
                   </CardContent>
                 </Card>
