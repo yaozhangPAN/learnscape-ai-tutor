@@ -58,8 +58,8 @@ const CourseDetails: React.FC = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="space-y-8">
+        <div className="grid grid-cols-1 gap-8">
+          <div className="max-w-5xl mx-auto w-full space-y-8">
             <CourseHeader course={course} />
             <CourseContent
               hasAccess={hasAccess}
@@ -71,7 +71,7 @@ const CourseDetails: React.FC = () => {
           </div>
           
           {isAdmin && (
-            <div>
+            <div className="max-w-5xl mx-auto w-full">
               <AccessCodeManager courseId={courseId || ''} />
             </div>
           )}
