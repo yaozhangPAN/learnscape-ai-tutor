@@ -293,7 +293,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                       )}
                     </div>
                     <div className="mt-2">
-                      {(selectedObj?.optionId || selectedObj?.value) && (
+                      {isSubmitted && (selectedObj?.optionId || selectedObj?.value) && (
                         <span className="inline-block px-3 py-1 bg-learnscape-darkBlue text-white rounded text-xs">
                           Selected Option ID: {selectedObj?.optionId}
                         </span>
