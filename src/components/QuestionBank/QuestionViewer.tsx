@@ -1,9 +1,26 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { Question } from "./types";
-import TextInputQuestion from "./TextInputQuestion";
-import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
+
+interface Question {
+  id: number;
+  title: string;
+  content: any;
+  subject: string;
+  type: string;
+  level: string;
+  term: string;
+  date: string;
+}
+
+interface QuestionViewerProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  question: Question | null;
+}
 
 const anwser = [
   {
@@ -164,15 +181,9 @@ const anwser = [
   },
   {
     id: "Q40",
-    value: "我认为当父母看到子懂得为自己的行为��责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
+    value: "我认为当父母看到子懂得为自己的行为负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
   }
 ];
-
-interface QuestionViewerProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  question: Question | null;
-}
 
 const QuestionViewer: React.FC<QuestionViewerProps> = ({
   isOpen,
@@ -205,10 +216,16 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
       if (Array.isArray(parsedContent.questionList)) {
         return (
           <div className="space-y-8">
-            {parsedContent.questionList.map((questionItem: any, index: number) => {
+            {parsedContent.topic && (
+              <div className="mb-6 mt-2">
+                {renderTopicWithLineBreaks(parsedContent.topic)}
+              </div>
+            )}
+            {parsedContent.questionList.map((questionItem, index) => {
               const isSubmitted = submittedIndexes[index] || false;
               const selectedObj = selectedOptions[index];
               const selectedValue = selectedObj?.value ?? "";
+
               const answerObj = anwser.find(a => a.id === questionItem.id);
               const correctValue = answerObj ? answerObj.value : "N/A";
 
@@ -217,48 +234,125 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                     <p className="text-sm mb-4">{questionItem.question}</p>
-
                     {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
-                      <TextInputQuestion
-                        questionId={questionItem.id}
-                        question={questionItem.question}
-                        correctValue={correctValue}
-                        isSubmitted={isSubmitted}
-                        onSubmit={() => {
-                          setSubmittedIndexes((prev) => ({
-                            ...prev,
-                            [index]: true
-                          }));
-                        }}
-                        isUserLoggedIn={!!user}
-                      />
+                      <>
+                        <Input
+                          placeholder="Type your answer here"
+                          className="w-full mt-2"
+                          disabled={isSubmitted}
+                        />
+                    
+                        <div className="mt-4 flex items-center gap-3">
+                          <Button
+                            variant="default"
+                            className="bg-learnscape-blue text-white"
+                            disabled={!user || isSubmitted}
+                            onClick={() => {
+                              setSubmittedIndexes((prev) => ({
+                                ...prev,
+                                [index]: true
+                              }));
+                            }}
+                          >
+                            Submit
+                          </Button>
+                          {!user && (
+                            <span className="text-xs text-gray-500">
+                              Please log in to submit your answer.
+                            </span>
+                          )}
+                        </div>
+                    
+                        {isSubmitted && (
+                          <div className="mt-3">
+                            <span className="inline-block px-3 py-1 rounded text-xs bg-gray-200 text-gray-700">
+                              Correct Answer: <span className="font-semibold">{correctValue}</span>
+                            </span>
+                          </div>
+                        )}
+                      </>
                     ) : questionItem.options ? (
-                      <MultipleChoiceQuestion
-                        questionId={questionItem.id}
-                        options={questionItem.options}
-                        selectedValue={selectedValue}
-                        onValueChange={(val) => {
-                          setSelectedOptions((prev) => ({
-                            ...prev,
-                            [index]: {
-                              value: val,
-                              optionId: questionItem?.options?.[parseInt(val)]?.key
-                                ? `${questionItem.id}-${questionItem.options[parseInt(val)].key}`
-                                : `${questionItem.id}-${val}`
-                            }
-                          }));
-                        }}
-                        isSubmitted={isSubmitted}
-                        onSubmit={() => {
+                      <div className="space-y-4">
+                        <RadioGroup
+                          value={selectedValue}
+                          onValueChange={(val) => {
+                            setSelectedOptions((prev) => ({
+                              ...prev,
+                              [index]: {
+                                value: val,
+                                optionId: questionItem?.options?.[parseInt(val)]?.key
+                                  ? `${questionItem.id}-${questionItem.options[parseInt(val)].key}`
+                                  : `${questionItem.id}-${val}`
+                              }
+                            }));
+                          }}
+                          disabled={isSubmitted}
+                        >
+                          {questionItem.options.map((optionItem, optionIndex) => (
+                            <div key={optionIndex} className="flex items-center space-x-2 p-2">
+                              <RadioGroupItem
+                                value={String(optionIndex)}
+                                id={`${index}-${optionIndex}`}
+                                disabled={isSubmitted}
+                              />
+                              <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
+                                {typeof optionItem.value === 'string'
+                                  ? optionItem.value
+                                  : JSON.stringify(optionItem.value)}
+                              </label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </div>
+                    ) : null}
+
+                    <div className="mt-4 flex items-center gap-3">
+                      <Button
+                        variant="default"
+                        className="bg-learnscape-blue text-white"
+                        disabled={!user || isSubmitted}
+                        onClick={() => {
                           setSubmittedIndexes((prev) => ({
                             ...prev,
                             [index]: true
                           }));
                         }}
-                        isUserLoggedIn={!!user}
-                        correctAnswer={correctValue}
-                      />
-                    ) : null}
+                      >
+                        Submit
+                      </Button>
+                      {!user && (
+                        <span className="text-xs text-gray-500">
+                          Please log in to submit your answer.
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-2">
+                      {isSubmitted && selectedObj?.optionId && (
+                        (() => {
+                          const [questionId, questionValue] = selectedObj.optionId.split("-");
+                          const answerObj = anwser.find(a => a.id === questionId);
+                          const correctValue = answerObj ? answerObj.value : "N/A";
+                          const isCorrect = questionValue === correctValue;
+                          const labelBg =
+                            isCorrect
+                              ? "bg-green-200 text-green-900"
+                              : "bg-red-500 text-white";
+
+                          return (
+                            <span className={`inline-block px-3 py-1 rounded text-xs ${labelBg}`}>
+                              <span className="font-semibold mr-1">
+                                {isCorrect ? "Correct" : "Wrong"}
+                              </span>
+                              {!isCorrect && (
+                                <span>
+                                  , the correct answer is: <span className="font-semibold">{correctValue}</span>
+                                </span>
+                              )}
+                            </span>
+                          );
+                        })()
+                      )}
+                    </div>
                   </div>
                 </div>
               );
