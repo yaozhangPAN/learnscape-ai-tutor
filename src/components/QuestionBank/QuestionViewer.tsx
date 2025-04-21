@@ -3,6 +3,8 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Question {
   id: number;
@@ -26,6 +28,8 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
   onOpenChange,
   question
 }) => {
+  const { user } = useAuth();
+
   // Renders topic with line breaks and HTML
   const renderTopicWithLineBreaks = (topic: string) => {
     if (!topic) return null;
@@ -60,12 +64,11 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                   <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                   <p className="text-sm mb-4">{questionItem.question}</p>
 
-                  {/* Updated logic: text box if options is an empty array */}
+                  {/* Text box if options is an empty array, else show RadioGroup */}
                   {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
                     <Input
                       placeholder="Type your answer here"
                       className="w-full mt-2"
-                      // Not controlled - for viewing only
                     />
                   ) : questionItem.options ? (
                     <div className="space-y-4">
@@ -81,6 +84,22 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                       </RadioGroup>
                     </div>
                   ) : null}
+
+                  {/* Submit button, only enabled if logged in */}
+                  <div className="mt-4 flex items-center gap-3">
+                    <Button
+                      variant="default"
+                      className="bg-learnscape-blue text-white"
+                      disabled={!user}
+                    >
+                      Submit
+                    </Button>
+                    {!user && (
+                      <span className="text-xs text-gray-500">
+                        Please log in to submit your answer.
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
