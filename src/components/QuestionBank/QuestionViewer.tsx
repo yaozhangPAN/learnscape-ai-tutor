@@ -293,17 +293,18 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                       )}
                     </div>
                     <div className="mt-2">
-                      {isSubmitted && (selectedObj?.optionId || selectedObj?.value) && (
-                        <span className="inline-block px-3 py-1 bg-learnscape-darkBlue text-white rounded text-xs">
-                          Selected Option ID:{" "}
-                          {selectedObj?.optionId
-                            ?.split("-")
-                            .map((part, i) => (
-                              <span key={i} className="mr-1">
-                                {part}
-                              </span>
-                            ))}
-                        </span>
+                      {isSubmitted && selectedObj?.optionId && (
+                        (() => {
+                          const [questionId, questionValue] = selectedObj.optionId.split("-");
+                          return (
+                            <span className="inline-block px-3 py-1 bg-learnscape-darkBlue text-white rounded text-xs">
+                              <span className="font-semibold mr-1">Question ID:</span>
+                              <span className="mr-3">{questionId}</span>
+                              <span className="font-semibold mr-1">Value:</span>
+                              <span>{questionValue}</span>
+                            </span>
+                          );
+                        })()
                       )}
                     </div>
                   </div>
