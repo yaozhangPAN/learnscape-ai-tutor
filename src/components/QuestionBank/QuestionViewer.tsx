@@ -1,10 +1,10 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface Question {
   id: number;
@@ -38,7 +38,6 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
     return (
       <div
         className="text-base mb-2"
-        // Be careful here: this will render HTML. Only use on trusted content!
         dangerouslySetInnerHTML={{ __html: html }}
       />
     );
@@ -51,6 +50,10 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
       const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
 
       if (Array.isArray(parsedContent.questionList)) {
+        // Hold selected answer state per question
+        const [selected, setSelected] = useState<{ [questionIdx: number]: string }>({});
+        const [textAnswer, setTextAnswer] = useState<{ [questionIdx: number]: string }>({});
+
         return (
           <div className="space-y-8">
             {parsedContent.topic && (
@@ -63,25 +66,33 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                   <p className="text-sm mb-4">{questionItem.question}</p>
-
-                  {/* Text box if options is an empty array, else show RadioGroup */}
+                  
+                  {/* Text box if options is an empty array, else show ToggleGroup as button group */}
                   {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
                     <Input
                       placeholder="Type your answer here"
                       className="w-full mt-2"
+                      value={textAnswer[index] || ""}
+                      onChange={e => setTextAnswer(prev => ({ ...prev, [index]: e.target.value }))}
                     />
-                  ) : questionItem.options ? (
+                  ) : Array.isArray(questionItem.options) ? (
                     <div className="space-y-4">
-                      <RadioGroup defaultValue={questionItem.correctAnswer}>
+                      <ToggleGroup
+                        type="single"
+                        value={selected[index] ?? ""}
+                        onValueChange={val => setSelected(prev => ({ ...prev, [index]: val }))}
+                        className="flex gap-2"
+                      >
                         {questionItem.options.map((optionItem, optionIndex) => (
-                          <div key={optionIndex} className="flex items-center space-x-2 p-2">
-                            <RadioGroupItem value={optionIndex} id={`${index}-${optionIndex}`} />
-                            <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
-                              {typeof optionItem.value === 'string' ? optionItem.value : JSON.stringify(optionItem.value)}
-                            </label>
-                          </div>
+                          <ToggleGroupItem
+                            key={optionIndex}
+                            value={String(optionIndex)}
+                            className="flex-1 px-4 py-2 rounded shadow border border-gray-200 bg-white hover:bg-gray-100 text-center"
+                          >
+                            {typeof optionItem.value === 'string' ? optionItem.value : JSON.stringify(optionItem.value)}
+                          </ToggleGroupItem>
                         ))}
-                      </RadioGroup>
+                      </ToggleGroup>
                     </div>
                   ) : null}
 
@@ -136,4 +147,3 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 };
 
 export default QuestionViewer;
-
