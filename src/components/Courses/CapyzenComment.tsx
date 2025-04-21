@@ -27,7 +27,7 @@ export const CapyzenComment: React.FC<CapyzenCommentProps> = ({ feedback, isPrem
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !isPremium) return;
     
-    const userMessage = { role: 'user', content: newMessage };
+    const userMessage: Message = { role: 'user', content: newMessage };
     setMessages(prev => [...prev, userMessage]);
     setNewMessage('');
     setIsLoading(true);

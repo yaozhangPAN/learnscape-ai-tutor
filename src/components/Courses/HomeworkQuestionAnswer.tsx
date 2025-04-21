@@ -99,28 +99,6 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     });
   };
 
-  const handleForwardToChat = () => {
-    if (!isPremium) {
-      toast({
-        title: "需要开通会员",
-        description: "只有付费用户可以使用AI对话功能，请升级为会员。",
-        variant: "destructive"
-      });
-      return;
-    }
-    forwardToChat({
-      question: `${questionContent}\n${questionText}`,
-      answer
-    });
-    const event = new CustomEvent("capyzen-chat-open");
-    window.dispatchEvent(event);
-    toast({
-      title: "已转发到AI对话",
-      description: "请在右下角聊天窗口中继续咨询",
-      variant: "success",
-    });
-  };
-
   // 付费限制说明
   const premiumHint = (
     <div className="flex items-center text-xs text-orange-600 mt-2 gap-1">
@@ -183,7 +161,6 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
       {aiComment && (
         <CapyzenComment 
           feedback={aiComment} 
-          onForwardToChat={isPremium ? handleForwardToChat : undefined} 
           isPremium={isPremium}
           startCheckoutSession={startCheckoutSession}
         />
