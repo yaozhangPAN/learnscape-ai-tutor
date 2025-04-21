@@ -33,18 +33,21 @@ export const GuidedWritingChat: React.FC<GuidedWritingChatProps> = ({
     const initializeStep = async () => {
       let initialPrompt = "";
       
+      // Include image context in every step
+      const imageContext = `我们正在看一张图片，图片的URL是：${imageUrl}。这是一篇看图作文练习。`;
+      
       switch(currentStep) {
         case 'understanding':
-          initialPrompt = `让我们一起来写作文。这是一篇看图作文，让我们先来观察图片。你看到了什么呢？我们来一起讨论5W1H（谁、什么、何时、何地、为何、如何）。`;
+          initialPrompt = `${imageContext}让我们一起来观察图片。你看到了什么呢？让我们按照5W1H（谁、什么、何时、何地、为何、如何）的方法来分析这张图片。`;
           break;
         case 'outlining':
-          initialPrompt = `很好！现在我们已经观察完图片了。让我们来规划一下作文的结构，写一个大纲。你觉得这篇作文可以分成哪几个部分？`;
+          initialPrompt = `${imageContext}太好了！现在我们已经观察完图片了。让我们来规划一下作文的结构。根据我们讨论的内容，你觉得这篇作文可以分成哪几个部分呢？`;
           break;
         case 'drafting':
-          initialPrompt = `大纲已经写好了！现在让我们开始写作文的正文。我们一段一段来写，每写完一段我都会给你一些建议。`;
+          initialPrompt = `${imageContext}现在让我们开始写作。我们一段一段来写，每写完一段我都会给你一些建议。记住要运用感官描写，让文章更加生动有趣。`;
           break;
         case 'revising':
-          initialPrompt = `作文已经写完了！让我们一起来修改和润色。我们会关注：1. 是否表达清楚？2. 有没有错别字？3. 句子是否通顺？4. 是否生动有趣？`;
+          initialPrompt = `${imageContext}作文已经写得差不多了！让我们一起来修改和润色。我们要注意：1. 有没有表达不清楚的地方？2. 有没有错别字？3. 句子是否通顺？4. 内容是否生动有趣？`;
           break;
       }
 
@@ -57,10 +60,19 @@ export const GuidedWritingChat: React.FC<GuidedWritingChatProps> = ({
     };
 
     initializeStep();
-  }, [currentStep]);
+  }, [currentStep, imageUrl]);
 
   const getAIResponse = async (userMessage: string): Promise<string> => {
     try {
+      // Always include the image context in the conversation history
+      const conversationWithContext = [
+        ...messages,
+        { 
+          role: 'user', 
+          content: `[当前步骤: ${currentStep}] [图片URL: ${imageUrl}] ${userMessage}`
+        }
+      ];
+
       const response = await fetch(
         "https://xfwnjocfdvuocvwjopke.supabase.co/functions/v1/ai-capyzen-feedback",
         {
@@ -70,10 +82,7 @@ export const GuidedWritingChat: React.FC<GuidedWritingChatProps> = ({
           },
           body: JSON.stringify({
             type: "chat",
-            messages: [
-              ...messages,
-              { role: 'user', content: userMessage }
-            ],
+            messages: conversationWithContext,
           }),
         }
       );
