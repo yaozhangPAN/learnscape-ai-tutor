@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { HomeworkQuestionAnswer } from "./HomeworkQuestionAnswer";
 import { CapyzenChatFloating } from "./CapyzenChatFloating";
+import { WritingSteps } from "./WritingSteps";
 import type { HomeworkQuestion } from "./types";
 
 const mockHomeworkQuestions: HomeworkQuestion[] = [
@@ -40,6 +41,51 @@ export const CourseHomework: React.FC = () => {
         <CardContent>
           <ScrollArea className="h-[600px] pr-4">
             <div className="space-y-6">
+              <Card className="border-2 border-purple-200">
+                <CardContent className="p-6">
+                  <WritingSteps />
+                  
+                  <div className="flex gap-6">
+                    <div className="flex-1 space-y-4">
+                      <div className="flex items-start gap-3">
+                        <img
+                          src="/lovable-uploads/95142e5e-0a24-4687-a2d3-c0eb68cdb485.png"
+                          alt="Capyzen"
+                          className="w-12 h-12 rounded-full"
+                        />
+                        <div>
+                          <h3 className="text-xl font-semibold mb-2">让我们一起写作文！</h3>
+                          <p className="text-gray-600">第一步是理解作文题目要求。</p>
+                        </div>
+                      </div>
+
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <h4 className="font-semibold text-lg mb-3">看图作文</h4>
+                        <div className="space-y-2">
+                          <div className="flex justify-center mb-4">
+                            <img 
+                              src={compositionImage}
+                              alt="看图作文题目"
+                              className="rounded-lg max-h-[340px] shadow-lg"
+                            />
+                          </div>
+                          <p className="text-gray-700">
+                            请仔细观察上面的图片，发挥想象力，写一篇不少于600字的作文。
+                            注意描写人物、环境、动作等细节，让故事更加生动有趣。
+                          </p>
+                        </div>
+                      </div>
+
+                      <HomeworkQuestionAnswer
+                        questionId="img1"
+                        questionContent="请根据上面的图片内容写一篇作文。"
+                        questionText="字数要求：不少于600字。注意细节描写，让故事更加生动。"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {mockHomeworkQuestions.map((question) => (
                 <Card key={question.id} className="border-2 border-gray-200">
                   <CardHeader>
@@ -56,31 +102,6 @@ export const CourseHomework: React.FC = () => {
                   </CardContent>
                 </Card>
               ))}
-
-              {/* 新增图片作文题 */}
-              <Card className="border-2 border-purple-200 shadow-md">
-                <CardHeader>
-                  <CardTitle className="text-lg text-purple-700">看图作文题</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex justify-center">
-                    <img
-                      src={compositionImage}
-                      alt="看图作文"
-                      className="rounded max-w-full max-h-[340px] shadow-lg border border-gray-300"
-                      style={{ background: "#fff" }}
-                    />
-                  </div>
-                  <div className="font-medium text-gray-900 mt-2 mb-2">
-                    请认真观察上面的图片，发挥想象力，用不少于600字写一段小故事（也可以合理使用图片中的词语和成语）。
-                  </div>
-                  <HomeworkQuestionAnswer
-                    questionId="img1"
-                    questionContent="请根据以上图片内容与右侧词语写一段小故事。"
-                    questionText="至少600字，可以合理使用指定词语或成语。"
-                  />
-                </CardContent>
-              </Card>
             </div>
           </ScrollArea>
         </CardContent>
