@@ -272,7 +272,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           </div>
                         )}
                       </>
-                    ) : questionItem.options ? (
+                    ) : (
                       <>
                         <div className="space-y-4">
                           <RadioGroup
@@ -356,7 +356,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           )}
                         </div>
                       </>
-                    ) : null}
+                    )}
                   </div>
                 </div>
               );
