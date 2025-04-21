@@ -83,6 +83,74 @@ const anwser = [
   {
     id: "Q15",
     value: "3"
+  },
+  {
+    id: "Q16",
+    value: "4"
+  },
+  {
+    id: "Q17",
+    value: "2"
+  },
+  {
+    id: "Q18",
+    value: "3"
+  },
+  {
+    id: "Q19",
+    value: "1"
+  },
+  {
+    id: "Q20",
+    value: "3"
+  },
+  {
+    id: "Q21",
+    value: "2"
+  },
+  {
+    id: "Q22",
+    value: "3"
+  },
+  {
+    id: "Q23",
+    value: "1"
+  },
+  {
+    id: "Q24",
+    value: "3"
+  },
+  {
+    id: "Q25",
+    value: "4"
+  },
+  {
+    id: "Q26",
+    value: "6"
+  },
+  {
+    id: "Q27",
+    value: "8"
+  },
+  {
+    id: "Q28",
+    value: "7"
+  },
+  {
+    id: "Q29",
+    value: "3"
+  },
+  {
+    id: "Q30",
+    value: "4"
+  },
+  {
+    id: "Q31",
+    value: "3"
+  },
+  {
+    id: "Q32",
+    value: "2"
   }
 ];
 
