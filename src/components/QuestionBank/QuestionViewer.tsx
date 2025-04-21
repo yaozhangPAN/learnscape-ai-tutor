@@ -23,26 +23,10 @@ interface QuestionViewerProps {
   question: Question | null;
 }
 
-const anwser[] = [
+const anwser = [
   {
     id: "Q1",
     value: "2"
-  },
-  {
-    id: "Q2",
-    value: "1"
-  },
-  {
-    id: "Q3",
-    value: "4"
-  },
-  {
-    id: "Q4",
-    value: "3"
-  },
-  {
-    id: "Q5",
-    value: "3"
   }
 ];
 
