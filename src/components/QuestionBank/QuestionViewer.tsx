@@ -92,7 +92,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                       className="bg-learnscape-blue text-white"
                       disabled={!user}
                     >
-                      Submit
+                      提交
                     </Button>
                     {!user && (
                       <span className="text-xs text-gray-500">
