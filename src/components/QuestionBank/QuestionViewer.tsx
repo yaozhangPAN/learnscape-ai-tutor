@@ -2,6 +2,7 @@
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 
 interface Question {
   id: number;
@@ -59,7 +60,14 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                   <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                   <p className="text-sm mb-4">{questionItem.question}</p>
 
-                  {questionItem.options && (
+                  {/* Updated logic: text box if options is an empty array */}
+                  {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
+                    <Input
+                      placeholder="Type your answer here"
+                      className="w-full mt-2"
+                      // Not controlled - for viewing only
+                    />
+                  ) : questionItem.options ? (
                     <div className="space-y-4">
                       <RadioGroup defaultValue={questionItem.correctAnswer}>
                         {questionItem.options.map((optionItem, optionIndex) => (
@@ -72,7 +80,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                         ))}
                       </RadioGroup>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               </div>
             ))}
@@ -109,3 +117,4 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
 };
 
 export default QuestionViewer;
+
