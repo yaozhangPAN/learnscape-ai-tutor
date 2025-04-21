@@ -261,7 +261,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                                 id={`${index}-${optionItem.key}`}
                                 disabled={isSubmitted}
                               />
-                              <label htmlFor={`${index}-${optionIndex}`} className="text-sm">
+                              <label htmlFor={`${index}-${optionItem.key}`} className="text-sm">
                                 {typeof optionItem.value === 'string'
                                   ? optionItem.value
                                   : JSON.stringify(optionItem.value)}
