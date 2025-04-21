@@ -31,10 +31,10 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
     try {
       const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
       
-      if (Array.isArray(parsedContent)) {
+      if (Array.isArray(parsedContent.questionList)) {
         return (
           <div className="space-y-8">
-            {parsedContent.map((questionItem, index) => (
+            {parsedContent.questionList.map((questionItem, index) => (
               <div key={index} className="border-b pb-6 last:border-b-0">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="text-lg font-medium mb-2">Question {index + 1}:</h3>
@@ -68,15 +68,15 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
           <div className="bg-gray-50 p-4 rounded-lg">
             <h3 className="text-lg font-medium mb-2">Question:</h3>
             <pre className="whitespace-pre-wrap font-mono text-sm">
-              {JSON.stringify(parsedContent.question, null, 2)}
+              {JSON.stringify(parsedContent.questionList.question, null, 2)}
             </pre>
           </div>
 
-          {parsedContent.options && (
+          {parsedContent.questionList.options && (
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Options:</h3>
-              <RadioGroup defaultValue={parsedContent.correctAnswer}>
-                {Object.entries(parsedContent.options).map(([key, value]) => (
+              <RadioGroup defaultValue={parsedContent.questionList.correctAnswer}>
+                {Object.entries(parsedContent.questionList.options).map(([key, value]) => (
                   <div key={key} className="flex items-center space-x-2 p-2">
                     <RadioGroupItem value={key} id={key} />
                     <label htmlFor={key} className="text-sm">
