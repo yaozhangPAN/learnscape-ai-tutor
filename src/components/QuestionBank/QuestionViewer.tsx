@@ -25,6 +25,15 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
   onOpenChange,
   question
 }) => {
+  const renderTopicWithLineBreaks = (topic: string) => {
+    return topic.split('\n').map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        {index < topic.split('\n').length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
   const renderQuestionContent = (content: any) => {
     if (!content) return <p className="text-gray-500">No content available for this question.</p>;
 
@@ -37,7 +46,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
             {parsedContent.topic && (
               <div className="mb-6 mt-2">
                 <h2 className="text-lg font-medium mb-2">
-                  {parsedContent.topic}
+                  {renderTopicWithLineBreaks(parsedContent.topic)}
                 </h2>
               </div>
             )}
