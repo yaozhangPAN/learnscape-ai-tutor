@@ -226,17 +226,27 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
               const selectedObj = selectedOptions[index];
               const selectedValue = selectedObj?.value ?? "";
 
+              const answerObj = anwser.find(a => a.id === questionItem.id);
+              const correctValue = answerObj ? answerObj.value : "N/A";
+
               return (
                 <div key={index} className="border-b pb-6 last:border-b-0">
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="text-base font-medium mb-2">{questionItem.id}:</div>
                     <p className="text-sm mb-4">{questionItem.question}</p>
                     {Array.isArray(questionItem.options) && questionItem.options.length === 0 ? (
-                      <Input
-                        placeholder="Type your answer here"
-                        className="w-full mt-2"
-                        disabled={isSubmitted}
-                      />
+                      <>
+                        <Input
+                          placeholder="Type your answer here"
+                          className="w-full mt-2"
+                          disabled={isSubmitted}
+                        />
+                        <div className="mt-3">
+                          <span className="inline-block px-3 py-1 rounded text-xs bg-gray-200 text-gray-700">
+                            Correct Answer: <span className="font-semibold">{correctValue}</span>
+                          </span>
+                        </div>
+                      </>
                     ) : questionItem.options ? (
                       <div className="space-y-4">
                         <RadioGroup
@@ -299,13 +309,21 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           const answerObj = anwser.find(a => a.id === questionId);
                           const correctValue = answerObj ? answerObj.value : "N/A";
                           const isCorrect = questionValue === correctValue;
-                          const resultLabelStyle = isCorrect
-                            ? "bg-[#F2FCE2] text-green-900 border border-green-200"
-                            : "bg-[#ea384c] text-white";
+                          const labelBg =
+                            isCorrect
+                              ? "bg-green-200 text-green-900"
+                              : "bg-red-500 text-white";
 
                           return (
-                            <span className={`inline-block px-3 py-1 rounded text-xs ${isCorrect ? 'bg-[#F2FCE2]' : 'bg-[#ea384c]'} ${isCorrect ? 'text-green-900 border border-green-200' : 'text-white'}`}>
-                              <span className="font-semibold mr-1">{isCorrect ? "Correct" : "Wrong, the correct answer is: " + correctValue}</span>
+                            <span className={`inline-block px-3 py-1 rounded text-xs ${labelBg}`}>
+                              <span className="font-semibold mr-1">
+                                {isCorrect ? "Correct" : "Wrong"}
+                              </span>
+                              {!isCorrect && (
+                                <span>
+                                  , the correct answer is: <span className="font-semibold">{correctValue}</span>
+                                </span>
+                              )}
                             </span>
                           );
                         })()
