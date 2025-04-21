@@ -33,8 +33,8 @@ export const GuidedWritingChat: React.FC<GuidedWritingChatProps> = ({
     const initializeStep = async () => {
       let initialPrompt = "";
       
-      // Include image context in every step
-      const imageContext = `我们正在看一张图片，图片的URL是：${imageUrl}。这是一篇看图作文练习。`;
+      // 直接在初始化时传入图片上下文
+      const imageContext = `我们正在做看图作文。图片URL是：${imageUrl}。`;
       
       switch(currentStep) {
         case 'understanding':
@@ -53,7 +53,7 @@ export const GuidedWritingChat: React.FC<GuidedWritingChatProps> = ({
 
       if (initialPrompt) {
         setIsLoading(true);
-        const response = await getAIResponse(initialPrompt);
+        const response = await getAIResponse(initialPrompt, imageUrl);
         setMessages([{ role: 'assistant', content: response }]);
         setIsLoading(false);
       }
@@ -62,14 +62,14 @@ export const GuidedWritingChat: React.FC<GuidedWritingChatProps> = ({
     initializeStep();
   }, [currentStep, imageUrl]);
 
-  const getAIResponse = async (userMessage: string): Promise<string> => {
+  const getAIResponse = async (userMessage: string, currentImageUrl?: string): Promise<string> => {
     try {
-      // Always include the image context in the conversation history
+      // 在消息历史中总是包含图片上下文
       const conversationWithContext = [
         ...messages,
         { 
           role: 'user', 
-          content: `[当前步骤: ${currentStep}] [图片URL: ${imageUrl}] ${userMessage}`
+          content: `[当前步骤: ${currentStep}] [图片URL: ${currentImageUrl || imageUrl}] ${userMessage}`
         }
       ];
 
