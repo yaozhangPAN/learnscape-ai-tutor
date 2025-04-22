@@ -1,3 +1,4 @@
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
@@ -51,7 +52,7 @@ const colorBlocks = [
     placeholder: "预留插图"
   },
   {
-    title: "Daily Goal",
+    title: "Daily Adventure",
     desc: (
       <>
         <div className="flex items-center mt-1">
@@ -83,7 +84,7 @@ const Index = () => {
         </div>
         {/* 新布局: 顶部双并排大块 (Video Lessons + AI Tutor) */}
         <div className="grid grid-cols-2 grid-rows-1 gap-4 max-w-2xl w-full mb-4 transition-all">
-          {/* Video Lessons */}
+          {/* Video Lessons，不显示卡通图 */}
           <Link 
             to={colorBlocks[0].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[0].className}`} 
@@ -93,17 +94,10 @@ const Index = () => {
               <div className="flex items-center mb-2">{colorBlocks[0].icon}<span className="text-xl font-bold">{colorBlocks[0].title}</span></div>
               <div className="text-sm font-medium">{colorBlocks[0].desc}</div>
             </div>
-            <div className="mt-6 flex-1 flex items-end justify-center">
-              <img
-                src="/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png"
-                alt="Cartoon Character"
-                className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                draggable={false}
-                style={{ userSelect: "none" }}
-              />
-            </div>
+            {/* 删除卡通形象 */}
+            <div className="mt-6 flex-1 flex items-end justify-center" />
           </Link>
-          {/* AI Tutor */}
+          {/* AI Tutor, 放 Video Lessons 的卡通形象到这里 */}
           <Link 
             to={colorBlocks[3].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[3].className}`} 
@@ -113,21 +107,27 @@ const Index = () => {
               <div className="flex items-center mb-2">{colorBlocks[3].icon}<span className="text-xl font-bold">{colorBlocks[3].title}</span></div>
               <div className="text-sm font-medium">{colorBlocks[3].desc}</div>
             </div>
-            <div className="flex-1 flex items-end justify-center">
-              <div className="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center font-bold text-[#B1B1B1] text-sm">{colorBlocks[3].placeholder}</div>
+            <div className="flex-1 flex items-end justify-end">
+              <img
+                src="/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png"
+                alt="Cartoon Character"
+                className="w-24 h-32 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
             </div>
           </Link>
         </div>
         {/* 第二行：Question Bank + My Words */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
-          {/* Question Bank | 题库 */}
+          {/* Question Bank | 题库，图片靠右 */}
           <Link 
             to={colorBlocks[1].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[1].className} min-h-[144px]`}
           >
             <div className="flex items-center mb-2">{colorBlocks[1].icon}<span className="text-xl font-bold">{colorBlocks[1].title}</span></div>
             <div className="text-sm font-semibold">{colorBlocks[1].desc}</div>
-            <div className="flex-1 flex items-end justify-end">
+            <div className="flex-1 flex items-end justify-end pr-2">
               <img
                 src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
                 alt="Question Bank Cartoon Character"
@@ -137,17 +137,17 @@ const Index = () => {
               />
             </div>
           </Link>
-          {/* My Words | 词语本 */}
+          {/* My Words | 词语本，用用户上传的图片 */}
           <Link 
             to={colorBlocks[2].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[2].className} min-h-[144px]`}
           >
             <div className="flex items-center mb-2">{colorBlocks[2].icon}<span className="text-xl font-bold">{colorBlocks[2].title}</span></div>
             <div className="text-sm font-medium">{colorBlocks[2].desc}</div>
-            <div className="flex-1 flex items-end justify-end">
+            <div className="flex-1 flex items-end justify-end pr-2">
               <img
-                src="/lovable-uploads/256e4bed-3c15-4fde-9f35-2b4259d122b7.png"
-                alt="My Words Cartoon Character"
+                src="/lovable-uploads/9a9791df-299b-4d4f-b4e4-4cd232ecf481.png"
+                alt="My Words Custom Cartoon"
                 className="w-24 h-32 object-contain select-none drop-shadow-lg"
                 draggable={false}
                 style={{ userSelect: "none" }}
@@ -155,21 +155,27 @@ const Index = () => {
             </div>
           </Link>
         </div>
-        {/* 第三行：留白模块 + Daily Goal */}
+        {/* 第三行：留白模块 + Daily Adventure */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-8 transition-all">
           {/* 留白块 */}
           <div className="flex items-center justify-center rounded-2xl bg-white/50 border-2 border-white shadow-lg min-h-[144px]">
             {colorBlocks[4].placeholder}
           </div>
-          {/* Daily Goal */}
+          {/* Daily Adventure，右下放Question Bank的卡通 */}
           <Link 
             to={colorBlocks[5].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[5].className} ${colorBlocks[5].style}`}
           >
             <span className="text-lg font-bold mb-1">{colorBlocks[5].title}</span>
             {colorBlocks[5].desc}
-            <div className="flex-1 flex items-end">
-              <div className="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center font-bold text-[#B1B1B1] text-sm">{colorBlocks[5].placeholder}</div>
+            <div className="flex-1 flex items-end justify-end pr-2">
+              <img
+                src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+                alt="Daily Adventure Cartoon Character"
+                className="w-20 h-20 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
             </div>
           </Link>
         </div>
