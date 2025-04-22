@@ -7,7 +7,7 @@ const HomeHeader: React.FC = () => (
       className="text-4xl sm:text-5xl font-extrabold text-[#915723] mb-2 tracking-tight"
       style={{ fontFamily: "Nunito, sans-serif" }}
     >
-      My Learning
+      My Learnscape
     </h1>
     <div className="mb-6 flex space-x-2">
       <span className="w-4 h-4 bg-white/70 rounded-full"></span>
