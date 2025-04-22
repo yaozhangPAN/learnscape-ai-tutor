@@ -25,7 +25,8 @@ const AITutor = () => {
   const handleLanguageArtsClick = () => {
     navigate('/ai-tutor/language-arts');
   };
-  
+
+  // 只保留当前需要显示的卡片，暂时隐藏 error analysis, Snap & Solve, Reading Coach
   const tutorOptions = [
     {
       id: "writing-coach",
@@ -59,22 +60,22 @@ const AITutor = () => {
       path: "/ai-tutor/tutor-me",
       emoji: "🧠"
     },
-    {
-      id: "error-analysis",
-      title: "Error Analysis",
-      icon: <FileSearch className="h-8 w-8 text-red-500" />,
-      description: "Analyze your mistakes and learn how to avoid them in future examinations.",
-      path: "/ai-tutor/error-analysis",
-      emoji: "🔍"
-    },
-    {
-      id: "snap-and-solve",
-      title: "Snap & Solve",
-      icon: <Camera className="h-8 w-8 text-indigo-500" />,
-      description: "Take a photo of your question to get step by step guidance for reaching solutions!",
-      path: "/ai-tutor/snap-and-solve",
-      emoji: "📸"
-    },
+    // {
+    //   id: "error-analysis",
+    //   title: "Error Analysis",
+    //   icon: <FileSearch className="h-8 w-8 text-red-500" />,
+    //   description: "Analyze your mistakes and learn how to avoid them in future examinations.",
+    //   path: "/ai-tutor/error-analysis",
+    //   emoji: "🔍"
+    // },
+    // {
+    //   id: "snap-and-solve",
+    //   title: "Snap & Solve",
+    //   icon: <Camera className="h-8 w-8 text-indigo-500" />,
+    //   description: "Take a photo of your question to get step by step guidance for reaching solutions!",
+    //   path: "/ai-tutor/snap-and-solve",
+    //   emoji: "📸"
+    // },
     {
       id: "vocabulary",
       title: "Vocabulary Builder",
@@ -92,14 +93,14 @@ const AITutor = () => {
       onClick: handleLanguageArtsClick,
       emoji: "📝"
     },
-    {
-      id: "reading-coach",
-      title: "Reading Coach",
-      icon: <BookOpen className="h-8 w-8 text-orange-500" />,
-      description: "Improve your reading comprehension with Microsoft's Reading Coach.",
-      path: "/ai-tutor/reading-coach",
-      emoji: "📖"
-    }
+    // {
+    //   id: "reading-coach",
+    //   title: "Reading Coach",
+    //   icon: <BookOpen className="h-8 w-8 text-orange-500" />,
+    //   description: "Improve your reading comprehension with Microsoft's Reading Coach.",
+    //   path: "/ai-tutor/reading-coach",
+    //   emoji: "📖"
+    // }
   ];
 
   return (
