@@ -18,7 +18,7 @@ const mainBlocks = [
         完成今日目标
       </div>
     ),
-    bg: "bg-[#FF9E43]",
+    bg: "bg-[#F97316]",
     text: "text-white",
     img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
     to: "/dashboard",
