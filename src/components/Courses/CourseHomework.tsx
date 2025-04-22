@@ -7,6 +7,14 @@ import { CapyzenChatFloating } from "./CapyzenChatFloating";
 import { supabase } from "@/integrations/supabase/client";
 import type { HomeworkQuestion } from "./types";
 
+// Define an interface for the parsed content structure
+interface QuestionContent {
+  content?: string;
+  question?: string;
+  image_url?: string;
+  [key: string]: any; // Allow for other properties
+}
+
 export const CourseHomework: React.FC = () => {
   const [homeworkQuestions, setHomeworkQuestions] = useState<HomeworkQuestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +34,7 @@ export const CourseHomework: React.FC = () => {
         // Transform Supabase data to match HomeworkQuestion type
         const transformedQuestions: HomeworkQuestion[] = data.map(question => {
           // Parse content safely
-          let parsedContent = {};
+          let parsedContent: QuestionContent = {};
           if (typeof question.content === 'string') {
             try {
               parsedContent = JSON.parse(question.content);
@@ -34,15 +42,15 @@ export const CourseHomework: React.FC = () => {
               console.error('Error parsing content:', e);
             }
           } else if (question.content && typeof question.content === 'object') {
-            parsedContent = question.content;
+            parsedContent = question.content as QuestionContent;
           }
 
           return {
             id: question.id,
             title: question.title || '',
-            content: parsedContent?.content || '',
-            question: parsedContent?.question || '',
-            imageUrl: parsedContent?.image_url || undefined
+            content: parsedContent.content || '',
+            question: parsedContent.question || '',
+            imageUrl: parsedContent.image_url || undefined
           };
         });
 
