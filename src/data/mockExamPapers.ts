@@ -4,7 +4,7 @@ import { ExamPaper } from "@/types/exam";
 export const mockExamPapers: ExamPaper[] = [
   {
     id: "1",
-    title: "Chinese Paper 2",
+    title: "南洋小学小六华文试卷",
     school: "Nanyang Primary",
     year: "2024",
     type: "SA1",

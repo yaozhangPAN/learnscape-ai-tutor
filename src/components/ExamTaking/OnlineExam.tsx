@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { Clock, CheckCircle, AlertCircle, ArrowRight, ArrowLeft } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { useForm } from "react-hook-form";
+import { Clock, CheckCircle, AlertCircle, ArrowRight, ArrowLeft } from "lucide-react";
 import ExamQuestion from "./ExamQuestion";
 import ExamTimer from "./ExamTimer";
 import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
@@ -50,88 +46,78 @@ const OnlineExam = () => {
           
           console.log("Fetched questions:", questionData);
           
-          // If no questions found in database or an error occurs, use mock data as fallback
-          let examQuestions = [];
+          // Process questions from database or use mock data as fallback
+          let examQuestions: Question[] = [];
           
           if (questionData && questionData.length > 0) {
-            // Map all sections we want questions for
-            const sectionOrder = [
-              "语文应用",
-              "短文填空",
-              "阅读理解一", 
-              "完成对话",
-              "阅读理解二"
-            ];
-            
-            // Filter and process questions
-            const filteredQuestions = questionData.filter(q => {
-              return q.title && sectionOrder.some(section => q.title.includes(section));
-            });
-            
-            console.log("Filtered questions:", filteredQuestions);
-            
-            if (filteredQuestions.length > 0) {
-              // Process the questions
-              examQuestions = filteredQuestions.map(q => {
-                // Basic question structure
-                const question: Question = {
-                  id: q.id || `q-${Math.random().toString(36).substr(2, 9)}`,
-                  text: q.title || "No question text provided",
-                  type: "MCQ", // Default type
-                  marks: 2, // Default marks
-                };
+            // Map questions from database
+            examQuestions = questionData.reduce((acc: Question[], q) => {
+              try {
+                if (!q.content) return acc;
                 
-                // Try to parse content
-                if (q.content) {
-                  try {
-                    const content = typeof q.content === 'string' 
-                      ? JSON.parse(q.content) 
-                      : q.content;
-                    
-                    // If we have a topic, update the text
-                    if (content.topic) {
-                      question.text = content.topic.substring(0, 200);
-                    }
-                    
-                    // Add options if available
-                    if (content.questionList && content.questionList.length > 0) {
-                      const firstSubQuestion = content.questionList[0];
-                      
-                      if (firstSubQuestion.options && firstSubQuestion.options.length > 0) {
-                        question.options = firstSubQuestion.options.map((opt, index) => ({
-                          value: String.fromCharCode(65 + index), // A, B, C, D...
-                          label: `${String.fromCharCode(65 + index)}. ${opt.value || opt}`
-                        }));
-                        question.correctAnswer = "A"; // Default correct answer
-                      }
-                    }
-                  } catch (error) {
-                    console.error("Error processing content:", error);
-                  }
+                const contentObj = typeof q.content === 'string' 
+                  ? JSON.parse(q.content) 
+                  : q.content;
+                
+                // Skip if there's no question list
+                if (!contentObj.questionList || !Array.isArray(contentObj.questionList)) {
+                  return acc;
                 }
                 
-                return question;
-              });
-            }
+                // Process each question in the questionList
+                const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
+                  // Basic question structure
+                  const question: Question = {
+                    id: `${q.id}-${subQuestion.id || index}`,
+                    text: subQuestion.question || "No question text",
+                    type: "MCQ",
+                    marks: 2,
+                  };
+                  
+                  // Add topic to question text if available
+                  if (contentObj.topic) {
+                    question.text = `${q.title}: ${question.text}`;
+                  }
+                  
+                  // Add options if available
+                  if (subQuestion.options && Array.isArray(subQuestion.options)) {
+                    question.options = subQuestion.options.map((opt: any, optIndex: number) => ({
+                      value: opt.key ? String(opt.key) : String(optIndex + 1),
+                      label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
+                    }));
+                    
+                    // Set default correct answer to the first option
+                    question.correctAnswer = question.options[0].value;
+                  }
+                  
+                  return question;
+                });
+                
+                return [...acc, ...processedQuestions];
+              } catch (error) {
+                console.error("Error processing question:", error);
+                return acc;
+              }
+            }, []);
+            
+            // Limit to 15 questions to keep the exam manageable
+            examQuestions = examQuestions.slice(0, 15);
           }
           
           // If we couldn't process any questions, use mock data
-          if (!examQuestions || examQuestions.length === 0) {
+          if (examQuestions.length === 0) {
             console.log("Using mock questions as fallback");
             examQuestions = mockQuestions;
           }
           
-          // Make sure we have questions before proceeding
-          if (examQuestions.length === 0) {
-            throw new Error("No questions available for this exam");
-          }
+          console.log("Final processed questions:", examQuestions);
           
           // Create the exam paper object
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
             id: examId,
-            title: examPaper ? examPaper.title : "Chinese Paper 2",
-            school: examPaper ? examPaper.school : "Primary Schools",
+            title: examPaper ? examPaper.title : "小六华文试卷",
+            school: examPaper ? examPaper.school : "Nanyang Primary",
             subject: "chinese",
             level: "p6",
             year: "2024",
@@ -156,9 +142,10 @@ const OnlineExam = () => {
         } else {
           toast({
             title: "Error",
-            description: "Exam not found.",
+            description: "试卷不存在。",
             variant: "destructive"
           });
+          navigate("/mock-exam");
         }
         
         setLoading(false);
@@ -166,15 +153,16 @@ const OnlineExam = () => {
         console.error("Error fetching exam:", error);
         toast({
           title: "Error",
-          description: "Failed to load exam paper. Please try again.",
+          description: "无法加载试卷。请重试。",
           variant: "destructive"
         });
         setLoading(false);
+        navigate("/mock-exam");
       }
     };
     
     fetchExam();
-  }, [examId, toast]);
+  }, [examId, toast, navigate]);
 
   const calculateTotalMarks = (questions: Question[]): number => {
     if (!questions || questions.length === 0) return 0;
@@ -265,7 +253,7 @@ const OnlineExam = () => {
       <div className="flex items-center justify-center min-h-[500px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-learnscape-blue mx-auto"></div>
-          <p className="mt-4 text-lg">Loading exam paper...</p>
+          <p className="mt-4 text-lg">正在加载试卷...</p>
         </div>
       </div>
     );

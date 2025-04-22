@@ -22,11 +22,11 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
         className="mt-4 space-y-3"
       >
         {question.options.map((option, index) => (
-          <div key={index} className="flex items-center space-x-2">
+          <div key={index} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-md">
             <RadioGroupItem value={option.value} id={`option-${question.id}-${index}`} />
             <Label 
               htmlFor={`option-${question.id}-${index}`} 
-              className="text-base cursor-pointer"
+              className="text-base cursor-pointer w-full"
             >
               {option.label}
             </Label>
@@ -42,7 +42,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
     return (
       <div className="mt-4">
         <Textarea
-          placeholder="Enter your answer here..."
+          placeholder="在此输入你的答案..."
           value={userAnswer}
           onChange={(e) => onAnswerChange(e.target.value)}
           className="min-h-[120px]"
@@ -57,7 +57,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
     return (
       <div className="mt-4">
         <Textarea
-          placeholder="Enter your detailed answer here..."
+          placeholder="在此输入你的详细答案..."
           value={userAnswer}
           onChange={(e) => onAnswerChange(e.target.value)}
           className="min-h-[200px]"
@@ -69,7 +69,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
   return (
     <div className="space-y-4">
       <div className="prose max-w-none">
-        <div dangerouslySetInnerHTML={{ __html: question.text }} />
+        <div className="text-lg font-medium mb-4">{question.text}</div>
         
         {question.image && (
           <div className="my-4">
