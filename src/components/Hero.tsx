@@ -2,30 +2,55 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Brain, Calendar } from "lucide-react";
+import { ArrowRight, Sparkles, Calendar } from "lucide-react";
+
+// 图片路径
+const BEAR = "/public/lovable-uploads/415ba260-aeec-4f17-ae4e-b005b78136d5.png";
+const PANDA = "/public/lovable-uploads/2ac414cd-b34a-4efa-bf70-b16c471a377f.png";
+const BUNNY = "/public/lovable-uploads/72f82c67-0df8-4350-814c-79ce2d5faa3f.png";
+// 还有一张素材可以用，需要路径的话再补
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
-  
+
   useEffect(() => {
-    // Add a small delay before showing the animations
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 300);
-    
+    const timer = setTimeout(() => { setIsVisible(true); }, 300);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="relative overflow-hidden bg-white">
+      {/* 背景渐变 */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#FEF7CD] to-white z-0"></div>
-      
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-10 h-10 rounded-full bg-green-200 animate-bounce-slow opacity-70 hidden md:block"></div>
-      <div className="absolute top-40 right-20 w-8 h-8 rounded-full bg-green-200 animate-float opacity-70 hidden md:block"></div>
-      <div className="absolute bottom-20 left-1/4 w-6 h-6 rounded-full bg-yellow-200 animate-spin-slow opacity-70 hidden md:block"></div>
-      <div className="absolute bottom-40 right-1/3 w-12 h-12 rounded-full bg-yellow-200 animate-wiggle opacity-70 hidden md:block"></div>
-      
+
+      {/* 卡通人物---角落装饰，绝不靠近正文 */}
+      <img
+        src={BEAR}
+        alt="Wise Bear"
+        className="hidden md:block absolute w-32 left-8 top-8 z-10 animate-float pointer-events-none"
+        style={{ pointerEvents: 'none' }}
+      />
+      <img
+        src={PANDA}
+        alt="Red Panda"
+        className="hidden md:block absolute w-28 right-8 top-12 z-10 animate-float"
+        style={{ pointerEvents: 'none' }}
+      />
+      <img
+        src={BUNNY}
+        alt="Explorer Bunny"
+        className="hidden md:block absolute w-24 left-6 bottom-10 z-10 animate-float"
+        style={{ pointerEvents: 'none' }}
+      />
+      {/* 可根据你第四张图再添加一个角落装饰 */}
+
+      {/* 彩色圆形装饰，保持原有 */}
+      <div className="absolute top-28 left-1/4 w-10 h-10 rounded-full bg-green-200 animate-bounce-slow opacity-70 hidden md:block"></div>
+      <div className="absolute top-44 right-40 w-8 h-8 rounded-full bg-green-200 animate-float opacity-70 hidden md:block"></div>
+      <div className="absolute bottom-24 left-1/3 w-6 h-6 rounded-full bg-yellow-200 animate-spin-slow opacity-70 hidden md:block"></div>
+      <div className="absolute bottom-44 right-1/4 w-12 h-12 rounded-full bg-yellow-200 animate-wiggle opacity-70 hidden md:block"></div>
+
+      {/* 内容主体 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="py-16 lg:py-24">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
@@ -59,13 +84,9 @@ const Hero = () => {
                 </div>
               </div>
             </div>
+            {/* 右侧 “My Learning” 区域不放人物，只显示卡片 */}
             <div className={`mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
               <div className="relative mx-auto w-full rounded-lg lg:max-w-md">
-                <img 
-                  src="/public/lovable-uploads/415ba260-aeec-4f17-ae4e-b005b78136d5.png" 
-                  alt="Wise Bear Character" 
-                  className="absolute -left-4 -top-4 w-32 h-auto z-10 animate-float"
-                />
                 <div className="relative block w-full bg-white rounded-xl shadow-lg overflow-hidden p-6">
                   <div className="text-2xl font-bold text-[#5E2D00] mb-4">My Learning</div>
                   <div className="grid grid-cols-2 gap-4">
@@ -78,10 +99,12 @@ const Hero = () => {
                     </Link>
                     <Link to="/daily-plan" className="bg-[#FFA85C] text-white px-4 py-3 rounded-xl flex items-center justify-between hover:scale-105 transition-transform relative">
                       <span>My Words</span>
-                      <img 
-                        src="/public/lovable-uploads/72f82c67-0df8-4350-814c-79ce2d5faa3f.png" 
-                        alt="Explorer Bunny" 
-                        className="absolute -bottom-1 -right-1 w-12 h-auto"
+                      {/* 可选：小图标可放文字右下角，但不要盖文字 */}
+                      <img
+                        src={BUNNY}
+                        alt="Explorer Bunny"
+                        className="absolute -bottom-1 right-2 w-10 h-auto"
+                        style={{ pointerEvents: 'none' }}
                       />
                     </Link>
                     <Link to="/ai-tutor" className="bg-[#4ABA79] text-white px-4 py-3 rounded-xl flex items-center justify-between hover:scale-105 transition-transform relative">
@@ -89,10 +112,12 @@ const Hero = () => {
                         <div>AI Tutor</div>
                         <div className="text-xs">Speaking, Writing</div>
                       </div>
-                      <img 
-                        src="/public/lovable-uploads/2ac414cd-b34a-4efa-bf70-b16c471a377f.png" 
-                        alt="Red Panda Wizard" 
-                        className="absolute -bottom-1 -right-1 w-12 h-auto"
+                      {/* 可选：PANDA漂浮右下角（不挡字） */}
+                      <img
+                        src={PANDA}
+                        alt="Red Panda Wizard"
+                        className="absolute -bottom-1 right-2 w-10 h-auto"
+                        style={{ pointerEvents: 'none' }}
                       />
                     </Link>
                   </div>
@@ -104,6 +129,7 @@ const Hero = () => {
                   </div>
                 </div>
               </div>
+              {/* 移除任何会叠加文字区域上的人物装饰 */}
             </div>
           </div>
         </div>

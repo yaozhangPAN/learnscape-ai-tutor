@@ -6,9 +6,14 @@ import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
+const BEAR = "/public/lovable-uploads/415ba260-aeec-4f17-ae4e-b005b78136d5.png";
+const PANDA = "/public/lovable-uploads/2ac414cd-b34a-4efa-bf70-b16c471a377f.png";
+const BUNNY = "/public/lovable-uploads/72f82c67-0df8-4350-814c-79ce2d5faa3f.png";
+// 可继续增加如新图4路径...
+
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
-  
+
   useEffect(() => {
     setLoaded(true);
   }, []);
@@ -16,17 +21,38 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className={`transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+      {/* 页面全局悬浮装饰，人物永远不重叠中间文字 */}
+      <img
+        src={BEAR}
+        alt="Wise Bear"
+        className="hidden md:block absolute top-10 left-5 w-32 z-10 animate-float pointer-events-none"
+      />
+      <img
+        src={PANDA}
+        alt="Red Panda"
+        className="hidden md:block absolute top-16 right-8 w-28 z-10 animate-float"
+        style={{ pointerEvents: 'none' }}
+      />
+      <img
+        src={BUNNY}
+        alt="Explorer Bunny"
+        className="hidden md:block absolute bottom-14 left-10 w-24 z-10 animate-float"
+        style={{ pointerEvents: 'none' }}
+      />
+      {/* 可补充更多的装饰图片 */}
+
+      <div className={`transition-opacity duration-500 relative ${loaded ? 'opacity-100' : 'opacity-0'}`}>
         <Hero />
-        
-        {/* Learning Features Section with Cartoon Characters */}
+
+        {/* Learning Features Section */}
         <div className="py-16 bg-[#FEF7CD] relative overflow-hidden">
-          {/* Decorative stars */}
+          {/* 彩色星星装饰 */}
           <div className="absolute top-10 left-[10%] text-white text-2xl">✦</div>
           <div className="absolute top-20 right-[15%] text-white text-xl">✦</div>
           <div className="absolute bottom-10 left-[20%] text-white text-xl">✦</div>
           <div className="absolute bottom-40 right-[10%] text-white text-xl">✦</div>
-          
+          {/* 卡通图不要挡文字，所以都放角落或内容区外 */}
+
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-extrabold text-[#5E2D00] sm:text-4xl">
@@ -36,13 +62,14 @@ const Index = () => {
                 Explore our interactive learning tools designed for Singapore students
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                {/* 卡通人物移到box外角落，正文没有被图片覆盖 */}
                 <img 
-                  src="/public/lovable-uploads/415ba260-aeec-4f17-ae4e-b005b78136d5.png" 
-                  alt="Wise Bear Character" 
-                  className="absolute -top-12 -right-8 w-24 h-auto"
+                  src={BEAR} 
+                  alt="Wise Bear" 
+                  className="absolute -top-10 -right-8 w-20 h-auto pointer-events-none"
                 />
                 <h3 className="text-xl font-bold text-[#5E2D00] mt-2">Video Lessons</h3>
                 <p className="mt-2 text-gray-600">
@@ -52,12 +79,12 @@ const Index = () => {
                   Start Learning <ArrowRight className="ml-1 h-4 w-4" />
                 </Link>
               </div>
-              
+
               <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative">
                 <img 
-                  src="/public/lovable-uploads/2ac414cd-b34a-4efa-bf70-b16c471a377f.png" 
-                  alt="Red Panda Wizard" 
-                  className="absolute -top-12 -right-8 w-24 h-auto"
+                  src={PANDA} 
+                  alt="Red Panda" 
+                  className="absolute -top-10 -right-8 w-20 h-auto pointer-events-none"
                 />
                 <h3 className="text-xl font-bold text-[#5E2D00] mt-2">AI Tutor</h3>
                 <p className="mt-2 text-gray-600">
@@ -67,12 +94,12 @@ const Index = () => {
                   Meet Your Tutor <ArrowRight className="ml-1 h-4 w-4" />
                 </Link>
               </div>
-              
+
               <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 relative">
                 <img 
-                  src="/public/lovable-uploads/72f82c67-0df8-4350-814c-79ce2d5faa3f.png" 
+                  src={BUNNY} 
                   alt="Explorer Bunny" 
-                  className="absolute -top-12 -right-8 w-24 h-auto"
+                  className="absolute -top-10 -right-8 w-20 h-auto pointer-events-none"
                 />
                 <h3 className="text-xl font-bold text-[#5E2D00] mt-2">Question Bank</h3>
                 <p className="mt-2 text-gray-600">
@@ -85,7 +112,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Daily Goal Section */}
         <div className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,6 +134,8 @@ const Index = () => {
               </div>
               <div className="mt-10 lg:mt-0 relative">
                 <div className="bg-[#FEF7CD] rounded-2xl p-6 shadow-md relative overflow-hidden">
+                  {/* 这里可以放一张“学习进度”主题素材 */}
+                  {/* 下面这张图可根据需要替换为你的新素材 */}
                   <img 
                     src="/public/lovable-uploads/31625b2a-8819-4cc9-838a-c9ab2a1e1da4.png" 
                     alt="Learning Progress" 
@@ -117,22 +146,22 @@ const Index = () => {
                   </div>
                 </div>
                 <img 
-                  src="/public/lovable-uploads/415ba260-aeec-4f17-ae4e-b005b78136d5.png" 
-                  alt="Wise Bear Character" 
-                  className="absolute -bottom-10 -left-10 w-32 h-auto transform -rotate-12"
+                  src={BEAR} 
+                  alt="Wise Bear" 
+                  className="absolute -bottom-10 -left-10 w-32 h-auto transform -rotate-12 pointer-events-none"
                 />
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Testimonials Section */}
         <div className="py-16 bg-[#F2FCE2] relative overflow-hidden">
-          {/* Decorative elements */}
+          {/* 彩色圆形装饰 */}
           <div className="absolute top-10 left-[10%] w-12 h-12 rounded-full bg-[#FEF7CD] animate-bounce-slow"></div>
           <div className="absolute top-20 right-[15%] w-8 h-8 rounded-full bg-[#FEF7CD] animate-float"></div>
           <div className="absolute bottom-10 left-[20%] w-10 h-10 rounded-full bg-[#FEF7CD] animate-spin-slow"></div>
-          
+
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h2 className="text-3xl font-extrabold text-[#5E2D00] sm:text-4xl relative inline-block">
@@ -143,8 +172,9 @@ const Index = () => {
                 Join thousands of Singapore students already improving their learning outcomes.
               </p>
             </div>
-            
+
             <div className="mt-12 grid gap-8 lg:grid-cols-3">
+              {/* 评价卡片里不插人物图片，这样排版清晰 */}
               <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="flex items-center mb-4">
                   <div className="h-12 w-12 rounded-full bg-gradient-to-r from-[#4ABA79] to-[#38A169] flex items-center justify-center text-white font-bold text-xl">
@@ -159,7 +189,7 @@ const Index = () => {
                   "Learnscape has helped me improve my Mathematics scores significantly. The personalized practice questions target exactly what I need help with."
                 </p>
               </div>
-              
+
               <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="flex items-center mb-4">
                   <div className="h-12 w-12 rounded-full bg-gradient-to-r from-[#4ABA79] to-[#38A169] flex items-center justify-center text-white font-bold text-xl">
@@ -174,7 +204,7 @@ const Index = () => {
                   "As a working parent, I appreciate how Learnscape gives my child access to quality educational resources. The progress tracking helps me stay involved in her learning."
                 </p>
               </div>
-              
+
               <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="flex items-center mb-4">
                   <div className="h-12 w-12 rounded-full bg-gradient-to-r from-[#4ABA79] to-[#38A169] flex items-center justify-center text-white font-bold text-xl">
@@ -192,7 +222,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-        
+
         <Footer />
       </div>
     </div>
