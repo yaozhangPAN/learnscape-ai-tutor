@@ -13,6 +13,7 @@ import ExamQuestion from "./ExamQuestion";
 import ExamTimer from "./ExamTimer";
 import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
+import { mockQuestions } from "./mockData";
 
 const OnlineExam = () => {
   const { examId } = useParams();
@@ -35,11 +36,11 @@ const OnlineExam = () => {
         if (examId === "1") { // For Primary 6 Chinese exam
           console.log("Fetching Primary 6 Chinese exam questions");
           
+          // First attempt to get questions from Supabase
           const { data: questionData, error: questionError } = await supabase
             .from('questions')
             .select('*')
-            .eq('level', 'Primary 6')
-            .is('subject', null); // Get Chinese questions (where subject is null in this case)
+            .eq('level', 'Primary 6');
           
           if (questionError) {
             console.error("Error fetching questions:", questionError);
@@ -48,7 +49,21 @@ const OnlineExam = () => {
           
           console.log("Fetched questions:", questionData);
           
-          const sortedQuestions = organizeQuestions(questionData || []);
+          // If no questions found in database or an error occurs, use mock data as fallback
+          let examQuestions = [];
+          if (questionData && questionData.length > 0) {
+            examQuestions = organizeQuestions(questionData);
+          } else {
+            console.log("No questions found in database, using mock data");
+            examQuestions = mockQuestions;
+          }
+          
+          console.log("Final exam questions:", examQuestions);
+          
+          // Make sure we have questions before proceeding
+          if (examQuestions.length === 0) {
+            throw new Error("No questions available for this exam");
+          }
           
           const exam: ExamPaper = {
             id: examId,
@@ -59,8 +74,8 @@ const OnlineExam = () => {
             year: "2024",
             type: "Practice Paper",
             durationMinutes: 100, // 1 hour 40 minutes
-            totalMarks: calculateTotalMarks(sortedQuestions),
-            questions: sortedQuestions,
+            totalMarks: calculateTotalMarks(examQuestions),
+            questions: examQuestions,
           };
           
           setCurrentExam(exam);
@@ -99,59 +114,90 @@ const OnlineExam = () => {
   }, [examId, toast]);
 
   const organizeQuestions = (questionsData: any[]): Question[] => {
-    const sectionOrder = [
-      "语文应用",
-      "短文填空",
-      "阅读理解一",
-      "完成对话",
-      "阅读理解二"
-    ];
-    
-    const organizedQuestions: Question[] = [];
-    
-    sectionOrder.forEach(sectionTitle => {
-      const sectionQuestions = questionsData.filter(q => {
-        return q.title && q.title.includes(sectionTitle);
+    try {
+      console.log("Organizing questions, data:", questionsData);
+      
+      // Define section order
+      const sectionOrder = [
+        "语文应用",
+        "短文填空",
+        "阅读理解一",
+        "完成对话",
+        "阅读理解二"
+      ];
+      
+      const organizedQuestions: Question[] = [];
+      
+      // First filter to have only questions with titles that match our sections
+      const validQuestions = questionsData.filter(q => 
+        q.title && sectionOrder.some(section => q.title.includes(section))
+      );
+      
+      console.log("Valid questions after filtering:", validQuestions);
+      
+      // Then organize them by section
+      sectionOrder.forEach(sectionTitle => {
+        const sectionQuestions = validQuestions.filter(q => 
+          q.title && q.title.includes(sectionTitle)
+        );
+        
+        console.log(`Questions for section ${sectionTitle}:`, sectionQuestions);
+        
+        sectionQuestions.forEach(q => {
+          if (q.content) {
+            try {
+              // Make sure content is an object
+              const content = typeof q.content === 'string' 
+                ? JSON.parse(q.content) 
+                : q.content;
+              
+              // Create a valid question object with defaults for missing properties
+              const question: Question = {
+                id: q.id || `q-${Math.random().toString(36).substr(2, 9)}`,
+                text: content.questionText || q.title || "No question text provided",
+                type: determineQuestionType(content),
+                marks: content.marks || 2, // Default to 2 marks if not specified
+              };
+              
+              if (question.type === "MCQ" && content.options) {
+                question.options = content.options.map((opt: any, index: number) => ({
+                  value: String.fromCharCode(65 + index), // A, B, C, D...
+                  label: `${String.fromCharCode(65 + index)}. ${opt}`
+                }));
+                question.correctAnswer = content.correctAnswer || "A";
+              }
+              
+              if (question.type === "ShortAnswer" && content.correctAnswer) {
+                question.correctAnswer = content.correctAnswer;
+              }
+              
+              organizedQuestions.push(question);
+            } catch (error) {
+              console.error("Error processing question:", error, q);
+            }
+          }
+        });
       });
       
-      sectionQuestions.forEach(q => {
-        if (q.content) {
-          try {
-            const content = typeof q.content === 'string' 
-              ? JSON.parse(q.content) 
-              : q.content;
-            
-            const question: Question = {
-              id: q.id,
-              text: content.questionText || q.title,
-              type: determineQuestionType(content),
-              marks: content.marks || 2,
-            };
-            
-            if (question.type === "MCQ" && content.options) {
-              question.options = content.options.map((opt: any, index: number) => ({
-                value: String.fromCharCode(65 + index), // A, B, C, D...
-                label: `${String.fromCharCode(65 + index)}. ${opt}`
-              }));
-              question.correctAnswer = content.correctAnswer || "A";
-            }
-            
-            if (question.type === "ShortAnswer" && content.correctAnswer) {
-              question.correctAnswer = content.correctAnswer;
-            }
-            
-            organizedQuestions.push(question);
-          } catch (error) {
-            console.error("Error processing question:", error, q);
-          }
-        }
-      });
-    });
-    
-    return organizedQuestions;
+      console.log("Final organized questions:", organizedQuestions);
+      
+      // If we have no questions from the database, use mock data
+      if (organizedQuestions.length === 0) {
+        console.log("No questions could be processed, returning mock data");
+        return mockQuestions;
+      }
+      
+      return organizedQuestions;
+    } catch (error) {
+      console.error("Error organizing questions:", error);
+      // Fallback to mock data if there's an error in processing
+      return mockQuestions;
+    }
   };
 
   const determineQuestionType = (content: any): QuestionType => {
+    if (!content) return "ShortAnswer"; // Default if content is missing
+    
     if (content.type) {
       if (content.type.toLowerCase().includes('mcq') || 
           content.type.toLowerCase().includes('multiple choice')) {
@@ -169,7 +215,8 @@ const OnlineExam = () => {
   };
 
   const calculateTotalMarks = (questions: Question[]): number => {
-    return questions.reduce((total, q) => total + q.marks, 0);
+    if (!questions || questions.length === 0) return 0;
+    return questions.reduce((total, q) => total + (q.marks || 0), 0);
   };
 
   const startExam = () => {
@@ -262,14 +309,14 @@ const OnlineExam = () => {
     );
   }
 
-  if (!currentExam) {
+  if (!currentExam || !currentExam.questions || currentExam.questions.length === 0) {
     return (
       <div className="text-center py-12">
         <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold mb-2">Exam Not Found</h2>
-        <p className="mb-6">The exam paper you're looking for could not be found.</p>
+        <h2 className="text-2xl font-bold mb-2">试卷不可用</h2>
+        <p className="mb-6">很抱歉，找不到该试卷或试卷中没有问题。</p>
         <Button onClick={() => navigate("/mock-exam")}>
-          Return to Mock Exams
+          返回考试列表
         </Button>
       </div>
     );
