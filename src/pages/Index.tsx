@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -19,12 +18,13 @@ const mainBlocks = [
         完成今日目标
       </div>
     ),
-    bg: "bg-[#F7941D]", // Updated background color
+    bg: "bg-[#F7941D]", // 明确指定橙色背景
     text: "text-white",
     img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
     to: "/dashboard",
     customBgImg: "/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png",
     isCustomBg: true,
+    debugColor: "#F7941D", // 添加调试颜色属性
   },
   {
     key: "ai-tutor",
@@ -110,8 +110,8 @@ const Index = () => {
             style={{
               minHeight: 164,
               background: mainBlocks[0].isCustomBg
-                ? `url('${mainBlocks[0].customBgImg}') no-repeat center center, #38B87D`
-                : undefined,
+                ? `url('${mainBlocks[0].customBgImg}') no-repeat center center, ${mainBlocks[0].debugColor}`
+                : mainBlocks[0].debugColor,
               backgroundSize: mainBlocks[0].isCustomBg ? "cover" : undefined
             }}
           >
