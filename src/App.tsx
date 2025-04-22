@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -33,9 +32,9 @@ import VocabularyBuilder from "./pages/VocabularyBuilder";
 import LanguageArtsRedirect from "./components/LanguageArtsRedirect";
 import ReadingCoachRedirect from "./components/ReadingCoachRedirect";
 import CourseDetails from "./pages/CourseDetails";
+import OralExamRedirect from "./components/AITutor/OralExamRedirect";
 
 const App = () => {
-  // Create a new QueryClient instance using useState to ensure it's stable between renders
   const [queryClient] = useState(() => new QueryClient());
 
   return (
@@ -67,9 +66,8 @@ const App = () => {
                 <Route path="/daily-plan" element={<DailyPlan />} />
                 <Route path="/zoom-courses" element={<ZoomCourses />} />
                 
-                {/* AI Module Routes */}
                 <Route path="/ai-tutor/writing-coach" element={<WritingCoach />} />
-                <Route path="/ai-tutor/oral-exam" element={<OralExamPractice />} />
+                <Route path="/ai-tutor/oral-exam" element={<OralExamRedirect />} />
                 <Route path="/ai-tutor/dictation-practice" element={<DictationPractice />} />
                 <Route path="/ai-tutor/tutor-me" element={<TutorMe />} />
                 <Route path="/ai-tutor/error-analysis" element={<ErrorAnalysis />} />
@@ -78,7 +76,6 @@ const App = () => {
                 <Route path="/ai-tutor/language-arts" element={<LanguageArtsRedirect />} />
                 <Route path="/ai-tutor/reading-coach" element={<ReadingCoachRedirect />} />
                 
-                {/* Redirect any /about requests to the home page */}
                 <Route path="/about" element={<Navigate to="/" replace />} />
                 
                 <Route path="*" element={<NotFound />} />
