@@ -73,7 +73,6 @@ const Index = () => {
     <div className="min-h-screen flex flex-col" style={{ background: "#FCE883" }}>
       <Navbar />
       <main className="flex-1 flex flex-col items-center py-6 px-2 sm:px-0">
-        {/* 顶部大标题 */}
         <h1 className="text-4xl sm:text-5xl font-extrabold text-[#915723] mb-2 tracking-tight" style={{ fontFamily: "Nunito, sans-serif" }}>
           My Learning
         </h1>
@@ -82,10 +81,14 @@ const Index = () => {
           <span className="w-3 h-3 bg-yellow-200 rounded-full"></span>
           <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
         </div>
-        {/* 主体区块 - 模拟卡通布局 */}
-        <div className="grid grid-cols-2 grid-rows-3 gap-4 max-w-2xl w-full mb-8 transition-all">
-          {/* Video Lessons | 大块（左上） */}
-          <Link to={colorBlocks[0].to} className={`flex ${colorBlocks[0].style} rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[0].className}`}>
+        {/* 新布局: 顶部双并排大块 (Video Lessons + AI Tutor) */}
+        <div className="grid grid-cols-2 grid-rows-1 gap-4 max-w-2xl w-full mb-4 transition-all">
+          {/* Video Lessons */}
+          <Link 
+            to={colorBlocks[0].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[0].className}`} 
+            style={{ minHeight: 180 }}
+          >
             <div>
               <div className="flex items-center mb-2">{colorBlocks[0].icon}<span className="text-xl font-bold">{colorBlocks[0].title}</span></div>
               <div className="text-sm font-medium">{colorBlocks[0].desc}</div>
@@ -100,8 +103,28 @@ const Index = () => {
               />
             </div>
           </Link>
-          {/* Question Bank | 大块（右上） */}
-          <Link to={colorBlocks[1].to} className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[1].className} ${colorBlocks[1].style}`}>
+          {/* AI Tutor */}
+          <Link 
+            to={colorBlocks[3].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[3].className}`} 
+            style={{ minHeight: 180 }}
+          >
+            <div>
+              <div className="flex items-center mb-2">{colorBlocks[3].icon}<span className="text-xl font-bold">{colorBlocks[3].title}</span></div>
+              <div className="text-sm font-medium">{colorBlocks[3].desc}</div>
+            </div>
+            <div className="flex-1 flex items-end justify-center">
+              <div className="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center font-bold text-[#B1B1B1] text-sm">{colorBlocks[3].placeholder}</div>
+            </div>
+          </Link>
+        </div>
+        {/* 第二行：Question Bank + My Words */}
+        <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
+          {/* Question Bank | 题库 */}
+          <Link 
+            to={colorBlocks[1].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[1].className} min-h-[144px]`}
+          >
             <div className="flex items-center mb-2">{colorBlocks[1].icon}<span className="text-xl font-bold">{colorBlocks[1].title}</span></div>
             <div className="text-sm font-semibold">{colorBlocks[1].desc}</div>
             <div className="flex-1 flex items-end justify-end">
@@ -114,11 +137,14 @@ const Index = () => {
               />
             </div>
           </Link>
-          {/* My Words | 左下 */}
-          <Link to={colorBlocks[2].to} className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[2].className}`}>
+          {/* My Words | 词语本 */}
+          <Link 
+            to={colorBlocks[2].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[2].className} min-h-[144px]`}
+          >
             <div className="flex items-center mb-2">{colorBlocks[2].icon}<span className="text-xl font-bold">{colorBlocks[2].title}</span></div>
             <div className="text-sm font-medium">{colorBlocks[2].desc}</div>
-            <div className="flex-1 flex items-end">
+            <div className="flex-1 flex items-end justify-end">
               <img
                 src="/lovable-uploads/256e4bed-3c15-4fde-9f35-2b4259d122b7.png"
                 alt="My Words Cartoon Character"
@@ -128,18 +154,18 @@ const Index = () => {
               />
             </div>
           </Link>
-          {/* AI Tutor | 右下 */}
-          <Link to={colorBlocks[3].to} className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[3].className}`}>
-            <div className="flex items-center mb-2">{colorBlocks[3].icon}<span className="text-xl font-bold">{colorBlocks[3].title}</span></div>
-            <div className="text-sm font-medium">{colorBlocks[3].desc}</div>
-            <div className="flex-1 flex items-end">
-              <div className="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center font-bold text-[#B1B1B1] text-sm">{colorBlocks[3].placeholder}</div>
-            </div>
-          </Link>
-          {/* 留白块（左下大块） */}
-          <div className="flex items-center justify-center rounded-2xl bg-white/50 border-2 border-white shadow-lg min-h-[144px]">{colorBlocks[4].placeholder}</div>
+        </div>
+        {/* 第三行：留白模块 + Daily Goal */}
+        <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-8 transition-all">
+          {/* 留白块 */}
+          <div className="flex items-center justify-center rounded-2xl bg-white/50 border-2 border-white shadow-lg min-h-[144px]">
+            {colorBlocks[4].placeholder}
+          </div>
           {/* Daily Goal */}
-          <Link to={colorBlocks[5].to} className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[5].className} ${colorBlocks[5].style}`}>
+          <Link 
+            to={colorBlocks[5].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[5].className} ${colorBlocks[5].style}`}
+          >
             <span className="text-lg font-bold mb-1">{colorBlocks[5].title}</span>
             {colorBlocks[5].desc}
             <div className="flex-1 flex items-end">
