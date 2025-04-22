@@ -50,7 +50,7 @@ export const mockQuestions: Question[] = [
   },
   {
     id: "q5",
-    text: "造句：使用"虽然……但是……"完成句子。",
+    text: "造句：使用\"虽然......但是......\"完成句子。",
     type: "ShortAnswer",
     marks: 3,
     correctAnswer: "虽然下雨了，但是他们还是准时到达了。"
