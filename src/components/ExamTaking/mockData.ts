@@ -66,5 +66,31 @@ export const mockQuestions: Question[] = [
       { value: "D", label: "D. 为人诚实" }
     ],
     correctAnswer: "A"
+  },
+  {
+    id: "q6",
+    text: "语文应用（二）：选择正确的成语。",
+    type: "MCQ",
+    marks: 2,
+    options: [
+      { value: "A", label: "A. 鸟语花香" },
+      { value: "B", label: "B. 万紫千红" },
+      { value: "C", label: "C. 欣欣向荣" },
+      { value: "D", label: "D. 无忧无虑" }
+    ],
+    correctAnswer: "B"
+  },
+  {
+    id: "q7",
+    text: "短文填空（二）：请根据上下文选择合适的词语。",
+    type: "MCQ",
+    marks: 2,
+    options: [
+      { value: "A", label: "A. 友好" },
+      { value: "B", label: "B. 友善" },
+      { value: "C", label: "C. 热情" },
+      { value: "D", label: "D. 真诚" }
+    ],
+    correctAnswer: "C"
   }
 ];

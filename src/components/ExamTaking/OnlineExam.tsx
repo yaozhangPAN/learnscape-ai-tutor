@@ -14,6 +14,7 @@ import ExamTimer from "./ExamTimer";
 import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
+import { mockExamPapers } from "@/data/mockExamPapers";
 
 const OnlineExam = () => {
   const { examId } = useParams();
@@ -51,24 +52,86 @@ const OnlineExam = () => {
           
           // If no questions found in database or an error occurs, use mock data as fallback
           let examQuestions = [];
+          
           if (questionData && questionData.length > 0) {
-            examQuestions = organizeQuestions(questionData);
-          } else {
-            console.log("No questions found in database, using mock data");
-            examQuestions = mockQuestions;
+            // Map all sections we want questions for
+            const sectionOrder = [
+              "语文应用",
+              "短文填空",
+              "阅读理解一", 
+              "完成对话",
+              "阅读理解二"
+            ];
+            
+            // Filter and process questions
+            const filteredQuestions = questionData.filter(q => {
+              return q.title && sectionOrder.some(section => q.title.includes(section));
+            });
+            
+            console.log("Filtered questions:", filteredQuestions);
+            
+            if (filteredQuestions.length > 0) {
+              // Process the questions
+              examQuestions = filteredQuestions.map(q => {
+                // Basic question structure
+                const question: Question = {
+                  id: q.id || `q-${Math.random().toString(36).substr(2, 9)}`,
+                  text: q.title || "No question text provided",
+                  type: "MCQ", // Default type
+                  marks: 2, // Default marks
+                };
+                
+                // Try to parse content
+                if (q.content) {
+                  try {
+                    const content = typeof q.content === 'string' 
+                      ? JSON.parse(q.content) 
+                      : q.content;
+                    
+                    // If we have a topic, update the text
+                    if (content.topic) {
+                      question.text = content.topic.substring(0, 200);
+                    }
+                    
+                    // Add options if available
+                    if (content.questionList && content.questionList.length > 0) {
+                      const firstSubQuestion = content.questionList[0];
+                      
+                      if (firstSubQuestion.options && firstSubQuestion.options.length > 0) {
+                        question.options = firstSubQuestion.options.map((opt, index) => ({
+                          value: String.fromCharCode(65 + index), // A, B, C, D...
+                          label: `${String.fromCharCode(65 + index)}. ${opt.value || opt}`
+                        }));
+                        question.correctAnswer = "A"; // Default correct answer
+                      }
+                    }
+                  } catch (error) {
+                    console.error("Error processing content:", error);
+                  }
+                }
+                
+                return question;
+              });
+            }
           }
           
-          console.log("Final exam questions:", examQuestions);
+          // If we couldn't process any questions, use mock data
+          if (!examQuestions || examQuestions.length === 0) {
+            console.log("Using mock questions as fallback");
+            examQuestions = mockQuestions;
+          }
           
           // Make sure we have questions before proceeding
           if (examQuestions.length === 0) {
             throw new Error("No questions available for this exam");
           }
           
+          // Create the exam paper object
+          const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
             id: examId,
-            title: "Chinese Paper 2",
-            school: "Primary Schools",
+            title: examPaper ? examPaper.title : "Chinese Paper 2",
+            school: examPaper ? examPaper.school : "Primary Schools",
             subject: "chinese",
             level: "p6",
             year: "2024",
@@ -112,107 +175,6 @@ const OnlineExam = () => {
     
     fetchExam();
   }, [examId, toast]);
-
-  const organizeQuestions = (questionsData: any[]): Question[] => {
-    try {
-      console.log("Organizing questions, data:", questionsData);
-      
-      // Define section order
-      const sectionOrder = [
-        "语文应用",
-        "短文填空",
-        "阅读理解一",
-        "完成对话",
-        "阅读理解二"
-      ];
-      
-      const organizedQuestions: Question[] = [];
-      
-      // First filter to have only questions with titles that match our sections
-      const validQuestions = questionsData.filter(q => 
-        q.title && sectionOrder.some(section => q.title.includes(section))
-      );
-      
-      console.log("Valid questions after filtering:", validQuestions);
-      
-      // Then organize them by section
-      sectionOrder.forEach(sectionTitle => {
-        const sectionQuestions = validQuestions.filter(q => 
-          q.title && q.title.includes(sectionTitle)
-        );
-        
-        console.log(`Questions for section ${sectionTitle}:`, sectionQuestions);
-        
-        sectionQuestions.forEach(q => {
-          if (q.content) {
-            try {
-              // Make sure content is an object
-              const content = typeof q.content === 'string' 
-                ? JSON.parse(q.content) 
-                : q.content;
-              
-              // Create a valid question object with defaults for missing properties
-              const question: Question = {
-                id: q.id || `q-${Math.random().toString(36).substr(2, 9)}`,
-                text: content.questionText || q.title || "No question text provided",
-                type: determineQuestionType(content),
-                marks: content.marks || 2, // Default to 2 marks if not specified
-              };
-              
-              if (question.type === "MCQ" && content.options) {
-                question.options = content.options.map((opt: any, index: number) => ({
-                  value: String.fromCharCode(65 + index), // A, B, C, D...
-                  label: `${String.fromCharCode(65 + index)}. ${opt}`
-                }));
-                question.correctAnswer = content.correctAnswer || "A";
-              }
-              
-              if (question.type === "ShortAnswer" && content.correctAnswer) {
-                question.correctAnswer = content.correctAnswer;
-              }
-              
-              organizedQuestions.push(question);
-            } catch (error) {
-              console.error("Error processing question:", error, q);
-            }
-          }
-        });
-      });
-      
-      console.log("Final organized questions:", organizedQuestions);
-      
-      // If we have no questions from the database, use mock data
-      if (organizedQuestions.length === 0) {
-        console.log("No questions could be processed, returning mock data");
-        return mockQuestions;
-      }
-      
-      return organizedQuestions;
-    } catch (error) {
-      console.error("Error organizing questions:", error);
-      // Fallback to mock data if there's an error in processing
-      return mockQuestions;
-    }
-  };
-
-  const determineQuestionType = (content: any): QuestionType => {
-    if (!content) return "ShortAnswer"; // Default if content is missing
-    
-    if (content.type) {
-      if (content.type.toLowerCase().includes('mcq') || 
-          content.type.toLowerCase().includes('multiple choice')) {
-        return "MCQ";
-      } else if (content.type.toLowerCase().includes('essay')) {
-        return "Essay";
-      }
-    }
-    
-    if (content.options && Array.isArray(content.options) && content.options.length > 0) {
-      return "MCQ";
-    }
-    
-    return "ShortAnswer";
-  };
 
   const calculateTotalMarks = (questions: Question[]): number => {
     if (!questions || questions.length === 0) return 0;

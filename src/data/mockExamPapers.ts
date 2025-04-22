@@ -6,7 +6,7 @@ export const mockExamPapers: ExamPaper[] = [
     id: "1",
     title: "Chinese Paper 2",
     school: "Nanyang Primary",
-    year: "2019",
+    year: "2024",
     type: "SA1",
     subject: "chinese",
     level: "p6",
