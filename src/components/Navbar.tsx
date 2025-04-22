@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -78,10 +77,10 @@ const Navbar = () => {
             ))}
             {user ? (
               <Button 
-                variant="outline"
+                variant="default"
                 size="sm"
                 onClick={handleLogout}
-                className="flex items-center text-white border-white/30 hover:bg-white/10"
+                className="bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors"
               >
                 <LogOut className="mr-1 h-4 w-4" />
                 Logout
@@ -89,7 +88,7 @@ const Navbar = () => {
             ) : (
               <Button 
                 asChild
-                className="bg-white text-learnscape-darkBlue hover:bg-yellow-100"
+                className="bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors"
               >
                 <Link to="/login">
                   <span className="relative z-10">Login</span>
@@ -109,7 +108,6 @@ const Navbar = () => {
         </div>
       </div>
       
-      {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-learnscape-darkBlue">
@@ -131,7 +129,7 @@ const Navbar = () => {
             {user ? (
               <button 
                 onClick={handleLogout}
-                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-red-500/30 hover:bg-red-500/50 mt-4"
+                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-[#4CAF50] hover:bg-[#16A085] mt-4"
               >
                 <span className="flex items-center">
                   <LogOut className="mr-2 h-4 w-4" />
@@ -141,7 +139,7 @@ const Navbar = () => {
             ) : (
               <Link 
                 to="/login" 
-                className="block px-3 py-2 rounded-md text-base font-medium bg-white text-learnscape-darkBlue hover:bg-yellow-100 mt-4 text-center"
+                className="block px-3 py-2 rounded-md text-base font-medium bg-[#4CAF50] text-white hover:bg-[#16A085] mt-4 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Login
@@ -155,4 +153,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
