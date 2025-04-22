@@ -16,9 +16,9 @@ const PlaceholderImageBlock: React.FC = () => (
       </div>
       {/* 新图片作为背景 */}
       <img
-        src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+        src="/lovable-uploads/810634f8-55f5-400e-b770-6eed83a82bec.png"
         alt="Streak and Progress"
-        className="object-contain w-full h-full max-h-60 opacity-100 transition-all duration-200"
+        className="object-cover w-full h-full opacity-100 transition-all duration-200"
         draggable={false}
         style={{ userSelect: "none" }}
       />
