@@ -8,6 +8,7 @@ import ExamTable from "@/components/MockExam/ExamTable";
 import ExamCards from "@/components/MockExam/ExamCards";
 import ExamPagination from "@/components/MockExam/ExamPagination";
 import EmptyState from "@/components/MockExam/EmptyState";
+import UploadExamPaper from "@/components/MockExam/UploadExamPaper";
 import { mockExamPapers, schools, years, paperTypes } from "@/data/mockExamPapers";
 
 const MockExam = () => {
@@ -97,6 +98,8 @@ const MockExam = () => {
             Practice with real exam questions to prepare for your primary school examinations.
           </p>
         </div>
+
+        <UploadExamPaper />
 
         <ExamFilters 
           searchQuery={searchQuery}
