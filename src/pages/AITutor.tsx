@@ -72,7 +72,7 @@ const AITutor = () => {
       id: "dictation-practice",
       title: "Dictation Practice",
       subtitle: "英语听写",
-      icon: cartoonImages[2],
+      icon: "/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png",
       color: cardColors[2],
       description: "中英文听写训练，语音输入更轻松！",
       path: "/ai-tutor/dictation-practice",
