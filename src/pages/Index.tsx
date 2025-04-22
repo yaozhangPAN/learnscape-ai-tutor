@@ -83,6 +83,30 @@ const Index = () => {
           <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
         </div>
         
+        {/* Daily Adventure section moved to the top */}
+        <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
+          <Link 
+            to={colorBlocks[5].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[5].className} ${colorBlocks[5].style} relative`}
+            style={{
+              background: `url('/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png') no-repeat center center`,
+              backgroundSize: 'cover',
+            }}
+          >
+            <span className="text-lg font-bold mb-1 text-white drop-shadow">Daily Adventure</span>
+            <div className="text-white drop-shadow">{colorBlocks[5].desc}</div>
+            <div className="flex-1 flex items-end justify-end pr-2">
+              <img
+                src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+                alt="Daily Adventure Cartoon Character"
+                className="w-20 h-20 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
+            </div>
+          </Link>
+        </div>
+
         {/* 新布局: 顶部双并排大块 (Video Lessons + AI Tutor) */}
         <div className="grid grid-cols-2 grid-rows-1 gap-4 max-w-2xl w-full mb-4 transition-all">
           {/* Video Lessons */}
@@ -172,22 +196,7 @@ const Index = () => {
             {colorBlocks[4].placeholder}
           </div>
           {/* Daily Adventure，右下放Question Bank的卡通 */}
-          <Link 
-            to={colorBlocks[5].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[5].className} ${colorBlocks[5].style}`}
-          >
-            <span className="text-lg font-bold mb-1">Daily Adventure</span>
-            {colorBlocks[5].desc}
-            <div className="flex-1 flex items-end justify-end pr-2">
-              <img
-                src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
-                alt="Daily Adventure Cartoon Character"
-                className="w-20 h-20 object-contain select-none drop-shadow-lg"
-                draggable={false}
-                style={{ userSelect: "none" }}
-              />
-            </div>
-          </Link>
+          
         </div>
         
         {/* 温馨提示 */}
