@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
@@ -84,7 +83,7 @@ const Index = () => {
         </div>
         {/* 新布局: 顶部双并排大块 (Video Lessons + AI Tutor) */}
         <div className="grid grid-cols-2 grid-rows-1 gap-4 max-w-2xl w-full mb-4 transition-all">
-          {/* Video Lessons，不显示卡通图 */}
+          {/* Video Lessons */}
           <Link 
             to={colorBlocks[0].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[0].className}`} 
@@ -94,10 +93,9 @@ const Index = () => {
               <div className="flex items-center mb-2">{colorBlocks[0].icon}<span className="text-xl font-bold">{colorBlocks[0].title}</span></div>
               <div className="text-sm font-medium">{colorBlocks[0].desc}</div>
             </div>
-            {/* 删除卡通形象 */}
             <div className="mt-6 flex-1 flex items-end justify-center" />
           </Link>
-          {/* AI Tutor, 放 Video Lessons 的卡通形象到这里 */}
+          {/* AI Tutor, 放 Video Lessons 的卡通形象 */}
           <Link 
             to={colorBlocks[3].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[3].className}`} 
@@ -166,7 +164,7 @@ const Index = () => {
             to={colorBlocks[5].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[5].className} ${colorBlocks[5].style}`}
           >
-            <span className="text-lg font-bold mb-1">{colorBlocks[5].title}</span>
+            <span className="text-lg font-bold mb-1">Daily Adventure</span>
             {colorBlocks[5].desc}
             <div className="flex-1 flex items-end justify-end pr-2">
               <img
