@@ -7,4 +7,3 @@ export { masterclassCourse, oralPracticeCourse, oralPracticeCourses };
 export const mockCourses: Course[] = [
   ...chineseCourses
 ];
-
