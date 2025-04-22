@@ -7,12 +7,11 @@ import { CapyzenChatFloating } from "./CapyzenChatFloating";
 import { supabase } from "@/integrations/supabase/client";
 import type { HomeworkQuestion } from "./types";
 
-// Define an interface for the parsed content
 interface ParsedQuestionContent {
   content?: string;
   question?: string;
   image_url?: string;
-  [key: string]: any; // Allow for other properties
+  [key: string]: any;
 }
 
 export const CourseHomework: React.FC = () => {
@@ -27,13 +26,12 @@ export const CourseHomework: React.FC = () => {
           .select('*')
           .eq('level', '小六')
           .eq('subject', '华文')
-          .eq('term', 'CA1');
+          .eq('term', 'CA1')
+          .order('created_at', { ascending: true }); // 按照创建时间排序
 
         if (error) throw error;
 
-        // Transform Supabase data to match HomeworkQuestion type
         const transformedQuestions: HomeworkQuestion[] = data.map(question => {
-          // Parse content safely
           let parsedContent: ParsedQuestionContent = {};
           if (typeof question.content === 'string') {
             try {
@@ -54,7 +52,19 @@ export const CourseHomework: React.FC = () => {
           };
         });
 
-        setHomeworkQuestions(transformedQuestions);
+        // 手动排序题目
+        const orderMap = {
+          '巧练题（一）': 0,
+          '巧练题（二）': 1,
+          '巧练题（三）': 2,
+          '看图作文': 3
+        };
+
+        const orderedQuestions = transformedQuestions.sort((a, b) => 
+          (orderMap[a.title] ?? 4) - (orderMap[b.title] ?? 4)
+        );
+
+        setHomeworkQuestions(orderedQuestions);
       } catch (error) {
         console.error('Error fetching homework questions:', error);
       } finally {
