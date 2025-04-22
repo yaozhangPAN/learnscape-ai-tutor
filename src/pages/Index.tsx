@@ -4,8 +4,24 @@ import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { Video, Book, Star } from "lucide-react";
 
-// 主色彩块
+// Reorder the colorBlocks array to move Daily Adventure to the top
 const colorBlocks = [
+  {
+    title: "Daily Adventure",
+    desc: (
+      <>
+        <div className="flex items-center mt-1">
+          <span className="bg-[#FF5E5B] text-white text-xs rounded-full px-2 py-0.5 mr-2">50 XP</span>
+          完成今日目标
+        </div>
+      </>
+    ),
+    className: "bg-white border-2 border-[#FFEEAE] text-[#31312D]",
+    icon: null,
+    style: "col-span-2 flex-col justify-center",
+    to: "/dashboard",
+    placeholder: "预留插图"
+  },
   {
     title: "Video Lessons",
     desc: "各科名师视频课程",
@@ -50,22 +66,6 @@ const colorBlocks = [
     style: "row-span-2 flex items-center justify-center",
     to: "",
     placeholder: "预留插图"
-  },
-  {
-    title: "Daily Adventure",
-    desc: (
-      <>
-        <div className="flex items-center mt-1">
-          <span className="bg-[#FF5E5B] text-white text-xs rounded-full px-2 py-0.5 mr-2">50 XP</span>
-          完成今日目标
-        </div>
-      </>
-    ),
-    className: "bg-white border-2 border-[#FFEEAE] text-[#31312D]",
-    icon: null,
-    style: "col-span-2 flex-col justify-center",
-    to: "/dashboard",
-    placeholder: "预留插图"
   }
 ];
 
@@ -83,17 +83,37 @@ const Index = () => {
           <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
         </div>
         
-        {/* 新布局: 顶部双并排大块 (Video Lessons + AI Tutor) */}
+        {/* Daily Adventure section now at the top */}
+        <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
+          <Link 
+            to={colorBlocks[0].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[0].className} ${colorBlocks[0].style}`}
+          >
+            <span className="text-lg font-bold mb-1">Daily Adventure</span>
+            {colorBlocks[0].desc}
+            <div className="flex-1 flex items-end justify-end pr-2">
+              <img
+                src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+                alt="Daily Adventure Cartoon Character"
+                className="w-20 h-20 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
+            </div>
+          </Link>
+        </div>
+
+        {/* Rest of the existing layout */}
         <div className="grid grid-cols-2 grid-rows-1 gap-4 max-w-2xl w-full mb-4 transition-all">
           {/* Video Lessons */}
           <Link 
-            to={colorBlocks[0].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[0].className}`} 
+            to={colorBlocks[1].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[1].className}`} 
             style={{ minHeight: 180 }}
           >
             <div>
-              <div className="flex items-center mb-2">{colorBlocks[0].icon}<span className="text-xl font-bold">{colorBlocks[0].title}</span></div>
-              <div className="text-sm font-medium">{colorBlocks[0].desc}</div>
+              <div className="flex items-center mb-2">{colorBlocks[1].icon}<span className="text-xl font-bold">{colorBlocks[1].title}</span></div>
+              <div className="text-sm font-medium">{colorBlocks[1].desc}</div>
             </div>
             <div className="flex-1 flex items-end justify-end pr-2">
               <img
@@ -105,7 +125,7 @@ const Index = () => {
               />
             </div>
           </Link>
-          {/* AI Tutor, 放 Video Lessons 的卡通形象 */}
+          {/* AI Tutor */}
           <Link 
             to={colorBlocks[3].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[3].className}`} 
@@ -126,8 +146,8 @@ const Index = () => {
             </div>
           </Link>
         </div>
-        
-        {/* 第二行：Question Bank + My Words */}
+
+        {/* Rest of the page remains the same */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
           {/* Question Bank | 题库，图片靠右 */}
           <Link 
@@ -164,8 +184,7 @@ const Index = () => {
             </div>
           </Link>
         </div>
-        
-        {/* 第三行：留白模块 + Daily Adventure */}
+
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-8 transition-all">
           {/* 留白块 */}
           <div className="flex items-center justify-center rounded-2xl bg-white/50 border-2 border-white shadow-lg min-h-[144px]">
@@ -189,8 +208,7 @@ const Index = () => {
             </div>
           </Link>
         </div>
-        
-        {/* 温馨提示 */}
+
         <div className="bg-white/80 rounded-xl px-6 py-3 text-center text-[#955F1D] text-base shadow-sm font-semibold max-w-md mx-auto">
           角色卡通将在这里出现，敬请期待！点击各板块可进入对应功能。
         </div>
