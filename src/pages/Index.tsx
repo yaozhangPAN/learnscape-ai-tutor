@@ -39,7 +39,7 @@ const colorBlocks = [
   {
     title: "AI Tutor",
     desc: "口语/写作/词汇练习",
-    className: "bg-[#71C479] text-white",
+    className: "bg-[#F2DEFF] text-[#31312D]", // Changed to pastel purple
     icon: <Star className="w-8 h-8 mr-2" />,
     style: "",
     to: "/ai-tutor"
@@ -64,7 +64,7 @@ const colorBlocks = [
         </div>
       </>
     ),
-    className: "bg-white border-2 border-[#FFEEAE] text-[#31312D]",
+    className: "bg-[#F2FCE2] text-[#31312D]", // Changed to soft green
     icon: null,
     style: "col-span-2 flex-col justify-center",
     to: "/dashboard"
