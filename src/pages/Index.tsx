@@ -18,7 +18,7 @@ const mainBlocks = [
         完成今日目标
       </div>
     ),
-    bg: "bg-[#38B87D]",
+    bg: "bg-[#FF9E43]",
     text: "text-white",
     img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
     to: "/dashboard",
@@ -39,7 +39,7 @@ const mainBlocks = [
     key: "video-lessons",
     title: "Video Lessons",
     desc: "各科名师视频课程",
-    bg: "bg-[#FF9E43]",
+    bg: "bg-[#38B87D]",
     text: "text-white",
     icon: <Video className="w-8 h-8 mr-2" />,
     img: "/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png",
