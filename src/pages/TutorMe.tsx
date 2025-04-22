@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { 
@@ -16,6 +16,8 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const TutorMe = () => {
+  useRequirePremium();
+
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
   const [subject, setSubject] = useState("math");

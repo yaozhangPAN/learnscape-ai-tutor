@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,8 @@ import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 
 const DictationPractice = () => {
+  useRequirePremium(); // 添加 premium 限制
+
   const [isListening, setIsListening] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [dictationText, setDictationText] = useState("");

@@ -1,5 +1,5 @@
-
 import { useState, useEffect } from "react";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,8 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import SubscriptionBanner from "@/components/SubscriptionBanner";
 
 const LanguageArts = () => {
+  useRequirePremium();
+
   const [prompt, setPrompt] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isLoading, setIsLoading] = useState(false);

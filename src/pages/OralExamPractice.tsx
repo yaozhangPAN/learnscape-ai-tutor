@@ -1,5 +1,5 @@
-
 import { useState, useEffect } from "react";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mic, MicOff, Play, Square, Sparkles, Volume2, ArrowLeft } from "lucide-react";
@@ -9,6 +9,8 @@ import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 
 const OralExamPractice = () => {
+  useRequirePremium();
+
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [practicePrompt, setPracticePrompt] = useState("");
@@ -17,10 +19,8 @@ const OralExamPractice = () => {
   const { toast } = useToast();
   
   useEffect(() => {
-    // Set initial animation state
     setAnimation(true);
     
-    // Reset animation after it plays
     const timer = setTimeout(() => setAnimation(false), 1000);
     return () => clearTimeout(timer);
   }, [practicePrompt]);
@@ -36,11 +36,8 @@ const OralExamPractice = () => {
 
   const toggleRecording = () => {
     if (isRecording) {
-      // Stop recording
       setIsRecording(false);
       
-      // In a real app, this would process the actual recording
-      // Simulate AI generating feedback
       setTimeout(() => {
         setFeedback(`
           <h3>Pronunciation 🔊</h3>
@@ -65,9 +62,7 @@ const OralExamPractice = () => {
         description: "Your response has been submitted for analysis.",
       });
     } else {
-      // Start new recording
       if (!practicePrompt) {
-        // Select a random prompt if none is active
         const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
         setPracticePrompt(randomPrompt);
       }
@@ -76,10 +71,9 @@ const OralExamPractice = () => {
       setIsRecording(true);
       setFeedback("");
       
-      // Start the timer
       const timer = setInterval(() => {
         setRecordingTime(prev => {
-          if (prev >= 120) { // Auto-stop after 2 minutes
+          if (prev >= 120) {
             clearInterval(timer);
             setIsRecording(false);
             return prev;
@@ -181,7 +175,7 @@ const OralExamPractice = () => {
             {feedback && (
               <div className="mt-8 animate-fade-in">
                 <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <Sparkles className="mr-2 h-5 w-5 text-yellow-400" />
+                  <Sparkles className="mr-2 h-5 w-4 text-yellow-400" />
                   AI Feedback:
                 </h3>
                 <div className="bg-gray-50 border rounded-md p-6 prose prose-sm max-w-none">

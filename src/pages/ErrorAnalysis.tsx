@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,8 @@ import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 
 const ErrorAnalysis = () => {
+  useRequirePremium();
+
   const [fileContent, setFileContent] = useState("");
   const [subject, setSubject] = useState("math");
   const [analysisResult, setAnalysisResult] = useState("");

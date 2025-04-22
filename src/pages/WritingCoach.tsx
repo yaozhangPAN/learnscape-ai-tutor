@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -9,6 +9,8 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const WritingCoach = () => {
+  useRequirePremium();
+
   const [text, setText] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isLoading, setIsLoading] = useState(false);
