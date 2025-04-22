@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -21,7 +22,7 @@ const mainBlocks = [
     bg: "bg-[#F7941D]", // 明确指定橙色背景
     text: "text-white",
     img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
-    to: "/dashboard",
+    to: "/daily-plan", // Changed from "/dashboard" to "/daily-plan"
     customBgImg: "/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png",
     isCustomBg: true,
     debugColor: "#F7941D", // 添加调试颜色属性
