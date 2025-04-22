@@ -62,7 +62,7 @@ const AITutor = () => {
       id: "oral-exam",
       title: "Oral Exam Practice",
       subtitle: "口语闯关",
-      icon: cartoonImages[1],
+      icon: "/lovable-uploads/87e2cca6-743b-42dc-81ac-356df86c7e4f.png",
       color: cardColors[1],
       description: "趣味口语练习，助你自信拿下面试。",
       path: "/ai-tutor/oral-exam",
