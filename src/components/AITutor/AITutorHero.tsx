@@ -5,12 +5,6 @@ const AITutorHero = () => {
   return (
     <div className="relative bg-gradient-to-br from-[#fce883] via-[#ffe29f] to-[#fbeadd] pt-14 pb-6 px-4 rounded-b-3xl shadow-lg overflow-hidden">
       <div className="max-w-4xl mx-auto flex flex-col items-center z-10 relative">
-        <img
-          src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=facearea&w=320&q=80"
-          alt="Cartoon AI Tutor"
-          className="w-32 h-32 rounded-full shadow-lg border-4 border-white mb-2 object-cover"
-          style={{ marginTop: '-58px' }}
-        />
         <h1 className="text-4xl md:text-5xl font-extrabold text-[#6241a3] mb-3 tracking-tight drop-shadow-sm font-playfair relative">
           AI Tutor <span className="ml-2 animate-wiggle">✨</span>
         </h1>
@@ -29,3 +23,4 @@ const AITutorHero = () => {
 };
 
 export default AITutorHero;
+
