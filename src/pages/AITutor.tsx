@@ -92,7 +92,7 @@ const AITutor = () => {
       id: "vocabulary",
       title: "Vocabulary Builder",
       subtitle: "词汇冲关",
-      icon: cartoonImages[4],
+      icon: "/lovable-uploads/dd362a8e-2391-4d80-aa88-c1d33876d724.png",
       color: cardColors[4],
       description: "闯关答题记单词，词汇量UP!",
       path: "/ai-tutor/vocabulary",
