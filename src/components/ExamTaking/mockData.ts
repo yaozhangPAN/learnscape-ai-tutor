@@ -4,77 +4,55 @@ import { Question } from "./types";
 export const mockQuestions: Question[] = [
   {
     id: "q1",
-    text: "If x = 5 and y = 3, calculate the value of 2x + 3y.",
+    text: "阅读理解（一）：请阅读下面的短文，然后回答问题。",
     type: "MCQ",
     marks: 2,
     options: [
-      { value: "A", label: "A. 16" },
-      { value: "B", label: "B. 19" },
-      { value: "C", label: "C. 22" },
-      { value: "D", label: "D. 25" }
-    ],
-    correctAnswer: "B"
-  },
-  {
-    id: "q2",
-    text: "What is the area of a rectangle with length 12 cm and width 5 cm?",
-    type: "MCQ",
-    marks: 2,
-    options: [
-      { value: "A", label: "A. 17 cm²" },
-      { value: "B", label: "B. 34 cm²" },
-      { value: "C", label: "C. 60 cm²" },
-      { value: "D", label: "D. 120 cm²" }
+      { value: "A", label: "A. 为人诚实" },
+      { value: "B", label: "B. 勤奋学习" },
+      { value: "C", label: "C. 关心他人" },
+      { value: "D", label: "D. 保护环境" }
     ],
     correctAnswer: "C"
   },
   {
-    id: "q3",
-    text: "Solve the equation: 3x - 7 = 14",
+    id: "q2",
+    text: "阅读理解（二）：根据短文内容选择正确的答案。",
     type: "MCQ",
-    marks: 3,
+    marks: 2,
     options: [
-      { value: "A", label: "A. x = 5" },
-      { value: "B", label: "B. x = 7" },
-      { value: "C", label: "C. x = 9" },
-      { value: "D", label: "D. x = 21" }
+      { value: "A", label: "A. 春天" },
+      { value: "B", label: "B. 夏天" },
+      { value: "C", label: "C. 秋天" },
+      { value: "D", label: "D. 冬天" }
     ],
-    correctAnswer: "B"
+    correctAnswer: "A"
+  },
+  {
+    id: "q3",
+    text: "词语运用：请选择最适合的词语填空。",
+    type: "MCQ",
+    marks: 2,
+    options: [
+      { value: "A", label: "A. 匆匆忙忙" },
+      { value: "B", label: "B. 轻轻松松" },
+      { value: "C", label: "C. 高高兴兴" },
+      { value: "D", label: "D. 认认真真" }
+    ],
+    correctAnswer: "D"
   },
   {
     id: "q4",
-    text: "Calculate the perimeter of a square with sides of length 8 cm.",
+    text: "写出下面词语的反义词。",
     type: "ShortAnswer",
-    marks: 3,
-    correctAnswer: "32 cm"
+    marks: 2,
+    correctAnswer: "关闭 - 开启"
   },
   {
     id: "q5",
-    text: "Factor completely: x² - 9",
+    text: "造句：使用"虽然……但是……"完成句子。",
     type: "ShortAnswer",
     marks: 3,
-    correctAnswer: "(x+3)(x-3)"
-  },
-  {
-    id: "q6",
-    text: "A train travels at a speed of 80 km/h. How far will it travel in 3.5 hours?",
-    type: "ShortAnswer",
-    marks: 3,
-    correctAnswer: "280 km"
-  },
-  {
-    id: "q7",
-    text: `<p>Look at the diagram below of a right-angled triangle.</p>
-    <p>If angle A = 30° and side b = 8 cm, find the length of side a.</p>`,
-    type: "ShortAnswer",
-    marks: 4,
-    image: "https://www.mathsisfun.com/geometry/images/triangle-right-d.svg",
-    correctAnswer: "4.62 cm"
-  },
-  {
-    id: "q8",
-    text: "Explain how to solve a quadratic equation using the quadratic formula. Give an example with your solution.",
-    type: "Essay",
-    marks: 5
+    correctAnswer: "虽然下雨了，但是他们还是准时到达了。"
   }
 ];
