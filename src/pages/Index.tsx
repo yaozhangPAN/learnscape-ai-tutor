@@ -97,9 +97,17 @@ const mainBlocks = [
     key: "leaderboard",
     title: "Leaderboard",
     desc: "排行榜",
-    bg: "bg-[#FADE61]",
+    bg: "bg-[#FFB300]",
     text: "text-[#6D5A21]",
-    icon: <LayoutGrid className="w-8 h-8 mr-2" />,
+    icon: (
+      <img
+        src="/lovable-uploads/1eabcd5f-326e-4849-bf2d-db471b7a4428.png"
+        alt="Leaderboard Red Panda Icon"
+        className="w-8 h-8 mr-2"
+        draggable={false}
+        style={{ userSelect: "none" }}
+      />
+    ),
     to: "/leaderboard"
   },
 ];

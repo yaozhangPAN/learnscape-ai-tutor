@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { LayoutGrid } from "lucide-react";
 
 interface LeaderboardSectionProps {
   to: string;
@@ -20,8 +19,8 @@ const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({ to, className =
     <div className="text-base font-medium">{desc}</div>
     <div className="flex-1 flex items-end justify-end">
       <img
-        src="/lovable-uploads/5f13138d-564f-4d30-98b9-192d891f3cd4.png"
-        alt="Leaderboard Cartoon"
+        src="/lovable-uploads/1eabcd5f-326e-4849-bf2d-db471b7a4428.png"
+        alt="Leaderboard Red Panda Cartoon"
         className="w-24 h-32 object-contain select-none drop-shadow-lg"
         draggable={false}
         style={{ userSelect: "none" }}
