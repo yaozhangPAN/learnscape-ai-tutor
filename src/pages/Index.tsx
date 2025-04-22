@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -238,7 +237,10 @@ const Index = () => {
             </div>
           </Link>
 
-          <div className="flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative bg-white text-[#6D5A21] min-h-[164px] overflow-hidden">
+          <div 
+            onClick={() => window.location.href = mainBlocks[6].to} 
+            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative bg-white text-[#6D5A21] min-h-[164px] overflow-hidden cursor-pointer`}
+          >
             <div className="absolute top-3 left-3 z-10 bg-white/80 rounded-lg px-4 py-1 font-bold text-[#C48829] text-lg shadow">Streak and Progress</div>
             <img
               src={mainBlocks[6].img}
