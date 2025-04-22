@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Download, PlayCircle, Star } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 import { ExamPaper } from "@/types/exam";
+import { downloadExamPaper } from "@/utils/examStorage";
 
 type ExamTableProps = {
   papers: ExamPaper[];
@@ -13,46 +12,10 @@ type ExamTableProps = {
 
 const ExamTable: React.FC<ExamTableProps> = ({ papers, handleTakeExam }) => {
   const handleDownload = async (paper: ExamPaper) => {
-    try {
-      // This is just a simulation. In production, you would fetch the actual file URL from your backend
-      const pdfUrl = `https://api.yourbackend.com/exams/${paper.id}/download`;
-      
-      // For demo, we'll create a sample PDF content
-      const response = await fetch(pdfUrl).catch(() => {
-        // Fallback for demo: create a text file with exam details
-        const content = `
-          Paper: ${paper.title}
-          School: ${paper.school}
-          Year: ${paper.year}
-          Type: ${paper.type}
-          Subject: ${paper.subject}
-          Level: ${paper.level}
-        `;
-        const blob = new Blob([content], { type: 'text/plain' });
-        return new Response(blob);
-      });
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${paper.title}_${paper.school}_${paper.year}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-
-      toast({
-        title: "Starting download",
-        description: `Downloading ${paper.title}`,
-      });
-    } catch (error) {
-      toast({
-        title: "Download failed",
-        description: "There was an error downloading the exam paper.",
-        variant: "destructive",
-      });
-    }
+    // Simulate a file URL for demonstration
+    // In production, this URL would come from your database
+    const fileUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers/${paper.id}.pdf`;
+    await downloadExamPaper(fileUrl, paper.title);
   };
 
   return (
