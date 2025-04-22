@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -18,7 +19,7 @@ const mainBlocks = [
         完成今日目标
       </div>
     ),
-    bg: "bg-[#F97316]",
+    bg: "bg-[#F7941D]", // Updated background color
     text: "text-white",
     img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
     to: "/dashboard",
