@@ -67,13 +67,21 @@ const mainBlocks = [
   },
   {
     key: "my-words",
-    title: "My Words",
-    desc: "词语本&生词本",
+    title: "Mock Exam",
+    desc: "自适应模拟考试",
     bg: "bg-[#FFCA52]",
     text: "text-[#8D6923]",
-    icon: <Star className="w-8 h-8 mr-2" />,
-    img: "/lovable-uploads/673f2711-1205-4d7f-b4cd-7ac68b6ca77e.png",
-    to: "/vocabulary-builder"
+    icon: (
+      <img
+        src="/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png"
+        alt="Mock Exam Icon"
+        className="w-8 h-8 mr-2"
+        draggable={false}
+        style={{ userSelect: "none" }}
+      />
+    ),
+    img: "/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png",
+    to: "/mock-exam"
   },
   {
     key: "streak-progress",
@@ -203,13 +211,16 @@ const Index = () => {
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${mainBlocks[5].bg} ${mainBlocks[5].text}`}
             style={{ minHeight: 164 }}
           >
-            <div className="flex items-center mb-2">{mainBlocks[5].icon}<span className="text-xl font-bold">{mainBlocks[5].title}</span></div>
+            <div className="flex items-center mb-2">
+              {mainBlocks[5].icon}
+              <span className="text-xl font-bold">{mainBlocks[5].title}</span>
+            </div>
             <div className="text-base font-medium">{mainBlocks[5].desc}</div>
             <div className="flex-1 flex items-end justify-end">
               {mainBlocks[5].img && (
                 <img
                   src={mainBlocks[5].img}
-                  alt="My Words Cartoon"
+                  alt="Mock Exam Cartoon"
                   className="w-24 h-32 object-contain select-none drop-shadow-lg"
                   draggable={false}
                   style={{ userSelect: "none" }}
