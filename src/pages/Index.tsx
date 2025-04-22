@@ -119,7 +119,13 @@ const Index = () => {
             <div className="flex items-center mb-2">{colorBlocks[2].icon}<span className="text-xl font-bold">{colorBlocks[2].title}</span></div>
             <div className="text-sm font-medium">{colorBlocks[2].desc}</div>
             <div className="flex-1 flex items-end">
-              <div className="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center font-bold text-[#B1B1B1] text-sm">{colorBlocks[2].placeholder}</div>
+              <img
+                src="/lovable-uploads/256e4bed-3c15-4fde-9f35-2b4259d122b7.png"
+                alt="My Words Cartoon Character"
+                className="w-24 h-32 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
             </div>
           </Link>
           {/* AI Tutor | 右下 */}
