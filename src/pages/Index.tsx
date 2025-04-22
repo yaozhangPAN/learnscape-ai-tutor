@@ -138,7 +138,7 @@ const Index = () => {
             <div className="text-sm font-semibold">{colorBlocks[1].desc}</div>
             <div className="flex-1 flex items-end justify-end pr-2">
               <img
-                src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+                src="/lovable-uploads/f0df06aa-0094-4ce2-9d9a-d7d749143aed.png"
                 alt="Question Bank Cartoon Character"
                 className="w-24 h-32 object-contain select-none drop-shadow-lg"
                 draggable={false}
