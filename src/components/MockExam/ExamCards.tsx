@@ -3,9 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Calendar, Download, FileText, PlayCircle, Star } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 import { ExamPaper } from "@/types/exam";
-import { downloadExamPaper } from "@/utils/examStorage";
 
 type ExamCardsProps = {
   papers: ExamPaper[];
@@ -13,25 +11,6 @@ type ExamCardsProps = {
 };
 
 const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
-  const handleDownload = async (paper: ExamPaper) => {
-    try {
-      console.log("尝试下载考试试卷:", paper.title, "ID:", paper.id);
-      
-      // 构建文件URL - 注意：在实际生产环境中，这个URL应该来自数据库
-      const fileUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers/${paper.id}.pdf`;
-      console.log("下载URL:", fileUrl);
-      
-      await downloadExamPaper(fileUrl, paper.title);
-    } catch (error) {
-      console.error("下载处理出错:", error);
-      toast({
-        title: "下载失败",
-        description: "无法下载所选考试试卷",
-        variant: "destructive",
-      });
-    }
-  };
-
   return (
     <div className="md:hidden">
       {papers.map((paper) => (
@@ -57,11 +36,7 @@ const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
             </div>
           </CardContent>
           <CardFooter className="flex gap-2">
-            <Button 
-              variant="outline" 
-              className="flex-1"
-              onClick={() => handleDownload(paper)}
-            >
+            <Button variant="outline" className="flex-1">
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>

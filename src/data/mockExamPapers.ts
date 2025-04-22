@@ -2,18 +2,6 @@ import { ExamPaper } from "@/types/exam";
 
 export const mockExamPapers: ExamPaper[] = [
   {
-    id: "13",
-    title: "Chinese Paper 2",
-    school: "Nanyang Primary",
-    year: "2019",
-    type: "SA1",
-    subject: "chinese",
-    level: "p6",
-    downloadCount: 178,
-    isTopSchool: true,
-    isOnlineAvailable: true
-  },
-  {
     id: "1",
     title: "English Paper 1",
     school: "Rosyth School",
@@ -156,6 +144,18 @@ export const mockExamPapers: ExamPaper[] = [
     downloadCount: 213,
     isTopSchool: false,
     isOnlineAvailable: false
+  },
+  {
+    id: "13",
+    title: "Chinese Paper 2",
+    school: "Nanyang Primary",
+    year: "2019",
+    type: "SA1",
+    subject: "chinese",
+    level: "p6",
+    downloadCount: 178,
+    isTopSchool: true,
+    isOnlineAvailable: true
   }
 ];
 
