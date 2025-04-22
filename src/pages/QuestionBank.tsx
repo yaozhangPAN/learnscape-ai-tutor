@@ -39,7 +39,9 @@ const defaultQuestionData = [
   { id: 22, title: "Grade 4 - Energy and Forces", subject: "Science", type: "Physics", level: "Primary 4", term: "SA1", date: "2025-03-13" },
   { id: 23, title: "Grade 5 - Materials and Matter", subject: "Science", type: "Chemistry", level: "Primary 5", term: "CA2", date: "2025-03-17" },
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
-];
+].filter(question => 
+  !["巧练题（一）", "巧练题（二）", "巧练题（三）", "看图作文题"].includes(question.title)
+);
 
 const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6", "小六"];
 const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华文"];
