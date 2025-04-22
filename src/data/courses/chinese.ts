@@ -2,8 +2,8 @@
 import { Course } from "@/types/course";
 
 export const oralPracticeCourse: Course = {
-  id: "psle-chinese-oral-practice",
-  title: "PSLE 华文口试练习",
+  id: "psle-chinese-oral-practice-1",
+  title: "PSLE 华文口试练习1",
   description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
   level: "p6",
   subject: "chinese",
@@ -16,6 +16,70 @@ export const oralPracticeCourse: Course = {
   type: "tutorial",
   videoUrl: "https://www.youtube.com/embed/ZobPO6C7TTM?si=0ZQL8bcz_vzgP1oq"
 };
+
+export const oralPracticeCourses: Course[] = [
+  oralPracticeCourse,
+  {
+    id: "psle-chinese-oral-practice-2",
+    title: "PSLE 华文口试练习2",
+    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+    level: "p6",
+    subject: "chinese",
+    duration: "1 video",
+    rating: 4.8,
+    students: 285,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    type: "tutorial",
+    videoUrl: "https://www.youtube.com/embed/cTRwD-h6xdA?si=c1CrIbAQHtuEAmF8"
+  },
+  {
+    id: "psle-chinese-oral-practice-3",
+    title: "PSLE 华文口试练习3",
+    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+    level: "p6",
+    subject: "chinese",
+    duration: "1 video",
+    rating: 4.8,
+    students: 267,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    type: "tutorial",
+    videoUrl: "https://www.youtube.com/embed/5Lib4BxW3tg?si=wqLRXlwKGcSNvCeM"
+  },
+  {
+    id: "psle-chinese-oral-practice-4",
+    title: "PSLE 华文口试练习4",
+    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+    level: "p6",
+    subject: "chinese",
+    duration: "1 video",
+    rating: 4.8,
+    students: 245,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    type: "tutorial",
+    videoUrl: "https://www.youtube.com/embed/C_DXx5gBPNg?si=VdSIsUAwxqc5_9rn"
+  },
+  {
+    id: "psle-chinese-oral-practice-5",
+    title: "PSLE 华文口试练习5",
+    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+    level: "p6",
+    subject: "chinese",
+    duration: "1 video",
+    rating: 4.8,
+    students: 234,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    type: "tutorial",
+    videoUrl: "https://www.youtube.com/embed/aP-XoRMU0OM?si=PM2FEF0OAB8-v1EX"
+  }
+];
 
 export const masterclassCourse: Course = {
   id: "psle-chinese-masterclass",
@@ -34,7 +98,7 @@ export const masterclassCourse: Course = {
 };
 
 export const chineseCourses: Course[] = [
-  oralPracticeCourse,
+  ...oralPracticeCourses,
   masterclassCourse,
   {
     id: "4",
