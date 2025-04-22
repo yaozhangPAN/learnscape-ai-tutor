@@ -8,7 +8,6 @@ import { ArrowRight, Sparkles, Calendar } from "lucide-react";
 const BEAR = "/public/lovable-uploads/415ba260-aeec-4f17-ae4e-b005b78136d5.png";
 const PANDA = "/public/lovable-uploads/2ac414cd-b34a-4efa-bf70-b16c471a377f.png";
 const BUNNY = "/public/lovable-uploads/72f82c67-0df8-4350-814c-79ce2d5faa3f.png";
-// 还有一张素材可以用，需要路径的话再补
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -23,28 +22,27 @@ const Hero = () => {
       {/* 背景渐变 */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#FEF7CD] to-white z-0"></div>
 
-      {/* 卡通人物---角落装饰，绝不靠近正文 */}
+      {/* 卡通人物---角落装饰，确保不遮挡正文且不重叠 */}
       <img
         src={BEAR}
         alt="Wise Bear"
-        className="hidden md:block absolute w-32 left-8 top-8 z-10 animate-float pointer-events-none"
+        className="hidden md:block absolute w-36 left-10 top-10 z-10 animate-float pointer-events-none"
         style={{ pointerEvents: 'none' }}
       />
       <img
         src={PANDA}
         alt="Red Panda"
-        className="hidden md:block absolute w-28 right-8 top-12 z-10 animate-float"
+        className="hidden md:block absolute w-32 right-14 bottom-16 z-10 animate-float pointer-events-none"
         style={{ pointerEvents: 'none' }}
       />
       <img
         src={BUNNY}
         alt="Explorer Bunny"
-        className="hidden md:block absolute w-24 left-6 bottom-10 z-10 animate-float"
+        className="hidden md:block absolute w-28 left-14 bottom-28 z-10 animate-float pointer-events-none"
         style={{ pointerEvents: 'none' }}
       />
-      {/* 可根据你第四张图再添加一个角落装饰 */}
 
-      {/* 彩色圆形装饰，保持原有 */}
+      {/* 彩色圆形装饰 */}
       <div className="absolute top-28 left-1/4 w-10 h-10 rounded-full bg-green-200 animate-bounce-slow opacity-70 hidden md:block"></div>
       <div className="absolute top-44 right-40 w-8 h-8 rounded-full bg-green-200 animate-float opacity-70 hidden md:block"></div>
       <div className="absolute bottom-24 left-1/3 w-6 h-6 rounded-full bg-yellow-200 animate-spin-slow opacity-70 hidden md:block"></div>
@@ -84,7 +82,7 @@ const Hero = () => {
                 </div>
               </div>
             </div>
-            {/* 右侧 “My Learning” 区域不放人物，只显示卡片 */}
+            {/* 右侧内容区 不放人物装饰，避免挡字 */}
             <div className={`mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
               <div className="relative mx-auto w-full rounded-lg lg:max-w-md">
                 <div className="relative block w-full bg-white rounded-xl shadow-lg overflow-hidden p-6">
@@ -99,26 +97,12 @@ const Hero = () => {
                     </Link>
                     <Link to="/daily-plan" className="bg-[#FFA85C] text-white px-4 py-3 rounded-xl flex items-center justify-between hover:scale-105 transition-transform relative">
                       <span>My Words</span>
-                      {/* 可选：小图标可放文字右下角，但不要盖文字 */}
-                      <img
-                        src={BUNNY}
-                        alt="Explorer Bunny"
-                        className="absolute -bottom-1 right-2 w-10 h-auto"
-                        style={{ pointerEvents: 'none' }}
-                      />
                     </Link>
-                    <Link to="/ai-tutor" className="bg-[#4ABA79] text-white px-4 py-3 rounded-xl flex items-center justify-between hover:scale-105 transition-transform relative">
+                    <Link to="/ai-tutor" className="bg-[#4ABA79] text-white px-4 py-3 rounded-xl flex items-center justify-between hover:scale-105 transition-transform">
                       <div>
                         <div>AI Tutor</div>
                         <div className="text-xs">Speaking, Writing</div>
                       </div>
-                      {/* 可选：PANDA漂浮右下角（不挡字） */}
-                      <img
-                        src={PANDA}
-                        alt="Red Panda Wizard"
-                        className="absolute -bottom-1 right-2 w-10 h-auto"
-                        style={{ pointerEvents: 'none' }}
-                      />
                     </Link>
                   </div>
                   <div className="mt-4 flex justify-between items-center">
@@ -129,7 +113,7 @@ const Hero = () => {
                   </div>
                 </div>
               </div>
-              {/* 移除任何会叠加文字区域上的人物装饰 */}
+              {/* 移除文字区域的人物装饰 */}
             </div>
           </div>
         </div>
