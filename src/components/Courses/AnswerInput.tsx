@@ -6,7 +6,7 @@ import { Mic, MicOff } from "lucide-react";
 
 interface AnswerInputProps {
   answer: string;
-  setAnswer: (val: string) => void;
+  setAnswer: React.Dispatch<React.SetStateAction<string>>;
   isRecording: boolean;
   startRecording: (callback: (transcript: string) => void) => void;
   stopRecording: () => void;
