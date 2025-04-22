@@ -1,3 +1,4 @@
+import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
@@ -94,7 +95,15 @@ const Index = () => {
               <div className="flex items-center mb-2">{colorBlocks[0].icon}<span className="text-xl font-bold">{colorBlocks[0].title}</span></div>
               <div className="text-sm font-medium">{colorBlocks[0].desc}</div>
             </div>
-            <div className="mt-6 flex-1 flex items-end justify-center" />
+            <div className="flex-1 flex items-end justify-end pr-2">
+              <img
+                src="/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png"
+                alt="Video Lessons Cartoon Character"
+                className="w-24 h-32 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
+            </div>
           </Link>
           {/* AI Tutor, 放 Video Lessons 的卡通形象 */}
           <Link 
