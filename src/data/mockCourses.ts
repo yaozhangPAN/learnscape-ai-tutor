@@ -29,7 +29,7 @@ export const oralPracticeCourse: Course = {
   isPremium: false,
   image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
   type: "tutorial",
-  videoUrl: "https://www.youtube.com/embed/ZobPO6C7TTM"
+  videoUrl: "https://www.youtube.com/embed/ZobPO6C7TTM?si=0ZQL8bcz_vzgP1oq"
 };
 
 export const mockCourses: Course[] = [
