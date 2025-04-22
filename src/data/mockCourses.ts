@@ -16,7 +16,24 @@ export const masterclassCourse: Course = {
   requiresAccessCode: true,
 };
 
+export const oralPracticeCourse: Course = {
+  id: "psle-chinese-oral-practice",
+  title: "PSLE 华文口试练习",
+  description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+  level: "p6",
+  subject: "chinese",
+  duration: "8 videos",
+  rating: 4.8,
+  students: 320,
+  price: "Free",
+  isPremium: false,
+  image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+  type: "tutorial",
+  videoUrl: "https://www.youtube.com/embed/videoseries?list=PLq3YJrmD9hxMgLrOUncGbf6h-o1CvPH48"
+};
+
 export const mockCourses: Course[] = [
+  oralPracticeCourse,
   masterclassCourse,
   {
     id: "1",

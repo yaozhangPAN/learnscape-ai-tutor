@@ -1,15 +1,17 @@
+
 import React, { useEffect, useRef } from 'react';
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 interface CourseVideoProps {
-  bucketName: string;
-  filePath: string;
+  bucketName?: string;
+  filePath?: string;
   title: string;
+  videoUrl?: string;
 }
 
-export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, title }) => {
+export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, title, videoUrl }) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [signedUrl, setSignedUrl] = React.useState<string | null>(null);
   const { toast } = useToast();
@@ -17,27 +19,29 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const getSignedUrl = async () => {
-      try {
-        const { data, error } = await supabase
-          .storage
-          .from(bucketName)
-          .createSignedUrl(filePath, 3600); // URL expires in 1 hour
+    if (bucketName && filePath) {
+      const getSignedUrl = async () => {
+        try {
+          const { data, error } = await supabase
+            .storage
+            .from(bucketName)
+            .createSignedUrl(filePath, 3600);
 
-        if (error) {
-          console.error('Error getting signed URL:', error);
-          return;
+          if (error) {
+            console.error('Error getting signed URL:', error);
+            return;
+          }
+
+          if (data?.signedUrl) {
+            setSignedUrl(data.signedUrl);
+          }
+        } catch (error) {
+          console.error('Error:', error);
         }
+      };
 
-        if (data?.signedUrl) {
-          setSignedUrl(data.signedUrl);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    getSignedUrl();
+      getSignedUrl();
+    }
   }, [bucketName, filePath]);
 
   useEffect(() => {
@@ -50,24 +54,13 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
       }
     };
 
-    // Setup fullscreen change event listener
-    const handleFullscreenChange = () => {
-      if (document.fullscreenElement && videoContainerRef.current) {
-        // Make sure watermark is part of fullscreen
-        console.log("Fullscreen entered");
-      }
-    };
-
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
     
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, [toast]);
 
-  // Function to handle enter fullscreen request
   const handleEnterFullscreen = () => {
     if (videoContainerRef.current) {
       if (videoContainerRef.current.requestFullscreen) {
@@ -87,7 +80,17 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
         ref={videoContainerRef}
         className="aspect-video relative"
       >
-        {signedUrl ? (
+        {videoUrl ? (
+          <iframe
+            className="w-full h-full"
+            src={videoUrl}
+            title={title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            onLoad={() => setIsLoading(false)}
+          />
+        ) : signedUrl ? (
           <>
             <video
               ref={videoRef}
@@ -115,7 +118,7 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
           </div>
         )}
         
-        {isLoading && signedUrl && (
+        {isLoading && (signedUrl || videoUrl) && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50">
             <Loader2 className="h-8 w-8 animate-spin text-white" />
           </div>

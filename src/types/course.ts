@@ -1,5 +1,5 @@
 
-export type Course = {
+export interface Course {
   id: string;
   title: string;
   description: string;
@@ -11,6 +11,7 @@ export type Course = {
   price: string;
   isPremium: boolean;
   image: string;
-  type?: string;
+  type: string;
   requiresAccessCode?: boolean;
-};
+  videoUrl?: string;
+}
