@@ -102,7 +102,7 @@ const AITutor = () => {
       id: "language-arts",
       title: "Language Arts Workshop",
       subtitle: "语文工坊",
-      icon: cartoonImages[5],
+      icon: "/lovable-uploads/35e5ebeb-cc32-46fc-961d-fb6241e51756.png", // New Language Arts Workshop icon
       color: cardColors[5],
       description: "创意写作&阅读理解，全面提升语文能力。",
       path: "#",
