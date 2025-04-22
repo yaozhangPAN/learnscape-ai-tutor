@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -39,7 +40,8 @@ serve(async (req) => {
   }
 
   try {
-    const { type, question, answer, imageUrl } = await req.json();
+    const requestData = await req.json();
+    const { type, question, answer, imageUrl, messages } = requestData;
 
     if (type === "feedback") {
       if (!question || !answer) {
