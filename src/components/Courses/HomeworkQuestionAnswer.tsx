@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -119,6 +120,31 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     </div>
   );
 
+  // Get the answer text from questionContent
+  // It could be a direct string, a property in an object, or null
+  const getAnswerText = () => {
+    if (!questionContent) return "";
+    
+    // If questionContent is a string
+    if (typeof questionContent === 'string') {
+      return questionContent;
+    }
+    
+    // If questionContent is an object with an answer property
+    if (typeof questionContent === 'object' && questionContent.answer) {
+      // Handle both string and object answers
+      if (typeof questionContent.answer === 'string') {
+        return questionContent.answer;
+      } else if (typeof questionContent.answer === 'object') {
+        // For complex answer objects, join the parts
+        const answerObj = questionContent.answer;
+        return Object.values(answerObj).filter(Boolean).join("\n\n");
+      }
+    }
+    
+    return "";
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-end gap-2">
@@ -176,7 +202,7 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
         
         {showAnswer && (
           <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-gray-800 whitespace-pre-wrap">{questionContent?.answer}</p>
+            <p className="text-gray-800 whitespace-pre-wrap">{getAnswerText()}</p>
           </div>
         )}
       </div>
