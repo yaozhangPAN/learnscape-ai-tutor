@@ -259,7 +259,7 @@ const Index = () => {
           />
         </div>
 
-        <HomeNote />
+        <HomeNote className="max-w-2xl w-full" />
       </main>
       <Footer />
     </div>
