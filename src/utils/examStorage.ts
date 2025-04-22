@@ -6,8 +6,19 @@ export const uploadExamPaper = async (file: File, examId: string): Promise<strin
   try {
     console.log("开始上传文件:", file.name, "大小:", file.size, "类型:", file.type);
     
+    // 验证文件类型
+    if (file.type !== 'application/pdf') {
+      console.error('文件类型错误:', file.type);
+      toast({
+        title: "上传失败",
+        description: "只支持PDF文件格式",
+        variant: "destructive",
+      });
+      return null;
+    }
+    
     const fileExt = file.name.split('.').pop();
-    const fileName = `${examId}-${Date.now()}.${fileExt}`;
+    const fileName = `${examId}.${fileExt}`;
     
     console.log("正在上传到 exam-papers 存储桶，文件名:", fileName);
     
@@ -15,7 +26,7 @@ export const uploadExamPaper = async (file: File, examId: string): Promise<strin
       .from('exam-papers')
       .upload(fileName, file, {
         cacheControl: '3600',
-        upsert: false
+        upsert: true // 允许覆盖同名文件
       });
 
     if (error) {
@@ -27,6 +38,8 @@ export const uploadExamPaper = async (file: File, examId: string): Promise<strin
         errorMessage = "文件太大，超出了存储限制";
       } else if (error.message.includes("Unauthorized")) {
         errorMessage = "未授权访问。请确保您已登录并有上传权限";
+      } else if (error.message.includes("not supported")) {
+        errorMessage = "不支持的文件类型，只接受PDF文件";
       }
       
       toast({
@@ -79,7 +92,12 @@ export const downloadExamPaper = async (fileUrl: string, paperTitle: string) => 
     }
     
     const blob = await response.blob();
-    console.log("文件下载成功，大小:", blob.size);
+    console.log("文件下载成功，大小:", blob.size, "类型:", blob.type);
+    
+    // 验证是否为PDF文件
+    if (blob.type !== 'application/pdf') {
+      console.warn("下载的文件不是PDF格式:", blob.type);
+    }
     
     const downloadUrl = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
