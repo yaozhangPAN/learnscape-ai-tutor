@@ -1,4 +1,21 @@
+
 import { Course } from "@/types/course";
+
+export const masterclassCourse: Course = {
+  id: "psle-chinese-masterclass",
+  title: "PSLE 华文名师专项提分课",
+  description: "由资深华文名师主讲，针对PSLE华文考试重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "10 weeks",
+  rating: 4.9,
+  students: 156,
+  price: "S$399",
+  isPremium: true,
+  image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+  type: "tutorial",
+  requiresAccessCode: true,
+};
 
 export const oralPracticeCourse: Course = {
   id: "psle-chinese-oral-practice-1",
@@ -11,7 +28,7 @@ export const oralPracticeCourse: Course = {
   students: 320,
   price: "Free",
   isPremium: false,
-  image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+  image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
   type: "tutorial",
   videoUrl: "https://www.youtube.com/embed/ZobPO6C7TTM?si=0ZQL8bcz_vzgP1oq"
 };
@@ -29,7 +46,7 @@ export const oralPracticeCourses: Course[] = [
     students: 285,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
     type: "tutorial",
     videoUrl: "https://www.youtube.com/embed/cTRwD-h6xdA?si=c1CrIbAQHtuEAmF8"
   },
@@ -44,7 +61,7 @@ export const oralPracticeCourses: Course[] = [
     students: 267,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
     type: "tutorial",
     videoUrl: "https://www.youtube.com/embed/5Lib4BxW3tg?si=wqLRXlwKGcSNvCeM"
   },
@@ -59,7 +76,7 @@ export const oralPracticeCourses: Course[] = [
     students: 245,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
     type: "tutorial",
     videoUrl: "https://www.youtube.com/embed/C_DXx5gBPNg?si=VdSIsUAwxqc5_9rn"
   },
@@ -74,7 +91,7 @@ export const oralPracticeCourses: Course[] = [
     students: 234,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
     type: "tutorial",
     videoUrl: "https://www.youtube.com/embed/aP-XoRMU0OM?si=PM2FEF0OAB8-v1EX"
   },
@@ -89,7 +106,7 @@ export const oralPracticeCourses: Course[] = [
     students: 223,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
     type: "tutorial",
     videoUrl: "https://www.youtube.com/embed/vzmtLIyebxg?si=kPxYvgFJpxCfLpWm"
   },
@@ -104,71 +121,13 @@ export const oralPracticeCourses: Course[] = [
     students: 215,
     price: "Free",
     isPremium: false,
-    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
     type: "tutorial",
     videoUrl: "https://www.youtube.com/embed/sP0tVrtx_LY?si=WVIDrYeoCcP8PSrN"
   }
 ];
 
-export const masterclassCourse: Course = {
-  id: "psle-chinese-masterclass",
-  title: "PSLE 华文名师专项提分课",
-  description: "由资深华文名师主讲，针对PSLE华文考试重点难点进行专项训练，助你提升成绩。",
-  level: "p6",
-  subject: "chinese",
-  duration: "10 weeks",
-  rating: 4.9,
-  students: 156,
-  price: "S$399",
-  isPremium: true,
-  image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
-  type: "tutorial",
-  requiresAccessCode: true,
-};
-
 export const chineseCourses: Course[] = [
-  ...oralPracticeCourses,
   masterclassCourse,
-  {
-    id: "4",
-    title: "Primary 6 Chinese - Vocabulary Building",
-    description: "Expand your Chinese vocabulary for PSLE Chinese examinations",
-    level: "p6",
-    subject: "chinese",
-    duration: "10 weeks",
-    rating: 4.6,
-    students: 142,
-    price: "S$599",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "7",
-    title: "Primary 6 Chinese - Mastering Comprehension",
-    description: "Improve your reading and understanding of Chinese texts for PSLE",
-    level: "p6",
-    subject: "chinese",
-    duration: "11 weeks",
-    rating: 4.8,
-    students: 156,
-    price: "S$399",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  },
-  {
-    id: "8",
-    title: "Primary 6 Chinese - Mastering Composition",
-    description: "Develop essential writing skills for Chinese compositions in PSLE",
-    level: "p6",
-    subject: "chinese",
-    duration: "12 weeks",
-    rating: 4.9,
-    students: 168,
-    price: "S$499",
-    isPremium: true,
-    image: "https://images.unsplash.com/photo-1449157291145-7bf3a84b82f8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
-    type: "tutorial"
-  }
+  ...oralPracticeCourses
 ];
