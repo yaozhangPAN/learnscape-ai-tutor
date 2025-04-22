@@ -1,7 +1,10 @@
 
 import { useState, useEffect } from 'react';
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 
 const OralExamRedirect = () => {
+  useRequirePremium();
+
   const [loading, setLoading] = useState(true);
 
   // Hide loading spinner after iframe loads
@@ -27,3 +30,4 @@ const OralExamRedirect = () => {
 };
 
 export default OralExamRedirect;
+
