@@ -20,6 +20,7 @@ export const CourseContent = ({
   onAccessCodeCheck 
 }: CourseContentProps) => {
   const course = mockCourses.find(c => c.id === courseId);
+  const showHomework = courseId !== 'psle-chinese-oral-practice';
   
   return (
     <div className="space-y-8">
@@ -33,7 +34,7 @@ export const CourseContent = ({
       ) : (
         <LockedCourseContent onAccessCodeCheck={onAccessCodeCheck} />
       )}
-      <CourseHomework />
+      {showHomework && <CourseHomework />}
     </div>
   );
 };
