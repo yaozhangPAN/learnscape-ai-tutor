@@ -82,7 +82,7 @@ const AITutor = () => {
       id: "tutor-me",
       title: "Tutor Me",
       subtitle: "一对一提问",
-      icon: cartoonImages[3],
+      icon: "/lovable-uploads/134d4088-5005-41d9-9487-719568001089.png", // New Tutor Me icon
       color: cardColors[3],
       description: "学科难题不会怕，问AI随时随地答。",
       path: "/ai-tutor/tutor-me",
