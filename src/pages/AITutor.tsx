@@ -10,7 +10,6 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import AITutorHero from "@/components/AITutor/AITutorHero";
 import AITutorBubbleDecor from "@/components/AITutor/AITutorBubbleDecor";
 
-// 定义配色方案
 const cardColors = [
   "bg-[#e5deff]", // 淡紫
   "bg-[#d3e4fd]", // 淡蓝
@@ -20,7 +19,6 @@ const cardColors = [
   "bg-[#fbeadd]", // 奶油色
 ];
 
-// 可用的卡通图片（建议轮换）
 const cartoonImages = [
   "/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png",
   "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
@@ -46,7 +44,6 @@ const AITutor = () => {
     navigate("/ai-tutor/language-arts");
   };
 
-  // 卡片内容配置
   const tutorOptions = [
     {
       id: "writing-coach",
@@ -92,7 +89,7 @@ const AITutor = () => {
       id: "vocabulary",
       title: "Vocabulary Builder",
       subtitle: "词汇冲关",
-      icon: "/lovable-uploads/dd362a8e-2391-4d80-aa88-c1d33876d724.png",
+      icon: "/lovable-uploads/3a8a17fe-664a-4c72-990a-dee148e1f5bb.png", // New Vocabulary Builder icon
       color: cardColors[4],
       description: "闯关答题记单词，词汇量UP!",
       path: "/ai-tutor/vocabulary",
@@ -114,7 +111,6 @@ const AITutor = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#f7f8fd] relative overflow-x-hidden">
       <Navbar />
-      {/* Banner 插图和大��题区域 */}
       <div className="relative z-10"> 
         <AITutorHero />
         <AITutorBubbleDecor />
