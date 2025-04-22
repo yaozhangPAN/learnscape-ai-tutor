@@ -1,9 +1,11 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Download, PlayCircle, Star } from "lucide-react";
 import { ExamPaper } from "@/types/exam";
 import { downloadExamPaper } from "@/utils/examStorage";
+import { toast } from "@/hooks/use-toast";
 
 type ExamTableProps = {
   papers: ExamPaper[];
@@ -12,10 +14,22 @@ type ExamTableProps = {
 
 const ExamTable: React.FC<ExamTableProps> = ({ papers, handleTakeExam }) => {
   const handleDownload = async (paper: ExamPaper) => {
-    // Simulate a file URL for demonstration
-    // In production, this URL would come from your database
-    const fileUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers/${paper.id}.pdf`;
-    await downloadExamPaper(fileUrl, paper.title);
+    try {
+      console.log("尝试下载考试试卷:", paper.title, "ID:", paper.id);
+      
+      // 构建文件URL - 注意：在实际生产环境中，这个URL应该来自数据库
+      const fileUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers/${paper.id}.pdf`;
+      console.log("下载URL:", fileUrl);
+      
+      await downloadExamPaper(fileUrl, paper.title);
+    } catch (error) {
+      console.error("下载处理出错:", error);
+      toast({
+        title: "下载失败",
+        description: "无法下载所选考试试卷",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
