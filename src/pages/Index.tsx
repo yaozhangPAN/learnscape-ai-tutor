@@ -15,7 +15,7 @@ const colorBlocks = [
   {
     title: "Video Lessons",
     desc: "各科名师视频课程",
-    className: "bg-[#71C479] text-white",
+    className: "bg-[#FFA54E] text-white", // Updated to match template's orange
     icon: <Video className="w-8 h-8 mr-2" />,
     style: "row-span-2 flex-col justify-between",
     to: "/video-tutorials"
@@ -23,7 +23,7 @@ const colorBlocks = [
   {
     title: "Question Bank",
     desc: "PSLE真题与模拟题",
-    className: "bg-[#7FDBD7] text-[#31312D]",
+    className: "bg-[#2AB4AF] text-white", // Updated to match template's teal
     icon: <Book className="w-8 h-8 mr-2" />,
     style: "col-span-2",
     to: "/question-bank"
@@ -31,7 +31,7 @@ const colorBlocks = [
   {
     title: "My Words",
     desc: "词语本&生词本",
-    className: "bg-[#FFA64E] text-white",
+    className: "bg-[#FFA64E] text-white", // Keeping a similar orange tone
     icon: <Star className="w-8 h-8 mr-2" />,
     style: "",
     to: "/vocabulary-builder"
@@ -39,7 +39,7 @@ const colorBlocks = [
   {
     title: "AI Tutor",
     desc: "口语/写作/词汇练习",
-    className: "bg-[#F2DEFF] text-[#31312D]", // Changed to pastel purple
+    className: "bg-[#9D7CFF] text-white", // Updated to match template's purple
     icon: <Star className="w-8 h-8 mr-2" />,
     style: "",
     to: "/ai-tutor"
@@ -64,7 +64,7 @@ const colorBlocks = [
         </div>
       </>
     ),
-    className: "bg-[#F2FCE2] text-[#31312D]", // Changed to soft green
+    className: "bg-[#37C871] text-white", // Updated to match template's green
     icon: null,
     style: "col-span-2 flex-col justify-center",
     to: "/dashboard"
