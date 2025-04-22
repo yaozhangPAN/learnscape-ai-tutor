@@ -1,10 +1,17 @@
+
 import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Link } from "react-router-dom";
+import DailyAdventure from "@/components/home/DailyAdventure";
+import VideoSection from "@/components/home/VideoSection";
+import QuestionBankSection from "@/components/home/QuestionBankSection";
+import MyWordsSection from "@/components/home/MyWordsSection";
+import AITutorSection from "@/components/home/AITutorSection";
+import EmptyBlock from "@/components/home/EmptyBlock";
 import { Video, Book, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 
-// 主色彩块
+// 主色彩块数据
 const colorBlocks = [
   {
     title: "Video Lessons",
@@ -85,118 +92,53 @@ const Index = () => {
         
         {/* Daily Adventure section moved to the top */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
-          <Link 
-            to={colorBlocks[5].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg ${colorBlocks[5].className} ${colorBlocks[5].style} relative`}
-            style={{
-              background: `url('/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png') no-repeat center center`,
-              backgroundSize: 'cover',
-            }}
-          >
-            <span className="text-lg font-bold mb-1 text-white drop-shadow">Daily Adventure</span>
-            <div className="text-white drop-shadow">{colorBlocks[5].desc}</div>
-            <div className="flex-1 flex items-end justify-end pr-2">
-              <img
-                src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
-                alt="Daily Adventure Cartoon Character"
-                className="w-20 h-20 object-contain select-none drop-shadow-lg"
-                draggable={false}
-                style={{ userSelect: "none" }}
-              />
-            </div>
-          </Link>
+          <DailyAdventure
+            to={colorBlocks[5].to}
+            className={colorBlocks[5].className}
+            style={colorBlocks[5].style}
+            desc={colorBlocks[5].desc}
+          />
         </div>
 
-        {/* 新布局: 顶部双并排大块 (Video Lessons + AI Tutor) */}
+        {/* 顶部双并排大块 (Video Lessons + AI Tutor) */}
         <div className="grid grid-cols-2 grid-rows-1 gap-4 max-w-2xl w-full mb-4 transition-all">
-          {/* Video Lessons */}
-          <Link 
-            to={colorBlocks[0].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[0].className}`} 
-            style={{ minHeight: 180 }}
-          >
-            <div>
-              <div className="flex items-center mb-2">{colorBlocks[0].icon}<span className="text-xl font-bold">{colorBlocks[0].title}</span></div>
-              <div className="text-sm font-medium">{colorBlocks[0].desc}</div>
-            </div>
-            <div className="flex-1 flex items-end justify-end pr-2">
-              <img
-                src="/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png"
-                alt="Video Lessons Cartoon Character"
-                className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                draggable={false}
-                style={{ userSelect: "none" }}
-              />
-            </div>
-          </Link>
-          {/* AI Tutor, 放 Video Lessons 的卡通形象 */}
-          <Link 
-            to={colorBlocks[3].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[3].className}`} 
-            style={{ minHeight: 180 }}
-          >
-            <div>
-              <div className="flex items-center mb-2">{colorBlocks[3].icon}<span className="text-xl font-bold">{colorBlocks[3].title}</span></div>
-              <div className="text-sm font-medium">{colorBlocks[3].desc}</div>
-            </div>
-            <div className="flex-1 flex items-end justify-end">
-              <img
-                src="/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png"
-                alt="Cartoon Character"
-                className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                draggable={false}
-                style={{ userSelect: "none" }}
-              />
-            </div>
-          </Link>
+          <VideoSection
+            to={colorBlocks[0].to}
+            className={colorBlocks[0].className}
+            icon={colorBlocks[0].icon}
+            title={colorBlocks[0].title}
+            desc={colorBlocks[0].desc}
+          />
+          <AITutorSection
+            to={colorBlocks[3].to}
+            className={colorBlocks[3].className}
+            icon={colorBlocks[3].icon}
+            title={colorBlocks[3].title}
+            desc={colorBlocks[3].desc}
+          />
         </div>
         
         {/* 第二行：Question Bank + My Words */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
-          {/* Question Bank | 题库，图片靠右 */}
-          <Link 
-            to={colorBlocks[1].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[1].className} min-h-[144px]`}
-          >
-            <div className="flex items-center mb-2">{colorBlocks[1].icon}<span className="text-xl font-bold">{colorBlocks[1].title}</span></div>
-            <div className="text-sm font-semibold">{colorBlocks[1].desc}</div>
-            <div className="flex-1 flex items-end justify-end pr-2">
-              <img
-                src="/lovable-uploads/f0df06aa-0094-4ce2-9d9a-d7d749143aed.png"
-                alt="Question Bank Cartoon Character"
-                className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                draggable={false}
-                style={{ userSelect: "none" }}
-              />
-            </div>
-          </Link>
-          {/* My Words | 词语本，用新上传的图片 */}
-          <Link 
-            to={colorBlocks[2].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[2].className} min-h-[144px]`}
-          >
-            <div className="flex items-center mb-2">{colorBlocks[2].icon}<span className="text-xl font-bold">{colorBlocks[2].title}</span></div>
-            <div className="text-sm font-medium">{colorBlocks[2].desc}</div>
-            <div className="flex-1 flex items-end justify-end pr-2">
-              <img
-                src="/lovable-uploads/673f2711-1205-4d7f-b4cd-7ac68b6ca77e.png"
-                alt="My Words Custom Cartoon"
-                className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                draggable={false}
-                style={{ userSelect: "none" }}
-              />
-            </div>
-          </Link>
+          <QuestionBankSection
+            to={colorBlocks[1].to}
+            className={colorBlocks[1].className}
+            icon={colorBlocks[1].icon}
+            title={colorBlocks[1].title}
+            desc={colorBlocks[1].desc}
+          />
+          <MyWordsSection
+            to={colorBlocks[2].to}
+            className={colorBlocks[2].className}
+            icon={colorBlocks[2].icon}
+            title={colorBlocks[2].title}
+            desc={colorBlocks[2].desc}
+          />
         </div>
         
-        {/* 第三行：留白模块 + Daily Adventure */}
+        {/* 第三行：留白模块 */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-8 transition-all">
-          {/* 留白块 */}
-          <div className="flex items-center justify-center rounded-2xl bg-white/50 border-2 border-white shadow-lg min-h-[144px]">
-            {colorBlocks[4].placeholder}
-          </div>
-          {/* Daily Adventure，右下放Question Bank的卡通 */}
-          
+          <EmptyBlock />
         </div>
         
         {/* 温馨提示 */}
