@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -53,7 +52,7 @@ const AITutor = () => {
       id: "writing-coach",
       title: "Writing Coach",
       subtitle: "写作教练",
-      icon: cartoonImages[0],
+      icon: "/lovable-uploads/ea629f6c-6bb6-4da1-a355-703f3196322d.png", // New bear icon
       color: cardColors[0],
       description: "提升写作技巧，获得AI写作反馈和建议。",
       path: "/ai-tutor/writing-coach",
@@ -115,7 +114,7 @@ const AITutor = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#f7f8fd] relative overflow-x-hidden">
       <Navbar />
-      {/* Banner 插图和大标题区域 */}
+      {/* Banner 插图和大��题区域 */}
       <div className="relative z-10"> 
         <AITutorHero />
         <AITutorBubbleDecor />
@@ -184,4 +183,3 @@ const AITutor = () => {
 };
 
 export default AITutor;
-
