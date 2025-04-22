@@ -1,4 +1,3 @@
-
 import { Course } from "@/types/course";
 
 export const oralPracticeCourse: Course = {
@@ -78,6 +77,36 @@ export const oralPracticeCourses: Course[] = [
     image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
     type: "tutorial",
     videoUrl: "https://www.youtube.com/embed/aP-XoRMU0OM?si=PM2FEF0OAB8-v1EX"
+  },
+  {
+    id: "psle-chinese-oral-practice-6",
+    title: "PSLE 华文口试练习6",
+    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+    level: "p6",
+    subject: "chinese",
+    duration: "1 video",
+    rating: 4.8,
+    students: 223,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    type: "tutorial",
+    videoUrl: "https://www.youtube.com/embed/vzmtLIyebxg?si=kPxYvgFJpxCfLpWm"
+  },
+  {
+    id: "psle-chinese-oral-practice-7",
+    title: "PSLE 华文口试练习7",
+    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+    level: "p6",
+    subject: "chinese",
+    duration: "1 video",
+    rating: 4.8,
+    students: 215,
+    price: "Free",
+    isPremium: false,
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b",
+    type: "tutorial",
+    videoUrl: "https://www.youtube.com/embed/sP0tVrtx_LY?si=WVIDrYeoCcP8PSrN"
   }
 ];
 
