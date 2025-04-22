@@ -168,10 +168,11 @@ const Index = () => {
               )}
             </div>
           </Link>
+
           <OnlineClassroomSection
             to={mainBlocks[3].to}
             className={`${mainBlocks[3].bg} ${mainBlocks[3].text}`}
-            icon={mainBlocks[3].icon}
+            icon={<img src="/lovable-uploads/7a7e4714-d8d9-4f9c-acdc-a5e2aaae7344.png" alt="Online Classroom Icon" className="w-8 h-8 mr-2" />}
             title={mainBlocks[3].title}
             desc={mainBlocks[3].desc}
           />
@@ -195,6 +196,7 @@ const Index = () => {
               )}
             </div>
           </Link>
+
           <Link
             to={mainBlocks[5].to}
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${mainBlocks[5].bg} ${mainBlocks[5].text}`}
@@ -227,6 +229,7 @@ const Index = () => {
             <div className="absolute inset-0 rounded-2xl bg-yellow-100 opacity-0 hover:opacity-20 transition-opacity z-10"></div>
             <div className="flex-1 z-20"></div>
           </div>
+
           <LeaderboardSection
             to={mainBlocks[7].to}
             className={`${mainBlocks[7].bg} ${mainBlocks[7].text}`}
