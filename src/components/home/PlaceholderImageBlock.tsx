@@ -1,17 +1,30 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 
 const PlaceholderImageBlock: React.FC = () => (
   <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-8 transition-all">
-    <div className="flex items-center justify-center rounded-2xl bg-white/50 border-2 border-white shadow-lg min-h-[144px] w-full overflow-hidden">
+    <Link
+      to="/dashboard"
+      className="flex items-center justify-center rounded-2xl bg-white/50 border-2 border-white shadow-lg min-h-[144px] w-full overflow-hidden relative group focus:outline-none focus:ring-2 focus:ring-[#fbc02d] transition-all"
+      style={{ textDecoration: 'none' }}
+      draggable={false}
+    >
+      {/* 标题 */}
+      <div className="absolute top-3 left-3 z-10 bg-white/70 rounded-lg px-4 py-1 font-bold text-[#C48829] text-lg shadow group-hover:bg-yellow-100 transition-colors">
+        Streak and Progress
+      </div>
+      {/* 新图片作为背景 */}
       <img
-        src="/lovable-uploads/42744e08-0a1c-498b-b49a-4d816f75f591.png"
-        alt="Daily Adventure Illustration"
-        className="object-contain w-full h-full max-h-60 transition-all"
+        src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+        alt="Streak and Progress"
+        className="object-contain w-full h-full max-h-60 opacity-100 transition-all duration-200"
         draggable={false}
         style={{ userSelect: "none" }}
       />
-    </div>
+      {/* 点击区域做 hover 动效，可选加亮 */}
+      <div className="absolute inset-0 rounded-2xl bg-yellow-100 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+    </Link>
   </div>
 );
 
