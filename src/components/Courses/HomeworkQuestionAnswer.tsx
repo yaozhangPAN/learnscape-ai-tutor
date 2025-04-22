@@ -1,7 +1,7 @@
+
 import React, { useState } from 'react';
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, HelpCircle, Lock, Eye } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CapyzenComment } from "./CapyzenComment";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
@@ -9,6 +9,9 @@ import { useCapyzenChat } from "@/hooks/useCapyzenChat";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { supabase } from "@/integrations/supabase/client";
 import type { QuestionAnswerProps } from "./types";
+import { AnswerInput } from "./AnswerInput";
+import { QuestionRevealAnswer } from "./QuestionRevealAnswer";
+import { PremiumHint } from "./PremiumHint";
 
 const getAIFeedback = async (question: string, answer: string, imageUrl?: string): Promise<string> => {
   try {
@@ -53,25 +56,12 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
   const { forwardToChat } = useCapyzenChat();
   const { isPremium, loadingSubscription, startCheckoutSession } = useSubscription();
 
-  const toggleRecording = () => {
-    if (!isPremium) {
-      toast({
-        title: "仅限付费会员",
-        description: "开通会员即可使用语音输入与点评功能",
-        variant: "destructive"
-      });
-      return;
-    }
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording((transcript: string) => {
-        setAnswer(prev => {
-          const newText = prev ? prev + ' ' + transcript : transcript;
-          return newText.trim();
-        });
-      });
-    }
+  const handleNotPremium = () => {
+    toast({
+      title: "仅限付费会员",
+      description: "开通会员即可使用语音输入与点评功能",
+      variant: "destructive"
+    });
   };
 
   const handleAIFeedback = async () => {
@@ -147,42 +137,19 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
     setShowAnswer(!showAnswer);
   };
 
-  const premiumHint = (
-    <div className="flex items-center text-xs text-orange-600 mt-2 gap-1">
-      <Lock className="w-4 h-4 mr-1" />
-      仅付费会员可使用AI点评/对话，<button
-        className="underline text-blue-600 hover:text-orange-500 ml-1"
-        onClick={async () => {
-          const url = await startCheckoutSession("premium_subscription");
-          if (url) window.location.href = url;
-        }}
-      >立即开通</button>
-    </div>
-  );
-
   return (
     <div className="space-y-4">
-      <div className="flex items-end gap-2">
-        <Textarea
-          placeholder="在此输入您的答案..."
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          className="flex-1"
-          disabled={false}
-        />
-        <Button
-          variant={isRecording ? "destructive" : "secondary"}
-          size="icon"
-          onClick={toggleRecording}
-          className="mt-1"
-          disabled={isRecording ? false : loadingSubscription}
-        >
-          {isRecording ? (
-            <MicOff className="h-4 w-4" />
-          ) : (
-            <Mic className="h-4 w-4" />
-          )}
-        </Button>
+      <AnswerInput
+        answer={answer}
+        setAnswer={setAnswer}
+        isRecording={isRecording}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
+        loadingSubscription={loadingSubscription}
+        isPremium={isPremium}
+        onNotPremium={handleNotPremium}
+      />
+      <div>
         <Button
           type="button"
           variant="default"
@@ -204,26 +171,13 @@ export const HomeworkQuestionAnswer: React.FC<QuestionAnswerProps> = ({
           )}
         </Button>
       </div>
-
-      <div className="mt-4">
-        <Button
-          onClick={toggleAnswer}
-          variant="outline"
-          className="flex items-center gap-2"
-          disabled={isLoadingAnswer}
-        >
-          <Eye className="h-4 w-4" />
-          {isLoadingAnswer ? "加载中..." : showAnswer ? "隐藏答案" : "查看答案"}
-        </Button>
-        
-        {showAnswer && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-gray-800 whitespace-pre-wrap">{dbAnswer}</p>
-          </div>
-        )}
-      </div>
-
-      {!isPremium && !loadingSubscription && premiumHint}
+      <QuestionRevealAnswer
+        showAnswer={showAnswer}
+        isLoadingAnswer={isLoadingAnswer}
+        dbAnswer={dbAnswer}
+        onToggle={toggleAnswer}
+      />
+      {!isPremium && <PremiumHint loadingSubscription={loadingSubscription} startCheckoutSession={startCheckoutSession} />}
       {aiComment && (
         <CapyzenComment 
           feedback={aiComment} 
