@@ -42,14 +42,14 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`bg-white sticky top-0 z-50 transition-all duration-300 ${
+    <nav className={`bg-learnscape-darkBlue sticky top-0 z-50 transition-all duration-300 ${
       scrolled ? 'shadow-md' : 'shadow-sm'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
             <Link to="/" className="flex items-center group">
-              <span className="text-2xl font-extrabold gradient-text flex items-center relative">
+              <span className="text-2xl font-extrabold text-white flex items-center relative">
                 Learnscape
                 <Sparkles className="ml-1 h-4 w-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse" />
               </span>
@@ -61,13 +61,13 @@ const Navbar = () => {
               <Link 
                 key={link.path} 
                 to={link.path} 
-                className={`text-gray-700 hover:text-learnscape-blue transition-colors py-1 group relative font-bold ${
-                  location.pathname === link.path ? 'text-learnscape-blue font-bold' : ''
+                className={`text-white hover:text-yellow-300 transition-colors py-1 group relative font-bold ${
+                  location.pathname === link.path ? 'text-yellow-300 font-bold' : ''
                 }`}
               >
                 {link.name}
                 {location.pathname === link.path && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-learnscape-blue"></span>
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-300"></span>
                 )}
                 {link.icon && (
                   <span className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -81,7 +81,7 @@ const Navbar = () => {
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                className="flex items-center"
+                className="flex items-center text-white border-white/30 hover:bg-white/10"
               >
                 <LogOut className="mr-1 h-4 w-4" />
                 Logout
@@ -89,11 +89,10 @@ const Navbar = () => {
             ) : (
               <Button 
                 asChild
-                className="bg-[#FFA500] hover:bg-[#FF6F00] group relative overflow-hidden"
+                className="bg-white text-learnscape-darkBlue hover:bg-yellow-100"
               >
                 <Link to="/login">
                   <span className="relative z-10">Login</span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-[#FF8C00] to-[#FF6F00] opacity-0 group-hover:opacity-100 transition-opacity"></span>
                 </Link>
               </Button>
             )}
@@ -102,7 +101,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-learnscape-blue focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-yellow-300 focus:outline-none"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -113,15 +112,15 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-learnscape-darkBlue">
             {navLinks.map((link) => (
               <Link 
                 key={link.path}
                 to={link.path} 
                 className={`block px-3 py-2 rounded-md text-base font-bold ${
                   location.pathname === link.path 
-                    ? 'text-learnscape-blue bg-green-50' 
-                    : 'text-gray-700 hover:text-learnscape-blue'
+                    ? 'text-yellow-300 bg-white/10' 
+                    : 'text-white hover:text-yellow-300'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -132,7 +131,7 @@ const Navbar = () => {
             {user ? (
               <button 
                 onClick={handleLogout}
-                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-red-500 hover:bg-red-600 mt-4"
+                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-red-500/30 hover:bg-red-500/50 mt-4"
               >
                 <span className="flex items-center">
                   <LogOut className="mr-2 h-4 w-4" />
@@ -142,7 +141,7 @@ const Navbar = () => {
             ) : (
               <Link 
                 to="/login" 
-                className="block px-3 py-2 rounded-md text-base font-medium bg-[#FFA500] hover:bg-[#FF6F00] text-white mt-4 text-center"
+                className="block px-3 py-2 rounded-md text-base font-medium bg-white text-learnscape-darkBlue hover:bg-yellow-100 mt-4 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Login
@@ -156,3 +155,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
