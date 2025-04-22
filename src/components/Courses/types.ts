@@ -9,7 +9,7 @@ export interface HomeworkQuestion {
 
 export interface QuestionAnswerProps {
   questionId: string;
-  questionContent: string;
+  questionContent: any; // Changed from string to any to support nested properties
   questionText: string;
   imageUrl?: string;
 }
