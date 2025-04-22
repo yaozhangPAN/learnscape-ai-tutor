@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import ExamQuestion from "./ExamQuestion";
 import ExamTimer from "./ExamTimer";
 import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
-import { mockQuestions } from "./mockData";
+import { supabase } from "@/integrations/supabase/client";
 
 const OnlineExam = () => {
   const { examId } = useParams();
@@ -25,29 +25,48 @@ const OnlineExam = () => {
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [examStarted, setExamStarted] = useState(false);
   const [examCompleted, setExamCompleted] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(3600); // 60 minutes by default
+  const [timeRemaining, setTimeRemaining] = useState(6000); // 1 hour 40 minutes by default
   const [score, setScore] = useState<number | null>(null);
   
-  // Fetch the exam paper based on examId
+  // Fetch the exam paper and questions from Supabase
   useEffect(() => {
     const fetchExam = async () => {
       try {
         setLoading(true);
-        // In a real app, this would be a fetch from Supabase
-        // For now, we'll use mock data
-        setTimeout(() => {
-          // Mock data for demonstration
+        
+        // First, get exam paper information
+        if (examId === "1") { // For Nanyang P6 Chinese exam
+          console.log("Fetching Nanyang Primary P6 Chinese exam questions");
+          
+          // Fetch questions from Supabase for Nanyang Primary P6 Chinese
+          const { data: questionData, error: questionError } = await supabase
+            .from('questions')
+            .select('*')
+            .eq('level', 'p6')
+            .eq('subject', 'chinese');
+          
+          if (questionError) {
+            console.error("Error fetching questions:", questionError);
+            throw new Error("Failed to load questions");
+          }
+          
+          console.log("Fetched questions:", questionData);
+          
+          // Sort questions into the specified order
+          const sortedQuestions = organizeQuestions(questionData || []);
+          
+          // Create the exam paper with the fetched questions
           const exam: ExamPaper = {
-            id: examId || "1",
-            title: "Mathematics Paper 1",
+            id: examId,
+            title: "Chinese Paper 2",
             school: "Nanyang Primary",
-            subject: "mathematics",
+            subject: "chinese",
             level: "p6",
-            year: "2023",
-            type: "SA2",
-            durationMinutes: 60,
-            totalMarks: 100,
-            questions: mockQuestions,
+            year: "2019",
+            type: "SA1",
+            durationMinutes: 100, // 1 hour 40 minutes
+            totalMarks: calculateTotalMarks(sortedQuestions),
+            questions: sortedQuestions,
           };
           
           setCurrentExam(exam);
@@ -63,8 +82,15 @@ const OnlineExam = () => {
           }));
           
           setUserAnswers(initialAnswers);
-          setLoading(false);
-        }, 1000);
+        } else {
+          toast({
+            title: "Error",
+            description: "Exam not found.",
+            variant: "destructive"
+          });
+        }
+        
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching exam:", error);
         toast({
@@ -79,19 +105,127 @@ const OnlineExam = () => {
     fetchExam();
   }, [examId, toast]);
 
+  // Function to organize questions in the specified order
+  const organizeQuestions = (questionsData: any[]): Question[] => {
+    // Define section titles for sorting
+    const sectionOrder = [
+      "语文应用",
+      "短文填空",
+      "阅读理解一",
+      "完成对话",
+      "阅读理解二"
+    ];
+    
+    const organizedQuestions: Question[] = [];
+    
+    // Process each section in order
+    sectionOrder.forEach(sectionTitle => {
+      // Find questions for this section
+      const sectionQuestions = questionsData.filter(q => {
+        if (q.content && typeof q.content === 'object') {
+          return q.content.section === sectionTitle || 
+                (q.title && q.title.includes(sectionTitle));
+        }
+        return false;
+      });
+      
+      // Convert to our Question format and add to the organized list
+      sectionQuestions.forEach(q => {
+        if (q.content) {
+          try {
+            const content = typeof q.content === 'string' 
+              ? JSON.parse(q.content) 
+              : q.content;
+            
+            const question: Question = {
+              id: q.id,
+              text: content.questionText || q.title || sectionTitle,
+              type: determineQuestionType(content),
+              marks: content.marks || 2,
+            };
+            
+            // Add options for MCQ questions
+            if (question.type === "MCQ" && content.options) {
+              question.options = content.options.map((opt: any, index: number) => ({
+                value: String.fromCharCode(65 + index), // A, B, C, D...
+                label: `${String.fromCharCode(65 + index)}. ${opt}`
+              }));
+              question.correctAnswer = content.correctAnswer || "A";
+            }
+            
+            // For short answer questions
+            if (question.type === "ShortAnswer" && content.correctAnswer) {
+              question.correctAnswer = content.correctAnswer;
+            }
+            
+            organizedQuestions.push(question);
+          } catch (error) {
+            console.error("Error processing question:", error, q);
+          }
+        }
+      });
+    });
+    
+    // If no questions found from database, return at least one placeholder
+    if (organizedQuestions.length === 0) {
+      return [
+        {
+          id: "placeholder1",
+          text: "阅读理解（一）：请阅读下面的短文，然后回答问题。",
+          type: "MCQ",
+          marks: 2,
+          options: [
+            { value: "A", label: "A. 为人诚实" },
+            { value: "B", label: "B. 勤奋学习" },
+            { value: "C", label: "C. 关心他人" },
+            { value: "D", label: "D. 保护环境" }
+          ],
+          correctAnswer: "C"
+        }
+      ];
+    }
+    
+    return organizedQuestions;
+  };
+  
+  // Determine question type based on content
+  const determineQuestionType = (content: any): QuestionType => {
+    if (content.type) {
+      if (content.type.toLowerCase().includes('mcq') || 
+          content.type.toLowerCase().includes('multiple choice')) {
+        return "MCQ";
+      } else if (content.type.toLowerCase().includes('essay')) {
+        return "Essay";
+      }
+    }
+    
+    // Check if options exist to determine if it's MCQ
+    if (content.options && Array.isArray(content.options) && content.options.length > 0) {
+      return "MCQ";
+    }
+    
+    // Default to short answer
+    return "ShortAnswer";
+  };
+  
+  // Calculate total marks for all questions
+  const calculateTotalMarks = (questions: Question[]): number => {
+    return questions.reduce((total, q) => total + q.marks, 0);
+  };
+
   // Start the exam
   const startExam = () => {
     setExamStarted(true);
     toast({
-      title: "Exam Started",
-      description: `You have ${currentExam?.durationMinutes} minutes to complete this exam.`,
+      title: "考试开始",
+      description: `你有 ${currentExam?.durationMinutes} 分钟完成这次考试。`,
     });
   };
 
   // Submit the exam
   const submitExam = () => {
     if (userAnswers.some(answer => !answer.isAnswered)) {
-      const confirmation = window.confirm("You have unanswered questions. Are you sure you want to submit?");
+      const confirmation = window.confirm("你还有未回答的问题。确定要提交吗？");
       if (!confirmation) return;
     }
     
@@ -128,8 +262,8 @@ const OnlineExam = () => {
       setExamCompleted(true);
       
       toast({
-        title: "Exam Submitted",
-        description: `Your score: ${totalScore}/${currentExam.totalMarks}`,
+        title: "考试已提交",
+        description: `你的分数: ${totalScore}/${currentExam.totalMarks}`,
       });
     }
   };
@@ -137,8 +271,8 @@ const OnlineExam = () => {
   // Handle time expired
   const handleTimeExpired = () => {
     toast({
-      title: "Time's Up!",
-      description: "Your exam time has expired. Your answers have been automatically submitted.",
+      title: "时间到！",
+      description: "考试时间已结束。你的答案已自动提交。",
       variant: "destructive"
     });
     submitExam();
@@ -198,24 +332,24 @@ const OnlineExam = () => {
           <CardHeader className="bg-gradient-to-r from-blue-100 to-blue-50">
             <CardTitle className="flex items-center gap-2 text-2xl">
               <CheckCircle className="h-6 w-6 text-green-500" />
-              Exam Completed
+              考试结束
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <h2 className="text-xl font-bold mb-4">{currentExam.title}</h2>
             <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
               <div>
-                <p className="text-gray-600">School: {currentExam.school}</p>
-                <p className="text-gray-600">Level: {currentExam.level.toUpperCase()}</p>
+                <p className="text-gray-600">学校: {currentExam.school}</p>
+                <p className="text-gray-600">级别: {currentExam.level.toUpperCase()}</p>
               </div>
               <div>
-                <p className="text-gray-600">Type: {currentExam.type}</p>
-                <p className="text-gray-600">Year: {currentExam.year}</p>
+                <p className="text-gray-600">类型: {currentExam.type}</p>
+                <p className="text-gray-600">年份: {currentExam.year}</p>
               </div>
             </div>
             
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-              <h3 className="text-xl font-bold mb-2">Your Result</h3>
+              <h3 className="text-xl font-bold mb-2">你的成绩</h3>
               <div className="flex items-center gap-4 mb-4">
                 <div className="text-3xl font-bold text-green-600">{score}</div>
                 <div className="text-xl text-gray-500">/ {currentExam.totalMarks}</div>
@@ -229,24 +363,24 @@ const OnlineExam = () => {
               />
             </div>
             
-            <h3 className="text-lg font-bold mb-4">Question Summary</h3>
+            <h3 className="text-lg font-bold mb-4">题目概览</h3>
             <div className="space-y-4">
               {currentExam.questions.map((question, index) => (
                 <div key={question.id} className="border rounded-lg p-4">
                   <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium">Question {index + 1}</h4>
+                    <h4 className="font-medium">问题 {index + 1}</h4>
                     <div className={`px-2 py-1 rounded text-sm font-medium ${
                       userAnswers[index].isCorrect 
                         ? 'bg-green-100 text-green-800' 
                         : 'bg-red-100 text-red-800'
                     }`}>
-                      {userAnswers[index].isCorrect ? 'Correct' : 'Incorrect'}
+                      {userAnswers[index].isCorrect ? '正确' : '不正确'}
                     </div>
                   </div>
                   <p className="mb-2 text-sm">{question.text.substring(0, 100)}...</p>
                   <div className="flex justify-between text-sm">
-                    <span>Your answer: {userAnswers[index].answer || '(No answer)'}</span>
-                    <span>Marks: {userAnswers[index].marksAwarded}/{question.marks}</span>
+                    <span>你的答案: {userAnswers[index].answer || '(没有答案)'}</span>
+                    <span>得分: {userAnswers[index].marksAwarded}/{question.marks}</span>
                   </div>
                 </div>
               ))}
@@ -254,7 +388,7 @@ const OnlineExam = () => {
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button variant="outline" onClick={() => navigate("/mock-exam")}>
-              Back to Exam List
+              返回考试列表
             </Button>
             <Button onClick={() => {
               setExamStarted(false);
@@ -273,7 +407,7 @@ const OnlineExam = () => {
                 setUserAnswers(resetAnswers);
               }
             }}>
-              Retry Exam
+              重新考试
             </Button>
           </CardFooter>
         </Card>
@@ -291,35 +425,35 @@ const OnlineExam = () => {
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
               <div>
-                <p className="text-gray-600">School: {currentExam.school}</p>
-                <p className="text-gray-600">Subject: {currentExam.subject}</p>
-                <p className="text-gray-600">Level: {currentExam.level.toUpperCase()}</p>
+                <p className="text-gray-600">学校: {currentExam.school}</p>
+                <p className="text-gray-600">科目: {currentExam.subject}</p>
+                <p className="text-gray-600">级别: {currentExam.level.toUpperCase()}</p>
               </div>
               <div>
-                <p className="text-gray-600">Type: {currentExam.type}</p>
-                <p className="text-gray-600">Year: {currentExam.year}</p>
-                <p className="text-gray-600">Duration: {currentExam.durationMinutes} minutes</p>
+                <p className="text-gray-600">类型: {currentExam.type}</p>
+                <p className="text-gray-600">年份: {currentExam.year}</p>
+                <p className="text-gray-600">时长: {currentExam.durationMinutes} 分钟</p>
               </div>
             </div>
             
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-bold mb-2">Exam Instructions</h3>
+              <h3 className="text-lg font-bold mb-2">考试说明</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-700">
-                <li>You have {currentExam.durationMinutes} minutes to complete this exam.</li>
-                <li>The exam consists of {currentExam.questions.length} questions worth a total of {currentExam.totalMarks} marks.</li>
-                <li>You can navigate between questions using the navigation buttons.</li>
-                <li>Your progress is saved automatically.</li>
-                <li>You can submit the exam at any time by clicking the "Submit" button.</li>
-                <li>Once submitted, you cannot retake the exam without starting over.</li>
+                <li>你有 {currentExam.durationMinutes} 分钟完成这次考试。</li>
+                <li>考试包含 {currentExam.questions.length} 道题目，总分 {currentExam.totalMarks} 分。</li>
+                <li>可以使用导航按钮在题目之间切换。</li>
+                <li>你的进度会自动保存。</li>
+                <li>可以随时点击"提交考试"按钮提交。</li>
+                <li>提交后，不能重新开始考试。</li>
               </ul>
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button variant="outline" onClick={() => navigate("/mock-exam")}>
-              Back to Exam List
+              返回考试列表
             </Button>
             <Button onClick={startExam}>
-              Start Exam
+              开始考试
             </Button>
           </CardFooter>
         </Card>
@@ -345,8 +479,8 @@ const OnlineExam = () => {
           <Card className="mb-6">
             <CardHeader className="border-b">
               <CardTitle className="flex justify-between">
-                <span>Question {currentQuestionIndex + 1} of {currentExam.questions.length}</span>
-                <span className="text-gray-500">{currentQuestion.marks} {currentQuestion.marks === 1 ? 'mark' : 'marks'}</span>
+                <span>问题 {currentQuestionIndex + 1} / {currentExam.questions.length}</span>
+                <span className="text-gray-500">{currentQuestion.marks} {currentQuestion.marks === 1 ? '分' : '分'}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
@@ -363,13 +497,13 @@ const OnlineExam = () => {
                 disabled={currentQuestionIndex === 0}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Previous
+                上一题
               </Button>
               <Button 
                 onClick={nextQuestion}
                 disabled={currentQuestionIndex === currentExam.questions.length - 1}
               >
-                Next
+                下一题
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardFooter>
@@ -379,7 +513,7 @@ const OnlineExam = () => {
         <div className="w-full md:w-1/4">
           <Card>
             <CardHeader className="border-b">
-              <CardTitle>Question Navigator</CardTitle>
+              <CardTitle>题目导航</CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="grid grid-cols-5 gap-2">
@@ -400,17 +534,17 @@ const OnlineExam = () => {
               <div className="mt-6">
                 <div className="flex items-center mb-2">
                   <div className="w-4 h-4 bg-learnscape-blue rounded-full mr-2"></div>
-                  <span className="text-sm">Current Question</span>
+                  <span className="text-sm">当前题目</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-4 h-4 border-2 border-green-500 rounded-full mr-2"></div>
-                  <span className="text-sm">Answered</span>
+                  <span className="text-sm">已回答</span>
                 </div>
               </div>
               
               <div className="mt-6">
                 <p className="text-sm text-gray-500 mb-2">
-                  Questions Answered: {userAnswers.filter(a => a.isAnswered).length} of {currentExam.questions.length}
+                  已回答: {userAnswers.filter(a => a.isAnswered).length} / {currentExam.questions.length}
                 </p>
                 <Progress 
                   value={(userAnswers.filter(a => a.isAnswered).length / currentExam.questions.length) * 100} 
@@ -424,7 +558,7 @@ const OnlineExam = () => {
                 variant="destructive"
                 onClick={submitExam}
               >
-                Submit Exam
+                提交考试
               </Button>
             </CardFooter>
           </Card>
