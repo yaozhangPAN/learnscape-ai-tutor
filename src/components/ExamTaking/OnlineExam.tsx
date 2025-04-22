@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,22 +27,19 @@ const OnlineExam = () => {
   const [timeRemaining, setTimeRemaining] = useState(6000); // 1 hour 40 minutes by default
   const [score, setScore] = useState<number | null>(null);
   
-  // Fetch the exam paper and questions from Supabase
   useEffect(() => {
     const fetchExam = async () => {
       try {
         setLoading(true);
         
-        // First, get exam paper information
-        if (examId === "1") { // For Nanyang P6 Chinese exam
-          console.log("Fetching Nanyang Primary P6 Chinese exam questions");
+        if (examId === "1") { // For Primary 6 Chinese exam
+          console.log("Fetching Primary 6 Chinese exam questions");
           
-          // Fetch questions from Supabase for Nanyang Primary P6 Chinese
           const { data: questionData, error: questionError } = await supabase
             .from('questions')
             .select('*')
-            .eq('level', 'p6')
-            .eq('subject', 'chinese');
+            .eq('level', 'Primary 6')
+            .is('subject', null); // Get Chinese questions (where subject is null in this case)
           
           if (questionError) {
             console.error("Error fetching questions:", questionError);
@@ -52,18 +48,16 @@ const OnlineExam = () => {
           
           console.log("Fetched questions:", questionData);
           
-          // Sort questions into the specified order
           const sortedQuestions = organizeQuestions(questionData || []);
           
-          // Create the exam paper with the fetched questions
           const exam: ExamPaper = {
             id: examId,
             title: "Chinese Paper 2",
-            school: "Nanyang Primary",
+            school: "Primary Schools",
             subject: "chinese",
             level: "p6",
-            year: "2019",
-            type: "SA1",
+            year: "2024",
+            type: "Practice Paper",
             durationMinutes: 100, // 1 hour 40 minutes
             totalMarks: calculateTotalMarks(sortedQuestions),
             questions: sortedQuestions,
@@ -72,7 +66,6 @@ const OnlineExam = () => {
           setCurrentExam(exam);
           setTimeRemaining(exam.durationMinutes * 60);
           
-          // Initialize user answers
           const initialAnswers = exam.questions.map(q => ({
             questionId: q.id,
             answer: "",
@@ -105,9 +98,7 @@ const OnlineExam = () => {
     fetchExam();
   }, [examId, toast]);
 
-  // Function to organize questions in the specified order
   const organizeQuestions = (questionsData: any[]): Question[] => {
-    // Define section titles for sorting
     const sectionOrder = [
       "语文应用",
       "短文填空",
@@ -118,18 +109,11 @@ const OnlineExam = () => {
     
     const organizedQuestions: Question[] = [];
     
-    // Process each section in order
     sectionOrder.forEach(sectionTitle => {
-      // Find questions for this section
       const sectionQuestions = questionsData.filter(q => {
-        if (q.content && typeof q.content === 'object') {
-          return q.content.section === sectionTitle || 
-                (q.title && q.title.includes(sectionTitle));
-        }
-        return false;
+        return q.title && q.title.includes(sectionTitle);
       });
       
-      // Convert to our Question format and add to the organized list
       sectionQuestions.forEach(q => {
         if (q.content) {
           try {
@@ -139,12 +123,11 @@ const OnlineExam = () => {
             
             const question: Question = {
               id: q.id,
-              text: content.questionText || q.title || sectionTitle,
+              text: content.questionText || q.title,
               type: determineQuestionType(content),
               marks: content.marks || 2,
             };
             
-            // Add options for MCQ questions
             if (question.type === "MCQ" && content.options) {
               question.options = content.options.map((opt: any, index: number) => ({
                 value: String.fromCharCode(65 + index), // A, B, C, D...
@@ -153,7 +136,6 @@ const OnlineExam = () => {
               question.correctAnswer = content.correctAnswer || "A";
             }
             
-            // For short answer questions
             if (question.type === "ShortAnswer" && content.correctAnswer) {
               question.correctAnswer = content.correctAnswer;
             }
@@ -166,29 +148,9 @@ const OnlineExam = () => {
       });
     });
     
-    // If no questions found from database, return at least one placeholder
-    if (organizedQuestions.length === 0) {
-      return [
-        {
-          id: "placeholder1",
-          text: "阅读理解（一）：请阅读下面的短文，然后回答问题。",
-          type: "MCQ",
-          marks: 2,
-          options: [
-            { value: "A", label: "A. 为人诚实" },
-            { value: "B", label: "B. 勤奋学习" },
-            { value: "C", label: "C. 关心他人" },
-            { value: "D", label: "D. 保护环境" }
-          ],
-          correctAnswer: "C"
-        }
-      ];
-    }
-    
     return organizedQuestions;
   };
-  
-  // Determine question type based on content
+
   const determineQuestionType = (content: any): QuestionType => {
     if (content.type) {
       if (content.type.toLowerCase().includes('mcq') || 
@@ -199,21 +161,17 @@ const OnlineExam = () => {
       }
     }
     
-    // Check if options exist to determine if it's MCQ
     if (content.options && Array.isArray(content.options) && content.options.length > 0) {
       return "MCQ";
     }
     
-    // Default to short answer
     return "ShortAnswer";
   };
-  
-  // Calculate total marks for all questions
+
   const calculateTotalMarks = (questions: Question[]): number => {
     return questions.reduce((total, q) => total + q.marks, 0);
   };
 
-  // Start the exam
   const startExam = () => {
     setExamStarted(true);
     toast({
@@ -222,14 +180,12 @@ const OnlineExam = () => {
     });
   };
 
-  // Submit the exam
   const submitExam = () => {
     if (userAnswers.some(answer => !answer.isAnswered)) {
       const confirmation = window.confirm("你还有未回答的问题。确定要提交吗？");
       if (!confirmation) return;
     }
     
-    // Calculate score
     if (currentExam) {
       let totalScore = 0;
       const scoredAnswers = userAnswers.map((answer, index) => {
@@ -241,10 +197,8 @@ const OnlineExam = () => {
           isCorrect = answer.answer === question.correctAnswer;
           marksAwarded = isCorrect ? question.marks : 0;
         } else {
-          // For other question types like open-ended, we'd need manual grading
-          // For demo purposes, let's award partial marks
           if (answer.answer.length > 0) {
-            marksAwarded = Math.floor(question.marks * 0.7); // 70% for attempting
+            marksAwarded = Math.floor(question.marks * 0.7);
           }
         }
         
@@ -268,7 +222,6 @@ const OnlineExam = () => {
     }
   };
 
-  // Handle time expired
   const handleTimeExpired = () => {
     toast({
       title: "时间到！",
@@ -278,7 +231,6 @@ const OnlineExam = () => {
     submitExam();
   };
 
-  // Save answer for current question
   const saveAnswer = (value: string) => {
     setUserAnswers(prev => prev.map((a, i) => 
       i === currentQuestionIndex 
@@ -287,14 +239,12 @@ const OnlineExam = () => {
     ));
   };
 
-  // Navigate to next question
   const nextQuestion = () => {
     if (currentExam && currentQuestionIndex < currentExam.questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     }
   };
 
-  // Navigate to previous question
   const prevQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1);
@@ -395,7 +345,6 @@ const OnlineExam = () => {
               setExamCompleted(false);
               setCurrentQuestionIndex(0);
               setScore(null);
-              // Reset answers
               if (currentExam) {
                 const resetAnswers = currentExam.questions.map(q => ({
                   questionId: q.id,
