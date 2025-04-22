@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
@@ -91,8 +90,14 @@ const Index = () => {
               <div className="flex items-center mb-2">{colorBlocks[0].icon}<span className="text-xl font-bold">{colorBlocks[0].title}</span></div>
               <div className="text-sm font-medium">{colorBlocks[0].desc}</div>
             </div>
-            <div className="mt-6 flex-1 flex items-end">
-              <div className="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center font-bold text-[#B1B1B1] text-sm"> {colorBlocks[0].placeholder} </div>
+            <div className="mt-6 flex-1 flex items-end justify-center">
+              <img
+                src="/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png"
+                alt="Cartoon Character"
+                className="w-24 h-32 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
             </div>
           </Link>
           {/* Question Bank | 大块（右上） */}
@@ -141,4 +146,3 @@ const Index = () => {
 };
 
 export default Index;
-
