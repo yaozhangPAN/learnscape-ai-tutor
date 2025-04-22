@@ -104,8 +104,14 @@ const Index = () => {
           <Link to={colorBlocks[1].to} className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[1].className} ${colorBlocks[1].style}`}>
             <div className="flex items-center mb-2">{colorBlocks[1].icon}<span className="text-xl font-bold">{colorBlocks[1].title}</span></div>
             <div className="text-sm font-semibold">{colorBlocks[1].desc}</div>
-            <div className="flex-1 flex items-end">
-              <div className="w-20 h-20 bg-white/40 rounded-xl flex items-center justify-center font-bold text-[#B1B1B1] text-sm">{colorBlocks[1].placeholder}</div>
+            <div className="flex-1 flex items-end justify-center">
+              <img
+                src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+                alt="Question Bank Cartoon Character"
+                className="w-24 h-32 object-contain select-none drop-shadow-lg"
+                draggable={false}
+                style={{ userSelect: "none" }}
+              />
             </div>
           </Link>
           {/* My Words | 左下 */}
