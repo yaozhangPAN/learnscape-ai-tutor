@@ -81,6 +81,7 @@ const Index = () => {
           <span className="w-3 h-3 bg-yellow-200 rounded-full"></span>
           <span className="w-2 h-2 bg-yellow-300 rounded-full"></span>
         </div>
+        
         {/* 新布局: 顶部双并排大块 (Video Lessons + AI Tutor) */}
         <div className="grid grid-cols-2 grid-rows-1 gap-4 max-w-2xl w-full mb-4 transition-all">
           {/* Video Lessons */}
@@ -116,6 +117,7 @@ const Index = () => {
             </div>
           </Link>
         </div>
+        
         {/* 第二行：Question Bank + My Words */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-4 transition-all">
           {/* Question Bank | 题库，图片靠右 */}
@@ -135,7 +137,7 @@ const Index = () => {
               />
             </div>
           </Link>
-          {/* My Words | 词语本，用用户上传的图片 */}
+          {/* My Words | 词语本，用新上传的图片 */}
           <Link 
             to={colorBlocks[2].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${colorBlocks[2].className} min-h-[144px]`}
@@ -144,7 +146,7 @@ const Index = () => {
             <div className="text-sm font-medium">{colorBlocks[2].desc}</div>
             <div className="flex-1 flex items-end justify-end pr-2">
               <img
-                src="/lovable-uploads/9a9791df-299b-4d4f-b4e4-4cd232ecf481.png"
+                src="/lovable-uploads/673f2711-1205-4d7f-b4cd-7ac68b6ca77e.png"
                 alt="My Words Custom Cartoon"
                 className="w-24 h-32 object-contain select-none drop-shadow-lg"
                 draggable={false}
@@ -153,6 +155,7 @@ const Index = () => {
             </div>
           </Link>
         </div>
+        
         {/* 第三行：留白模块 + Daily Adventure */}
         <div className="grid grid-cols-2 gap-4 max-w-2xl w-full mb-8 transition-all">
           {/* 留白块 */}
@@ -177,6 +180,7 @@ const Index = () => {
             </div>
           </Link>
         </div>
+        
         {/* 温馨提示 */}
         <div className="bg-white/80 rounded-xl px-6 py-3 text-center text-[#955F1D] text-base shadow-sm font-semibold max-w-md mx-auto">
           角色卡通将在这里出现，敬请期待！点击各板块可进入对应功能。
