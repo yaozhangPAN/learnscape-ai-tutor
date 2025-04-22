@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import QuestionViewer from "@/components/QuestionBank/QuestionViewer";
 
 const QUESTIONS_PER_PAGE = 10;
+const EXCLUDED_TITLES = ["巧练题（一）", "巧练题（二）", "巧练题（三）", "看图作文题"];
 
 const defaultQuestionData = [
   { id: 1, title: "Grade 6 - Reading Comprehension - 1", subject: "English", type: "Reading", level: "Primary 6", term: "CA1", date: "2025-03-01" },
@@ -39,9 +41,7 @@ const defaultQuestionData = [
   { id: 22, title: "Grade 4 - Energy and Forces", subject: "Science", type: "Physics", level: "Primary 4", term: "SA1", date: "2025-03-13" },
   { id: 23, title: "Grade 5 - Materials and Matter", subject: "Science", type: "Chemistry", level: "Primary 5", term: "CA2", date: "2025-03-17" },
   { id: 24, title: "Grade 6 - Earth and Space", subject: "Science", type: "Earth Science", level: "Primary 6", term: "SA2", date: "2025-03-21" }
-].filter(question => 
-  !["巧练题（一）", "巧练题（二）", "巧练题（三）", "看图作文题"].includes(question.title)
-);
+].filter(question => !EXCLUDED_TITLES.includes(question.title));
 
 const grades = ["All Grades", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5", "Primary 6", "小六"];
 const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华文"];
@@ -70,17 +70,19 @@ const QuestionBank = () => {
           console.error('Error fetching questions:', error);
           setQuestionData(defaultQuestionData);
         } else if (data && data.length > 0) {
-          const formattedData = data.map(item => ({
-            id: typeof item.id === 'number' ? item.id : parseInt(item.id) || Math.floor(Math.random() * 1000),
-            title: item.title || 'Untitled',
-            subject: item.subject || 'Unknown',
-            type: typeof item.content === 'string' ? 'General' : 'Comprehensive',
-            level: item.level || 'Unknown',
-            term: item.term || 'Unknown',
-            date: item.created_at || new Date().toISOString(),
-            created_at: item.created_at,
-            content: item.content
-          }));
+          const formattedData = data
+            .filter(item => !EXCLUDED_TITLES.includes(item.title))
+            .map(item => ({
+              id: typeof item.id === 'number' ? item.id : parseInt(item.id) || Math.floor(Math.random() * 1000),
+              title: item.title || 'Untitled',
+              subject: item.subject || 'Unknown',
+              type: typeof item.content === 'string' ? 'General' : 'Comprehensive',
+              level: item.level || 'Unknown',
+              term: item.term || 'Unknown',
+              date: item.created_at || new Date().toISOString(),
+              created_at: item.created_at,
+              content: item.content
+            }));
           setQuestionData(formattedData);
           console.log('Fetched questions:', data);
         } else {
