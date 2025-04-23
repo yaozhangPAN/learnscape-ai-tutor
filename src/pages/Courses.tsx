@@ -12,6 +12,7 @@ import { VideoDialog } from "@/components/Courses/VideoDialog";
 import { Course } from "@/types/course";
 import { mockCourses } from "@/data/mockCourses";
 import { Link } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
 
 const Courses = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
@@ -26,6 +27,7 @@ const Courses = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const contentId = searchParams.get("content");
   const [hasAccessToSelected, setHasAccessToSelected] = useState(false);
+  const { t, lang } = useI18n();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -46,7 +48,6 @@ const Courses = () => {
     }
   }, [contentId]);
 
-  // Check access whenever selected course changes
   useEffect(() => {
     const checkAccess = async () => {
       if (selectedCourse) {
@@ -75,10 +76,8 @@ const Courses = () => {
     setSelectedCourse(course);
     
     if (course.isPremium) {
-      // We will check access in the useEffect
       setDialogOpen(true);
     } else {
-      // No need to check access for non-premium courses
       setHasAccessToSelected(true);
       setDialogOpen(true);
     }
@@ -101,13 +100,17 @@ const Courses = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: "#FF56D5" }}>
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Star Teacher Video Lessons</h1>
+          <h1 className="text-3xl font-bold text-[#2F5530] mb-2">
+            {lang === "zh" ? "星级教师视频课程" : "Star Teacher Video Lessons"}
+          </h1>
           <p className="text-gray-600">
-            Access high-quality video tutorials designed by expert educators to help you master key concepts and excel in your exams.
+            {lang === "zh" 
+              ? "通过我们专业教师设计的高质量视频教程，掌握关键概念，在考试中脱颖而出。"
+              : "Access high-quality video tutorials designed by expert educators to help you master key concepts and excel in your exams."}
           </p>
         </div>
 
