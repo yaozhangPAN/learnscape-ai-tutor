@@ -10,7 +10,7 @@ const VocabularyGame = () => {
 
   const handleAssetUpload = (url: string) => {
     setGameAssets(prev => [...prev, url]);
-    // Restart the game scene to load new assets
+    // 重启游戏场景以加载新资源
     if (gameRef.current) {
       gameRef.current.scene.start('MainGameScene', { assets: [...gameAssets, url] });
     }
@@ -27,7 +27,7 @@ const VocabularyGame = () => {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { x: 0, y: 0 },  // Removed gravity for better asset manipulation
+          gravity: { x: 0, y: 0 },  // 移除重力以便更好地操作资源
           debug: false
         }
       }
@@ -35,7 +35,7 @@ const VocabularyGame = () => {
 
     if (!gameRef.current) {
       gameRef.current = new Phaser.Game(config);
-      // Initialize scene with current assets
+      // 使用当前资源初始化场景
       gameRef.current.scene.start('MainGameScene', { assets: gameAssets });
     }
 
