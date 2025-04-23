@@ -1,9 +1,7 @@
 
 import { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
-
-// 在这里引入您的自定义场景
-// import YourGameScene from './scenes/YourGameScene';
+import MainGameScene from './scenes/MainGameScene';
 
 const VocabularyGame = () => {
   const gameRef = useRef<Phaser.Game | null>(null);
@@ -15,31 +13,11 @@ const VocabularyGame = () => {
       height: 600,
       parent: 'phaser-game',
       backgroundColor: '#FFFFFF',
-      scene: {
-        // 您可以将自定义场景添加到这里
-        // 例如: [YourGameScene]
-        // 或者直接在这里定义场景
-        preload: function() {
-          // 在这里加载您的游戏资源
-          console.log('Game assets loading...');
-        },
-        create: function() {
-          // 在这里初始化您的游戏元素
-          console.log('Game scene created');
-          const text = this.add.text(400, 300, '加载您的游戏场景', {
-            fontSize: '32px',
-            color: '#000'
-          });
-          text.setOrigin(0.5);
-        },
-        update: function() {
-          // 在这里更新您的游戏逻辑
-        }
-      },
+      scene: MainGameScene,
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { x: 0, y: 300 },  // Fixed: Added the missing x property to gravity
+          gravity: { x: 0, y: 300 },
           debug: false
         }
       }
