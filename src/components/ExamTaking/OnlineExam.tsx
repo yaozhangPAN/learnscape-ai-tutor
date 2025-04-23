@@ -100,8 +100,8 @@ const OnlineExam = () => {
               }
             }, []);
             
-            // Limit to 15 questions to keep the exam manageable
-            examQuestions = examQuestions.slice(0, 15);
+            // Limit to 40 questions to keep the exam manageable
+            examQuestions = examQuestions.slice(0, 40);
           }
           
           // If we couldn't process any questions, use mock data
