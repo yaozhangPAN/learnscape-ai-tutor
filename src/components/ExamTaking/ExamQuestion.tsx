@@ -12,6 +12,11 @@ interface ExamQuestionProps {
 }
 
 const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProps) => {
+  const formatHtml = (text: string | undefined) => {
+    if (!text) return "";
+    return text.replace(/\n/g, "<br />");
+  };
+
   const renderMcqOptions = () => {
     if (question.type !== "MCQ" || !question.options || question.options.length === 0) return null;
 
@@ -28,7 +33,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
               htmlFor={`option-${question.id}-${index}`} 
               className="text-base cursor-pointer w-full"
             >
-              <div dangerouslySetInnerHTML={{ __html: option.label.replace(/\n/g, "<br />") }} />
+              <div dangerouslySetInnerHTML={{ __html: formatHtml(option.label) }} />
             </Label>
           </div>
         ))}
@@ -55,7 +60,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
     <div className="space-y-4">
       <div className="prose max-w-none">
         <div className="text-lg font-medium mb-4">
-          <div dangerouslySetInnerHTML={{ __html: question.text.replace(/\n/g, "<br />") }} />
+          <div dangerouslySetInnerHTML={{ __html: formatHtml(question.text) }} />
         </div>
         
         {question.image && (

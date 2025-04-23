@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,9 +13,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
 
-const formatText = (text: string | undefined) => {
+const formatText = (text: string | object | undefined) => {
   if (!text) return null;
-  const withLineBreaks = text.replace(/\n/g, "<br />");
+  
+  // If text is an object with a property (like {topic: "some topic"}), extract the first value
+  let textContent: string;
+  if (typeof text === 'object') {
+    const values = Object.values(text);
+    textContent = values.length > 0 && typeof values[0] === 'string' ? values[0] : '';
+  } else {
+    textContent = String(text);
+  }
+  
+  const withLineBreaks = textContent.replace(/\n/g, "<br />");
   return (
     <div
       className="text-base mb-2"
