@@ -83,8 +83,7 @@ const OnlineExam = () => {
                     topic: topic,
                   };
 
-                  /*
-                  if (subQuestion.options && Array.isArray(subQuestion.options)) {
+                  if (subQuestion.options && Array.isArray(subQuestion.options) && subQuestion.options.length > 0) {
                     question.options = subQuestion.options.map((opt: any, optIndex: number) => ({
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
@@ -92,7 +91,7 @@ const OnlineExam = () => {
                     
                     question.correctAnswer = question.options[0].value;
                   }
-                  */
+                  
                   return question;
                 });
 
