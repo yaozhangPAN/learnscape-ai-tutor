@@ -225,7 +225,7 @@ export type Database = {
     }
     Functions: {
       has_premium_subscription: {
-        Args: { user_uuid: string }
+        Args: { user_id: number } | { user_uuid: string }
         Returns: boolean
       }
     }
