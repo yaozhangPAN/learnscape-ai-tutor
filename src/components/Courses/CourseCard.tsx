@@ -4,7 +4,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Users, Clock, Video, Crown, BookOpen } from "lucide-react";
 import { Course } from '@/types/course';
-import { useI18n } from "@/contexts/I18nContext";
 
 interface CourseCardProps {
   course: Course;
@@ -12,8 +11,6 @@ interface CourseCardProps {
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) => {
-  const { lang } = useI18n();
-
   return (
     <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
       <div className="h-48 overflow-hidden relative">
@@ -23,29 +20,29 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) =>
           className="w-full h-full object-cover transition-transform hover:scale-105"
         />
         {course.isPremium && (
-          <div className="absolute top-2 right-2 bg-[#2F5530] text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
+          <div className="absolute top-2 right-2 bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
             <Crown className="h-3 w-3 mr-1" />
-            {lang === "zh" ? "高级课程" : "Premium"}
+            Premium
           </div>
         )}
         {course.type === "past_paper" && (
-          <div className="absolute top-2 left-2 bg-[#F7941D] text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
+          <div className="absolute top-2 left-2 bg-amber-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full flex items-center">
             <BookOpen className="h-3 w-3 mr-1" />
-            {lang === "zh" ? "真题解析" : "Past Paper"}
+            Past Paper
           </div>
         )}
       </div>
       <CardContent className="pt-6">
         <div className="flex items-start justify-between mb-2">
-          <div className="bg-[#26A69A] text-white text-xs font-semibold px-2.5 py-1 rounded">
+          <div className="bg-learnscape-blue text-white text-xs font-semibold px-2.5 py-1 rounded">
             {course.level.toUpperCase()} {course.subject}
           </div>
           <div className="flex items-center">
-            <Star className="h-4 w-4 text-[#F7941D] fill-[#F7941D]" />
+            <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
             <span className="ml-1 text-sm font-medium">{course.rating}</span>
           </div>
         </div>
-        <h3 className="text-lg font-semibold mb-2 line-clamp-2 text-[#2F5530]">{course.title}</h3>
+        <h3 className="text-lg font-semibold mb-2 line-clamp-2">{course.title}</h3>
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
         <div className="flex flex-wrap gap-y-2 text-xs text-gray-500">
           <div className="flex items-center mr-4">
@@ -54,22 +51,18 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) =>
           </div>
           <div className="flex items-center">
             <Users className="h-3.5 w-3.5 mr-1" />
-            <span>
-              {lang === "zh" 
-                ? `${course.students}名学生`
-                : `${course.students} students`}
-            </span>
+            <span>{course.students} students</span>
           </div>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
-        <div className="font-semibold text-[#2F5530]">{course.price}</div>
+        <div className="font-semibold text-learnscape-blue">{course.price}</div>
         <Button 
-          className="bg-[#26A69A] hover:bg-[#1E8276] text-white"
+          className="bg-learnscape-blue hover:bg-blue-700"
           onClick={() => onWatchNow(course)}
         >
           <Video className="h-4 w-4 mr-2" />
-          {lang === "zh" ? "观看" : "Watch Now"}
+          Watch Now
         </Button>
       </CardFooter>
     </Card>
