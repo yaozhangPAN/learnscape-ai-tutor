@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,112 +8,116 @@ import { Video, Book, Star, Grid2x2, LayoutGrid } from "lucide-react";
 import OnlineClassroomSection from "@/components/home/OnlineClassroomSection";
 import LeaderboardSection from "@/components/home/LeaderboardSection";
 import { Link } from "react-router-dom";
-
-const mainBlocks = [
-  {
-    key: "daily-adventure",
-    title: "Daily Adventure",
-    desc: (
-      <div className="flex items-center mt-1">
-        <span className="bg-[#FFD047] text-[#7C6020] text-xs rounded-full px-2 py-0.5 mr-2 font-bold">50 XP</span>
-        完成今日目标
-      </div>
-    ),
-    bg: "bg-[#F7941D]", // 明确指定橙色背景
-    text: "text-white",
-    img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
-    to: "/daily-plan", // Changed from "/dashboard" to "/daily-plan"
-    customBgImg: "/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png",
-    isCustomBg: true,
-    debugColor: "#F7941D", // 添加调试颜色属性
-  },
-  {
-    key: "ai-tutor",
-    title: "AI Tutor",
-    desc: "口语/写作/词汇练习",
-    bg: "bg-[#A48CF6]",
-    text: "text-white",
-    icon: <Grid2x2 className="w-8 h-8 mr-2" />,
-    img: "/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png",
-    to: "/ai-tutor"
-  },
-  {
-    key: "video-lessons",
-    title: "Video Lessons",
-    desc: "各科名师视频课程",
-    bg: "bg-[#38B87D]",
-    text: "text-white",
-    icon: <Video className="w-8 h-8 mr-2" />,
-    img: "/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png",
-    to: "/video-tutorials"
-  },
-  {
-    key: "online-classroom",
-    title: "Online Classroom",
-    desc: "在线互动教室",
-    bg: "bg-[#4CC7EA]",
-    text: "text-white",
-    icon: <LayoutGrid className="w-8 h-8 mr-2" />,
-    to: "/zoom-courses",
-  },
-  {
-    key: "question-bank",
-    title: "Question Bank",
-    desc: "PSLE真题与模拟题",
-    bg: "bg-[#19A69A]",
-    text: "text-white",
-    icon: <Book className="w-8 h-8 mr-2" />,
-    img: "/lovable-uploads/f0df06aa-0094-4ce2-9d9a-d7d749143aed.png",
-    to: "/question-bank"
-  },
-  {
-    key: "my-words",
-    title: "Mock Exam",
-    desc: "自适应模拟考试",
-    bg: "bg-[#FFCA52]",
-    text: "text-[#8D6923]",
-    icon: (
-      <img
-        src="/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png"
-        alt="Mock Exam Icon"
-        className="w-8 h-8 mr-2"
-        draggable={false}
-        style={{ userSelect: "none" }}
-      />
-    ),
-    img: "/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png",
-    to: "/mock-exam"
-  },
-  {
-    key: "streak-progress",
-    title: "Streak and Progress",
-    desc: "",
-    bg: "bg-white",
-    text: "text-[#6D5A21]",
-    img: "/lovable-uploads/db9f7a45-8c5c-4cea-a1cc-534fd2cf61f5.png",
-    to: "/dashboard",
-    isStreakBlock: true,
-  },
-  {
-    key: "leaderboard",
-    title: "Leaderboard",
-    desc: "排行榜",
-    bg: "bg-[#FFB300]",
-    text: "text-[#6D5A21]",
-    icon: (
-      <img
-        src="/lovable-uploads/1eabcd5f-326e-4849-bf2d-db471b7a4428.png"
-        alt="Leaderboard Red Panda Icon"
-        className="w-8 h-8 mr-2"
-        draggable={false}
-        style={{ userSelect: "none" }}
-      />
-    ),
-    to: "/leaderboard"
-  },
-];
+import { useI18n } from "@/contexts/I18nContext";
 
 const Index = () => {
+  const { t, lang } = useI18n();
+
+  const mainBlocks = [
+    {
+      key: "daily-adventure",
+      // 多语言
+      title: t.DAILY_PLAN.TITLE,
+      desc: (
+        <div className="flex items-center mt-1">
+          <span className="bg-[#FFD047] text-[#7C6020] text-xs rounded-full px-2 py-0.5 mr-2 font-bold">{t.DAILY_PLAN.XP}</span>
+          {t.DAILY_PLAN.DESC}
+        </div>
+      ),
+      bg: "bg-[#F7941D]",
+      text: "text-white",
+      img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
+      to: "/daily-plan",
+      customBgImg: "/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png",
+      isCustomBg: true,
+      debugColor: "#F7941D",
+    },
+    {
+      key: "ai-tutor",
+      title: t.NAV.AI_TUTOR,
+      desc: lang === "zh" ? "口语/写作/词汇练习" : "Speaking/Writing/Vocabulary Practice",
+      bg: "bg-[#A48CF6]",
+      text: "text-white",
+      icon: <Grid2x2 className="w-8 h-8 mr-2" />,
+      img: "/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png",
+      to: "/ai-tutor"
+    },
+    {
+      key: "video-lessons",
+      title: t.NAV.VIDEO_LESSONS,
+      desc: lang === "zh" ? "各科名师视频课程" : "Expert Video Lessons",
+      bg: "bg-[#38B87D]",
+      text: "text-white",
+      icon: <Video className="w-8 h-8 mr-2" />,
+      img: "/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png",
+      to: "/video-tutorials"
+    },
+    {
+      key: "online-classroom",
+      title: t.NAV.ONLINE_CLASSROOM,
+      desc: lang === "zh" ? "在线互动教室" : "Online Interactive Class",
+      bg: "bg-[#4CC7EA]",
+      text: "text-white",
+      icon: <LayoutGrid className="w-8 h-8 mr-2" />,
+      to: "/zoom-courses",
+    },
+    {
+      key: "question-bank",
+      title: t.NAV.QUESTION_BANK,
+      desc: lang === "zh" ? "PSLE真题与模拟题" : "PSLE Real & Practice Questions",
+      bg: "bg-[#19A69A]",
+      text: "text-white",
+      icon: <Book className="w-8 h-8 mr-2" />,
+      img: "/lovable-uploads/f0df06aa-0094-4ce2-9d9a-d7d749143aed.png",
+      to: "/question-bank"
+    },
+    {
+      key: "my-words",
+      title: t.NAV.MOCK_EXAM,
+      desc: lang === "zh" ? "自适应模拟考试" : "Adaptive Mock Exam",
+      bg: "bg-[#FFCA52]",
+      text: "text-[#8D6923]",
+      icon: (
+        <img
+          src="/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png"
+          alt="Mock Exam Icon"
+          className="w-8 h-8 mr-2"
+          draggable={false}
+          style={{ userSelect: "none" }}
+        />
+      ),
+      img: "/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png",
+      to: "/mock-exam"
+    },
+    {
+      key: "streak-progress",
+      title: t.NAV.STREAK_PROGRESS,
+      desc: "",
+      bg: "bg-white",
+      text: "text-[#6D5A21]",
+      img: "/lovable-uploads/db9f7a45-8c5c-4cea-a1cc-534fd2cf61f5.png",
+      to: "/dashboard",
+      isStreakBlock: true,
+    },
+    {
+      key: "leaderboard",
+      title: t.NAV.LEADERBOARD,
+      desc: lang === "zh" ? "排行榜" : "Leaderboard",
+      bg: "bg-[#FFB300]",
+      text: "text-[#6D5A21]",
+      icon: (
+        <img
+          src="/lovable-uploads/1eabcd5f-326e-4849-bf2d-db471b7a4428.png"
+          alt="Leaderboard Red Panda Icon"
+          className="w-8 h-8 mr-2"
+          draggable={false}
+          style={{ userSelect: "none" }}
+        />
+      ),
+      to: "/leaderboard"
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "#FCE883" }}>
       <Navbar />
@@ -241,7 +246,7 @@ const Index = () => {
             onClick={() => window.location.href = mainBlocks[6].to} 
             className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative bg-white text-[#6D5A21] min-h-[164px] overflow-hidden cursor-pointer`}
           >
-            <div className="absolute top-3 left-3 z-10 bg-white/80 rounded-lg px-4 py-1 font-bold text-[#C48829] text-lg shadow">Streak and Progress</div>
+            <div className="absolute top-3 left-3 z-10 bg-white/80 rounded-lg px-4 py-1 font-bold text-[#C48829] text-lg shadow">{mainBlocks[6].title}</div>
             <img
               src={mainBlocks[6].img}
               alt="Streak and Progress Block"
@@ -262,7 +267,15 @@ const Index = () => {
           />
         </div>
 
-        <HomeNote className="max-w-2xl w-full" />
+        <HomeNote 
+          className="max-w-2xl w-full"
+          // 传递多语言文本
+          note={
+            lang === "zh"
+              ? "点击各板块可进入对应功能。更多功能将在这里出现，敬请期待！"
+              : "Click each module to visit its page. More features will show up here soon. Stay tuned!"
+          }
+        />
       </main>
       <Footer />
     </div>
@@ -270,3 +283,4 @@ const Index = () => {
 };
 
 export default Index;
+
