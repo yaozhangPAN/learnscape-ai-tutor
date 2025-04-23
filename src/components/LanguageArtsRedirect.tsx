@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRequirePremium } from "@/hooks/useRequirePremium";
 import Navbar from "@/components/Navbar";
 
@@ -27,6 +27,8 @@ const LanguageArtsRedirect = () => {
           className="w-full h-screen border-0"
           onLoad={handleIframeLoad}
           title="Language Arts Workshop"
+          allow="microphone; camera"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads"
         />
       </div>
     </div>

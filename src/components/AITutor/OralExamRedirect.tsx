@@ -27,6 +27,8 @@ const OralExamRedirect = () => {
           className="w-full h-screen border-0"
           onLoad={handleIframeLoad}
           title="Oral Exam Practice"
+          allow="microphone; camera"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads"
         />
       </div>
     </div>
