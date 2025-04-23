@@ -14,6 +14,7 @@ export interface Question {
   image?: string;
   options?: QuestionOption[];
   correctAnswer?: string;
+  topic?: string; // Added topic property
 }
 
 export interface ExamPaper {

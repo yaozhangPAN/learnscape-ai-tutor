@@ -48,6 +48,8 @@ const OnlineExam = () => {
           
           // Process questions from database or use mock data as fallback
           let examQuestions: Question[] = [];
+          // Create a map to organize questions by topic
+          const questionsByTopic: Record<string, Question[]> = {};
           
           if (questionData && questionData.length > 0) {
             // Map questions from database
@@ -64,6 +66,9 @@ const OnlineExam = () => {
                   return acc;
                 }
                 
+                // Extract topic from contentObj directly
+                const topic = contentObj.topic || "其他";
+                
                 // Process each question in the questionList
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   // Basic question structure
@@ -72,12 +77,8 @@ const OnlineExam = () => {
                     text: subQuestion.question || "No question text",
                     type: "MCQ",
                     marks: 2,
+                    topic: topic, // Store the topic directly in the question object
                   };
-                  
-                  // Add topic to question text if available
-                  if (contentObj.topic) {
-                    question.text = `${q.title}: ${question.text}`;
-                  }
                   
                   // Add options if available
                   if (subQuestion.options && Array.isArray(subQuestion.options)) {
@@ -240,25 +241,14 @@ const OnlineExam = () => {
     if (!currentExam) return [];
     
     const groupedQuestions = currentExam.questions.reduce((acc, question) => {
-      const topicMatch = question.text.match(/^(.*?):/);
-      const topic = topicMatch ? topicMatch[1].trim() : null;
+      // Use the topic property from the question object directly
+      const topic = question.topic || "其他";
       
-      if (topic) {
-        if (!acc[topic]) {
-          acc[topic] = [];
-        }
-        // Remove topic from question text since we'll display it separately
-        const cleanQuestion = {
-          ...question,
-          text: question.text.replace(`${topic}:`, '').trim()
-        };
-        acc[topic].push(cleanQuestion);
-      } else {
-        if (!acc['其他']) {
-          acc['其他'] = [];
-        }
-        acc['其他'].push(question);
+      if (!acc[topic]) {
+        acc[topic] = [];
       }
+      
+      acc[topic].push(question);
       return acc;
     }, {} as Record<string, Question[]>);
 
