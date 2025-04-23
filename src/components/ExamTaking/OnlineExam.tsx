@@ -48,6 +48,7 @@ const OnlineExam = () => {
           
           if (questionData) {
             setQuestionLength(questionData.length);
+            console.log("Function Log - Question Length:", questionData.length);
           }
           
           let examQuestions: Question[] = [];
@@ -432,7 +433,7 @@ const OnlineExam = () => {
               <div key={topicIndex} className="mb-8">
                 {topic !== '其他' && (
                   <h2 className="text-xl font-bold mb-4 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
-                    {topic}
+                    Topic Length: {questionLength}
                   </h2>
                 )}
                 {questions.map((question, index) => {
