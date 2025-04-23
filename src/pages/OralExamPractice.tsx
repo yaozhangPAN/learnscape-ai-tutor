@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
@@ -103,26 +104,26 @@ const OralExamPractice = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col text-black">
       <Navbar />
       <main className="flex-1 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 text-black">
           <div className="mb-6">
-            <Link to="/ai-tutor" className="inline-flex items-center text-learnscape-blue hover:text-blue-700 mb-4">
+            <Link to="/ai-tutor" className="inline-flex items-center text-black hover:text-gray-800 mb-4">
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to AI Tutor
             </Link>
-            <h1 className="text-3xl font-bold text-learnscape-darkBlue">Oral Exam Practice</h1>
-            <p className="text-gray-600 mt-1">Practice your speaking skills and prepare for oral examinations.</p>
+            <h1 className="text-3xl font-bold text-black">Oral Exam Practice</h1>
+            <p className="text-black mt-1">Practice your speaking skills and prepare for oral examinations.</p>
           </div>
           
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-learnscape-darkBlue flex items-center">
+              <h2 className="text-2xl font-bold text-black flex items-center">
                 Oral Exam Practice
                 <Sparkles className="ml-2 h-4 w-4 text-yellow-400" />
               </h2>
-              <Button variant="outline" onClick={getNewPrompt} disabled={isRecording} className="group">
+              <Button variant="outline" onClick={getNewPrompt} disabled={isRecording} className="group text-black">
                 New Topic
                 <span className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity">🎲</span>
               </Button>
@@ -130,11 +131,11 @@ const OralExamPractice = () => {
             
             <Card className={`border-2 border-learnscape-purple ${animation ? 'animate-pop' : ''}`}>
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-2 flex items-center">
+                <h3 className="text-xl font-semibold mb-2 flex items-center text-black">
                   <Volume2 className="mr-2 h-5 w-5 text-learnscape-purple" />
                   Speaking Prompt:
                 </h3>
-                <p className="text-lg relative">
+                <p className="text-lg relative text-black">
                   {practicePrompt || "Click 'New Topic' to get a speaking prompt."}
                   {practicePrompt && (
                     <span className="absolute -top-4 -right-2 text-lg animate-wiggle">💭</span>
@@ -147,7 +148,7 @@ const OralExamPractice = () => {
               <div className="relative">
                 <Button
                   size="lg"
-                  className={`rounded-full w-20 h-20 flex items-center justify-center ${
+                  className={`rounded-full w-20 h-20 flex items-center justify-center text-black ${
                     isRecording 
                       ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
                       : 'bg-learnscape-blue hover:bg-blue-700'
@@ -162,10 +163,10 @@ const OralExamPractice = () => {
                   </span>
                 )}
               </div>
-              <p className="text-lg font-mono">
+              <p className="text-lg font-mono text-black">
                 {isRecording ? formatTime(recordingTime) : "Ready"}
               </p>
-              <p className="text-sm text-gray-500 max-w-md text-center">
+              <p className="text-sm text-black max-w-md text-center">
                 {isRecording 
                   ? "Speak clearly to answer the prompt. Click the button again to stop recording." 
                   : "Click the microphone button to start recording your response."}
@@ -174,15 +175,15 @@ const OralExamPractice = () => {
             
             {feedback && (
               <div className="mt-8 animate-fade-in">
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
+                <h3 className="text-xl font-semibold mb-4 flex items-center text-black">
                   <Sparkles className="mr-2 h-5 w-4 text-yellow-400" />
                   AI Feedback:
                 </h3>
-                <div className="bg-gray-50 border rounded-md p-6 prose prose-sm max-w-none">
+                <div className="bg-gray-50 border rounded-md p-6 prose prose-sm max-w-none text-black">
                   <div dangerouslySetInnerHTML={{ __html: feedback }} />
                 </div>
                 <div className="mt-4 bg-yellow-50 p-4 rounded-lg border border-yellow-100 text-center">
-                  <p className="text-sm text-gray-700">Great job! Keep practicing to improve your speaking skills. 🌟</p>
+                  <p className="text-sm text-black">Great job! Keep practicing to improve your speaking skills. 🌟</p>
                   <div className="flex justify-center mt-2 space-x-2">
                     {["😀", "👍", "🎉", "⭐"].map((emoji, index) => (
                       <span key={index} className="text-xl cursor-pointer hover:transform hover:scale-125 transition-transform">
