@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -12,7 +11,6 @@ import AITutorHero from "@/components/AITutor/AITutorHero";
 import AITutorBubbleDecor from "@/components/AITutor/AITutorBubbleDecor";
 import { useI18n } from "@/contexts/I18nContext";
 
-// 新色卡变量
 const COLOR_BG = "#FFF6D5";
 const COLOR_CARD_BG = "#FFEFAE";
 const COLOR_PRIMARY = "#2F5530";
@@ -28,15 +26,14 @@ const COLOR_HOVER_PURPLE = "#AF93E5";
 const COLOR_CARD_BORDER = "#E6DFBA";
 const COLOR_CARD_BOXSHADOW = "0 3px 16px 0 rgba(47,85,48,0.07)";
 
-// 主页风格下新版卡片hover色（根据深色原色加权计算）
 const cardHoverMap = {
-  "bg-[#e5deff]": COLOR_HOVER_PURPLE,  // AI Tutor
-  "bg-[#d3e4fd]": "#B9DCF9",          // Video Lessons
-  "bg-[#fbed96]": "#F8D418",          // Mock Exam
-  "bg-[#e2fded]": "#A7E4D7",          // Online Classroom
-  "bg-[#ffe3e3]": "#FFB3B3",          // Leaderboard
-  "bg-[#fbeadd]": "#FFEBA2",          // Streak & Progress
-  "bg-[#FFEFAE]": "#FFE27A"           // 通用基础容器
+  "bg-[#e5deff]": COLOR_HOVER_PURPLE,
+  "bg-[#d3e4fd]": "#B9DCF9",
+  "bg-[#fbed96]": "#F8D418",
+  "bg-[#e2fded]": "#A7E4D7",
+  "bg-[#ffe3e3]": "#FFB3B3",
+  "bg-[#fbeadd]": "#FFEBA2",
+  "bg-[#FFEFAE]": "#FFE27A"
 };
 
 const cartoonImages = [
@@ -65,13 +62,12 @@ const AITutor = () => {
     navigate("/ai-tutor/language-arts");
   };
 
-  // 主页色彩下的新版tutor模块色配置
   const tutorOptions = [
     {
       id: "writing-coach",
       title: t.AI_TUTOR.WRITING_COACH,
       subtitle: t.AI_TUTOR.SUBTITLE_WRITING,
-      icon: "/lovable-uploads/ea629f6c-6bb6-4da1-a355-703f3196322d.png",
+      icon: "/lovable-uploads/1bd5d4e2-d0e7-4caf-a458-e87bbd5e7418.png",
       color: COLOR_PURPLE,
       description: t.AI_TUTOR.WRITING_COACH_DESC,
       path: "/ai-tutor/writing-coach",
@@ -242,4 +238,3 @@ const AITutor = () => {
 };
 
 export default AITutor;
-
