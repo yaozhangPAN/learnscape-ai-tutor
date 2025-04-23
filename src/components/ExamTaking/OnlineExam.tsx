@@ -111,7 +111,9 @@ const OnlineExam = () => {
                     }));
 
                     if (answerList.length === 40)
-                    {const answerObj = answerList.find(a => a.id === subQuestion.id);}
+                    {
+                      //const answerObj = answerList.find(a => a.id === subQuestion.id);
+                    }
                     //question.correctAnswer = answerObj ? answerObj.value : "1";
                   } else {
                     question.type = "ShortAnswer"
