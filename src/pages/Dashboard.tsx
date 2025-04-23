@@ -36,21 +36,21 @@ const Dashboard = () => {
       description: t.DASHBOARD.MODULES.QUESTION_BANK_DESC,
       icon: <Book className="h-6 w-6 text-white" />,
       count: 2500,
-      color: "bg-[#4aba79]",
+      color: "bg-[#009688] text-white",
     },
     {
       title: t.DASHBOARD.MODULES.WRONG_QUESTIONS,
       description: t.DASHBOARD.MODULES.WRONG_QUESTIONS_DESC,
       icon: <BookX className="h-6 w-6 text-white" />,
       count: 42,
-      color: "bg-[#ffe29f] text-[#c08e23]",
+      color: "bg-[#FF7043] text-white",
     },
     {
       title: t.DASHBOARD.MODULES.FAVORITES,
       description: t.DASHBOARD.MODULES.FAVORITES_DESC,
       icon: <Star className="h-6 w-6 text-white" />,
       count: 78,
-      color: "bg-[#e5deff] text-[#6a42b2]",
+      color: "bg-[#B39DDB] text-white",
     },
   ];
 
