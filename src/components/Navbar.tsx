@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -30,13 +31,13 @@ const Navbar = () => {
         </Link>
         <nav className="items-center space-x-6 hidden md:flex">
           <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-            {t.NAVBAR.COURSES}
+            {t.NAV.VIDEO_LESSONS}
           </Link>
           <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-            {t.NAVBAR.AI_TUTOR}
+            {t.NAV.AI_TUTOR}
           </Link>
           <Link to="/daily-plan" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-            {t.NAVBAR.DAILY_PLAN}
+            {t.NAV.DAILY_ADVENTURE}
           </Link>
           {user ? (
             <>
@@ -48,16 +49,16 @@ const Navbar = () => {
                 {lang === 'zh' ? '我的账户' : 'My Account'}
               </Link>
               <Button size="sm" variant="outline" onClick={() => signOut()}>
-                {t.NAVBAR.SIGN_OUT}
+                {t.NAV.LOGOUT}
               </Button>
             </>
           ) : (
             <>
               <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-                {t.NAVBAR.SIGN_IN}
+                {t.NAV.LOGIN}
               </Link>
               <Button size="sm" onClick={() => navigate("/register")}>
-                {t.NAVBAR.GET_STARTED}
+                {lang === 'zh' ? '开始使用' : 'Get Started'}
               </Button>
             </>
           )}
@@ -70,20 +71,20 @@ const Navbar = () => {
           </SheetTrigger>
           <SheetContent side="right" className="sm:max-w-xs">
             <SheetHeader>
-              <SheetTitle>{t.NAVBAR.MENU}</SheetTitle>
+              <SheetTitle>{lang === 'zh' ? '菜单' : 'Menu'}</SheetTitle>
               <SheetDescription>
-                {t.NAVBAR.MOBILE_NAV_DESC}
+                {lang === 'zh' ? '浏览我们的功能' : 'Browse our features'}
               </SheetDescription>
             </SheetHeader>
             <div className="grid gap-4 py-4">
               <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-                {t.NAVBAR.COURSES}
+                {t.NAV.VIDEO_LESSONS}
               </Link>
               <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-                {t.NAVBAR.AI_TUTOR}
+                {t.NAV.AI_TUTOR}
               </Link>
               <Link to="/daily-plan" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-                {t.NAVBAR.DAILY_PLAN}
+                {t.NAV.DAILY_ADVENTURE}
               </Link>
               {user ? (
                 <>
@@ -95,16 +96,16 @@ const Navbar = () => {
                     {lang === 'zh' ? '我的账户' : 'My Account'}
                   </Link>
                   <Button size="sm" variant="outline" onClick={() => signOut()}>
-                    {t.NAVBAR.SIGN_OUT}
+                    {t.NAV.LOGOUT}
                   </Button>
                 </>
               ) : (
                 <>
                   <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-                    {t.NAVBAR.SIGN_IN}
+                    {t.NAV.LOGIN}
                   </Link>
                   <Button size="sm" onClick={() => navigate("/register")}>
-                    {t.NAVBAR.GET_STARTED}
+                    {lang === 'zh' ? '开始使用' : 'Get Started'}
                   </Button>
                 </>
               )}
