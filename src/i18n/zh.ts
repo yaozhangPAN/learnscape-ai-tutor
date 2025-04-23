@@ -86,7 +86,7 @@ const zh = {
     WRITING_COACH_DESC: "提升写作技巧，获得AI写作反馈和建议。",
     ORAL_EXAM: "口语闯关",
     ORAL_EXAM_DESC: "趣味口语练习，助你自信拿下面试。",
-    DICTATION: "英语听写",
+    DICTATION: "听写助手",
     DICTATION_DESC: "中英文听写训练，语音输入更轻松！",
     TUTOR_ME: "一对一提问",
     TUTOR_ME_DESC: "学科难题不会怕，问AI随时随地答。",
