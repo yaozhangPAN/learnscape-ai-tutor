@@ -1,172 +1,118 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, LogOut, Home, CalendarDays, Video, LayoutGrid, Book, Star, BarChart3 } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
+import { useSubscription } from "@/contexts/SubscriptionContext";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Menu, User } from "lucide-react";
+import LearnScapeLogo from "./LearnScapeLogo";
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
   const { user, signOut } = useAuth();
-  const { lang, setLang, t } = useI18n();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navLinks = [
-    { path: "/", name: t.NAV.HOME, icon: <Home className="mr-2 h-4 w-4" /> },
-    { path: "/daily-plan", name: t.NAV.DAILY_ADVENTURE, icon: <CalendarDays className="mr-2 h-4 w-4" /> },
-    { path: "/ai-tutor", name: t.NAV.AI_TUTOR, icon: <span className="ml-1 text-xs">✨</span> },
-    { path: "/video-tutorials", name: t.NAV.VIDEO_LESSONS, icon: <Video className="mr-2 h-4 w-4" /> },
-    { path: "/zoom-courses", name: t.NAV.ONLINE_CLASSROOM, icon: <LayoutGrid className="mr-2 h-4 w-4" /> },
-    { path: "/question-bank", name: t.NAV.QUESTION_BANK, icon: <Book className="mr-2 h-4 w-4" /> },
-    { path: "/mock-exam", name: t.NAV.MOCK_EXAM, icon: <Star className="mr-2 h-4 w-4" /> },
-    { path: "/dashboard", name: t.NAV.STREAK_PROGRESS, icon: <BarChart3 className="mr-2 h-4 w-4" /> },
-    { path: "/leaderboard", name: t.NAV.LEADERBOARD },
-  ];
-
-  const handleLogout = async () => {
-    await signOut();
-    setIsMenuOpen(false);
-  };
-
-  const langBtnClass = "bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors ml-2";
+  const { isPremium } = useSubscription();
+  const { t, lang } = useI18n();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className={`bg-learnscape-darkBlue sticky top-0 z-50 transition-all duration-300 ${
-      scrolled ? 'shadow-md' : 'shadow-sm'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center group">
-              <span className="text-2xl font-extrabold text-white flex items-center relative">
-                Learnscape
-                <Sparkles className="ml-1 h-4 w-4 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity animate-pulse" />
-              </span>
-            </Link>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.path} 
-                to={link.path} 
-                className={`text-white hover:text-yellow-300 transition-colors py-1 group relative font-bold ${
-                  location.pathname === link.path ? 'text-yellow-300 font-bold' : ''
-                }`}
+    <header className="border-b bg-white">
+      <div className="container flex h-16 items-center justify-between">
+        <Link to="/" className="flex items-center">
+          <LearnScapeLogo />
+        </Link>
+        <nav className="items-center space-x-6 hidden md:flex">
+          <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+            {t.NAVBAR.COURSES}
+          </Link>
+          <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+            {t.NAVBAR.AI_TUTOR}
+          </Link>
+          <Link to="/daily-plan" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+            {t.NAVBAR.DAILY_PLAN}
+          </Link>
+          {user ? (
+            <>
+              <Link
+                to="/account"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-learnscape-blue transition-colors"
               >
-                {link.name}
-                {location.pathname === link.path && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-300"></span>
-                )}
-                {link.icon && (
-                  <span className="absolute -top-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {link.icon}
-                  </span>
-                )}
+                <User className="h-4 w-4" />
+                {lang === 'zh' ? '我的账户' : 'My Account'}
               </Link>
-            ))}
-            {user ? (
-              <Button 
-                variant="default"
-                size="sm"
-                onClick={handleLogout}
-                className="bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors"
-              >
-                <LogOut className="mr-1 h-4 w-4" />
-                {t.NAV.LOGOUT}
+              <Button size="sm" variant="outline" onClick={() => signOut()}>
+                {t.NAVBAR.SIGN_OUT}
               </Button>
-            ) : (
-              <Button 
-                asChild
-                className="bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors"
-              >
-                <Link to="/login">
-                  <span className="relative z-10">{t.NAV.LOGIN}</span>
-                </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                {t.NAVBAR.SIGN_IN}
+              </Link>
+              <Button size="sm" onClick={() => navigate("/register")}>
+                {t.NAVBAR.GET_STARTED}
               </Button>
-            )}
-            <Button 
-              variant="default"
-              size="sm"
-              className={langBtnClass}
-              onClick={() => setLang(lang === "zh" ? "en" : "zh")}
-            >
-              {lang === "zh" ? t.NAV.ENGLISH : t.NAV.CHINESE}
+            </>
+          )}
+        </nav>
+        <Sheet>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="sm">
+              <Menu className="h-4 w-4" />
             </Button>
-          </div>
-          
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-yellow-300 focus:outline-none"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
+          </SheetTrigger>
+          <SheetContent side="right" className="sm:max-w-xs">
+            <SheetHeader>
+              <SheetTitle>{t.NAVBAR.MENU}</SheetTitle>
+              <SheetDescription>
+                {t.NAVBAR.MOBILE_NAV_DESC}
+              </SheetDescription>
+            </SheetHeader>
+            <div className="grid gap-4 py-4">
+              <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                {t.NAVBAR.COURSES}
+              </Link>
+              <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                {t.NAVBAR.AI_TUTOR}
+              </Link>
+              <Link to="/daily-plan" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                {t.NAVBAR.DAILY_PLAN}
+              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/account"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-learnscape-blue transition-colors"
+                  >
+                    <User className="h-4 w-4" />
+                    {lang === 'zh' ? '我的账户' : 'My Account'}
+                  </Link>
+                  <Button size="sm" variant="outline" onClick={() => signOut()}>
+                    {t.NAVBAR.SIGN_OUT}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                    {t.NAVBAR.SIGN_IN}
+                  </Link>
+                  <Button size="sm" onClick={() => navigate("/register")}>
+                    {t.NAVBAR.GET_STARTED}
+                  </Button>
+                </>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
-      
-      {isMenuOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-learnscape-darkBlue">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.path}
-                to={link.path} 
-                className={`block px-3 py-2 rounded-md text-base font-bold ${
-                  location.pathname === link.path 
-                    ? 'text-yellow-300 bg-white/10' 
-                    : 'text-white hover:text-yellow-300'
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.name}
-                {link.path === "/ai-tutor" && <span className="ml-1 text-xs">✨</span>}
-              </Link>
-            ))}
-            {user ? (
-              <button 
-                onClick={handleLogout}
-                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-[#4CAF50] hover:bg-[#16A085] mt-4"
-              >
-                <span className="flex items-center">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  {t.NAV.LOGOUT}
-                </span>
-              </button>
-            ) : (
-              <Link 
-                to="/login" 
-                className="block px-3 py-2 rounded-md text-base font-medium bg-[#4CAF50] text-white hover:bg-[#16A085] mt-4 text-center"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t.NAV.LOGIN}
-              </Link>
-            )}
-            <button
-              onClick={() => setLang(lang === "zh" ? "en" : "zh")}
-              className="w-full block px-3 py-2 mt-3 rounded-md text-base bg-[#4CAF50] text-white hover:bg-[#16A085] border-none"
-            >
-              {lang === "zh" ? t.NAV.ENGLISH : t.NAV.CHINESE}
-            </button>
-          </div>
-        </div>
-      )}
-    </nav>
+    </header>
   );
 };
 

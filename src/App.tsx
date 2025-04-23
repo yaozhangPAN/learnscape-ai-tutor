@@ -34,6 +34,7 @@ import ReadingCoachRedirect from "./components/ReadingCoachRedirect";
 import CourseDetails from "./pages/CourseDetails";
 import OralExamRedirect from "./components/AITutor/OralExamRedirect";
 import { I18nProvider } from "@/contexts/I18nContext";
+import Account from "./pages/Account";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -78,6 +79,7 @@ const App = () => {
                   <Route path="/ai-tutor/reading-coach" element={<ReadingCoachRedirect />} />
                   
                   <Route path="/about" element={<Navigate to="/" replace />} />
+                  <Route path="/account" element={<Account />} />
                   
                   <Route path="*" element={<NotFound />} />
                 </Routes>
