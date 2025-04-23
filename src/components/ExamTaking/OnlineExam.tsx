@@ -16,6 +16,7 @@ import answer from "../QuestionBank/QuestionViewer"
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
   
+  // If text is an object with a property (like {topic: "some topic"}), extract the first value
   let textContent: string;
   if (typeof text === 'object') {
     const values = Object.values(text);
@@ -24,6 +25,7 @@ const formatText = (text: string | object | undefined) => {
     textContent = String(text);
   }
   
+  // Now that we've ensured textContent is a string, we can safely use replace
   const withLineBreaks = textContent.replace(/\n/g, "<br />");
   return (
     <div
@@ -92,19 +94,16 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
-
-                const answers = contentObj.answerList || [];
+                
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
-                  // Find the corresponding answer in the answerList
-                  const answer = answers.find((a: any) => a.id === subQuestion.id);
-                  
+                  console.log("Processing subQuestion:", subQuestion.question);
+                  q_len = q_len + "_" + subQuestion.question;
                   const question: Question = {
                     id: `${q.id}-${subQuestion.id || index}`,
                     text: subQuestion.question || "",
                     type: "MCQ",
                     marks: 2,
                     topic: topic,
-                    correctAnswer: answer ? String(answer.correctAnswer) : "1" // Use answer from answerList if found
                   };
 
                   if (subQuestion.options && Array.isArray(subQuestion.options) && subQuestion.options.length > 0) {
@@ -112,6 +111,10 @@ const OnlineExam = () => {
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
+
+                    //const answerObj = answer.find(a => a.id === "1");
+                    //question.correctAnswer = answerObj ? answerObj.value : "N/A";
+                    question.correctAnswer = question.options[0].value;
                   } else {
                     question.type = "ShortAnswer"
                   }
@@ -316,7 +319,7 @@ const OnlineExam = () => {
             <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
               <div>
                 <p className="text-gray-600">学校: {currentExam.school}</p>
-                <p className="text-gray-600">级���: {currentExam.level.toUpperCase()}</p>
+                <p className="text-gray-600">级别: {currentExam.level.toUpperCase()}</p>
               </div>
               <div>
                 <p className="text-gray-600">类型: {currentExam.type}</p>
