@@ -14,6 +14,19 @@ const StreakComponent = () => {
   const freezeUsed = 1;
   const { t } = useI18n();
 
+  // Updated color palette with more saturation
+  const colors = {
+    background: "bg-gradient-to-br from-[#2ecc71] to-[#27ae60]", // Vibrant green gradient
+    streakSocietyBg: "bg-[#e74c3c]", // Bright red
+    streakText: "text-white", // White text for better contrast
+    tabBackground: "bg-gradient-to-br from-[#3498db] to-[#2980b9]", // Blue gradient
+    activeTabBg: "bg-white text-[#2ecc71]", // White background with green text
+    cardBgs: {
+      practiced: "bg-gradient-to-br from-[#2ecc71] to-[#27ae60]", // Green gradient
+      freeze: "bg-gradient-to-br from-[#3498db] to-[#2980b9]" // Blue gradient
+    }
+  };
+
   // Mock calendar data for current month
   const calendarDays = [
     { day: "Su", date: null },
@@ -51,23 +64,23 @@ const StreakComponent = () => {
   ];
 
   return (
-    <div className="bg-[#f2fce2] rounded-3xl p-4 md:p-8">
+    <div className={`${colors.background} rounded-3xl p-4 md:p-8 text-white`}>
       <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold text-[#4ABA79] tracking-tight">{t.STREAK.TITLE}</h1>
+        <h1 className="text-3xl font-bold text-white tracking-tight">{t.STREAK.TITLE}</h1>
       </div>
 
       <Tabs defaultValue="personal" className="w-full mb-4">
-        <TabsList className="w-full bg-[#e5deff] rounded-full h-12 mb-2">
+        <TabsList className={`w-full ${colors.tabBackground} rounded-full h-12 mb-2`}>
           <TabsTrigger 
             value="personal" 
-            className="w-1/2 data-[state=active]:bg-white data-[state=active]:text-[#4ABA79] text-lg"
+            className={`w-1/2 data-[state=active]:${colors.activeTabBg} text-lg`}
             onClick={() => setActiveTab("personal")}
           >
             {t.STREAK.PERSONAL}
           </TabsTrigger>
           <TabsTrigger 
             value="friends" 
-            className="w-1/2 data-[state=active]:bg-white data-[state=active]:text-[#4ABA79] text-lg"
+            className={`w-1/2 data-[state=active]:${colors.activeTabBg} text-lg`}
             onClick={() => setActiveTab("friends")}
           >
             {t.STREAK.FRIENDS}
@@ -76,56 +89,56 @@ const StreakComponent = () => {
         
         <TabsContent value="personal" className="mt-2">
           <div className="mb-6">
-            <div className="bg-[#fbed96] text-[#ad8a2c] py-2 px-4 rounded-full inline-block mb-4 text-center">
+            <div className={`${colors.streakSocietyBg} ${colors.streakText} py-2 px-4 rounded-full inline-block mb-4 text-center`}>
               <span className="font-bold text-sm tracking-wide">{t.STREAK.STREAK_SOCIETY}</span>
             </div>
             <div className="flex items-center justify-between flex-wrap gap-6">
               <div>
-                <h2 className="text-7xl font-bold text-[#ffd664] text-stroke drop-shadow">{currentStreak}</h2>
-                <p className="text-[#d3a647] text-2xl mt-1">{t.STREAK.DAY_STREAK}</p>
+                <h2 className="text-7xl font-bold text-white text-stroke drop-shadow">{currentStreak}</h2>
+                <p className="text-white/90 text-2xl mt-1">{t.STREAK.DAY_STREAK}</p>
               </div>
               <div className="flex-1 flex items-center justify-center">
-                <Flame className="h-24 w-24 text-[#ffd664] drop-shadow-lg" />
+                <Flame className="h-24 w-24 text-white drop-shadow-lg" />
               </div>
             </div>
           </div>
           
           <div className="mb-6 flex flex-col md:flex-row gap-4">
-            <Card className="bg-[#e5deff] border-none flex-1 shadow">
+            <Card className={`${colors.cardBgs.practiced} border-none flex-1 shadow text-white`}>
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="bg-[#4ABA79] rounded-full p-2 mr-2">
+                <div className="bg-white/30 rounded-full p-2 mr-2">
                   <span className="text-white font-bold text-2xl">✓</span>
                 </div>
                 <div>
-                  <h4 className="text-2xl font-bold text-[#4ABA79]">{daysPracticed}</h4>
-                  <p className="text-[#8268b5] font-semibold">{t.STREAK.DAYS_PRACTICED}</p>
+                  <h4 className="text-2xl font-bold">{daysPracticed}</h4>
+                  <p className="font-semibold text-white/90">{t.STREAK.DAYS_PRACTICED}</p>
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-[#fbed96] border-none flex-1 shadow">
+            <Card className={`${colors.cardBgs.freeze} border-none flex-1 shadow text-white`}>
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="bg-[#38A169] rounded-full p-2 mr-2">
+                <div className="bg-white/30 rounded-full p-2 mr-2">
                   <span className="text-white font-bold text-2xl">❄</span>
                 </div>
                 <div>
-                  <h4 className="text-2xl font-bold text-[#38A169]">{freezeUsed}</h4>
-                  <p className="text-[#b58a37] font-semibold">{t.STREAK.FREEZE_USED}</p>
+                  <h4 className="text-2xl font-bold">{freezeUsed}</h4>
+                  <p className="font-semibold text-white/90">{t.STREAK.FREEZE_USED}</p>
                 </div>
               </CardContent>
             </Card>
           </div>
           
-          <Card className="bg-white border-none shadow-sm p-4">
+          <Card className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-sm p-4">
             <CardContent>
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <button className="text-[#b197d7] text-xl font-bold">&lt;</button>
-                  <h3 className="text-lg font-extrabold text-[#4ABA79]">{currentMonth}</h3>
-                  <button className="text-[#b197d7] text-xl font-bold">&gt;</button>
+                  <button className="text-white/80 text-xl font-bold">&lt;</button>
+                  <h3 className="text-lg font-extrabold text-white">{currentMonth}</h3>
+                  <button className="text-white/80 text-xl font-bold">&gt;</button>
                 </div>
                 <div className="grid grid-cols-7 gap-2 mb-1">
                   {calendarDays.slice(0, 7).map((day, index) => (
-                    <div key={`day-${index}`} className="text-[#b197d7] font-medium text-sm text-center">
+                    <div key={`day-${index}`} className="text-white/80 font-medium text-sm text-center">
                       {day.day}
                     </div>
                   ))}
@@ -134,23 +147,23 @@ const StreakComponent = () => {
                   {calendarDays.map((day, index) => {
                     if (!day.date) return <div key={`empty-${index}`}></div>;
                     
-                    let bgColor = "bg-[#f3f3f3]";
-                    let textColor = "text-[#bdbdbd]";
+                    let bgColor = "bg-white/10";
+                    let textColor = "text-white/60";
                     let content = day.date;
                     
                     if (day.status === "completed") {
-                      bgColor = "bg-[#4ABA79]";
+                      bgColor = "bg-[#2ecc71]";
                       textColor = "text-white";
                     } else if (day.status === "freeze") {
-                      bgColor = "bg-[#38A169]";
+                      bgColor = "bg-[#3498db]";
                       textColor = "text-white";
                       content = <div className="relative">{day.date}<span className="absolute -bottom-1 -right-1 text-xs">❄</span></div>;
                     } else if (day.status === "active") {
-                      bgColor = "bg-[#f6c244]";
+                      bgColor = "bg-[#f1c40f]";
                       textColor = "text-white";
                     } else if (day.status === "today") {
-                      bgColor = "bg-[#ffe29f]";
-                      textColor = "text-[#c08e23]";
+                      bgColor = "bg-[#e74c3c]";
+                      textColor = "text-white";
                     }
                     
                     return (
@@ -168,11 +181,11 @@ const StreakComponent = () => {
           </Card>
 
           <div className="mt-6 text-center">
-            <Button className="bg-[#4ABA79] hover:bg-[#38895a] text-white text-lg px-8 py-3 rounded-full font-bold shadow">
+            <Button className="bg-white text-[#2ecc71] hover:bg-white/90 text-lg px-8 py-3 rounded-full font-bold shadow">
               {t.STREAK.EXTEND_STREAK}
             </Button>
-            <div className="mt-2 text-[#4ABA79] font-semibold">
-              <Clock className="inline-block mr-2 h-5 w-5 text-[#e47069]" />
+            <div className="mt-2 text-white font-semibold">
+              <Clock className="inline-block mr-2 h-5 w-5 text-white/80" />
               {t.STREAK.STREAK_WARNING}
             </div>
           </div>
@@ -180,8 +193,8 @@ const StreakComponent = () => {
         
         <TabsContent value="friends">
           <div className="text-center py-10">
-            <Calendar className="h-16 w-16 text-[#b197d7] mx-auto mb-2" />
-            <h3 className="text-lg font-medium text-[#b197d7]">
+            <Calendar className="h-16 w-16 text-white/80 mx-auto mb-2" />
+            <h3 className="text-lg font-medium text-white">
               {t.STREAK.FRIENDS_MESSAGE}
             </h3>
           </div>
