@@ -47,7 +47,7 @@ const OnlineExam = () => {
           console.log("Raw questionData:", questionData);
           
           let examQuestions: Question[] = [];
-          
+          let q_len = "";
           if (questionData && questionData.length > 0) {
             examQuestions = questionData.reduce((acc: Question[], q) => {
               try {
@@ -71,7 +71,7 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
-                setQuestionLength(questionLength + contentObj.questionList.length.toString());
+                q_len = q_len + contentObj.questionList.length.toString();
                 
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   console.log("Processing subQuestion:", subQuestion);
@@ -112,6 +112,7 @@ const OnlineExam = () => {
           }
           
           console.log("Final processed questions:", examQuestions);
+          setQuestionLength(q_len);
           
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
