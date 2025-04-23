@@ -73,7 +73,7 @@ const OnlineExam = () => {
                 console.log("Topic for questions:", topic);
                 
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
-                  console.log("Processing subQuestion:", subQuestion);
+                  console.log("Processing subQuestion:", subQuestion.question);
                   q_len = q_len + "_" + subQuestion;
                   const question: Question = {
                     id: `${q.id}-${subQuestion.id || index}`,
@@ -95,8 +95,6 @@ const OnlineExam = () => {
                   return question;
                 });
 
-                
-                
                 return [...acc, ...processedQuestions];
               } catch (error) {
                 console.error("Error processing individual question:", error);
