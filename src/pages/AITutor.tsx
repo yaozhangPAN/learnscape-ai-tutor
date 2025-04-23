@@ -10,6 +10,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import AITutorHero from "@/components/AITutor/AITutorHero";
 import AITutorBubbleDecor from "@/components/AITutor/AITutorBubbleDecor";
 import { useI18n } from "@/contexts/I18nContext";
+import { useToast } from "@/hooks/use-toast";
 
 const COLOR_BG = "#FFF6D5";
 const COLOR_CARD_BG = "#FFEFAE";
@@ -49,7 +50,8 @@ const AITutor = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { isPremium } = useSubscription();
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const { toast } = useToast();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -57,6 +59,14 @@ const AITutor = () => {
     }, 250);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleUpgradeNotice = () => {
+    toast({
+      title: lang === 'zh' ? "功能升级中" : "Feature Upgrading",
+      description: lang === 'zh' ? "该功能正在升级中，敬请期待上线！" : "This feature is currently being upgraded. Stay tuned!",
+      variant: "default",
+    });
+  };
 
   const handleLanguageArtsClick = () => {
     navigate("/ai-tutor/language-arts");
@@ -70,7 +80,8 @@ const AITutor = () => {
       icon: "/lovable-uploads/1bd5d4e2-d0e7-4caf-a458-e87bbd5e7418.png",
       color: COLOR_PURPLE,
       description: t.AI_TUTOR.WRITING_COACH_DESC,
-      path: "/ai-tutor/writing-coach",
+      path: "#",
+      onClick: handleUpgradeNotice,
       emoji: "✏️"
     },
     {
@@ -90,7 +101,8 @@ const AITutor = () => {
       icon: "/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png",
       color: COLOR_MINT,
       description: t.AI_TUTOR.DICTATION_DESC,
-      path: "/ai-tutor/dictation-practice",
+      path: "#",
+      onClick: handleUpgradeNotice,
       emoji: "🎧"
     },
     {
@@ -100,7 +112,8 @@ const AITutor = () => {
       icon: "/lovable-uploads/134d4088-5005-41d9-9487-719568001089.png",
       color: COLOR_GREEN,
       description: t.AI_TUTOR.TUTOR_ME_DESC,
-      path: "/ai-tutor/tutor-me",
+      path: "#",
+      onClick: handleUpgradeNotice,
       emoji: "🧠"
     },
     {
@@ -110,7 +123,8 @@ const AITutor = () => {
       icon: "/lovable-uploads/3a8a17fe-664a-4c72-990a-dee148e1f5bb.png",
       color: COLOR_ORANGE,
       description: t.AI_TUTOR.VOCABULARY_DESC,
-      path: "/ai-tutor/vocabulary",
+      path: "#",
+      onClick: handleUpgradeNotice,
       emoji: "📚"
     },
     {
@@ -155,78 +169,142 @@ const AITutor = () => {
                 className="relative group"
                 onClick={option.onClick}
               >
-                <Link
-                  to={option.path}
-                  onClick={e => {
-                    if (option.onClick) {
-                      e.preventDefault();
-                      option.onClick();
-                    }
-                  }}
-                  className="no-underline"
-                >
-                  <Card
-                    className="rounded-3xl shadow-xl h-full overflow-hidden border-0 card-hover transition-transform"
-                    style={{
-                      background: option.color,
-                      boxShadow: COLOR_CARD_BOXSHADOW,
-                      border: `2px solid ${COLOR_CARD_BORDER}`,
-                      transition: "background .2s"
+                {option.path === "#" ? (
+                  <div className="cursor-pointer">
+                    <Card
+                      className="rounded-3xl shadow-xl h-full overflow-hidden border-0 card-hover transition-transform opacity-75"
+                      style={{
+                        background: option.color,
+                        boxShadow: COLOR_CARD_BOXSHADOW,
+                        border: `2px solid ${COLOR_CARD_BORDER}`,
+                      }}
+                    >
+                      <CardHeader className="flex flex-col items-center text-center pb-2 relative bg-transparent">
+                        <div className="mb-2">
+                          <img
+                            src={option.icon}
+                            alt={option.title}
+                            className="w-20 h-20 rounded-full shadow-md border-4 border-white object-cover drop-shadow-xl bg-white"
+                            draggable="false"
+                          />
+                        </div>
+                        <CardTitle
+                          className="text-xl md:text-2xl font-bold flex items-center group-hover:tracking-wide"
+                          style={{ color: COLOR_PRIMARY }}
+                        >
+                          {option.title}
+                          <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
+                            {option.emoji}
+                          </span>
+                        </CardTitle>
+                        <div
+                          className="text-xs font-medium tracking-widest mt-1 mb-0.5"
+                          style={{ color: "#8D6663" }}
+                        >
+                          {option.subtitle}
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription
+                          className="text-center text-base font-medium min-h-[62px]"
+                          style={{
+                            color: "#4E342E",
+                            background: "rgba(255,255,255,0.07)",
+                            borderRadius: 16,
+                            lineHeight: 1.5
+                          }}
+                        >
+                          {option.description}
+                        </CardDescription>
+                      </CardContent>
+                      <CardFooter className="flex justify-center mt-2">
+                        <Button
+                          variant="ghost"
+                          className="rounded-lg shadow px-6 py-2 font-semibold"
+                          style={{
+                            background: COLOR_PRIMARY,
+                            color: "#fff",
+                            fontWeight: 700
+                          }}
+                        >
+                          {t.AI_TUTOR.GO} {option.title}
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                ) : (
+                  <Link
+                    to={option.path}
+                    onClick={e => {
+                      if (option.onClick) {
+                        e.preventDefault();
+                        option.onClick();
+                      }
                     }}
+                    className="no-underline"
                   >
-                    <CardHeader className="flex flex-col items-center text-center pb-2 relative bg-transparent">
-                      <div className="mb-2">
-                        <img
-                          src={option.icon}
-                          alt={option.title}
-                          className="w-20 h-20 rounded-full shadow-md border-4 border-white object-cover drop-shadow-xl bg-white"
-                          draggable="false"
-                        />
-                      </div>
-                      <CardTitle
-                        className="text-xl md:text-2xl font-bold flex items-center group-hover:tracking-wide"
-                        style={{ color: COLOR_PRIMARY }}
-                      >
-                        {option.title}
-                        <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
-                          {option.emoji}
-                        </span>
-                      </CardTitle>
-                      <div
-                        className="text-xs font-medium tracking-widest mt-1 mb-0.5"
-                        style={{ color: "#8D6663" }}
-                      >
-                        {option.subtitle}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription
-                        className="text-center text-base font-medium min-h-[62px]"
-                        style={{
-                          color: "#4E342E",
-                          background: "rgba(255,255,255,0.07)",
-                          borderRadius: 16,
-                          lineHeight: 1.5
-                        }}
-                      >
-                        {option.description}
-                      </CardDescription>
-                    </CardContent>
-                    <CardFooter className="flex justify-center mt-2">
-                      <Button
-                        variant="ghost"
-                        className="rounded-lg shadow px-6 py-2 font-semibold"
-                        style={{
-                          background: COLOR_PRIMARY,
-                          color: "#fff",
-                          fontWeight: 700
-                        }}
-                      >
-                        {t.AI_TUTOR.GO} {option.title}
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </Link>
+                    <Card
+                      className="rounded-3xl shadow-xl h-full overflow-hidden border-0 card-hover transition-transform"
+                      style={{
+                        background: option.color,
+                        boxShadow: COLOR_CARD_BOXSHADOW,
+                        border: `2px solid ${COLOR_CARD_BORDER}`,
+                      }}
+                    >
+                      <CardHeader className="flex flex-col items-center text-center pb-2 relative bg-transparent">
+                        <div className="mb-2">
+                          <img
+                            src={option.icon}
+                            alt={option.title}
+                            className="w-20 h-20 rounded-full shadow-md border-4 border-white object-cover drop-shadow-xl bg-white"
+                            draggable="false"
+                          />
+                        </div>
+                        <CardTitle
+                          className="text-xl md:text-2xl font-bold flex items-center group-hover:tracking-wide"
+                          style={{ color: COLOR_PRIMARY }}
+                        >
+                          {option.title}
+                          <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity animate-bounce-slow">
+                            {option.emoji}
+                          </span>
+                        </CardTitle>
+                        <div
+                          className="text-xs font-medium tracking-widest mt-1 mb-0.5"
+                          style={{ color: "#8D6663" }}
+                        >
+                          {option.subtitle}
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription
+                          className="text-center text-base font-medium min-h-[62px]"
+                          style={{
+                            color: "#4E342E",
+                            background: "rgba(255,255,255,0.07)",
+                            borderRadius: 16,
+                            lineHeight: 1.5
+                          }}
+                        >
+                          {option.description}
+                        </CardDescription>
+                      </CardContent>
+                      <CardFooter className="flex justify-center mt-2">
+                        <Button
+                          variant="ghost"
+                          className="rounded-lg shadow px-6 py-2 font-semibold"
+                          style={{
+                            background: COLOR_PRIMARY,
+                            color: "#fff",
+                            fontWeight: 700
+                          }}
+                        >
+                          {t.AI_TUTOR.GO} {option.title}
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </Link>
+                )}
               </div>
             ))}
           </div>
