@@ -24,7 +24,7 @@ const OnlineExam = () => {
   const [examCompleted, setExamCompleted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(6000); // 1 hour 40 minutes by default
   const [score, setScore] = useState<number | null>(null);
-  const [questionLength, setQuestionLength] = useState<string>("0");
+  const [questionLength, setQuestionLength] = useState("");
 
   useEffect(() => {
     const fetchExam = async () => {
@@ -45,11 +45,6 @@ const OnlineExam = () => {
           }
           
           console.log("Raw questionData:", questionData);
-          
-          if (questionData) {
-            setQuestionLength(questionData.length.toString());
-            console.log("Function Log - Question Length:", questionData.length);
-          }
           
           let examQuestions: Question[] = [];
           
@@ -76,6 +71,7 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
+                setQuestionLength(questionLength + topic);
                 
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   console.log("Processing subQuestion:", subQuestion);
@@ -116,10 +112,6 @@ const OnlineExam = () => {
           }
           
           console.log("Final processed questions:", examQuestions);
-          if (questionData) {
-            setQuestionLength(examQuestions.length);
-            console.log("Function Log - Question Length:", questionData.length);
-          }
           
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
@@ -437,7 +429,7 @@ const OnlineExam = () => {
               <div key={topicIndex} className="mb-8">
                 {topic !== '其他' && (
                   <h2 className="text-xl font-bold mb-4 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
-                    Question Length: {questionLength}
+                    Topic Length: {questionLength}
                   </h2>
                 )}
                 {questions.map((question, index) => {
