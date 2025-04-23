@@ -123,8 +123,7 @@ const AITutor = () => {
       icon: "/lovable-uploads/3a8a17fe-664a-4c72-990a-dee148e1f5bb.png",
       color: COLOR_ORANGE,
       description: t.AI_TUTOR.VOCABULARY_DESC,
-      path: "#",
-      onClick: handleUpgradeNotice,
+      path: "/ai-tutor/vocabulary",
       emoji: "📚"
     },
     {
