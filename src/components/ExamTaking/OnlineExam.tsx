@@ -24,7 +24,7 @@ const OnlineExam = () => {
   const [examCompleted, setExamCompleted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(6000); // 1 hour 40 minutes by default
   const [score, setScore] = useState<number | null>(null);
-  let [questionLength, setQuestionLength] = useState("");
+  const [questionLength, setQuestionLength] = useState("");
 
   useEffect(() => {
     const fetchExam = async () => {
@@ -71,7 +71,7 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
-                setQuestionLength(questionLength + topic);
+                setQuestionLength(questionLength + contentObj.questionList.length.toString());
                 
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   console.log("Processing subQuestion:", subQuestion);
