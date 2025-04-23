@@ -39,7 +39,7 @@ const VocabularyGame = () => {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { y: 300 },
+          gravity: { x: 0, y: 300 },  // Fixed: Added the missing x property to gravity
           debug: false
         }
       }
@@ -65,4 +65,3 @@ const VocabularyGame = () => {
 };
 
 export default VocabularyGame;
-
