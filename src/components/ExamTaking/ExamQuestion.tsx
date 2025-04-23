@@ -13,7 +13,7 @@ interface ExamQuestionProps {
 
 const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProps) => {
   const renderMcqOptions = () => {
-    if (question.type !== "MCQ" || !question.options) return null;
+    if (question.type !== "MCQ" || !question.options || question.options.length === 0) return null;
 
     return (
       <RadioGroup 
@@ -36,8 +36,8 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
     );
   };
 
-  const renderShortAnswer = () => {
-    if (question.type !== "ShortAnswer") return null;
+  const renderTextAnswer = () => {
+    if (question.type !== "MCQ" || (question.options && question.options.length > 0)) return null;
 
     return (
       <div className="mt-4">
@@ -46,21 +46,6 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
           value={userAnswer}
           onChange={(e) => onAnswerChange(e.target.value)}
           className="min-h-[120px]"
-        />
-      </div>
-    );
-  };
-
-  const renderLongAnswer = () => {
-    if (question.type !== "Essay") return null;
-
-    return (
-      <div className="mt-4">
-        <Textarea
-          placeholder="在此输入你的详细答案..."
-          value={userAnswer}
-          onChange={(e) => onAnswerChange(e.target.value)}
-          className="min-h-[200px]"
         />
       </div>
     );
@@ -82,9 +67,8 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
         )}
       </div>
       
-      {question.type === "MCQ" && renderMcqOptions()}
-      {question.type === "ShortAnswer" && renderShortAnswer()}
-      {question.type === "Essay" && renderLongAnswer()}
+      {renderMcqOptions()}
+      {renderTextAnswer()}
     </div>
   );
 };
