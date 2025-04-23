@@ -114,7 +114,8 @@ const OnlineExam = () => {
                   } else {
                     question.type = "ShortAnswer"
                   }
-
+                  
+                  setQuestionLength(anwser.toString());
                   if (subQuestion.id) {
                     const answerObj = anwser.find(a => a.id === subQuestion.id);
                     question.correctAnswer = answerObj ? answerObj.value : "N/A";
@@ -139,7 +140,6 @@ const OnlineExam = () => {
           }
           
           console.log("Final processed questions:", examQuestions);
-          setQuestionLength(q_len.toString());
           
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
