@@ -25,7 +25,7 @@ const DailyPlan = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-4">
           {/* 卡通角色 */}
           <img
-            src="/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png"
+            src="/lovable-uploads/67febdd9-e430-46e6-b523-5036340c4c65.png"
             alt="Daily Adventure Cartoon Character"
             className="w-24 h-24 object-contain drop-shadow-lg mr-0 md:mr-8"
             draggable={false}
@@ -57,7 +57,7 @@ const DailyPlan = () => {
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <img
-                src="/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png"
+                src="/lovable-uploads/67febdd9-e430-46e6-b523-5036340c4c65.png"
                 alt="Daily Adventure Bg"
                 className="w-16 h-16 object-contain rounded-xl shadow"
                 draggable={false}
