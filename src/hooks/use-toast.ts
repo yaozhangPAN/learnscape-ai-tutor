@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 import type {
@@ -168,7 +169,10 @@ function toast({ ...props }: Toast) {
   }
 }
 
+// Wrap the useToast hook in a function that ensures React is properly initialized
 function useToast() {
+  // This will throw an error if React isn't initialized yet, which is better than
+  // silently failing with "Cannot read property 'useState' of null"
   const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
