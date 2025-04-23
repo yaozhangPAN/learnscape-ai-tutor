@@ -13,8 +13,8 @@ const TutorOptionsGrid = () => {
 
   const handleUpgradeNotice = () => {
     toast({
-      title: t.language === 'zh' ? "功能升级中" : "Feature Upgrading",
-      description: t.language === 'zh' ? "该功能正在升级中，敬请期待上线！" : "This feature is currently being upgraded. Stay tuned!",
+      title: t.NAV.CHINESE === "中文" ? "功能升级中" : "Feature Upgrading",
+      description: t.NAV.CHINESE === "中文" ? "该功能正在升级中，敬请期待上线！" : "This feature is currently being upgraded. Stay tuned!",
       variant: "default",
     });
   };
