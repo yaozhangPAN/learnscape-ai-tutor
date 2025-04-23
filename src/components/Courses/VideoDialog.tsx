@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Video, Lock, Crown } from "lucide-react";
 import { Course } from '@/types/course';
+import { useI18n } from "@/contexts/I18nContext";
 
 interface VideoDialogProps {
   open: boolean;
@@ -24,6 +25,8 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
   onSubscribe,
   onPurchase,
 }) => {
+  const { t } = useI18n();
+  
   if (!course) return null;
 
   return (
@@ -50,17 +53,17 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
           <div className="aspect-video bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
             <div className="text-center p-8">
               <Lock className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-xl font-semibold mb-2">Premium Content</h3>
+              <h3 className="text-xl font-semibold mb-2">{t.VIDEO_TUTORIALS.PREMIUM_BADGE}</h3>
               <p className="text-gray-600 mb-6">
-                This video tutorial requires a purchase or premium subscription to access.
+                {t.SUBSCRIPTION.VIDEO_DESC}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button onClick={onPurchase}>
-                  Purchase ({course.price})
+                  {t.SUBSCRIPTION.PURCHASE_VIDEO} ({course.price})
                 </Button>
                 <Button variant="outline" onClick={onSubscribe}>
                   <Crown className="mr-2 h-4 w-4" />
-                  Subscribe to Premium
+                  {t.SUBSCRIPTION.SUBSCRIBE_PREMIUM}
                 </Button>
               </div>
             </div>

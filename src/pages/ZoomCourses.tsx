@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,6 +11,7 @@ import ZoomCourseGrid from "@/components/ZoomCourses/ZoomCourseGrid";
 import { Button } from "@/components/ui/button";
 import { Users, Calendar, Clock } from "lucide-react";
 import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 const mockZoomCourses = [
   {
@@ -131,6 +133,7 @@ const mockZoomCourses = [
 ];
 
 const ZoomCourses = () => {
+  const { t } = useI18n();
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
@@ -193,10 +196,8 @@ const ZoomCourses = () => {
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Live Zoom Courses</h1>
-          <p className="text-gray-600">
-            Join our interactive online classes with expert tutors for real-time learning, questions, and feedback.
-          </p>
+          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">{t.ONLINE_CLASSROOM.TITLE}</h1>
+          <p className="text-gray-600">{t.ONLINE_CLASSROOM.SUBTITLE}</p>
         </div>
 
         <UpcomingSessions 
@@ -255,21 +256,21 @@ const ZoomCourses = () => {
                   <div className="mt-4 space-y-2">
                     <div className="flex items-center text-sm">
                       <Users className="h-4 w-4 mr-2 text-gray-500" />
-                      <span>{selectedCourse.currentEnrollment}/{selectedCourse.maxStudents} students enrolled</span>
+                      <span>{selectedCourse.currentEnrollment}/{selectedCourse.maxStudents} {t.ONLINE_CLASSROOM.STUDENTS}</span>
                     </div>
                     <div className="flex items-center text-sm">
                       <Calendar className="h-4 w-4 mr-2 text-gray-500" />
-                      <span>Sessions run weekly</span>
+                      <span>{t.ONLINE_CLASSROOM.WEEKLY_SESSIONS}</span>
                     </div>
                     <div className="flex items-center text-sm">
                       <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                      <span>90 minutes per session</span>
+                      <span>90 {t.ONLINE_CLASSROOM.MINUTES}</span>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">Upcoming Sessions</h3>
+                  <h3 className="text-lg font-semibold mb-3">{t.ONLINE_CLASSROOM.UPCOMING_SESSIONS}</h3>
                   <div className="space-y-3">
                     {selectedCourse.upcomingSessions.map((session: any) => (
                       <div key={session.id} className="p-3 border rounded-md">
@@ -288,7 +289,7 @@ const ZoomCourses = () => {
                 <div className="font-semibold text-learnscape-blue">{selectedCourse.price}</div>
                 <div className="flex gap-3">
                   <Button onClick={handleEnroll}>
-                    Enroll in Course
+                    {t.ONLINE_CLASSROOM.JOIN_SESSION}
                   </Button>
                 </div>
               </DialogFooter>

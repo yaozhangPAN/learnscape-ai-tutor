@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -12,8 +13,10 @@ import { VideoDialog } from "@/components/Courses/VideoDialog";
 import { Course } from "@/types/course";
 import { mockCourses } from "@/data/mockCourses";
 import { Link } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
 
 const Courses = () => {
+  const { t } = useI18n();
   const [selectedLevel, setSelectedLevel] = useState<string>("p6");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
@@ -105,10 +108,8 @@ const Courses = () => {
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Star Teacher Video Lessons</h1>
-          <p className="text-gray-600">
-            Access high-quality video tutorials designed by expert educators to help you master key concepts and excel in your exams.
-          </p>
+          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">{t.VIDEO_TUTORIALS.TITLE}</h1>
+          <p className="text-gray-600">{t.VIDEO_TUTORIALS.SUBTITLE}</p>
         </div>
 
         <CourseFilters

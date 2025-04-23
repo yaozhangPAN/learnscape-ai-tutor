@@ -1,3 +1,4 @@
+
 const en = {
   NAV: {
     HOME: "Home",
@@ -193,7 +194,11 @@ const en = {
     SUBTITLE: "Join live online classes to interact with teachers and peers.",
     UPCOMING_SESSIONS: "Upcoming Sessions",
     JOIN_SESSION: "Join Session",
-    NO_SESSIONS: "No sessions scheduled"
+    NO_SESSIONS: "No sessions scheduled",
+    STUDENTS: "students enrolled",
+    WEEKLY_SESSIONS: "Sessions run weekly",
+    MINUTES: "minutes per session",
+    ENROLL: "Enroll in Course"
   },
   MOCK_EXAM: {
     TITLE: "Past Year Exam Papers",

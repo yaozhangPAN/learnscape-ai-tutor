@@ -1,3 +1,4 @@
+
 const zh = {
   NAV: {
     HOME: "首页",
@@ -193,7 +194,11 @@ const zh = {
     SUBTITLE: "参加实时在线课程，与老师和同学互动学习。",
     UPCOMING_SESSIONS: "即将开始的课程",
     JOIN_SESSION: "加入课程",
-    NO_SESSIONS: "暂无课程安排"
+    NO_SESSIONS: "暂无课程安排",
+    STUDENTS: "学生已报名",
+    WEEKLY_SESSIONS: "每周固定课程",
+    MINUTES: "分钟每节课",
+    ENROLL: "报名课程"
   },
   MOCK_EXAM: {
     TITLE: "模拟考试",
