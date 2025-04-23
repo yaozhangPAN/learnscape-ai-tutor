@@ -94,22 +94,17 @@ const OnlineExam = () => {
                 console.log("Topic for questions:", topic);
                 
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
-                  const questionId = `${q.id}-${subQuestion.id || index}`;
-                  const answerKey = subQuestion.options?.find(opt => opt.isCorrect)?.key;
-                  
                   const question: Question = {
-                    id: questionId,
+                    id: `${q.id}-${subQuestion.id || index}`,
                     text: subQuestion.question || "",
                     type: "MCQ",
                     marks: 2,
                     topic: topic,
-                    correctAnswer: answerKey 
-                      ? String(answerKey)
-                      : subQuestion.correctAnswer 
-                        ? String(subQuestion.correctAnswer)
-                        : subQuestion.options && subQuestion.options.length > 0 
-                          ? "1"  // default to first option if no correct answer found
-                          : "0"  // fallback if no options
+                    correctAnswer: subQuestion.correctAnswer 
+                      ? String(subQuestion.correctAnswer) 
+                      : subQuestion.options && subQuestion.options.length > 0 
+                        ? "1"  // default to first option if available
+                        : "0"  // fallback value if no options
                   };
 
                   if (subQuestion.options && Array.isArray(subQuestion.options) && subQuestion.options.length > 0) {
@@ -130,6 +125,8 @@ const OnlineExam = () => {
                 return acc;
               }
             }, []);
+            
+            console.log("Final processed questions:", examQuestions);
           }
           
           if (examQuestions.length === 0) {
