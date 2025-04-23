@@ -45,7 +45,7 @@ const Index = () => {
       bg: "bg-[#A48CF6]",
       text: "text-white",
       icon: <Grid2x2 className="w-8 h-8 mr-2" />,
-      img: "/lovable-uploads/3d8abec2-bc96-4d7b-80c1-4ee8efef5c9c.png",
+      img: "/lovable-uploads/08dd607c-c712-4811-a7fb-d18a717613dd.png", // New AI Tutor icon
       to: "/ai-tutor"
     },
     {
