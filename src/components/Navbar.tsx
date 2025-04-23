@@ -13,13 +13,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, User } from "lucide-react";
+import { Menu, User, Languages } from "lucide-react";
 import LearnScapeLogo from "./LearnScapeLogo";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
   const { isPremium } = useSubscription();
-  const { t, lang } = useI18n();
+  const { t, lang, toggleLang } = useI18n();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -36,9 +36,19 @@ const Navbar = () => {
           <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
             {t.NAV.AI_TUTOR}
           </Link>
-          <Link to="/daily-plan" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-            {t.NAV.DAILY_ADVENTURE}
+          <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+            {t.NAV.ONLINE_CLASSROOM}
           </Link>
+          <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+            {t.NAV.QUESTION_BANK}
+          </Link>
+          <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+            {t.NAV.MOCK_EXAM}
+          </Link>
+          <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-2">
+            <Languages className="h-4 w-4" />
+            {lang === 'en' ? '中文' : 'English'}
+          </Button>
           {user ? (
             <>
               <Link
@@ -83,9 +93,19 @@ const Navbar = () => {
               <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
                 {t.NAV.AI_TUTOR}
               </Link>
-              <Link to="/daily-plan" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
-                {t.NAV.DAILY_ADVENTURE}
+              <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                {t.NAV.ONLINE_CLASSROOM}
               </Link>
+              <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                {t.NAV.QUESTION_BANK}
+              </Link>
+              <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                {t.NAV.MOCK_EXAM}
+              </Link>
+              <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-2 justify-start">
+                <Languages className="h-4 w-4" />
+                {lang === 'en' ? '中文' : 'English'}
+              </Button>
               {user ? (
                 <>
                   <Link
