@@ -30,19 +30,19 @@ const Navbar = () => {
           <LearnScapeLogo />
         </Link>
         <nav className="items-center space-x-6 hidden md:flex">
-          <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+          <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
             {t.NAV.VIDEO_LESSONS}
           </Link>
-          <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+          <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
             {t.NAV.AI_TUTOR}
           </Link>
-          <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+          <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
             {t.NAV.ONLINE_CLASSROOM}
           </Link>
-          <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+          <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
             {t.NAV.QUESTION_BANK}
           </Link>
-          <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+          <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
             {t.NAV.MOCK_EXAM}
           </Link>
           <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-2">
@@ -53,7 +53,7 @@ const Navbar = () => {
             <>
               <Link
                 to="/account"
-                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-learnscape-blue transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-learnscape-darkBlue transition-colors"
               >
                 <User className="h-4 w-4" />
                 {lang === 'zh' ? '我的账户' : 'My Account'}
@@ -64,7 +64,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+              <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.LOGIN}
               </Link>
               <Button size="sm" onClick={() => navigate("/register")}>
@@ -87,19 +87,19 @@ const Navbar = () => {
               </SheetDescription>
             </SheetHeader>
             <div className="grid gap-4 py-4">
-              <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+              <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.VIDEO_LESSONS}
               </Link>
-              <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+              <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.AI_TUTOR}
               </Link>
-              <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+              <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.ONLINE_CLASSROOM}
               </Link>
-              <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+              <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.QUESTION_BANK}
               </Link>
-              <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+              <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.MOCK_EXAM}
               </Link>
               <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-2 justify-start">
@@ -110,7 +110,7 @@ const Navbar = () => {
                 <>
                   <Link
                     to="/account"
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-learnscape-blue transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-learnscape-darkBlue transition-colors"
                   >
                     <User className="h-4 w-4" />
                     {lang === 'zh' ? '我的账户' : 'My Account'}
@@ -121,7 +121,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-blue">
+                  <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                     {t.NAV.LOGIN}
                   </Link>
                   <Button size="sm" onClick={() => navigate("/register")}>
