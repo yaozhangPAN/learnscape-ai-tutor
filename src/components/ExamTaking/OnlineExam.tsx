@@ -74,7 +74,7 @@ const OnlineExam = () => {
                   // Basic question structure
                   const question: Question = {
                     id: `${q.id}-${subQuestion.id || index}`,
-                    text: subQuestion.question || "No question text",
+                    text: subQuestion.question || "",
                     type: "MCQ",
                     marks: 2,
                     topic: topic, // Store the topic directly in the question object
