@@ -11,7 +11,170 @@ import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
-import answer from "../QuestionBank/QuestionViewer"
+//import answer from "../QuestionBank/QuestionViewer"
+const anwser = [
+  {
+    id: "Q1",
+    value: "2"
+  },
+  {
+    id: "Q2",
+    value: "1"
+  },
+  {
+    id: "Q3",
+    value: "4"
+  },
+  {
+    id: "Q4",
+    value: "3"
+  },
+  {
+    id: "Q5",
+    value: "3"
+  },
+  {
+    id: "Q6",
+    value: "1"
+  },
+  {
+    id: "Q7",
+    value: "4"
+  },
+  {
+    id: "Q8",
+    value: "4"
+  },
+  {
+    id: "Q9",
+    value: "3"
+  },
+  {
+    id: "Q10",
+    value: "2"
+  },
+  {
+    id: "Q11",
+    value: "1"
+  },
+  {
+    id: "Q12",
+    value: "3"
+  },
+  {
+    id: "Q13",
+    value: "2"
+  },
+  {
+    id: "Q14",
+    value: "4"
+  },
+  {
+    id: "Q15",
+    value: "3"
+  },
+  {
+    id: "Q16",
+    value: "4"
+  },
+  {
+    id: "Q17",
+    value: "2"
+  },
+  {
+    id: "Q18",
+    value: "3"
+  },
+  {
+    id: "Q19",
+    value: "1"
+  },
+  {
+    id: "Q20",
+    value: "3"
+  },
+  {
+    id: "Q21",
+    value: "2"
+  },
+  {
+    id: "Q22",
+    value: "3"
+  },
+  {
+    id: "Q23",
+    value: "1"
+  },
+  {
+    id: "Q24",
+    value: "3"
+  },
+  {
+    id: "Q25",
+    value: "4"
+  },
+  {
+    id: "Q26",
+    value: "6"
+  },
+  {
+    id: "Q27",
+    value: "8"
+  },
+  {
+    id: "Q28",
+    value: "7"
+  },
+  {
+    id: "Q29",
+    value: "3"
+  },
+  {
+    id: "Q30",
+    value: "4"
+  },
+  {
+    id: "Q31",
+    value: "3"
+  },
+  {
+    id: "Q32",
+    value: "2"
+  },
+  {
+    id: "Q33",
+    value: "明华,我知道你喜欢喝奶茶,想约你一起去明月光茶馆喝奶茶。明月光茶馆新店 6 月 8 日开幕,开幕当天有特别优惠,只要购买一份套餐就能得到一张贵宾卡。我们俩可以买一份双人好友套餐,我想得到这个特别优惠,你可以 6 月 8 日上午 11 点和我一起去喝奶茶吗?"
+  },
+  {
+    id: "Q34",
+    value: "连忙/赶紧"
+  },
+  {
+    id: "Q35",
+    value: "惭愧"
+  },
+  {
+    id: "Q36",
+    value: "作者每当看到哥哥能自己上学,能和朋友一起出去,能去帮妈妈买东西等等,就很想像哥哥一样可以做这些事情,他问爸爸什么时候才能像哥哥那样,但爸爸说等他长大再说,所以作者想快快长大。"
+  },
+  {
+    id: "Q37",
+    value: "起初爸爸不认为作者长大了, 作者感到很委屈,他认为哥哥和他只差三岁,觉得自己已经长大了。"
+  },
+  {
+    id: "Q38",
+    value: "爸爸一直到最后才认同作者长大了, 原因是作者和明华撞到一位瘦小的老婆婆,他没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。爸爸认为这件事说明作者懂得为自己的行为负责,这才认同作者长大了。"
+  },
+  {
+    id: "Q39",
+    value: "这句话的意思是作者知道爸爸看到了明华和作者撞倒老婆婆,但是爸爸当时只是在人群中默默地看着他,这让他心里很慌,后来作者回到家,发现爸爸一直在他的房间里,这让作者感到更加不安,到了晚餐时间,爸爸坐下来后便看着他,他因此猜想爸爸一定会严厉批评他。"
+  },
+  {
+    id: "Q40",
+    value: "我认为当父母看到子懂得为自己的行���负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
+  }
+];
+
 
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
