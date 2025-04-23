@@ -4,26 +4,31 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HomeHeader from "@/components/home/HomeHeader";
 import HomeNote from "@/components/home/HomeNote";
-import { Video, Book, Star, Grid2x2, LayoutGrid } from "lucide-react";
+import { Video, Book, Grid2x2, LayoutGrid } from "lucide-react";
 import OnlineClassroomSection from "@/components/home/OnlineClassroomSection";
-import LeaderboardSection from "@/components/home/LeaderboardSection";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/contexts/I18nContext";
+import HomeDailyAdventureSection from "@/components/home/HomeDailyAdventureSection";
+import HomeAITutorSection from "@/components/home/HomeAITutorSection";
+import HomeVideoLessonsSection from "@/components/home/HomeVideoLessonsSection";
+import HomeQuestionBankSection from "@/components/home/HomeQuestionBankSection";
+import HomeMockExamSection from "@/components/home/HomeMockExamSection";
+import HomeStreakProgressSection from "@/components/home/HomeStreakProgressSection";
+import HomeLeaderboardSection from "@/components/home/HomeLeaderboardSection";
 
 const Index = () => {
   const { t, lang } = useI18n();
 
+  // DAILY ADVENTURE 小图标
+  const dailyIcon = "/lovable-uploads/134d4088-5005-41d9-9487-719568001089.png";
+
   const mainBlocks = [
     {
       key: "daily-adventure",
-      // 多语言
       title: t.DAILY_PLAN.TITLE,
-      desc: (
-        <div className="flex items-center mt-1">
-          <span className="bg-[#FFD047] text-[#7C6020] text-xs rounded-full px-2 py-0.5 mr-2 font-bold">{t.DAILY_PLAN.XP}</span>
-          {t.DAILY_PLAN.DESC}
-        </div>
-      ),
+      desc: t.DAILY_PLAN.DESC,
+      xp: t.DAILY_PLAN.XP,
+      xpBg: "bg-[#FFD047] text-[#7C6020]",
       bg: "bg-[#F7941D]",
       text: "text-white",
       img: "/lovable-uploads/82136408-7a17-4f22-a7fb-c770e52e2c20.png",
@@ -31,6 +36,7 @@ const Index = () => {
       customBgImg: "/lovable-uploads/a6490d24-162c-4faf-af6e-426d16fe09ff.png",
       isCustomBg: true,
       debugColor: "#F7941D",
+      iconImg: dailyIcon,
     },
     {
       key: "ai-tutor",
@@ -93,11 +99,8 @@ const Index = () => {
       key: "streak-progress",
       title: t.NAV.STREAK_PROGRESS,
       desc: "",
-      bg: "bg-white",
-      text: "text-[#6D5A21]",
       img: "/lovable-uploads/db9f7a45-8c5c-4cea-a1cc-534fd2cf61f5.png",
       to: "/dashboard",
-      isStreakBlock: true,
     },
     {
       key: "leaderboard",
@@ -123,74 +126,39 @@ const Index = () => {
       <Navbar />
       <main className="flex-1 flex flex-col items-center py-6 px-2 sm:px-0">
         <HomeHeader />
-
-        <div className="grid grid-cols-2 grid-rows-4 gap-4 max-w-2xl w-full my-4 transition-all">
-          <Link
+        <div className="grid grid-cols-2 grid-rows-4 gap-4 max-w-7xl w-full my-4 transition-all">
+          <HomeDailyAdventureSection
             to={mainBlocks[0].to}
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${mainBlocks[0].bg} ${mainBlocks[0].text}`}
-            style={{
-              minHeight: 164,
-              background: mainBlocks[0].isCustomBg
-                ? `url('${mainBlocks[0].customBgImg}') no-repeat center center, ${mainBlocks[0].debugColor}`
-                : mainBlocks[0].debugColor,
-              backgroundSize: mainBlocks[0].isCustomBg ? "cover" : undefined
-            }}
-          >
-            <span className="text-xl font-bold mb-1 drop-shadow">{mainBlocks[0].title}</span>
-            <div className="text-base drop-shadow">{mainBlocks[0].desc}</div>
-            <div className="flex-1 flex items-end justify-end pr-2">
-              {mainBlocks[0].img && (
-                <img
-                  src={mainBlocks[0].img}
-                  alt="Daily Adventure Cartoon Character"
-                  className="w-20 h-20 object-contain select-none drop-shadow-lg"
-                  draggable={false}
-                  style={{ userSelect: "none" }}
-                />
-              )}
-            </div>
-          </Link>
-
-          <Link
+            title={mainBlocks[0].title}
+            desc={mainBlocks[0].desc}
+            bg={mainBlocks[0].bg}
+            textColor={mainBlocks[0].text}
+            xpText={mainBlocks[0].xp}
+            xpBg={mainBlocks[0].xpBg}
+            img={mainBlocks[0].img}
+            bgImg={mainBlocks[0].customBgImg}
+            isCustomBg={mainBlocks[0].isCustomBg}
+            debugColor={mainBlocks[0].debugColor}
+            iconImg={mainBlocks[0].iconImg}
+          />
+          <HomeAITutorSection
             to={mainBlocks[1].to}
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${mainBlocks[1].bg} ${mainBlocks[1].text}`}
-            style={{ minHeight: 164 }}
-          >
-            <div className="flex items-center mb-2">{mainBlocks[1].icon}<span className="text-xl font-bold">{mainBlocks[1].title}</span></div>
-            <div className="text-base font-medium">{mainBlocks[1].desc}</div>
-            <div className="flex-1 flex items-end justify-end">
-              {mainBlocks[1].img && (
-                <img
-                  src={mainBlocks[1].img}
-                  alt="AI Tutor Cartoon"
-                  className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                  draggable={false}
-                  style={{ userSelect: "none" }}
-                />
-              )}
-            </div>
-          </Link>
-
-          <Link
+            title={mainBlocks[1].title}
+            desc={mainBlocks[1].desc}
+            bg={mainBlocks[1].bg}
+            textColor={mainBlocks[1].text}
+            icon={mainBlocks[1].icon}
+            img={mainBlocks[1].img}
+          />
+          <HomeVideoLessonsSection
             to={mainBlocks[2].to}
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${mainBlocks[2].bg} ${mainBlocks[2].text}`}
-            style={{ minHeight: 164 }}
-          >
-            <div className="flex items-center mb-2">{mainBlocks[2].icon}<span className="text-xl font-bold">{mainBlocks[2].title}</span></div>
-            <div className="text-base font-medium">{mainBlocks[2].desc}</div>
-            <div className="flex-1 flex items-end justify-end">
-              {mainBlocks[2].img && (
-                <img
-                  src={mainBlocks[2].img}
-                  alt="Video Lessons Cartoon"
-                  className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                  draggable={false}
-                  style={{ userSelect: "none" }}
-                />
-              )}
-            </div>
-          </Link>
-
+            title={mainBlocks[2].title}
+            desc={mainBlocks[2].desc}
+            bg={mainBlocks[2].bg}
+            textColor={mainBlocks[2].text}
+            icon={mainBlocks[2].icon}
+            img={mainBlocks[2].img}
+          />
           <OnlineClassroomSection
             to={mainBlocks[3].to}
             className={`${mainBlocks[3].bg} ${mainBlocks[3].text}`}
@@ -198,67 +166,30 @@ const Index = () => {
             title={mainBlocks[3].title}
             desc={mainBlocks[3].desc}
           />
-
-          <Link
+          <HomeQuestionBankSection
             to={mainBlocks[4].to}
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${mainBlocks[4].bg} ${mainBlocks[4].text}`}
-            style={{ minHeight: 164 }}
-          >
-            <div className="flex items-center mb-2">{mainBlocks[4].icon}<span className="text-xl font-bold">{mainBlocks[4].title}</span></div>
-            <div className="text-base font-medium">{mainBlocks[4].desc}</div>
-            <div className="flex-1 flex items-end justify-end">
-              {mainBlocks[4].img && (
-                <img
-                  src={mainBlocks[4].img}
-                  alt="Question Bank Cartoon"
-                  className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                  draggable={false}
-                  style={{ userSelect: "none" }}
-                />
-              )}
-            </div>
-          </Link>
-
-          <Link
+            title={mainBlocks[4].title}
+            desc={mainBlocks[4].desc}
+            bg={mainBlocks[4].bg}
+            textColor={mainBlocks[4].text}
+            icon={mainBlocks[4].icon}
+            img={mainBlocks[4].img}
+          />
+          <HomeMockExamSection
             to={mainBlocks[5].to}
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative ${mainBlocks[5].bg} ${mainBlocks[5].text}`}
-            style={{ minHeight: 164 }}
-          >
-            <div className="flex items-center mb-2">
-              {mainBlocks[5].icon}
-              <span className="text-xl font-bold">{mainBlocks[5].title}</span>
-            </div>
-            <div className="text-base font-medium">{mainBlocks[5].desc}</div>
-            <div className="flex-1 flex items-end justify-end">
-              {mainBlocks[5].img && (
-                <img
-                  src={mainBlocks[5].img}
-                  alt="Mock Exam Cartoon"
-                  className="w-24 h-32 object-contain select-none drop-shadow-lg"
-                  draggable={false}
-                  style={{ userSelect: "none" }}
-                />
-              )}
-            </div>
-          </Link>
-
-          <div 
-            onClick={() => window.location.href = mainBlocks[6].to} 
-            className={`flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative bg-white text-[#6D5A21] min-h-[164px] overflow-hidden cursor-pointer`}
-          >
-            <div className="absolute top-3 left-3 z-10 bg-white/80 rounded-lg px-4 py-1 font-bold text-[#C48829] text-lg shadow">{mainBlocks[6].title}</div>
-            <img
-              src={mainBlocks[6].img}
-              alt="Streak and Progress Block"
-              className="object-cover w-full h-full opacity-100 rounded-2xl"
-              style={{ position: "absolute", inset: 0, zIndex: 0, userSelect: "none" }}
-              draggable={false}
-            />
-            <div className="absolute inset-0 rounded-2xl bg-yellow-100 opacity-0 hover:opacity-20 transition-opacity z-10"></div>
-            <div className="flex-1 z-20"></div>
-          </div>
-
-          <LeaderboardSection
+            title={mainBlocks[5].title}
+            desc={mainBlocks[5].desc}
+            bg={mainBlocks[5].bg}
+            textColor={mainBlocks[5].text}
+            icon={mainBlocks[5].icon}
+            img={mainBlocks[5].img}
+          />
+          <HomeStreakProgressSection
+            to={mainBlocks[6].to}
+            title={mainBlocks[6].title}
+            img={mainBlocks[6].img}
+          />
+          <HomeLeaderboardSection
             to={mainBlocks[7].to}
             className={`${mainBlocks[7].bg} ${mainBlocks[7].text}`}
             icon={mainBlocks[7].icon}
@@ -266,10 +197,8 @@ const Index = () => {
             desc={mainBlocks[7].desc}
           />
         </div>
-
-        <HomeNote 
-          className="max-w-2xl w-full"
-          // 传递多语言文本
+        <HomeNote
+          className="max-w-7xl w-full"
           note={
             lang === "zh"
               ? "点击各板块可进入对应功能。更多功能将在这里出现，敬请期待！"
@@ -283,4 +212,3 @@ const Index = () => {
 };
 
 export default Index;
-
