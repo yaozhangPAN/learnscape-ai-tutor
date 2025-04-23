@@ -113,6 +113,18 @@ const en = {
     STREAK_WARNING: "Less than 2 hours to extend your streak!",
     FRIENDS_MESSAGE: "Connect with friends to see their streaks and compete together!"
   },
+  SUBSCRIPTION: {
+    AI_TUTOR_TITLE: "Unlock AI Tutor Premium Features",
+    AI_TUTOR_DESC: "Subscribe to our premium plan for unlimited access to our AI Tutor with advanced features.",
+    DAILY_REC_TITLE: "Get Personalized Daily Recommendations",
+    DAILY_REC_DESC: "Subscribe to our premium plan to receive personalized learning recommendations every day.",
+    VIDEO_TITLE: "Premium Star Teacher Video Lesson",
+    VIDEO_DESC: "Purchase this video lesson or subscribe to our premium plan for unlimited access to all Star Teacher Video Lessons.",
+    PURCHASE_VIDEO: "Purchase This Video",
+    SUBSCRIBE_BUTTON: "Subscribe for ???/month",
+    SUBSCRIBE_PREMIUM: "Subscribe to Premium",
+    PER_MONTH: "per month"
+  },
   DAILY_RECOMMENDATION: {
     LEARNING_PATH: "Daily Learning Path",
     COMPLETED_TODAY: " of {n} completed today",
@@ -149,4 +161,5 @@ const en = {
     TOAST_COMPLETED_DESC: "Great job! Your progress has been saved.",
   }
 };
+
 export default en;

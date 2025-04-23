@@ -1,6 +1,8 @@
+
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Button } from "./ui/button";
 import { Sparkles } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 
 type SubscriptionBannerProps = {
   type: "ai-tutor" | "daily-recommendation" | "video-tutorial";
@@ -9,6 +11,7 @@ type SubscriptionBannerProps = {
 
 const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
   const { isPremium, startCheckoutSession, loadingSubscription } = useSubscription();
+  const { t } = useI18n();
 
   const handleSubscribe = async () => {
     if (type === "video-tutorial" && contentId) {
@@ -35,7 +38,7 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
   }
 
   if (isPremium && type !== "video-tutorial") {
-    return null; // Don't show banner for premium users except for individual video tutorials
+    return null;
   }
 
   let title = "";
@@ -43,16 +46,16 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
 
   switch (type) {
     case "ai-tutor":
-      title = "Unlock AI Tutor Premium Features";
-      description = "Subscribe to our premium plan for unlimited access to our AI Tutor with advanced features.";
+      title = t.SUBSCRIPTION.AI_TUTOR_TITLE;
+      description = t.SUBSCRIPTION.AI_TUTOR_DESC;
       break;
     case "daily-recommendation":
-      title = "Get Personalized Daily Recommendations";
-      description = "Subscribe to our premium plan to receive personalized learning recommendations every day.";
+      title = t.SUBSCRIPTION.DAILY_REC_TITLE;
+      description = t.SUBSCRIPTION.DAILY_REC_DESC;
       break;
     case "video-tutorial":
-      title = "Premium Star Teacher Video Lesson";
-      description = "Purchase this video lesson or subscribe to our premium plan for unlimited access to all Star Teacher Video Lessons.";
+      title = t.SUBSCRIPTION.VIDEO_TITLE;
+      description = t.SUBSCRIPTION.VIDEO_DESC;
       break;
   }
 
@@ -71,8 +74,8 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
               className="bg-[#FFA500] hover:bg-[#FF6F00] text-white"
             >
               {type === "video-tutorial" && contentId 
-                ? "Purchase This Video" 
-                : "Subscribe for ???/month"}
+                ? t.SUBSCRIPTION.PURCHASE_VIDEO
+                : t.SUBSCRIPTION.SUBSCRIBE_BUTTON}
             </Button>
             {type === "video-tutorial" && contentId && (
               <Button 
@@ -80,14 +83,14 @@ const SubscriptionBanner = ({ type, contentId }: SubscriptionBannerProps) => {
                 className="ml-2"
                 onClick={() => startCheckoutSession("premium_subscription")}
               >
-                Subscribe to Premium
+                {t.SUBSCRIPTION.SUBSCRIBE_PREMIUM}
               </Button>
             )}
           </div>
         </div>
         <div className="bg-white p-3 rounded-lg shadow-sm border border-learnscape-blue/20">
           <div className="text-3xl font-bold text-learnscape-blue">???</div>
-          <div className="text-sm text-gray-500">per month</div>
+          <div className="text-sm text-gray-500">{t.SUBSCRIPTION.PER_MONTH}</div>
         </div>
       </div>
     </div>

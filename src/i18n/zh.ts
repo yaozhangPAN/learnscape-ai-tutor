@@ -113,6 +113,18 @@ const zh = {
     STREAK_WARNING: "剩余不到2小时来继续你的连续打卡！",
     FRIENDS_MESSAGE: "添加好友，查看他们的打卡记录，一起进步！"
   },
+  SUBSCRIPTION: {
+    AI_TUTOR_TITLE: "解锁 AI 导师高级功能",
+    AI_TUTOR_DESC: "订阅我们的高级计划，无限制使用 AI 导师的进阶功能。",
+    DAILY_REC_TITLE: "获取个性化每日推荐",
+    DAILY_REC_DESC: "订阅我们的高级计划，每天获取个性化学习建议。",
+    VIDEO_TITLE: "明星教师精品课程",
+    VIDEO_DESC: "购买此视频课程，或订阅高级会员无限观看所有明星教师课程。",
+    PURCHASE_VIDEO: "购买此视频",
+    SUBSCRIBE_BUTTON: "订阅 ???/月",
+    SUBSCRIBE_PREMIUM: "订阅高级会员",
+    PER_MONTH: "每月"
+  },
   DAILY_RECOMMENDATION: {
     LEARNING_PATH: "每日学习路径",
     COMPLETED_TODAY: " / 共{n}项已完成",
@@ -149,4 +161,5 @@ const zh = {
     TOAST_COMPLETED_DESC: "干得不错！你的进度已保存。",
   }
 };
+
 export default zh;
