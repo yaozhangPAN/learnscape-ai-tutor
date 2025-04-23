@@ -35,17 +35,12 @@ const CourseDetails: React.FC = () => {
         return;
       }
 
-      if (course && !course.requiresAccessCode && !course.isPremium) {
-        setHasAccess(true);
-        return;
-      }
-
       const access = await hasAccessToContent(courseId, "video_tutorial");
       setHasAccess(access);
     };
 
     checkAccess();
-  }, [courseId, user, hasAccessToContent, course]);
+  }, [courseId, user, hasAccessToContent]);
 
   if (!course) {
     return <div>课程未找到</div>;

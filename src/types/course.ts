@@ -10,7 +10,7 @@ export type Course = {
   duration: string;
   durationZh?: string;
   rating: number;
-  views: number;
+  views: number; // Replace students with views
   price: string;
   priceZh?: string;
   isPremium: boolean;
@@ -18,12 +18,4 @@ export type Course = {
   type: "tutorial" | "past_paper";
   videoUrl?: string;
   requiresAccessCode?: boolean;
-  videoLessons?: VideoLesson[];
-};
-
-export type VideoLesson = {
-  id: string;
-  title: string;
-  description: string;
-  videoUrl: string;
 };

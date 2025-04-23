@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -48,13 +49,10 @@ const Courses = () => {
     }
   }, [contentId]);
 
+  // Check access whenever selected course changes
   useEffect(() => {
     const checkAccess = async () => {
       if (selectedCourse) {
-        if (!selectedCourse.requiresAccessCode && !selectedCourse.isPremium) {
-          setHasAccessToSelected(true);
-          return;
-        }
         const access = isPremium || await hasAccessToContent(selectedCourse.id, "video_tutorial");
         setHasAccessToSelected(access);
       }
@@ -71,7 +69,7 @@ const Courses = () => {
   );
 
   const handleWatchNow = async (course: Course) => {
-    if (course.requiresAccessCode === true) {
+    if (course.requiresAccessCode) {
       setSelectedAccessCodeCourse(course);
       setAccessCodeDialogOpen(true);
       return;
@@ -79,12 +77,12 @@ const Courses = () => {
 
     setSelectedCourse(course);
     
-    if (!course.isPremium && !course.requiresAccessCode) {
-      setHasAccessToSelected(true);
-      setDialogOpen(true);
-    } else if (course.isPremium) {
+    if (course.isPremium) {
+      // We will check access in the useEffect
       setDialogOpen(true);
     } else {
+      // No need to check access for non-premium courses
+      setHasAccessToSelected(true);
       setDialogOpen(true);
     }
   };

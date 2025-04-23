@@ -12,14 +12,14 @@ interface CourseCardProps {
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) => {
-  const { t, lang } = useI18n();
-  
+  const { t } = useI18n();
+
   return (
     <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
       <div className="h-48 overflow-hidden relative">
         <img 
           src={course.image} 
-          alt={lang === 'zh' ? course.titleZh || course.title : course.title}
+          alt={course.title} 
           className="w-full h-full object-cover transition-transform hover:scale-105"
         />
         {course.isPremium && (
@@ -45,41 +45,21 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) =>
             <span className="ml-1 text-sm font-medium">{course.rating}</span>
           </div>
         </div>
-        <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-          {lang === 'zh' ? course.titleZh || course.title : course.title}
-        </h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {lang === 'zh' ? course.descriptionZh || course.description : course.description}
-        </p>
+        <h3 className="text-lg font-semibold mb-2 line-clamp-2">{course.title}</h3>
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
         <div className="flex flex-wrap gap-y-2 text-xs text-gray-500">
           <div className="flex items-center mr-4">
             <Clock className="h-3.5 w-3.5 mr-1" />
-            <span>{lang === 'zh' ? course.durationZh || course.duration : course.duration}</span>
+            <span>{course.duration}</span>
           </div>
           <div className="flex items-center">
             <Eye className="h-3.5 w-3.5 mr-1" />
             <span>{course.views} {t.VIDEO_TUTORIALS.VIEWS}</span>
           </div>
         </div>
-        {course.videoLessons && (
-          <div className="mt-4 space-y-2 border-t pt-4">
-            <span className="text-sm font-medium text-gray-700">
-              {lang === 'zh' ? '视频课程:' : 'Video Lessons:'}
-            </span>
-            <div className="grid grid-cols-1 gap-2">
-              {course.videoLessons.map((lesson, index) => (
-                <div key={lesson.id} className="text-sm text-gray-600">
-                  {index + 1}. {lesson.title}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </CardContent>
       <CardFooter className="flex justify-between items-center border-t border-gray-100 pt-4">
-        <div className="font-semibold text-learnscape-blue">
-          {lang === 'zh' ? course.priceZh || course.price : course.price}
-        </div>
+        <div className="font-semibold text-learnscape-blue">{course.price}</div>
         <Button 
           className="bg-learnscape-blue hover:bg-blue-700"
           onClick={() => onWatchNow(course)}
