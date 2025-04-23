@@ -11,7 +11,6 @@ import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
-import answer from "../QuestionBank/QuestionViewer"
 
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
@@ -111,16 +110,12 @@ const OnlineExam = () => {
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
+                    
+                    question.correctAnswer = question.options[0].value;
                   } else {
                     question.type = "ShortAnswer"
                   }
                   
-                  setQuestionLength(anwser.toString());
-                  //if (subQuestion.id) {
-                    //const answerObj = anwser.find(a => a.id === subQuestion.id);
-                    //question.correctAnswer = answerObj ? answerObj.value : "N/A";
-                  //}
-
                   return question;
                 });
 
@@ -140,6 +135,7 @@ const OnlineExam = () => {
           }
           
           console.log("Final processed questions:", examQuestions);
+          setQuestionLength(q_len.toString());
           
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
@@ -460,9 +456,6 @@ const OnlineExam = () => {
                     {formatText({topic})}
                   </h2>
                 )}
-                <h2 className="text-xl font-bold mb-4 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
-                    {questionLength}
-                </h2>
                 {questions.map((question, index) => {
                   const globalIndex = currentExam?.questions.findIndex(q => q.id === question.id) ?? 0;
                   return (
