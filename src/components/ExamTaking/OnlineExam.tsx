@@ -110,7 +110,7 @@ const OnlineExam = () => {
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
 
-                    const answerObj = answerList.find(a => a.id === subQuestion.id);
+                    const answerObj = answer.find(a => a.id === subQuestion.id);
                     question.correctAnswer = answerObj ? answerObj.value : "N/A";
                   } else {
                     question.type = "ShortAnswer"
