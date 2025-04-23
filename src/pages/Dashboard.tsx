@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Book, BookX, Star, Search } from "lucide-react";
@@ -6,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import StreakComponent from "@/components/StreakComponent";
+import { useI18n } from "@/contexts/I18nContext";
 
-// 主页风格配色
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
 const cardBgClasses = "bg-white shadow-sm border-0 rounded-3xl";
@@ -20,31 +19,35 @@ const progressColors = {
 };
 
 const Dashboard = () => {
-  const [greeting] = useState(() => {
+  const { t, lang } = useI18n();
+
+  const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 18) return "Good Afternoon";
-    return "Good Evening";
-  });
+    if (hour < 12) return t.DASHBOARD.GREETING.MORNING;
+    if (hour < 18) return t.DASHBOARD.GREETING.AFTERNOON;
+    return t.DASHBOARD.GREETING.EVENING;
+  };
+
+  const greeting = getGreeting();
 
   const modules = [
     {
-      title: "Question Bank",
-      description: "Customizable practice questions",
+      title: t.DASHBOARD.MODULES.QUESTION_BANK,
+      description: t.DASHBOARD.MODULES.QUESTION_BANK_DESC,
       icon: <Book className="h-6 w-6 text-white" />,
       count: 2500,
       color: "bg-[#4aba79]",
     },
     {
-      title: "Wrong Questions",
-      description: "Track questions you missed",
+      title: t.DASHBOARD.MODULES.WRONG_QUESTIONS,
+      description: t.DASHBOARD.MODULES.WRONG_QUESTIONS_DESC,
       icon: <BookX className="h-6 w-6 text-white" />,
       count: 42,
       color: "bg-[#ffe29f] text-[#c08e23]",
     },
     {
-      title: "Favorites",
-      description: "Your saved questions",
+      title: t.DASHBOARD.MODULES.FAVORITES,
+      description: t.DASHBOARD.MODULES.FAVORITES_DESC,
       icon: <Star className="h-6 w-6 text-white" />,
       count: 78,
       color: "bg-[#e5deff] text-[#6a42b2]",
@@ -85,14 +88,13 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="mb-6">
           <h1 className="text-4xl md:text-5xl font-extrabold font-playfair text-[#4ABA79] mb-1 tracking-tight">
-            {greeting}, <span className="text-[#1E5B3A]">Student</span>
+            {greeting}, <span className="text-[#1E5B3A]">{lang === "zh" ? "同学" : "Student"}</span>
           </h1>
           <p className="text-lg text-[#69c49a] font-semibold">
-            Here's an overview of your learning progress
+            {t.DASHBOARD.OVERVIEW}
           </p>
         </div>
 
-        {/* Streak Component */}
         <div className={sectionBox}>
           <StreakComponent />
         </div>
@@ -108,13 +110,12 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Learning Progress */}
         <div className="mb-8">
           <div className={cardBgClasses}>
             <CardHeader className="rounded-t-3xl bg-[#e5deff] p-6 border-b border-[#ededfa]">
-              <CardTitle className={`text-lg font-bold ${textMain}`}>Learning Progress</CardTitle>
+              <CardTitle className={`text-lg font-bold ${textMain}`}>{t.DASHBOARD.LEARNING_PROGRESS}</CardTitle>
               <CardDescription className="text-[#4ABA79] font-medium">
-                Your performance across subjects
+                {t.DASHBOARD.PERFORMANCE}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -144,13 +145,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Recent Activities */}
         <div className="mb-8">
           <div className={cardBgClasses}>
             <CardHeader className="bg-[#fbed96] p-6 rounded-t-3xl border-b border-[#faedca]">
-              <CardTitle className={`text-lg font-bold ${textAccent}`}>Recent Activities</CardTitle>
+              <CardTitle className={`text-lg font-bold ${textAccent}`}>{t.DASHBOARD.RECENT_ACTIVITIES}</CardTitle>
               <CardDescription className="text-[#e2a44a] font-medium">
-                Your learning journey in the past few days
+                {t.DASHBOARD.LEARNING_JOURNEY}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -185,7 +185,7 @@ const Dashboard = () => {
           <Button asChild className="btn-primary bg-[#4ABA79] hover:bg-[#38895a] shadow text-lg font-bold px-8 py-4 rounded-full border-0">
             <Link to="/question-bank" className="flex items-center justify-center gap-2">
               <Search className="mr-2 h-5 w-5" />
-              Explore Question Bank
+              {t.DASHBOARD.EXPLORE_QB}
             </Link>
           </Button>
         </div>

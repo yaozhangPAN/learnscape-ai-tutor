@@ -1,11 +1,12 @@
-
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import DailyRecommendations from "@/components/AITutor/DailyRecommendations";
 import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/contexts/I18nContext";
 
 const DailyPlan = () => {
+  const { t } = useI18n();
   return (
     <div className="min-h-screen bg-[#fbed96]">
       <Navbar />
@@ -23,16 +24,15 @@ const DailyPlan = () => {
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold font-playfair drop-shadow mb-2 flex items-center gap-3">
               <Calendar className="h-10 w-10 text-white/90" />
-              <span>Daily Adventure</span>
-              <span className="bg-[#FFD047] text-[#7C6020] text-xs rounded-full px-3 py-1 ml-2 font-bold shadow-md">50 XP</span>
+              <span>{t.DAILY_PLAN.TITLE}</span>
+              <span className="bg-[#FFD047] text-[#7C6020] text-xs rounded-full px-3 py-1 ml-2 font-bold shadow-md">{t.DAILY_PLAN.XP}</span>
             </h1>
             <p className="text-lg max-w-3xl mt-1 font-semibold text-white/90">
-              完成今日目标，开启你的冒险之旅！
+              {t.DAILY_PLAN.DESC}
             </p>
           </div>
         </div>
       </div>
-
       {/* 内容卡片 + 今日路径 */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 白色卡片，带有柔和阴影与圆角 */}
@@ -47,12 +47,12 @@ const DailyPlan = () => {
                 style={{ userSelect: "none" }}
               />
               <h2 className="text-2xl font-bold text-[#E2923A] tracking-tight">
-                今日冒险路径
+                {t.DAILY_PLAN.PATH_TITLE}
               </h2>
             </div>
             <Link to="/zoom-courses">
               <Button variant="outline" className="gap-2 border-[#4ABA79] text-[#4ABA79] font-bold bg-[#e2fded] hover:bg-[#4ABA79] hover:text-white transition">
-                参加Zoom课程
+                {t.DAILY_PLAN.JOIN_ZOOM}
               </Button>
             </Link>
           </div>

@@ -1,16 +1,17 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Sparkles, LogOut, Home, CalendarDays, Video, LayoutGrid, Book, Star, BarChart3 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { user, signOut } = useAuth();
-  
+  const { lang, setLang, t } = useI18n();
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -24,17 +25,16 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Updated navLinks per user requirements
   const navLinks = [
-    { path: "/", name: "Home", icon: <Home className="mr-2 h-4 w-4" /> },
-    { path: "/daily-plan", name: "Daily Adventure", icon: <CalendarDays className="mr-2 h-4 w-4" /> },
-    { path: "/ai-tutor", name: "AI Tutor", icon: <span className="ml-1 text-xs">✨</span> },
-    { path: "/video-tutorials", name: "Video Lessons", icon: <Video className="mr-2 h-4 w-4" /> },
-    { path: "/zoom-courses", name: "Online Classroom", icon: <LayoutGrid className="mr-2 h-4 w-4" /> },
-    { path: "/question-bank", name: "Question Bank", icon: <Book className="mr-2 h-4 w-4" /> },
-    { path: "/mock-exam", name: "Mock Exam", icon: <Star className="mr-2 h-4 w-4" /> },
-    { path: "/dashboard", name: "Streak and Progress", icon: <BarChart3 className="mr-2 h-4 w-4" /> },
-    { path: "/leaderboard", name: "Leaderboard" },
+    { path: "/", name: t.NAV.HOME, icon: <Home className="mr-2 h-4 w-4" /> },
+    { path: "/daily-plan", name: t.NAV.DAILY_ADVENTURE, icon: <CalendarDays className="mr-2 h-4 w-4" /> },
+    { path: "/ai-tutor", name: t.NAV.AI_TUTOR, icon: <span className="ml-1 text-xs">✨</span> },
+    { path: "/video-tutorials", name: t.NAV.VIDEO_LESSONS, icon: <Video className="mr-2 h-4 w-4" /> },
+    { path: "/zoom-courses", name: t.NAV.ONLINE_CLASSROOM, icon: <LayoutGrid className="mr-2 h-4 w-4" /> },
+    { path: "/question-bank", name: t.NAV.QUESTION_BANK, icon: <Book className="mr-2 h-4 w-4" /> },
+    { path: "/mock-exam", name: t.NAV.MOCK_EXAM, icon: <Star className="mr-2 h-4 w-4" /> },
+    { path: "/dashboard", name: t.NAV.STREAK_PROGRESS, icon: <BarChart3 className="mr-2 h-4 w-4" /> },
+    { path: "/leaderboard", name: t.NAV.LEADERBOARD },
   ];
 
   const handleLogout = async () => {
@@ -85,7 +85,7 @@ const Navbar = () => {
                 className="bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors"
               >
                 <LogOut className="mr-1 h-4 w-4" />
-                Logout
+                {t.NAV.LOGOUT}
               </Button>
             ) : (
               <Button 
@@ -93,10 +93,18 @@ const Navbar = () => {
                 className="bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors"
               >
                 <Link to="/login">
-                  <span className="relative z-10">Login</span>
+                  <span className="relative z-10">{t.NAV.LOGIN}</span>
                 </Link>
               </Button>
             )}
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="ml-2 border-white text-white hover:bg-white hover:text-[#4ABA79]"
+              onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+            >
+              {lang === "zh" ? t.NAV.ENGLISH : t.NAV.CHINESE}
+            </Button>
           </div>
           
           <div className="md:hidden flex items-center">
@@ -135,7 +143,7 @@ const Navbar = () => {
               >
                 <span className="flex items-center">
                   <LogOut className="mr-2 h-4 w-4" />
-                  Logout
+                  {t.NAV.LOGOUT}
                 </span>
               </button>
             ) : (
@@ -144,9 +152,15 @@ const Navbar = () => {
                 className="block px-3 py-2 rounded-md text-base font-medium bg-[#4CAF50] text-white hover:bg-[#16A085] mt-4 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Login
+                {t.NAV.LOGIN}
               </Link>
             )}
+            <button
+              onClick={() => setLang(lang === "zh" ? "en" : "zh")}
+              className="w-full block px-3 py-2 mt-3 rounded-md text-base text-white border border-white bg-transparent"
+            >
+              {lang === "zh" ? t.NAV.ENGLISH : t.NAV.CHINESE}
+            </button>
           </div>
         </div>
       )}
@@ -155,4 +169,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
