@@ -1,4 +1,3 @@
-
 const zh = {
   NAV: {
     HOME: "首页",
@@ -187,7 +186,8 @@ const zh = {
     WATCH_NOW: "立即观看",
     PREMIUM_BADGE: "精品",
     STUDENTS: "学生",
-    DURATION: "时长"
+    DURATION: "时长",
+    VIEWS: "浏览"
   },
   ONLINE_CLASSROOM: {
     TITLE: "在线课堂",
@@ -202,7 +202,7 @@ const zh = {
   },
   MOCK_EXAM: {
     TITLE: "模拟考试",
-    SUBTITLE: "通过新加坡顶尖学校的往年试卷进行练习。为小学会考做好准备。",
+    SUBTITLE: "通过新加���顶尖学校的往年试卷进行练习。为小学会考做好准备。",
     EXAMS: "试卷",
     RESULTS: "结果",
     SEARCH_PLACEHOLDER: "搜索试卷...",

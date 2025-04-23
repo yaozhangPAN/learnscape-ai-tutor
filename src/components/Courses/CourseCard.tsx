@@ -2,8 +2,9 @@
 import React from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, Users, Clock, Video, Crown, BookOpen } from "lucide-react";
+import { Star, Eye, Clock, Video, Crown, BookOpen } from "lucide-react";
 import { Course } from '@/types/course';
+import { useI18n } from '@/contexts/I18nContext';
 
 interface CourseCardProps {
   course: Course;
@@ -11,6 +12,8 @@ interface CourseCardProps {
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) => {
+  const { t } = useI18n();
+
   return (
     <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
       <div className="h-48 overflow-hidden relative">
@@ -50,8 +53,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) =>
             <span>{course.duration}</span>
           </div>
           <div className="flex items-center">
-            <Users className="h-3.5 w-3.5 mr-1" />
-            <span>{course.students} students</span>
+            <Eye className="h-3.5 w-3.5 mr-1" />
+            <span>{course.views} {t.VIDEO_TUTORIALS.VIEWS}</span>
           </div>
         </div>
       </CardContent>
@@ -62,7 +65,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) =>
           onClick={() => onWatchNow(course)}
         >
           <Video className="h-4 w-4 mr-2" />
-          Watch Now
+          {t.VIDEO_TUTORIALS.WATCH_NOW}
         </Button>
       </CardFooter>
     </Card>

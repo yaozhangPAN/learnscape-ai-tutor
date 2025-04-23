@@ -1,3 +1,4 @@
+
 import { Course } from "@/types/course";
 
 export const englishCourses: Course[] = [
@@ -12,7 +13,7 @@ export const englishCourses: Course[] = [
     duration: "12 weeks",
     durationZh: "12周",
     rating: 4.9,
-    students: 215,
+    views: 5240, // Replaced students with views
     price: "S$499",
     priceZh: "499新币",
     isPremium: true,
@@ -33,7 +34,7 @@ export const englishPastPapers: Course[] = [
     duration: "3 weeks",
     durationZh: "3周",
     rating: 4.7,
-    students: 254,
+    views: 3850, // Replaced students with views
     price: "S$40",
     priceZh: "40新币",
     isPremium: true,

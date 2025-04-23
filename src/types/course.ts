@@ -10,7 +10,7 @@ export type Course = {
   duration: string;
   durationZh?: string;
   rating: number;
-  students: number;
+  views: number; // Replace students with views
   price: string;
   priceZh?: string;
   isPremium: boolean;

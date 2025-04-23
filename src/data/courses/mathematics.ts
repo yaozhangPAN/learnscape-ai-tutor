@@ -1,4 +1,3 @@
-
 import { Course } from "@/types/course";
 
 export const mathematicsCourses: Course[] = [
@@ -13,7 +12,7 @@ export const mathematicsCourses: Course[] = [
     duration: "10 weeks",
     durationZh: "10周",
     rating: 4.8,
-    students: 248,
+    views: 6120,
     price: "Free",
     priceZh: "免费",
     isPremium: false,
@@ -31,7 +30,7 @@ export const mathematicsCourses: Course[] = [
     duration: "8 weeks",
     durationZh: "8周",
     rating: 4.7,
-    students: 186,
+    views: 186,
     price: "Free",
     priceZh: "免费",
     isPremium: false,
@@ -52,7 +51,7 @@ export const mathematicsPastPapers: Course[] = [
     duration: "3 weeks",
     durationZh: "3周",
     rating: 4.9,
-    students: 312,
+    views: 4780,
     price: "S$40",
     priceZh: "40新币",
     isPremium: true,
@@ -67,7 +66,7 @@ export const mathematicsPastPapers: Course[] = [
     subject: "mathematics",
     duration: "2 weeks",
     rating: 4.9,
-    students: 398,
+    views: 398,
     price: "S$40",
     isPremium: true,
     image: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
@@ -81,7 +80,7 @@ export const mathematicsPastPapers: Course[] = [
     subject: "mathematics",
     duration: "1 week",
     rating: 4.6,
-    students: 178,
+    views: 178,
     price: "Free",
     isPremium: false,
     image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",

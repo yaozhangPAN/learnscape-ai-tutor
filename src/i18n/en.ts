@@ -1,4 +1,3 @@
-
 const en = {
   NAV: {
     HOME: "Home",
@@ -187,7 +186,8 @@ const en = {
     WATCH_NOW: "Watch Now",
     PREMIUM_BADGE: "Premium",
     STUDENTS: "students",
-    DURATION: "duration"
+    DURATION: "duration",
+    VIEWS: "views"
   },
   ONLINE_CLASSROOM: {
     TITLE: "Online Classroom",
