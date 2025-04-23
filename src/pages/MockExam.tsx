@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -87,7 +86,13 @@ const MockExam = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div 
+      className="min-h-screen flex flex-col" 
+      style={{ 
+        background: `linear-gradient(135deg, #F0E4B0 0%, #AED581 100%)`,
+        backgroundAttachment: 'fixed'
+      }}
+    >
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-6">
