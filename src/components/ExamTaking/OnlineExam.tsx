@@ -113,7 +113,7 @@ const OnlineExam = () => {
                     
                     question.correctAnswer = question.options[0].value;
                   } else {
-                    question.type = "ShortAnwser"
+                    question.type = "ShortAnswer"
                   }
                   
                   return question;
