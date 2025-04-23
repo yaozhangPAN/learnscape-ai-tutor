@@ -236,6 +236,35 @@ const OnlineExam = () => {
     ));
   };
 
+  const getGroupedQuestions = () => {
+    if (!currentExam) return [];
+    
+    const groupedQuestions = currentExam.questions.reduce((acc, question) => {
+      const topicMatch = question.text.match(/^(.*?):/);
+      const topic = topicMatch ? topicMatch[1].trim() : null;
+      
+      if (topic) {
+        if (!acc[topic]) {
+          acc[topic] = [];
+        }
+        // Remove topic from question text since we'll display it separately
+        const cleanQuestion = {
+          ...question,
+          text: question.text.replace(`${topic}:`, '').trim()
+        };
+        acc[topic].push(cleanQuestion);
+      } else {
+        if (!acc['其他']) {
+          acc['其他'] = [];
+        }
+        acc['其他'].push(question);
+      }
+      return acc;
+    }, {} as Record<string, Question[]>);
+
+    return Object.entries(groupedQuestions);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[500px]">
@@ -398,9 +427,9 @@ const OnlineExam = () => {
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{currentExam.title}</h1>
+        <h1 className="text-2xl font-bold">{currentExam?.title}</h1>
         <ExamTimer 
-          initialTime={currentExam.durationMinutes * 60} 
+          initialTime={currentExam?.durationMinutes * 60} 
           onTimeExpired={handleTimeExpired}
         />
       </div>
@@ -408,28 +437,40 @@ const OnlineExam = () => {
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-3/4">
           <div className="space-y-6">
-            {currentExam.questions.map((question, index) => (
-              <Card key={question.id} className="mb-6">
-                <CardHeader className="border-b">
-                  <CardTitle className="flex justify-between">
-                    <span>问题 {index + 1} / {currentExam.questions.length}</span>
-                    <span className="text-gray-500">{question.marks} {question.marks === 1 ? '分' : '分'}</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <ExamQuestion 
-                    question={question}
-                    userAnswer={userAnswers[index].answer}
-                    onAnswerChange={(value) => {
-                      setUserAnswers(prev => prev.map((a, i) => 
-                        i === index 
-                          ? { ...a, answer: value, isAnswered: true } 
-                          : a
-                      ));
-                    }}
-                  />
-                </CardContent>
-              </Card>
+            {getGroupedQuestions().map(([topic, questions], topicIndex) => (
+              <div key={topicIndex} className="mb-8">
+                {topic !== '其他' && (
+                  <h2 className="text-xl font-bold mb-4 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
+                    {topic}
+                  </h2>
+                )}
+                {questions.map((question, index) => {
+                  const globalIndex = currentExam?.questions.findIndex(q => q.id === question.id) ?? 0;
+                  return (
+                    <Card key={question.id} className="mb-6" id={`question-${globalIndex}`}>
+                      <CardHeader className="border-b">
+                        <CardTitle className="flex justify-between">
+                          <span>问题 {globalIndex + 1} / {currentExam?.questions.length}</span>
+                          <span className="text-gray-500">{question.marks} {question.marks === 1 ? '分' : '分'}</span>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <ExamQuestion 
+                          question={question}
+                          userAnswer={userAnswers[globalIndex]?.answer || ''}
+                          onAnswerChange={(value) => {
+                            setUserAnswers(prev => prev.map((a, i) => 
+                              i === globalIndex 
+                                ? { ...a, answer: value, isAnswered: true } 
+                                : a
+                            ));
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
             ))}
           </div>
         </div>
@@ -467,10 +508,10 @@ const OnlineExam = () => {
               
               <div className="mt-6">
                 <p className="text-sm text-gray-500 mb-2">
-                  已回答: {userAnswers.filter(a => a.isAnswered).length} / {currentExam.questions.length}
+                  已回答: {userAnswers.filter(a => a.isAnswered).length} / {currentExam?.questions.length}
                 </p>
                 <Progress 
-                  value={(userAnswers.filter(a => a.isAnswered).length / currentExam.questions.length) * 100} 
+                  value={(userAnswers.filter(a => a.isAnswered).length / currentExam?.questions.length) * 100} 
                   className="h-2"
                 />
               </div>
