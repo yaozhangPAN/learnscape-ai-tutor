@@ -36,7 +36,7 @@ const Navbar = () => {
           <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
             {t.NAV.AI_TUTOR}
           </Link>
-          <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+          <Link to="/zoom-courses" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
             {t.NAV.ONLINE_CLASSROOM}
           </Link>
           <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
@@ -93,7 +93,7 @@ const Navbar = () => {
               <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.AI_TUTOR}
               </Link>
-              <Link to="/online-classroom" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+              <Link to="/zoom-courses" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.ONLINE_CLASSROOM}
               </Link>
               <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
