@@ -11,12 +11,11 @@ import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
-import answer from "../QuestionBank/QuestionViewer"
+import { anwser as answerList } from "../QuestionBank/QuestionViewer";
 
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
   
-  // If text is an object with a property (like {topic: "some topic"}), extract the first value
   let textContent: string;
   if (typeof text === 'object') {
     const values = Object.values(text);
@@ -25,7 +24,6 @@ const formatText = (text: string | object | undefined) => {
     textContent = String(text);
   }
   
-  // Now that we've ensured textContent is a string, we can safely use replace
   const withLineBreaks = textContent.replace(/\n/g, "<br />");
   return (
     <div
@@ -45,7 +43,7 @@ const OnlineExam = () => {
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [examStarted, setExamStarted] = useState(false);
   const [examCompleted, setExamCompleted] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(6000); // 1 hour 40 minutes by default
+  const [timeRemaining, setTimeRemaining] = useState(6000);
   const [score, setScore] = useState<number | null>(null);
   const [questionLength, setQuestionLength] = useState("");
 
@@ -112,9 +110,8 @@ const OnlineExam = () => {
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
 
-                    //const answerObj = answer.find(a => a.id === "1");
-                    //question.correctAnswer = answerObj ? answerObj.value : "N/A";
-                    question.correctAnswer = question.options[0].value;
+                    const answerObj = answerList.find(a => a.id === subQuestion.id);
+                    question.correctAnswer = answerObj ? answerObj.value : "1";
                   } else {
                     question.type = "ShortAnswer"
                   }
@@ -149,7 +146,7 @@ const OnlineExam = () => {
             level: "p6",
             year: "2024",
             type: "Practice Paper",
-            durationMinutes: 100, // 1 hour 40 minutes
+            durationMinutes: 100,
             totalMarks: calculateTotalMarks(examQuestions),
             questions: examQuestions,
           };
