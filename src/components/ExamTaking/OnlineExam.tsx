@@ -30,10 +30,9 @@ const OnlineExam = () => {
       try {
         setLoading(true);
         
-        if (examId === "1") { // For Primary 6 Chinese exam
+        if (examId === "1") { 
           console.log("Fetching Primary 6 Chinese exam questions");
           
-          // First attempt to get questions from Supabase
           const { data: questionData, error: questionError } = await supabase
             .from('questions')
             .select('*')
@@ -44,50 +43,51 @@ const OnlineExam = () => {
             throw new Error("Failed to load questions");
           }
           
-          console.log("Fetched questions:", questionData);
+          console.log("Raw questionData:", questionData);
           
-          // Process questions from database or use mock data as fallback
           let examQuestions: Question[] = [];
-          // Create a map to organize questions by topic
-          const questionsByTopic: Record<string, Question[]> = {};
           
           if (questionData && questionData.length > 0) {
-            // Map questions from database
             examQuestions = questionData.reduce((acc: Question[], q) => {
               try {
-                if (!q.content) return acc;
+                console.log("Processing question:", q);
+                
+                if (!q.content) {
+                  console.warn("Skipping question without content:", q);
+                  return acc;
+                }
                 
                 const contentObj = typeof q.content === 'string' 
                   ? JSON.parse(q.content) 
                   : q.content;
                 
-                // Skip if there's no question list
+                console.log("Parsed content object:", contentObj);
+                
                 if (!contentObj.questionList || !Array.isArray(contentObj.questionList)) {
+                  console.warn("Invalid question list:", contentObj);
                   return acc;
                 }
                 
-                // Extract topic from contentObj directly
                 const topic = contentObj.topic || "其他";
+                console.log("Topic for questions:", topic);
                 
-                // Process each question in the questionList
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
-                  // Basic question structure
+                  console.log("Processing subQuestion:", subQuestion);
+                  
                   const question: Question = {
                     id: `${q.id}-${subQuestion.id || index}`,
                     text: subQuestion.question || "",
                     type: "MCQ",
                     marks: 2,
-                    topic: topic, // Store the topic directly in the question object
+                    topic: topic,
                   };
                   
-                  // Add options if available
                   if (subQuestion.options && Array.isArray(subQuestion.options)) {
                     question.options = subQuestion.options.map((opt: any, optIndex: number) => ({
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
                     
-                    // Set default correct answer to the first option
                     question.correctAnswer = question.options[0].value;
                   }
                   
@@ -96,16 +96,14 @@ const OnlineExam = () => {
                 
                 return [...acc, ...processedQuestions];
               } catch (error) {
-                console.error("Error processing question:", error);
+                console.error("Error processing individual question:", error);
                 return acc;
               }
             }, []);
             
-            // Limit to 40 questions to keep the exam manageable
-            examQuestions = examQuestions.slice(0, 40);
+            console.log("Final processed questions:", examQuestions);
           }
           
-          // If we couldn't process any questions, use mock data
           if (examQuestions.length === 0) {
             console.log("Using mock questions as fallback");
             examQuestions = mockQuestions;
@@ -113,7 +111,6 @@ const OnlineExam = () => {
           
           console.log("Final processed questions:", examQuestions);
           
-          // Create the exam paper object
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
             id: examId,
@@ -151,7 +148,7 @@ const OnlineExam = () => {
         
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching exam:", error);
+        console.error("Full error in fetchExam:", error);
         toast({
           title: "Error",
           description: "无法加载试卷。请重试。",
@@ -241,7 +238,6 @@ const OnlineExam = () => {
     if (!currentExam) return [];
     
     const groupedQuestions = currentExam.questions.reduce((acc, question) => {
-      // Use the topic property from the question object directly
       const topic = question.topic || "其他";
       
       if (!acc[topic]) {
