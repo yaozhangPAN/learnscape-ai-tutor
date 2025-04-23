@@ -28,7 +28,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
               htmlFor={`option-${question.id}-${index}`} 
               className="text-base cursor-pointer w-full"
             >
-              {option.label}
+              <div dangerouslySetInnerHTML={{ __html: option.label.replace(/\n/g, "<br />") }} />
             </Label>
           </div>
         ))}
@@ -55,7 +55,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
     <div className="space-y-4">
       <div className="prose max-w-none">
         <div className="text-lg font-medium mb-4">
-          {question.text}
+          <div dangerouslySetInnerHTML={{ __html: question.text.replace(/\n/g, "<br />") }} />
         </div>
         
         {question.image && (

@@ -12,13 +12,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
 
-const formatText = (text: string) => {
+const formatText = (text: string | undefined) => {
   if (!text) return null;
-  const html = text.replace(/\n/g, "<br />");
+  const withLineBreaks = text.replace(/\n/g, "<br />");
   return (
     <div
       className="text-base mb-2"
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: withLineBreaks }}
     />
   );
 };
