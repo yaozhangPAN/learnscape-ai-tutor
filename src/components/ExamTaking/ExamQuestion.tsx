@@ -12,12 +12,14 @@ interface ExamQuestionProps {
 }
 
 const formatText = (text: string) => {
-  return text.split('\n').map((line, i) => (
-    <React.Fragment key={i}>
-      {line}
-      {i !== text.split('\n').length - 1 && <br />}
-    </React.Fragment>
-  ));
+  if (!text) return null;
+  const html = text.replace(/\n/g, "<br />");
+  return (
+    <div
+      className="text-base mb-2"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 };
 
 const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProps) => {
