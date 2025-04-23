@@ -77,7 +77,7 @@ const AITutor = () => {
       id: "oral-exam",
       title: t.AI_TUTOR.ORAL_EXAM,
       subtitle: t.AI_TUTOR.SUBTITLE_ORAL,
-      icon: "/lovable-uploads/87e2cca6-743b-42dc-81ac-356df86c7e4f.png",
+      icon: "/lovable-uploads/eb69da2f-b824-461b-bcd4-3c65112631ff.png",
       color: COLOR_BLUE,
       description: t.AI_TUTOR.ORAL_EXAM_DESC,
       path: "/ai-tutor/oral-exam",
