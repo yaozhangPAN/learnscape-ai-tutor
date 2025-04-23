@@ -5,7 +5,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { HomeworkQuestionAnswer } from "./HomeworkQuestionAnswer";
 import { CapyzenChatFloating } from "./CapyzenChatFloating";
 import { supabase } from "@/integrations/supabase/client";
+import { useParams } from 'react-router-dom';
 import type { HomeworkQuestion } from "./types";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface ParsedQuestionContent {
   content?: string;
@@ -17,17 +19,25 @@ interface ParsedQuestionContent {
 export const CourseHomework: React.FC = () => {
   const [homeworkQuestions, setHomeworkQuestions] = useState<HomeworkQuestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { courseId } = useParams<{ courseId: string }>();
+  const { lang } = useI18n();
 
   useEffect(() => {
     const fetchHomeworkQuestions = async () => {
       try {
-        const { data, error } = await supabase
+        // For masterclass course, fetch specific homework
+        let query = supabase
           .from('questions')
           .select('*')
           .eq('level', '小六')
-          .eq('subject', '华文')
-          .eq('term', 'CA1')
-          .order('created_at', { ascending: true }); // 按照创建时间排序
+          .eq('subject', '华文');
+          
+        // Apply different filters based on course ID
+        if (courseId === 'psle-chinese-masterclass') {
+          query = query.eq('term', 'CA1');
+        }
+        
+        const { data, error } = await query.order('created_at', { ascending: true });
 
         if (error) throw error;
 
@@ -73,17 +83,23 @@ export const CourseHomework: React.FC = () => {
     };
 
     fetchHomeworkQuestions();
-  }, []);
+  }, [courseId]);
 
   if (isLoading) {
-    return <div>Loading homework questions...</div>;
+    return <div>{lang === 'zh' ? '加载作业中...' : 'Loading homework questions...'}</div>;
+  }
+
+  if (homeworkQuestions.length === 0) {
+    return <div className="text-center p-6">
+      {lang === 'zh' ? '暂无作业' : 'No homework available for this course.'}
+    </div>;
   }
 
   return (
     <div className="max-w-5xl mx-auto">
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>课后作业</CardTitle>
+          <CardTitle>{lang === 'zh' ? '课后作业' : 'Homework'}</CardTitle>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[600px] pr-4">
