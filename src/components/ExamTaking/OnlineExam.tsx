@@ -71,7 +71,6 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
-                q_len = q_len + "_" + contentObj.questionList.length.toString();
                 
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   console.log("Processing subQuestion:", subQuestion);
@@ -95,6 +94,8 @@ const OnlineExam = () => {
                   
                   return question;
                 });
+
+                q_len = q_len + "_" + processedQuestions.length.toString();
                 
                 return [...acc, ...processedQuestions];
               } catch (error) {
