@@ -167,7 +167,8 @@ const DailyRecommendations = () => {
           <div className="text-sm mr-4">
             <span className="font-medium">{completedToday}</span>
             <span className="text-gray-500">
-              {t.DAILY_RECOMMENDATION.COMPLETED_TODAY.replace("{n}", recommendations.length)}
+              {/* FIX: This is where the error happened. We need to replace {n} with string representation of the number */}
+              {t.DAILY_RECOMMENDATION.COMPLETED_TODAY.replace('{n}', String(recommendations.length))}
             </span>
           </div>
           <Button>
@@ -324,5 +325,3 @@ const DailyRecommendations = () => {
 };
 
 export default DailyRecommendations;
-
-// 本文件已超322行建议下步考虑组件拆分！
