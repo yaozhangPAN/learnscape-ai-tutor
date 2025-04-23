@@ -11,6 +11,7 @@ import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
+import answer from "../QuestionBank/QuestionViewer"
 
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
