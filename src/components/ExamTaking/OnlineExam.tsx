@@ -111,7 +111,7 @@ const OnlineExam = () => {
                     }));
 
                     const answerObj = answerList.find(a => a.id === subQuestion.id);
-                    question.correctAnswer = answerObj ? answerObj.value : "1";
+                    question.correctAnswer = answerObj ? answerObj.value : "N/A";
                   } else {
                     question.type = "ShortAnswer"
                   }
