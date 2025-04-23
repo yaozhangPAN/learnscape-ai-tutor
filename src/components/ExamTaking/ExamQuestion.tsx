@@ -11,6 +11,15 @@ interface ExamQuestionProps {
   onAnswerChange: (value: string) => void;
 }
 
+const formatText = (text: string) => {
+  return text.split('\n').map((line, i) => (
+    <React.Fragment key={i}>
+      {line}
+      {i !== text.split('\n').length - 1 && <br />}
+    </React.Fragment>
+  ));
+};
+
 const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProps) => {
   const renderMcqOptions = () => {
     if (question.type !== "MCQ" || !question.options || question.options.length === 0) return null;
@@ -28,7 +37,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
               htmlFor={`option-${question.id}-${index}`} 
               className="text-base cursor-pointer w-full"
             >
-              {option.label}
+              {formatText(option.label)}
             </Label>
           </div>
         ))}
@@ -54,7 +63,9 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
   return (
     <div className="space-y-4">
       <div className="prose max-w-none">
-        <div className="text-lg font-medium mb-4">{question.text}</div>
+        <div className="text-lg font-medium mb-4">
+          {formatText(question.text)}
+        </div>
         
         {question.image && (
           <div className="my-4">
