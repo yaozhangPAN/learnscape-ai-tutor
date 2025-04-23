@@ -14,20 +14,31 @@ const StreakComponent = () => {
   const freezeUsed = 1;
   const { t } = useI18n();
 
-  // Updated color palette with more saturation
+  // 按照首页配色重定义色卡
   const colors = {
-    background: "bg-gradient-to-br from-[#2ecc71] to-[#27ae60]", // Vibrant green gradient
-    streakSocietyBg: "bg-[#e74c3c]", // Bright red
-    streakText: "text-white", // White text for better contrast
-    tabBackground: "bg-gradient-to-br from-[#3498db] to-[#2980b9]", // Blue gradient
-    activeTabBg: "bg-white text-[#2ecc71]", // White background with green text
+    mainBg: "bg-[#FFF6D5]", // 奶黄，整体背景
+    primary: "#2F5530",      // 深绿色
+    highlight: "#FFD700",    // 黄色高光点
+    card: "bg-[#FFEFAE]",    // 卡片背景奶黄
+    streakSocietyBg: "bg-[#2F5530]", // 深绿色
+    streakSocietyText: "text-white",
+    tabBg: "bg-[#FFEFAE]", // tab 背景卡片色，未激活奶黄
+    activeTabBg: "bg-[#2F5530] text-white",
+    inactiveTabBg: "bg-[#FFEFAE] text-[#2F5530]",
     cardBgs: {
-      practiced: "bg-gradient-to-br from-[#2ecc71] to-[#27ae60]", // Green gradient
-      freeze: "bg-gradient-to-br from-[#3498db] to-[#2980b9]" // Blue gradient
-    }
+      practiced: "bg-[#AED581]", // 草绿
+      freeze: "bg-[#FBC02D]",    // 金黄
+    },
+    cardText: "text-[#2F5530]",
+    button: "bg-[#2F5530] text-white hover:bg-[#21401f]",
+    calendarDay: "bg-[#FFEFAE] text-[#2F5530]", // 日历普通天
+    calendarDone: "bg-[#AED581] text-[#2F5530] font-bold", // 打卡完成天
+    calendarFreeze: "bg-[#FBC02D] text-white font-bold", // 冻结
+    calendarActive: "bg-[#FFD700] text-[#2F5530] font-bold", // 重点
+    calendarToday: "bg-[#FF7043] text-white font-bold", // 今日高亮
   };
 
-  // Mock calendar data for current month
+  // 日历数据不变
   const calendarDays = [
     { day: "Su", date: null },
     { day: "Mo", date: null },
@@ -64,81 +75,87 @@ const StreakComponent = () => {
   ];
 
   return (
-    <div className={`${colors.background} rounded-3xl p-4 md:p-8 text-white`}>
+    <div className={`${colors.mainBg} rounded-3xl p-4 md:p-8`}>
       <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold text-white tracking-tight">{t.STREAK.TITLE}</h1>
+        <h1 className="text-3xl font-bold" style={{ color: colors.primary, letterSpacing: "0.03em" }}>{t.STREAK.TITLE}</h1>
       </div>
 
       <Tabs defaultValue="personal" className="w-full mb-4">
-        <TabsList className={`w-full ${colors.tabBackground} rounded-full h-12 mb-2`}>
-          <TabsTrigger 
-            value="personal" 
-            className={`w-1/2 data-[state=active]:${colors.activeTabBg} text-lg`}
+        <TabsList className={`w-full ${colors.tabBg} rounded-full h-12 mb-2 flex`}>
+          <TabsTrigger
+            value="personal"
+            className={`w-1/2 rounded-full text-lg font-bold transition-all 
+            ${activeTab === "personal" ? colors.activeTabBg : colors.inactiveTabBg}`}
             onClick={() => setActiveTab("personal")}
           >
             {t.STREAK.PERSONAL}
           </TabsTrigger>
-          <TabsTrigger 
-            value="friends" 
-            className={`w-1/2 data-[state=active]:${colors.activeTabBg} text-lg`}
+          <TabsTrigger
+            value="friends"
+            className={`w-1/2 rounded-full text-lg font-bold transition-all 
+            ${activeTab === "friends" ? colors.activeTabBg : colors.inactiveTabBg}`}
             onClick={() => setActiveTab("friends")}
           >
             {t.STREAK.FRIENDS}
           </TabsTrigger>
         </TabsList>
-        
+
+        {/* 个人连续打卡 */}
         <TabsContent value="personal" className="mt-2">
-          <div className="mb-6">
-            <div className={`${colors.streakSocietyBg} ${colors.streakText} py-2 px-4 rounded-full inline-block mb-4 text-center`}>
-              <span className="font-bold text-sm tracking-wide">{t.STREAK.STREAK_SOCIETY}</span>
+          <div className="mb-6 flex flex-col items-center">
+            <div className={`${colors.streakSocietyBg} ${colors.streakSocietyText} py-2 px-5 rounded-full text-center font-semibold tracking-wide text-sm mb-4 flex items-center gap-2`}>
+              <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ background: colors.highlight }} />
+              {t.STREAK.STREAK_SOCIETY}
             </div>
-            <div className="flex items-center justify-between flex-wrap gap-6">
+            <div className="flex items-center justify-between flex-wrap gap-6 w-full">
               <div>
-                <h2 className="text-7xl font-bold text-white text-stroke drop-shadow">{currentStreak}</h2>
-                <p className="text-white/90 text-2xl mt-1">{t.STREAK.DAY_STREAK}</p>
+                <h2 className="text-7xl font-bold drop-shadow-sm" style={{ color: colors.primary, WebkitTextStroke: "2px #FFD700" }}>{currentStreak}</h2>
+                <p className="text-xl mt-1" style={{ color: colors.primary }}>{t.STREAK.DAY_STREAK}</p>
               </div>
               <div className="flex-1 flex items-center justify-center">
-                <Flame className="h-24 w-24 text-white drop-shadow-lg" />
+                <Flame className="h-24 w-24" style={{ color: colors.highlight, filter: "drop-shadow(0 2px 8px #FFD70099)" }} />
               </div>
             </div>
           </div>
-          
+
+          {/* 已练习天数、冻结 */}
           <div className="mb-6 flex flex-col md:flex-row gap-4">
-            <Card className={`${colors.cardBgs.practiced} border-none flex-1 shadow text-white`}>
+            <Card className={`${colors.cardBgs.practiced} border-none flex-1 shadow`}>
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="bg-white/30 rounded-full p-2 mr-2">
-                  <span className="text-white font-bold text-2xl">✓</span>
+                <div className="bg-white/70 rounded-full p-2 mr-2">
+                  <span className="text-[#2F5530] font-bold text-2xl">✓</span>
                 </div>
                 <div>
-                  <h4 className="text-2xl font-bold">{daysPracticed}</h4>
-                  <p className="font-semibold text-white/90">{t.STREAK.DAYS_PRACTICED}</p>
+                  <h4 className="text-2xl font-bold" style={{ color: colors.primary }}>{daysPracticed}</h4>
+                  <p className="font-semibold" style={{ color: colors.primary }}>{t.STREAK.DAYS_PRACTICED}</p>
                 </div>
               </CardContent>
             </Card>
-            <Card className={`${colors.cardBgs.freeze} border-none flex-1 shadow text-white`}>
+            <Card className={`${colors.cardBgs.freeze} border-none flex-1 shadow`}>
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="bg-white/30 rounded-full p-2 mr-2">
-                  <span className="text-white font-bold text-2xl">❄</span>
+                <div className="bg-white/70 rounded-full p-2 mr-2">
+                  <span className="text-[#FFD700] font-bold text-2xl">❄</span>
                 </div>
                 <div>
-                  <h4 className="text-2xl font-bold">{freezeUsed}</h4>
-                  <p className="font-semibold text-white/90">{t.STREAK.FREEZE_USED}</p>
+                  <h4 className="text-2xl font-bold" style={{ color: colors.primary }}>{freezeUsed}</h4>
+                  <p className="font-semibold" style={{ color: colors.primary }}>{t.STREAK.FREEZE_USED}</p>
                 </div>
               </CardContent>
             </Card>
           </div>
-          
-          <Card className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-sm p-4">
+
+          {/* 日历 */}
+          <Card className={`${colors.card} border border-[#f8e4a5] shadow-sm p-4`}>
             <CardContent>
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <button className="text-white/80 text-xl font-bold">&lt;</button>
-                  <h3 className="text-lg font-extrabold text-white">{currentMonth}</h3>
-                  <button className="text-white/80 text-xl font-bold">&gt;</button>
+                  <button className="text-xl font-bold" style={{ color: colors.primary }}>&lt;</button>
+                  <h3 className="text-lg font-extrabold" style={{ color: colors.primary }}>{currentMonth}</h3>
+                  <button className="text-xl font-bold" style={{ color: colors.primary }}>&gt;</button>
                 </div>
                 <div className="grid grid-cols-7 gap-2 mb-1">
                   {calendarDays.slice(0, 7).map((day, index) => (
-                    <div key={`day-${index}`} className="text-white/80 font-medium text-sm text-center">
+                    <div key={`day-${index}`} className="font-medium text-sm text-center" style={{ color: colors.primary, opacity: 0.7 }}>
                       {day.day}
                     </div>
                   ))}
@@ -146,31 +163,37 @@ const StreakComponent = () => {
                 <div className="grid grid-cols-7 gap-2">
                   {calendarDays.map((day, index) => {
                     if (!day.date) return <div key={`empty-${index}`}></div>;
-                    
-                    let bgColor = "bg-white/10";
-                    let textColor = "text-white/60";
+
+                    let cellClass = `${colors.calendarDay} rounded-full w-9 h-9 flex items-center justify-center mx-auto font-semibold text-base border border-[#F0E0A8]`;
                     let content = day.date;
-                    
+
                     if (day.status === "completed") {
-                      bgColor = "bg-[#2ecc71]";
-                      textColor = "text-white";
+                      cellClass = `${colors.calendarDone} rounded-full w-9 h-9 flex items-center justify-center mx-auto border border-[#AED581]`;
                     } else if (day.status === "freeze") {
-                      bgColor = "bg-[#3498db]";
-                      textColor = "text-white";
-                      content = <div className="relative">{day.date}<span className="absolute -bottom-1 -right-1 text-xs">❄</span></div>;
+                      cellClass = `${colors.calendarFreeze} rounded-full w-9 h-9 flex items-center justify-center mx-auto border border-[#FFD700] relative`;
+                      content = (
+                        <div className="relative w-full h-full flex items-center justify-center">
+                          {day.date}
+                          <span
+                            className="absolute -bottom-1 -right-1 text-xs"
+                            style={{
+                              color: "#FFD700",
+                              fontWeight: "bold",
+                              textShadow: "1px 1px 1px #fff",
+                            }}
+                          >
+                            ❄
+                          </span>
+                        </div>
+                      );
                     } else if (day.status === "active") {
-                      bgColor = "bg-[#f1c40f]";
-                      textColor = "text-white";
+                      cellClass = `${colors.calendarActive} rounded-full w-9 h-9 flex items-center justify-center mx-auto border border-[#FFD700] animate-bounce-slow`;
                     } else if (day.status === "today") {
-                      bgColor = "bg-[#e74c3c]";
-                      textColor = "text-white";
+                      cellClass = `${colors.calendarToday} rounded-full w-9 h-9 flex items-center justify-center mx-auto border border-[#FF7043]`;
                     }
-                    
+
                     return (
-                      <div 
-                        key={`date-${index}`} 
-                        className={`${bgColor} ${textColor} rounded-full w-8 h-8 flex items-center justify-center mx-auto font-semibold text-base`}
-                      >
+                      <div key={`date-${index}`} className={cellClass}>
                         {content}
                       </div>
                     );
@@ -180,21 +203,23 @@ const StreakComponent = () => {
             </CardContent>
           </Card>
 
+          {/* 继续打卡按钮和提醒 */}
           <div className="mt-6 text-center">
-            <Button className="bg-white text-[#2ecc71] hover:bg-white/90 text-lg px-8 py-3 rounded-full font-bold shadow">
+            <Button className={`${colors.button} text-lg px-8 py-3 rounded-full font-bold shadow`} style={{ backgroundColor: colors.primary, color: "#FFF" }}>
               {t.STREAK.EXTEND_STREAK}
             </Button>
-            <div className="mt-2 text-white font-semibold">
-              <Clock className="inline-block mr-2 h-5 w-5 text-white/80" />
+            <div className="mt-2 font-semibold flex justify-center items-center gap-2" style={{ color: colors.primary }}>
+              <Clock className="inline-block h-5 w-5 mr-1" style={{ color: colors.highlight }} />
               {t.STREAK.STREAK_WARNING}
             </div>
           </div>
         </TabsContent>
-        
+
+        {/* 好友 */}
         <TabsContent value="friends">
-          <div className="text-center py-10">
-            <Calendar className="h-16 w-16 text-white/80 mx-auto mb-2" />
-            <h3 className="text-lg font-medium text-white">
+          <div className={`${colors.card} text-center py-10 rounded-3xl`}>
+            <Calendar className="h-16 w-16 mx-auto mb-2" style={{ color: colors.primary, opacity: 0.25 }} />
+            <h3 className="text-lg font-medium" style={{ color: colors.primary }}>
               {t.STREAK.FRIENDS_MESSAGE}
             </h3>
           </div>
