@@ -14,7 +14,7 @@ interface ExamQuestionProps {
 const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProps) => {
   const formatHtml = (text: string | undefined) => {
     if (!text) return "";
-    return text.replace(/\n/g, "<br />");
+    return String(text).replace(/\n/g, "<br />");
   };
 
   const renderMcqOptions = () => {

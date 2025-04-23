@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,6 +24,7 @@ const formatText = (text: string | object | undefined) => {
     textContent = String(text);
   }
   
+  // Now that we've ensured textContent is a string, we can safely use replace
   const withLineBreaks = textContent.replace(/\n/g, "<br />");
   return (
     <div
