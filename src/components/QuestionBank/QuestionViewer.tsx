@@ -22,7 +22,7 @@ export interface QuestionViewerProps {
   question: Question | null;
 }
 
-export const anwser = [
+const anwser = [
   {
     id: "Q1",
     value: "2"
