@@ -16,6 +16,21 @@ const en = {
     ENGLISH: "English",
     CHINESE: "Chinese",
   },
+  NOT_FOUND: {
+    MESSAGE: "Oops! Page not found",
+    BACK_HOME: "Return to Home",
+  },
+  PAYMENT_SUCCESS: {
+    TITLE: "Payment Successful",
+    DESC: "Thank you for your purchase!",
+    TITLE_PREMIUM: "Welcome to Premium!",
+    DESC_PREMIUM: "You now have access to all premium features, including AI Tutor, Daily Recommendations, and more.",
+    TITLE_VIDEO: "Video Tutorial Purchased",
+    DESC_VIDEO: "You now have access to this video tutorial. Enjoy learning!",
+    BUTTON_AI_TUTOR: "Try AI Tutor",
+    BUTTON_VIDEO: "Watch Video",
+    BUTTON_DASHBOARD: "Go to Dashboard"
+  },
   DAILY_PLAN: {
     TITLE: "Daily Adventure",
     XP: "50 XP",

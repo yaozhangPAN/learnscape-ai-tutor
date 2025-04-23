@@ -16,6 +16,21 @@ const zh = {
     ENGLISH: "英文",
     CHINESE: "中文",
   },
+  NOT_FOUND: {
+    MESSAGE: "哎呀，页面未找到",
+    BACK_HOME: "返回首页",
+  },
+  PAYMENT_SUCCESS: {
+    TITLE: "支付成功",
+    DESC: "感谢你的购买！",
+    TITLE_PREMIUM: "升级为高级会员！",
+    DESC_PREMIUM: "你已解锁全部高级功能，包括AI导师、每日推荐等。",
+    TITLE_VIDEO: "视频课程购买成功",
+    DESC_VIDEO: "你现在已可以学习该视频教程，祝你学有所成！",
+    BUTTON_AI_TUTOR: "体验AI导师",
+    BUTTON_VIDEO: "观看视频",
+    BUTTON_DASHBOARD: "返回主页"
+  },
   DAILY_PLAN: {
     TITLE: "每日冒险",
     XP: "50经验",

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,9 @@ const Navbar = () => {
     await signOut();
     setIsMenuOpen(false);
   };
+
+  // 配色调整到绿色，与登录一致
+  const langBtnClass = "bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors ml-2";
 
   return (
     <nav className={`bg-learnscape-darkBlue sticky top-0 z-50 transition-all duration-300 ${
@@ -98,9 +102,9 @@ const Navbar = () => {
               </Button>
             )}
             <Button 
-              variant="outline" 
+              variant="default"
               size="sm"
-              className="ml-2 border-white text-white hover:bg-white hover:text-[#4ABA79]"
+              className={langBtnClass}
               onClick={() => setLang(lang === "zh" ? "en" : "zh")}
             >
               {lang === "zh" ? t.NAV.ENGLISH : t.NAV.CHINESE}
@@ -157,7 +161,7 @@ const Navbar = () => {
             )}
             <button
               onClick={() => setLang(lang === "zh" ? "en" : "zh")}
-              className="w-full block px-3 py-2 mt-3 rounded-md text-base text-white border border-white bg-transparent"
+              className="w-full block px-3 py-2 mt-3 rounded-md text-base bg-[#4CAF50] text-white hover:bg-[#16A085] border-none"
             >
               {lang === "zh" ? t.NAV.ENGLISH : t.NAV.CHINESE}
             </button>
@@ -169,3 +173,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

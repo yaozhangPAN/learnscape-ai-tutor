@@ -8,19 +8,21 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, Crown, ArrowRight, Video } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { checkPremiumStatus } = useSubscription();
   const [isLoading, setIsLoading] = useState(true);
-  
+
+  const { t } = useI18n();
+
   const paymentType = searchParams.get("type") || "";
   const contentId = searchParams.get("id") || "";
-  
+
   useEffect(() => {
     if (user) {
-      // Refresh subscription status after successful payment
       checkPremiumStatus().then(() => {
         setIsLoading(false);
       });
@@ -29,17 +31,17 @@ const PaymentSuccess = () => {
     }
   }, [user]);
 
-  let title = "Payment Successful";
-  let description = "Thank you for your purchase!";
+  let title = t.PAYMENT_SUCCESS.TITLE;
+  let description = t.PAYMENT_SUCCESS.DESC;
   let icon = <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />;
-  
+
   if (paymentType === "premium_subscription") {
-    title = "Welcome to Premium!";
-    description = "You now have access to all premium features, including AI Tutor, Daily Recommendations, and more.";
+    title = t.PAYMENT_SUCCESS.TITLE_PREMIUM;
+    description = t.PAYMENT_SUCCESS.DESC_PREMIUM;
     icon = <Crown className="w-16 h-16 text-yellow-500 mx-auto mb-4" />;
   } else if (paymentType === "video_tutorial") {
-    title = "Video Tutorial Purchased";
-    description = "You now have access to this video tutorial. Enjoy learning!";
+    title = t.PAYMENT_SUCCESS.TITLE_VIDEO;
+    description = t.PAYMENT_SUCCESS.DESC_VIDEO;
     icon = <Video className="w-16 h-16 text-blue-500 mx-auto mb-4" />;
   }
 
@@ -66,7 +68,7 @@ const PaymentSuccess = () => {
                   {paymentType === "premium_subscription" && (
                     <Button asChild className="bg-learnscape-blue hover:bg-blue-700">
                       <Link to="/ai-tutor">
-                        Try AI Tutor
+                        {t.PAYMENT_SUCCESS.BUTTON_AI_TUTOR}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
@@ -74,14 +76,14 @@ const PaymentSuccess = () => {
                   {paymentType === "video_tutorial" && contentId && (
                     <Button asChild className="bg-learnscape-blue hover:bg-blue-700">
                       <Link to={`/courses?content=${contentId}`}>
-                        Watch Video
+                        {t.PAYMENT_SUCCESS.BUTTON_VIDEO}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
                   )}
                   <Button asChild variant="outline">
                     <Link to="/dashboard">
-                      Go to Dashboard
+                      {t.PAYMENT_SUCCESS.BUTTON_DASHBOARD}
                     </Link>
                   </Button>
                 </div>
