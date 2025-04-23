@@ -46,11 +46,6 @@ const OnlineExam = () => {
           
           console.log("Raw questionData:", questionData);
           
-          if (questionData) {
-            setQuestionLength(questionData.length);
-            console.log("Function Log - Question Length:", questionData.length);
-          }
-          
           let examQuestions: Question[] = [];
           
           if (questionData && questionData.length > 0) {
@@ -116,6 +111,10 @@ const OnlineExam = () => {
           }
           
           console.log("Final processed questions:", examQuestions);
+          if (questionData) {
+            setQuestionLength(examQuestions.length);
+            console.log("Function Log - Question Length:", questionData.length);
+          }
           
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
