@@ -11,6 +11,7 @@ import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
+import answer from "../QuestionBank/QuestionViewer"
 
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
@@ -110,11 +111,12 @@ const OnlineExam = () => {
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
-                    
-                    question.correctAnswer = question.options[0].value;
                   } else {
                     question.type = "ShortAnswer"
                   }
+
+                  const answerObj = anwser.find(a => a.id === subQuestion.id);
+                  question.correctAnswer = answerObj ? answerObj.value : "N/A";
                   
                   return question;
                 });
