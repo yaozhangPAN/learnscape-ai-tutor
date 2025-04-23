@@ -116,10 +116,10 @@ const OnlineExam = () => {
                   }
                   
                   setQuestionLength(anwser.toString());
-                  if (subQuestion.id) {
-                    const answerObj = anwser.find(a => a.id === subQuestion.id);
-                    question.correctAnswer = answerObj ? answerObj.value : "N/A";
-                  }
+                  //if (subQuestion.id) {
+                    //const answerObj = anwser.find(a => a.id === subQuestion.id);
+                    //question.correctAnswer = answerObj ? answerObj.value : "N/A";
+                  //}
 
                   return question;
                 });
@@ -460,6 +460,9 @@ const OnlineExam = () => {
                     {formatText({topic})}
                   </h2>
                 )}
+                <h2 className="text-xl font-bold mb-4 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
+                    {questionLength}
+                </h2>
                 {questions.map((question, index) => {
                   const globalIndex = currentExam?.questions.findIndex(q => q.id === question.id) ?? 0;
                   return (
