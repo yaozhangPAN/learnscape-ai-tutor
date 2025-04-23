@@ -1,4 +1,3 @@
-
 const en = {
   NAV: {
     HOME: "Home",
@@ -101,6 +100,18 @@ const en = {
     SUBTITLE_TUTOR: "One-on-one Q&A",
     SUBTITLE_VOCAB: "Vocabulary Builder",
     SUBTITLE_LANGUAGE_ARTS: "Language Arts Workshop"
+  },
+  STREAK: {
+    TITLE: "Streak",
+    PERSONAL: "PERSONAL",
+    FRIENDS: "FRIENDS",
+    STREAK_SOCIETY: "STREAK SOCIETY",
+    DAY_STREAK: "day streak!",
+    DAYS_PRACTICED: "Days practiced",
+    FREEZE_USED: "Freeze used",
+    EXTEND_STREAK: "EXTEND STREAK",
+    STREAK_WARNING: "Less than 2 hours to extend your streak!",
+    FRIENDS_MESSAGE: "Connect with friends to see their streaks and compete together!"
   }
 };
 export default en;

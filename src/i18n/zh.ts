@@ -1,4 +1,3 @@
-
 const zh = {
   NAV: {
     HOME: "首页",
@@ -101,6 +100,18 @@ const zh = {
     SUBTITLE_TUTOR: "一对一提问",
     SUBTITLE_VOCAB: "词汇冲关",
     SUBTITLE_LANGUAGE_ARTS: "语文工坊"
+  },
+  STREAK: {
+    TITLE: "连续打卡",
+    PERSONAL: "个人",
+    FRIENDS: "好友",
+    STREAK_SOCIETY: "打卡社区",
+    DAY_STREAK: "天连续打卡！",
+    DAYS_PRACTICED: "已练习天数",
+    FREEZE_USED: "已使用冻结",
+    EXTEND_STREAK: "继续打卡",
+    STREAK_WARNING: "剩余不到2小时来继续你的连续打卡！",
+    FRIENDS_MESSAGE: "添加好友，查看他们的打卡记录，一起进步！"
   }
 };
 export default zh;

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Clock, Flame } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 
 const StreakComponent = () => {
   const [activeTab, setActiveTab] = useState("personal");
@@ -11,6 +12,7 @@ const StreakComponent = () => {
   const currentMonth = "April 2025";
   const daysPracticed = 3;
   const freezeUsed = 1;
+  const { t } = useI18n();
 
   // Mock calendar data for current month
   const calendarDays = [
@@ -51,7 +53,7 @@ const StreakComponent = () => {
   return (
     <div className="bg-[#f2fce2] rounded-3xl p-4 md:p-8">
       <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold text-[#4ABA79] tracking-tight">Streak</h1>
+        <h1 className="text-3xl font-bold text-[#4ABA79] tracking-tight">{t.STREAK.TITLE}</h1>
       </div>
 
       <Tabs defaultValue="personal" className="w-full mb-4">
@@ -61,26 +63,26 @@ const StreakComponent = () => {
             className="w-1/2 data-[state=active]:bg-white data-[state=active]:text-[#4ABA79] text-lg"
             onClick={() => setActiveTab("personal")}
           >
-            PERSONAL
+            {t.STREAK.PERSONAL}
           </TabsTrigger>
           <TabsTrigger 
             value="friends" 
             className="w-1/2 data-[state=active]:bg-white data-[state=active]:text-[#4ABA79] text-lg"
             onClick={() => setActiveTab("friends")}
           >
-            FRIENDS
+            {t.STREAK.FRIENDS}
           </TabsTrigger>
         </TabsList>
         
         <TabsContent value="personal" className="mt-2">
           <div className="mb-6">
             <div className="bg-[#fbed96] text-[#ad8a2c] py-2 px-4 rounded-full inline-block mb-4 text-center">
-              <span className="font-bold text-sm tracking-wide">STREAK SOCIETY</span>
+              <span className="font-bold text-sm tracking-wide">{t.STREAK.STREAK_SOCIETY}</span>
             </div>
             <div className="flex items-center justify-between flex-wrap gap-6">
               <div>
                 <h2 className="text-7xl font-bold text-[#ffd664] text-stroke drop-shadow">{currentStreak}</h2>
-                <p className="text-[#d3a647] text-2xl mt-1">day streak!</p>
+                <p className="text-[#d3a647] text-2xl mt-1">{t.STREAK.DAY_STREAK}</p>
               </div>
               <div className="flex-1 flex items-center justify-center">
                 <Flame className="h-24 w-24 text-[#ffd664] drop-shadow-lg" />
@@ -96,7 +98,7 @@ const StreakComponent = () => {
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold text-[#4ABA79]">{daysPracticed}</h4>
-                  <p className="text-[#8268b5] font-semibold">Days practiced</p>
+                  <p className="text-[#8268b5] font-semibold">{t.STREAK.DAYS_PRACTICED}</p>
                 </div>
               </CardContent>
             </Card>
@@ -107,7 +109,7 @@ const StreakComponent = () => {
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold text-[#38A169]">{freezeUsed}</h4>
-                  <p className="text-[#b58a37] font-semibold">Freeze used</p>
+                  <p className="text-[#b58a37] font-semibold">{t.STREAK.FREEZE_USED}</p>
                 </div>
               </CardContent>
             </Card>
@@ -167,11 +169,11 @@ const StreakComponent = () => {
 
           <div className="mt-6 text-center">
             <Button className="bg-[#4ABA79] hover:bg-[#38895a] text-white text-lg px-8 py-3 rounded-full font-bold shadow">
-              EXTEND STREAK
+              {t.STREAK.EXTEND_STREAK}
             </Button>
             <div className="mt-2 text-[#4ABA79] font-semibold">
               <Clock className="inline-block mr-2 h-5 w-5 text-[#e47069]" />
-              Less than 2 hours to extend your streak!
+              {t.STREAK.STREAK_WARNING}
             </div>
           </div>
         </TabsContent>
@@ -180,7 +182,7 @@ const StreakComponent = () => {
           <div className="text-center py-10">
             <Calendar className="h-16 w-16 text-[#b197d7] mx-auto mb-2" />
             <h3 className="text-lg font-medium text-[#b197d7]">
-              Connect with friends to see their streaks and compete together!
+              {t.STREAK.FRIENDS_MESSAGE}
             </h3>
           </div>
         </TabsContent>
