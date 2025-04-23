@@ -16,7 +16,6 @@ import answer from "../QuestionBank/QuestionViewer"
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
   
-  // If text is an object with a property (like {topic: "some topic"}), extract the first value
   let textContent: string;
   if (typeof text === 'object') {
     const values = Object.values(text);
@@ -25,7 +24,6 @@ const formatText = (text: string | object | undefined) => {
     textContent = String(text);
   }
   
-  // Now that we've ensured textContent is a string, we can safely use replace
   const withLineBreaks = textContent.replace(/\n/g, "<br />");
   return (
     <div
@@ -104,6 +102,7 @@ const OnlineExam = () => {
                     type: "MCQ",
                     marks: 2,
                     topic: topic,
+                    correctAnswer: "1"
                   };
 
                   if (subQuestion.options && Array.isArray(subQuestion.options) && subQuestion.options.length > 0) {
@@ -111,10 +110,6 @@ const OnlineExam = () => {
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
-
-                    //const answerObj = answer.find(a => a.id === "1");
-                    //question.correctAnswer = answerObj ? answerObj.value : "N/A";
-                    question.correctAnswer = question.options[0].value;
                   } else {
                     question.type = "ShortAnswer"
                   }
