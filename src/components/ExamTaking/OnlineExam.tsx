@@ -112,7 +112,7 @@ const OnlineExam = () => {
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
 
-                    const answerObj = anwser.find(a => a.id === "1");
+                    const answerObj = answer.find(a => a.id === "1");
                     //question.correctAnswer = answerObj ? answerObj.value : "N/A";
                     question.correctAnswer = question.options[0].value;
                   } else {
