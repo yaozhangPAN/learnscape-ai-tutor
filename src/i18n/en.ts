@@ -61,6 +61,46 @@ const en = {
     SCORE_IN_PROGRESS: "In progress",
     SCORE_COMPLETE: "Complete",
     SCORE_DEFAULT: "Score"
+  },
+  LEADERBOARD: {
+    TITLE: "Leaderboard",
+    SUBTITLE: "Recognizing our top performers who've demonstrated exceptional dedication and achievement in their learning journey.",
+    TOP_ACHIEVERS: "Top Achievers",
+    CHAMPION: "🏆 Champion",
+    RUNNER_UP: "🥈 Runner-up",
+    THIRD_PLACE: "🥉 3rd Place",
+    SEARCH_PLACEHOLDER: "Search by name...",
+    RANK: "Rank",
+    USER: "User",
+    POINTS: "Points",
+    QUESTIONS: "Questions",
+    BADGE: "Badge",
+    BADGE_EXPERT: "Expert",
+    BADGE_ADVANCED: "Advanced",
+    BADGE_INTERMEDIATE: "Intermediate",
+    BADGE_BEGINNER: "Beginner"
+  },
+  AI_TUTOR: {
+    TITLE: "Choose your AI Learning Assistant",
+    WRITING_COACH: "Writing Coach",
+    WRITING_COACH_DESC: "Improve writing skills with AI feedback and suggestions.",
+    ORAL_EXAM: "Oral Exam Practice",
+    ORAL_EXAM_DESC: "Fun oral practice to help you ace interviews.",
+    DICTATION: "Dictation Practice",
+    DICTATION_DESC: "Chinese & English dictation training, easier with voice input!",
+    TUTOR_ME: "Tutor Me",
+    TUTOR_ME_DESC: "Ask AI any academic question anytime.",
+    VOCABULARY: "Vocabulary Builder",
+    VOCABULARY_DESC: "Level-up and remember words by answering word quizzes!",
+    LANGUAGE_ARTS: "Language Arts Workshop",
+    LANGUAGE_ARTS_DESC: "Creative writing & reading comprehension to improve language.",
+    GO: "Enter",
+    SUBTITLE_WRITING: "Writing Coach",
+    SUBTITLE_ORAL: "Oral Exam",
+    SUBTITLE_DICTATION: "Dictation",
+    SUBTITLE_TUTOR: "One-on-one Q&A",
+    SUBTITLE_VOCAB: "Vocabulary Builder",
+    SUBTITLE_LANGUAGE_ARTS: "Language Arts Workshop"
   }
 };
 export default en;

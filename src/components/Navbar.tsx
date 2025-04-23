@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -43,7 +42,6 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
 
-  // 配色调整到绿色，与登录一致
   const langBtnClass = "bg-[#4CAF50] text-white hover:bg-[#16A085] transition-colors ml-2";
 
   return (
@@ -173,4 +171,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

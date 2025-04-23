@@ -61,6 +61,46 @@ const zh = {
     SCORE_IN_PROGRESS: "进行中",
     SCORE_COMPLETE: "已完成",
     SCORE_DEFAULT: "分数"
+  },
+  LEADERBOARD: {
+    TITLE: "排行榜",
+    SUBTITLE: "表彰在学习旅程中表现卓越、持之以恒的同学。",
+    TOP_ACHIEVERS: "优胜榜",
+    CHAMPION: "🏆 冠军",
+    RUNNER_UP: "🥈 亚军",
+    THIRD_PLACE: "🥉 季军",
+    SEARCH_PLACEHOLDER: "按姓名搜索...",
+    RANK: "排名",
+    USER: "用户",
+    POINTS: "积分",
+    QUESTIONS: "答题数",
+    BADGE: "称号",
+    BADGE_EXPERT: "专家",
+    BADGE_ADVANCED: "高级",
+    BADGE_INTERMEDIATE: "中级",
+    BADGE_BEGINNER: "初学"
+  },
+  AI_TUTOR: {
+    TITLE: "选择你需要的AI学习助手",
+    WRITING_COACH: "写作教练",
+    WRITING_COACH_DESC: "提升写作技巧，获得AI写作反馈和建议。",
+    ORAL_EXAM: "口语闯关",
+    ORAL_EXAM_DESC: "趣味口语练习，助你自信拿下面试。",
+    DICTATION: "英语听写",
+    DICTATION_DESC: "中英文听写训练，语音输入更轻松！",
+    TUTOR_ME: "一对一提问",
+    TUTOR_ME_DESC: "学科难题不会怕，问AI随时随地答。",
+    VOCABULARY: "词汇冲关",
+    VOCABULARY_DESC: "闯关答题记单词，词汇量UP!",
+    LANGUAGE_ARTS: "语文工坊",
+    LANGUAGE_ARTS_DESC: "创意写作&阅读理解，全面提升语文能力。",
+    GO: "进入",
+    SUBTITLE_WRITING: "写作教练",
+    SUBTITLE_ORAL: "口语闯关",
+    SUBTITLE_DICTATION: "英语听写",
+    SUBTITLE_TUTOR: "一对一提问",
+    SUBTITLE_VOCAB: "词汇冲关",
+    SUBTITLE_LANGUAGE_ARTS: "语文工坊"
   }
 };
 export default zh;
