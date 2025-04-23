@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { Button } from "@/components/ui/button";
