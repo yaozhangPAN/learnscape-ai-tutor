@@ -12,6 +12,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
 
+const formatText = (text: string) => {
+  if (!text) return null;
+  const html = text.replace(/\n/g, "<br />");
+  return (
+    <div
+      className="text-base mb-2"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+};
+
 const OnlineExam = () => {
   const { examId } = useParams();
   const navigate = useNavigate();
@@ -429,7 +440,7 @@ const OnlineExam = () => {
               <div key={topicIndex} className="mb-8">
                 {topic !== '其他' && (
                   <h2 className="text-xl font-bold mb-4 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
-                    {topic}
+                    formatText({topic})
                   </h2>
                 )}
                 {questions.map((question, index) => {
