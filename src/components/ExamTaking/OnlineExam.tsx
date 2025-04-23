@@ -96,22 +96,27 @@ const OnlineExam = () => {
                 
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   console.log("Processing subQuestion:", subQuestion.question);
-                  q_len = q_len + "_" + subQuestion.question;
-                  const question: Question = {
-                    id: `${q.id}-${subQuestion.id || index}`,
-                    text: subQuestion.question || "",
-                    type: "MCQ",
-                    marks: 2,
-                    topic: topic,
-                  };
-
                   if (subQuestion.options && Array.isArray(subQuestion.options) && subQuestion.options.length > 0) {
+                    const question: Question = {
+                      id: `${q.id}-${subQuestion.id || index}`,
+                      text: subQuestion.question || "",
+                      type: "MCQ",
+                      marks: 2,
+                      topic: topic,
+                    };
                     question.options = subQuestion.options.map((opt: any, optIndex: number) => ({
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
-                    
                     question.correctAnswer = question.options[0].value;
+                  } else {
+                    const question: Question = {
+                      id: `${q.id}-${subQuestion.id || index}`,
+                      text: subQuestion.question || "",
+                      type: "ShortAnswer",
+                      marks: 2,
+                      topic: topic,
+                    };
                   }
                   
                   return question;
