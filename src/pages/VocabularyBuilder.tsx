@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,9 +5,11 @@ import { ArrowLeft, ArrowRight, Volume2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
+import VocabularyGame from "@/components/VocabularyGame/VocabularyGame";
 
 const VocabularyBuilder = () => {
   const [currentCard, setCurrentCard] = useState(0);
+  const [showGame, setShowGame] = useState(false);
 
   // Example vocabulary cards (in a real app, this would come from an API)
   const cards = [
@@ -37,29 +38,49 @@ const VocabularyBuilder = () => {
           
           <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-8">Vocabulary Builder</h1>
           
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle className="text-center text-2xl">{cards[currentCard].word}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-gray-600 text-center">{cards[currentCard].definition}</p>
-              <p className="text-sm text-gray-500 italic text-center">"{cards[currentCard].example}"</p>
-              
-              <div className="flex justify-center space-x-4 mt-8">
-                <Button variant="outline" onClick={previousCard}>
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Previous
-                </Button>
-                <Button variant="outline">
-                  <Volume2 className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" onClick={nextCard}>
-                  Next
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="space-y-8">
+            <Card className="w-full max-w-2xl mx-auto">
+              <CardHeader>
+                <CardTitle className="text-center text-2xl">{cards[currentCard].word}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-600 text-center">{cards[currentCard].definition}</p>
+                <p className="text-sm text-gray-500 italic text-center">"{cards[currentCard].example}"</p>
+                
+                <div className="flex justify-center space-x-4 mt-8">
+                  <Button variant="outline" onClick={previousCard}>
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Previous
+                  </Button>
+                  <Button variant="outline">
+                    <Volume2 className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" onClick={nextCard}>
+                    Next
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex justify-center">
+              <Button 
+                variant="outline"
+                onClick={() => setShowGame(prev => !prev)}
+                className="mb-4"
+              >
+                {showGame ? "Hide Game" : "Play Vocabulary Game"}
+              </Button>
+            </div>
+
+            {showGame && (
+              <Card className="w-full">
+                <CardContent className="p-4">
+                  <VocabularyGame />
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </div>
       </main>
       <Footer />
