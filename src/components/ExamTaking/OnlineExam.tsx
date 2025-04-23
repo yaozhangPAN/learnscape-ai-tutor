@@ -92,19 +92,19 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
-                
+
+                const answers = contentObj.answerList || [];
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
+                  // Find the corresponding answer in the answerList
+                  const answer = answers.find((a: any) => a.id === subQuestion.id);
+                  
                   const question: Question = {
                     id: `${q.id}-${subQuestion.id || index}`,
                     text: subQuestion.question || "",
                     type: "MCQ",
                     marks: 2,
                     topic: topic,
-                    correctAnswer: subQuestion.correctAnswer 
-                      ? String(subQuestion.correctAnswer) 
-                      : subQuestion.options && subQuestion.options.length > 0 
-                        ? "1"  // default to first option if available
-                        : "0"  // fallback value if no options
+                    correctAnswer: answer ? String(answer.correctAnswer) : "1" // Use answer from answerList if found
                   };
 
                   if (subQuestion.options && Array.isArray(subQuestion.options) && subQuestion.options.length > 0) {
