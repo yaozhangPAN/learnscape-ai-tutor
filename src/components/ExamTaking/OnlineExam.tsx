@@ -112,7 +112,7 @@ const OnlineExam = () => {
           }
           
           console.log("Final processed questions:", examQuestions);
-          setQuestionLength(q_len);
+          setQuestionLength(q_len.toString());
           
           const examPaper = mockExamPapers.find(paper => paper.id === examId);
           const exam: ExamPaper = {
