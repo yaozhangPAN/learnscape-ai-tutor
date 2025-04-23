@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import DailyRecommendations from "@/components/AITutor/DailyRecommendations";
@@ -5,13 +6,22 @@ import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/contexts/I18nContext";
 
+// 配色方案
+const BG_COLOR = "#FFF6D5";
+const CARD_BG_COLOR = "#FFEFAE";
+const ORANGE = "#F7941D";
+const CARD_BORDER = "#fcd063";
+
 const DailyPlan = () => {
   const { t } = useI18n();
   return (
-    <div className="min-h-screen bg-[#fbed96]">
+    <div className="min-h-screen" style={{ background: BG_COLOR }}>
       <Navbar />
       {/* 顶部橙色 Banner，与主页保持一致 */}
-      <div className="bg-[#F7941D] text-white py-10 rounded-b-3xl shadow-lg">
+      <div
+        className="text-white py-10 rounded-b-3xl shadow-lg"
+        style={{ background: ORANGE }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-4">
           {/* 卡通角色 */}
           <img
@@ -34,9 +44,16 @@ const DailyPlan = () => {
         </div>
       </div>
       {/* 内容卡片 + 今日路径 */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 白色卡片，带有柔和阴影与圆角 */}
-        <div className="bg-white rounded-3xl shadow p-6 md:p-10 -mt-12 relative z-10 border border-[#fcd063]/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 卡片区域调整为卡片黄色底、圆角、柔和阴影，最大宽 */}
+        <div
+          className="rounded-3xl shadow p-6 md:p-10 -mt-12 relative z-10 border"
+          style={{
+            background: CARD_BG_COLOR,
+            borderColor: `${CARD_BORDER}40`,
+            boxShadow: "0 3px 16px 0 rgba(47,85,48,0.07)",
+          }}
+        >
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <img
@@ -46,7 +63,7 @@ const DailyPlan = () => {
                 draggable={false}
                 style={{ userSelect: "none" }}
               />
-              <h2 className="text-2xl font-bold text-[#E2923A] tracking-tight">
+              <h2 className="text-2xl font-bold" style={{ color: ORANGE }}>
                 {t.DAILY_PLAN.PATH_TITLE}
               </h2>
             </div>
