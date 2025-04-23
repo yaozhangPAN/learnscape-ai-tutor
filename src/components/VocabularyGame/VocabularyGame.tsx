@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import MainGameScene from './scenes/MainGameScene';
 import { GameAssetUploader } from './GameAssetUploader';
-import { useEffect, useRef } from 'react';
 
 const VocabularyGame = () => {
   const [gameAssets, setGameAssets] = useState<string[]>([]);
@@ -10,6 +10,10 @@ const VocabularyGame = () => {
 
   const handleAssetUpload = (url: string) => {
     setGameAssets(prev => [...prev, url]);
+    // Restart the game scene to load new assets
+    if (gameRef.current) {
+      gameRef.current.scene.start('MainGameScene', { assets: [...gameAssets, url] });
+    }
   };
 
   useEffect(() => {
@@ -23,18 +27,18 @@ const VocabularyGame = () => {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { x: 0, y: 300 },
+          gravity: { x: 0, y: 0 },  // Removed gravity for better asset manipulation
           debug: false
         }
       }
     };
 
-    // 创建新的游戏实例
     if (!gameRef.current) {
       gameRef.current = new Phaser.Game(config);
+      // Initialize scene with current assets
+      gameRef.current.scene.start('MainGameScene', { assets: gameAssets });
     }
 
-    // 清理函数
     return () => {
       if (gameRef.current) {
         gameRef.current.destroy(true);

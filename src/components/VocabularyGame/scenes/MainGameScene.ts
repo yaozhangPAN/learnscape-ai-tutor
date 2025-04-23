@@ -2,22 +2,51 @@
 import Phaser from 'phaser';
 
 export default class MainGameScene extends Phaser.Scene {
+  private gameAssets: string[] = [];
+
   constructor() {
     super({ key: 'MainGameScene' });
   }
 
+  init(data: { assets?: string[] }) {
+    if (data.assets) {
+      this.gameAssets = data.assets;
+    }
+  }
+
   preload() {
-    // 在这里加载您的游戏资源
-    // 例如:
-    // this.load.image('asset-key', '/game-assets/your-image.png');
+    // Load each uploaded asset with a unique key
+    this.gameAssets.forEach((assetUrl, index) => {
+      this.load.image(`asset-${index}`, assetUrl);
+      console.log(`Loading asset ${index}: ${assetUrl}`);
+    });
   }
 
   create() {
-    // 在这里初始化您的游戏元素
-    console.log('Game scene created');
-  }
+    // Create a container to display uploaded images
+    const centerX = this.cameras.main.centerX;
+    const centerY = this.cameras.main.centerY;
 
-  update() {
-    // 在这里更新您的游戏逻辑
+    // Display loaded images in a grid
+    this.gameAssets.forEach((_, index) => {
+      const sprite = this.add.sprite(0, 0, `asset-${index}`);
+      sprite.setInteractive();
+      
+      // Add drag functionality
+      this.input.setDraggable(sprite);
+      sprite.on('drag', function (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) {
+        this.x = dragX;
+        this.y = dragY;
+      });
+    });
+
+    // Add drag events
+    this.input.on('dragstart', function (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite) {
+      gameObject.setTint(0xff0000);
+    });
+
+    this.input.on('dragend', function (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite) {
+      gameObject.clearTint();
+    });
   }
 }
