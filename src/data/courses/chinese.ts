@@ -32,6 +32,7 @@ export const oralPracticeCourse: Course = {
   price: "Free",
   priceZh: "免费",
   isPremium: false,
+  requiresAccessCode: false, // Changed to false to make it freely accessible
   image: "https://images.unsplash.com/photo-1555431189-0fabf2667795",
   type: "tutorial",
   videoLessons: [
