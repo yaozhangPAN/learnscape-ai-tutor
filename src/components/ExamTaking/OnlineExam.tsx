@@ -24,7 +24,7 @@ const OnlineExam = () => {
   const [examCompleted, setExamCompleted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(6000); // 1 hour 40 minutes by default
   const [score, setScore] = useState<number | null>(null);
-  const [questionLength, setQuestionLength] = useState("");
+  let [questionLength, setQuestionLength] = useState("");
 
   useEffect(() => {
     const fetchExam = async () => {
