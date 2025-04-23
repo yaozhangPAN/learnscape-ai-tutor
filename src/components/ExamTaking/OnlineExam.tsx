@@ -236,18 +236,6 @@ const OnlineExam = () => {
     ));
   };
 
-  const nextQuestion = () => {
-    if (currentExam && currentQuestionIndex < currentExam.questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    }
-  };
-
-  const prevQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[500px]">
@@ -407,11 +395,8 @@ const OnlineExam = () => {
     );
   }
 
-  const currentQuestion = currentExam.questions[currentQuestionIndex];
-  const currentAnswer = userAnswers[currentQuestionIndex];
-
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-6xl mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{currentExam.title}</h1>
         <ExamTimer 
@@ -420,57 +405,53 @@ const OnlineExam = () => {
         />
       </div>
       
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="w-full md:w-3/4">
-          <Card className="mb-6">
-            <CardHeader className="border-b">
-              <CardTitle className="flex justify-between">
-                <span>问题 {currentQuestionIndex + 1} / {currentExam.questions.length}</span>
-                <span className="text-gray-500">{currentQuestion.marks} {currentQuestion.marks === 1 ? '分' : '分'}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <ExamQuestion 
-                question={currentQuestion}
-                userAnswer={currentAnswer.answer}
-                onAnswerChange={saveAnswer}
-              />
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button 
-                variant="outline"
-                onClick={prevQuestion}
-                disabled={currentQuestionIndex === 0}
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                上一题
-              </Button>
-              <Button 
-                onClick={nextQuestion}
-                disabled={currentQuestionIndex === currentExam.questions.length - 1}
-              >
-                下一题
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </CardFooter>
-          </Card>
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="w-full lg:w-3/4">
+          <div className="space-y-6">
+            {currentExam.questions.map((question, index) => (
+              <Card key={question.id} className="mb-6">
+                <CardHeader className="border-b">
+                  <CardTitle className="flex justify-between">
+                    <span>问题 {index + 1} / {currentExam.questions.length}</span>
+                    <span className="text-gray-500">{question.marks} {question.marks === 1 ? '分' : '分'}</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <ExamQuestion 
+                    question={question}
+                    userAnswer={userAnswers[index].answer}
+                    onAnswerChange={(value) => {
+                      setUserAnswers(prev => prev.map((a, i) => 
+                        i === index 
+                          ? { ...a, answer: value, isAnswered: true } 
+                          : a
+                      ));
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
         
-        <div className="w-full md:w-1/4">
-          <Card>
+        <div className="w-full lg:w-1/4">
+          <Card className="sticky top-4">
             <CardHeader className="border-b">
-              <CardTitle>题目导航</CardTitle>
+              <CardTitle>作答进度</CardTitle>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="grid grid-cols-5 gap-2">
                 {userAnswers.map((answer, index) => (
                   <Button
                     key={index}
-                    variant={currentQuestionIndex === index ? "default" : (answer.isAnswered ? "outline" : "ghost")}
+                    variant={answer.isAnswered ? "outline" : "ghost"}
                     className={`h-10 w-10 p-0 ${
                       answer.isAnswered ? "border-green-500 border-2" : "border"
-                    } ${currentQuestionIndex === index ? "bg-learnscape-blue text-white" : ""}`}
-                    onClick={() => setCurrentQuestionIndex(index)}
+                    }`}
+                    onClick={() => {
+                      const element = document.getElementById(`question-${index}`);
+                      element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
                   >
                     {index + 1}
                   </Button>
@@ -478,10 +459,6 @@ const OnlineExam = () => {
               </div>
               
               <div className="mt-6">
-                <div className="flex items-center mb-2">
-                  <div className="w-4 h-4 bg-learnscape-blue rounded-full mr-2"></div>
-                  <span className="text-sm">当前题目</span>
-                </div>
                 <div className="flex items-center">
                   <div className="w-4 h-4 border-2 border-green-500 rounded-full mr-2"></div>
                   <span className="text-sm">已回答</span>
