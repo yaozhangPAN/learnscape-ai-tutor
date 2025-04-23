@@ -18,7 +18,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
   };
 
   const renderMcqOptions = () => {
-    if (question.type !== "MCQ" || !question.options || question.options.length === 0) return null;
+    if (question.type !== "MCQ") return null;
 
     return (
       <RadioGroup 
@@ -41,8 +41,8 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
     );
   };
 
-  const renderTextAnswer = () => {
-    if (question.type !== "MCQ" || (question.options && question.options.length > 0)) return null;
+  const renderShortAnswer = () => {
+    if (question.type !== "ShortAnswer") return null;
 
     return (
       <div className="mt-4">
@@ -75,7 +75,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
       </div>
       
       {renderMcqOptions()}
-      {renderTextAnswer()}
+      {renderShortAnswer()}
     </div>
   );
 };
