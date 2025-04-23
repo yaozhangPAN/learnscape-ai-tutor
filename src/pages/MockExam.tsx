@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -9,8 +8,10 @@ import ExamCards from "@/components/MockExam/ExamCards";
 import ExamPagination from "@/components/MockExam/ExamPagination";
 import EmptyState from "@/components/MockExam/EmptyState";
 import { mockExamPapers, schools, years, paperTypes } from "@/data/mockExamPapers";
+import { useI18n } from "@/contexts/I18nContext";
 
 const MockExam = () => {
+  const { t } = useI18n();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -91,11 +92,8 @@ const MockExam = () => {
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">Past Year Exam Papers</h1>
-          <p className="text-gray-600">
-            Access a comprehensive collection of past year exam papers from top schools in Singapore.
-            Practice with real exam questions to prepare for your primary school examinations.
-          </p>
+          <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">{t.MOCK_EXAM.TITLE}</h1>
+          <p className="text-gray-600">{t.MOCK_EXAM.SUBTITLE}</p>
         </div>
 
         <ExamFilters 
@@ -121,8 +119,10 @@ const MockExam = () => {
           <div className="p-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold text-learnscape-darkBlue">
-                Exam Papers
-                <span className="ml-2 text-sm font-normal text-gray-500">({filteredPapers.length} results)</span>
+                {t.MOCK_EXAM.EXAMS}
+                <span className="ml-2 text-sm font-normal text-gray-500">
+                  ({filteredPapers.length} {t.MOCK_EXAM.RESULTS})
+                </span>
               </h2>
             </div>
           </div>

@@ -159,6 +159,54 @@ const zh = {
     TOAST_STARTED_DESC: "你开启了新的推荐活动！",
     TOAST_COMPLETED_TITLE: "活动已完成！",
     TOAST_COMPLETED_DESC: "干得不错！你的进度已保存。",
+  },
+  QUESTION_BANK: {
+    TITLE: "题库",
+    SUBTITLE: "我们全面的题库涵盖了小学一年级至六年级的英语、数学、华文和科学课程。练习为不同考试阶段设计的题目：CA1、SA1、CA2和SA2。",
+    SEARCH_PLACEHOLDER: "搜索题目...",
+    SELECT_SUBJECT: "选择科目",
+    SELECT_GRADE: "选择年级",
+    SELECT_TERM: "选择学期",
+    CLEAR_FILTERS: "清除筛选",
+    QUESTION_LIST: "题目列表",
+    LOADING: "加载中...",
+    NO_QUESTIONS: "未找到符合条件的题目。请调整筛选条件。",
+    SHOWING_RESULTS: "显示 {start} 至 {end}，共 {total} 题",
+    QUESTION_TITLE: "题目标题",
+    SUBJECT: "科目",
+    LEVEL: "年级",
+    TERM: "学期",
+    DATE: "日期",
+    ACTION: "操作",
+    VIEW: "查看"
+  },
+  VIDEO_TUTORIALS: {
+    TITLE: "视频课程",
+    SUBTITLE: "观看由明星教师精心制作的视频课程，掌握关键知识点。",
+    WATCH_NOW: "立即观看",
+    PREMIUM_BADGE: "精品",
+    STUDENTS: "学生",
+    DURATION: "时长"
+  },
+  ONLINE_CLASSROOM: {
+    TITLE: "在线课堂",
+    SUBTITLE: "参加实时在线课程，与老师和同学互动学习。",
+    UPCOMING_SESSIONS: "即将开始的课程",
+    JOIN_SESSION: "加入课程",
+    NO_SESSIONS: "暂无课程安排"
+  },
+  MOCK_EXAM: {
+    TITLE: "模拟考试",
+    SUBTITLE: "通过新加坡顶尖学校的往年试卷进行练习。为小学会考做好准备。",
+    EXAMS: "试卷",
+    RESULTS: "结果",
+    SEARCH_PLACEHOLDER: "搜索试卷...",
+    TAKE_EXAM: "开始考试",
+    NO_EXAMS: "未找到符合条件的试卷。",
+    RESET_FILTERS: "重置筛选",
+    SCHOOL: "学校",
+    YEAR: "年份",
+    TYPE: "类型"
   }
 };
 

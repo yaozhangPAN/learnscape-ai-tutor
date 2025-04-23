@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import QuestionViewer from "@/components/QuestionBank/QuestionViewer";
+import { useI18n } from "@/contexts/I18nContext";
 
 const QUESTIONS_PER_PAGE = 10;
 const EXCLUDED_TITLES = ["巧练题（一）", "巧练题（二）", "巧练题（三）", "看图作文题"];
@@ -48,6 +48,7 @@ const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华�
 const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
 const QuestionBank = () => {
+  const { t } = useI18n();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGrade, setSelectedGrade] = useState("All Grades");
@@ -190,24 +191,21 @@ const QuestionBank = () => {
       
       <div className="bg-learnscape-darkBlue text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">Question Bank</h1>
-          <p className="text-lg max-w-3xl">
-            Our comprehensive question bank covers English, Math, Chinese, and Science for Primary 1 to Primary 6 students.
-            Practice with questions designed for different assessment periods: CA1, SA1, CA2, and SA2.
-          </p>
+          <h1 className="text-4xl font-bold mb-4">{t.QUESTION_BANK.TITLE}</h1>
+          <p className="text-lg max-w-3xl">{t.QUESTION_BANK.SUBTITLE}</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">Question List</h2>
+          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{t.QUESTION_BANK.QUESTION_LIST}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="relative flex items-center col-span-1 md:col-span-4">
               <Search className="absolute left-3 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Search questions..."
+                placeholder={t.QUESTION_BANK.SEARCH_PLACEHOLDER}
                 className="pl-10 pr-4"
                 value={searchTerm}
                 onChange={(e) => {
@@ -226,7 +224,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Subject" />
+                  <SelectValue placeholder={t.QUESTION_BANK.SELECT_SUBJECT} />
                 </SelectTrigger>
                 <SelectContent>
                   {subjects.map((subject) => (
@@ -247,7 +245,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Grade" />
+                  <SelectValue placeholder={t.QUESTION_BANK.SELECT_GRADE} />
                 </SelectTrigger>
                 <SelectContent>
                   {grades.map((grade) => (
@@ -268,7 +266,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Term" />
+                  <SelectValue placeholder={t.QUESTION_BANK.SELECT_TERM} />
                 </SelectTrigger>
                 <SelectContent>
                   {terms.map((term) => (
@@ -292,7 +290,7 @@ const QuestionBank = () => {
                   handleFilterChange();
                 }}
               >
-                Clear Filters
+                {t.QUESTION_BANK.CLEAR_FILTERS}
               </Button>
             </div>
           </div>
@@ -308,12 +306,12 @@ const QuestionBank = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Question Title</TableHead>
-                        <TableHead>Subject</TableHead>
-                        <TableHead>Level</TableHead>
-                        <TableHead>Term</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead>{t.QUESTION_BANK.QUESTION_TITLE}</TableHead>
+                        <TableHead>{t.QUESTION_BANK.SUBJECT}</TableHead>
+                        <TableHead>{t.QUESTION_BANK.LEVEL}</TableHead>
+                        <TableHead>{t.QUESTION_BANK.TERM}</TableHead>
+                        <TableHead>{t.QUESTION_BANK.DATE}</TableHead>
+                        <TableHead className="text-right">{t.QUESTION_BANK.ACTION}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -332,7 +330,7 @@ const QuestionBank = () => {
                                 className="bg-learnscape-blue text-white"
                                 onClick={() => handleViewQuestion(question)}
                               >
-                                View
+                                {t.QUESTION_BANK.VIEW}
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -340,7 +338,7 @@ const QuestionBank = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                            No questions match your search criteria. Try adjusting your filters.
+                            {t.QUESTION_BANK.NO_QUESTIONS}
                           </TableCell>
                         </TableRow>
                       )}
@@ -350,7 +348,9 @@ const QuestionBank = () => {
               </Card>
 
               <div className="mt-4 text-sm text-gray-500">
-                Showing {currentQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0} to {Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)} of {filteredQuestions.length} questions
+                {t.QUESTION_BANK.SHOWING_RESULTS.replace('{start}', String((currentPage - 1) * QUESTIONS_PER_PAGE + 1))
+                                                .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
+                                                .replace('{total}', String(filteredQuestions.length))}
               </div>
 
               {totalPages > 1 && (

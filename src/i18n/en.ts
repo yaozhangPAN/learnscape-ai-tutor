@@ -159,6 +159,54 @@ const en = {
     TOAST_STARTED_DESC: "You've started a new recommended activity!",
     TOAST_COMPLETED_TITLE: "Activity Completed!",
     TOAST_COMPLETED_DESC: "Great job! Your progress has been saved.",
+  },
+  QUESTION_BANK: {
+    TITLE: "Question Bank",
+    SUBTITLE: "Our comprehensive question bank covers English, Math, Chinese, and Science for Primary 1 to Primary 6 students. Practice with questions designed for different assessment periods: CA1, SA1, CA2, and SA2.",
+    SEARCH_PLACEHOLDER: "Search questions...",
+    SELECT_SUBJECT: "Select Subject",
+    SELECT_GRADE: "Select Grade",
+    SELECT_TERM: "Select Term",
+    CLEAR_FILTERS: "Clear Filters",
+    QUESTION_LIST: "Question List",
+    LOADING: "Loading...",
+    NO_QUESTIONS: "No questions match your search criteria. Try adjusting your filters.",
+    SHOWING_RESULTS: "Showing {start} to {end} of {total} questions",
+    QUESTION_TITLE: "Question Title",
+    SUBJECT: "Subject",
+    LEVEL: "Level",
+    TERM: "Term",
+    DATE: "Date",
+    ACTION: "Action",
+    VIEW: "View"
+  },
+  VIDEO_TUTORIALS: {
+    TITLE: "Video Tutorials",
+    SUBTITLE: "Watch video lessons created by star teachers to master key concepts.",
+    WATCH_NOW: "Watch Now",
+    PREMIUM_BADGE: "Premium",
+    STUDENTS: "students",
+    DURATION: "duration"
+  },
+  ONLINE_CLASSROOM: {
+    TITLE: "Online Classroom",
+    SUBTITLE: "Join live online classes to interact with teachers and peers.",
+    UPCOMING_SESSIONS: "Upcoming Sessions",
+    JOIN_SESSION: "Join Session",
+    NO_SESSIONS: "No sessions scheduled"
+  },
+  MOCK_EXAM: {
+    TITLE: "Past Year Exam Papers",
+    SUBTITLE: "Access a comprehensive collection of past year exam papers from top schools in Singapore. Practice with real exam questions to prepare for your primary school examinations.",
+    EXAMS: "Exam Papers",
+    RESULTS: "results",
+    SEARCH_PLACEHOLDER: "Search papers...",
+    TAKE_EXAM: "Take Exam",
+    NO_EXAMS: "No exam papers match your search criteria.",
+    RESET_FILTERS: "Reset Filters",
+    SCHOOL: "School",
+    YEAR: "Year",
+    TYPE: "Type"
   }
 };
 
