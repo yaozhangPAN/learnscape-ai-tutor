@@ -22,6 +22,31 @@ const progressColors = {
   low: "bg-[#e47069]"
 };
 
+// Define types for activity details
+interface ActivityDetails {
+  question_id?: string;
+  subject?: string;
+  score?: string | number;
+  correct?: number;
+  total?: number;
+  title?: string;
+}
+
+interface UserActivity {
+  id: string;
+  activity_type: string;
+  activity_details: ActivityDetails | null;
+  created_at: string;
+  user_id: string;
+}
+
+interface RecentActivity {
+  id: string;
+  activity: string;
+  date: string;
+  score: string;
+}
+
 const Dashboard = () => {
   const { t, lang } = useI18n();
   const { session } = useAuth();
@@ -31,7 +56,7 @@ const Dashboard = () => {
   const [questionCount, setQuestionCount] = useState<number>(0);
   const [wrongQuestionCount, setWrongQuestionCount] = useState<number>(0);
   const [favoriteCount, setFavoriteCount] = useState<number>(0);
-  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
   const [subjects, setSubjects] = useState([
     { name: "Mathematics", progress: 0 },
     { name: "English", progress: 0 },
@@ -79,7 +104,7 @@ const Dashboard = () => {
         
         // Count unique questions answered incorrectly
         const uniqueWrongQuestions = new Set();
-        userActivities?.forEach(activity => {
+        userActivities?.forEach((activity: UserActivity) => {
           if (activity.activity_details?.question_id) {
             uniqueWrongQuestions.add(activity.activity_details.question_id);
           }
@@ -98,7 +123,7 @@ const Dashboard = () => {
         
         // Count unique favorite questions
         const uniqueFavorites = new Set();
-        favoriteData?.forEach(activity => {
+        favoriteData?.forEach((activity: UserActivity) => {
           if (activity.activity_details?.question_id) {
             uniqueFavorites.add(activity.activity_details.question_id);
           }
@@ -116,7 +141,7 @@ const Dashboard = () => {
         if (recentError) throw recentError;
         
         if (recentData && recentData.length > 0) {
-          const formattedActivities = recentData.map(activity => {
+          const formattedActivities = recentData.map((activity: UserActivity) => {
             const createdAt = new Date(activity.created_at);
             const now = new Date();
             const diffHours = Math.round((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60));
@@ -138,11 +163,11 @@ const Dashboard = () => {
             switch(activity.activity_type) {
               case 'quiz_complete':
                 activityText = `Completed ${activity.activity_details?.subject || ''} quiz`;
-                score = activity.activity_details?.score || "Complete";
+                score = activity.activity_details?.score?.toString() || "Complete";
                 break;
               case 'practice_complete':
                 activityText = `Completed ${activity.activity_details?.subject || ''} practice`;
-                score = activity.activity_details?.score 
+                score = activity.activity_details?.correct !== undefined && activity.activity_details?.total !== undefined
                   ? `${activity.activity_details.correct}/${activity.activity_details.total}` 
                   : "Complete";
                 break;
@@ -169,7 +194,7 @@ const Dashboard = () => {
           setRecentActivities(formattedActivities);
         } else {
           setRecentActivities([
-            { id: 1, activity: "No recent activities", date: "", score: "" }
+            { id: "1", activity: "No recent activities", date: "", score: "" }
           ]);
         }
         
@@ -191,10 +216,10 @@ const Dashboard = () => {
         if (subjectError) throw subjectError;
         
         // Count activities by subject
-        const subjectCounts = {};
-        subjectActivities?.forEach(activity => {
+        const subjectCounts: Record<string, number> = {};
+        subjectActivities?.forEach((activity: UserActivity) => {
           const subject = activity.activity_details?.subject;
-          if (subject && subjectProgress.hasOwnProperty(subject)) {
+          if (subject && subject in subjectProgress) {
             subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
           }
         });
@@ -204,7 +229,7 @@ const Dashboard = () => {
         Object.keys(subjectProgress).forEach(subject => {
           const count = subjectCounts[subject] || 0;
           const percentage = Math.min(100, Math.round((count / targetPerSubject) * 100));
-          subjectProgress[subject] = percentage;
+          subjectProgress[subject as keyof typeof subjectProgress] = percentage;
         });
         
         setSubjects([
