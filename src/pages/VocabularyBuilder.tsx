@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Volume2, GamepadIcon } from "lucide-react";
@@ -11,8 +11,9 @@ import Phaser from "phaser";
 
 const VocabularyBuilder = () => {
   const [currentCard, setCurrentCard] = useState(0);
-  const [gameURL, setGameURL] = useState<string | null>(null);
   const [showGame, setShowGame] = useState(false);
+  const gameRef = useRef<HTMLDivElement>(null);
+  const gameInstanceRef = useRef<Phaser.Game | null>(null);
 
   const cards = [
     { word: "Ephemeral", definition: "Lasting for a very short time", example: "The ephemeral beauty of a sunset" },
@@ -21,18 +22,75 @@ const VocabularyBuilder = () => {
   ];
 
   useEffect(() => {
-    const fetchGameFile = async () => {
-      const { data } = await supabase.storage
-        .from('vocabulary-game')
-        .getPublicUrl('index.html');
-
-      if (data) {
-        setGameURL(data.publicUrl);
+    // Clean up game instance when component unmounts
+    return () => {
+      if (gameInstanceRef.current) {
+        gameInstanceRef.current.destroy(true);
+        gameInstanceRef.current = null;
       }
     };
-
-    fetchGameFile();
   }, []);
+
+  useEffect(() => {
+    // Initialize the game when showGame changes to true
+    if (showGame && gameRef.current && !gameInstanceRef.current) {
+      // Basic game configuration
+      const config: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        parent: gameRef.current,
+        backgroundColor: '#f8f9fa',
+        scene: {
+          preload: function(this: Phaser.Scene) {
+            this.load.setBaseURL('/');
+            // Load game assets
+            this.load.image('background', 'https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/vocabulary-game/background.png');
+            this.load.image('card', 'https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/vocabulary-game/card.png');
+          },
+          create: function(this: Phaser.Scene) {
+            // Add text to the center of the screen
+            const centerX = this.cameras.main.width / 2;
+            const centerY = this.cameras.main.height / 2;
+            
+            this.add.text(centerX, centerY - 100, 'Vocabulary Game', { 
+              fontSize: '48px', 
+              color: '#333',
+              fontFamily: 'Arial'
+            }).setOrigin(0.5);
+            
+            this.add.text(centerX, centerY, 'Match the correct words with their definitions', { 
+              fontSize: '24px', 
+              color: '#555',
+              fontFamily: 'Arial'
+            }).setOrigin(0.5);
+            
+            // Add a start button
+            const startButton = this.add.text(centerX, centerY + 100, 'Start Game', {
+              fontSize: '32px',
+              color: '#fff',
+              backgroundColor: '#4CAF50',
+              padding: { x: 20, y: 10 },
+              fontFamily: 'Arial'
+            }).setOrigin(0.5);
+            
+            startButton.setInteractive({ useHandCursor: true })
+              .on('pointerdown', () => {
+                console.log('Game started!');
+                this.scene.start('gameScene');
+              });
+          }
+        }
+      };
+
+      // Create the game instance
+      gameInstanceRef.current = new Phaser.Game(config);
+    } else if (!showGame && gameInstanceRef.current) {
+      // Destroy the game instance when hiding
+      gameInstanceRef.current.destroy(true);
+      gameInstanceRef.current = null;
+    }
+  }, [showGame]);
 
   const nextCard = () => {
     setCurrentCard((prev) => (prev + 1) % cards.length);
@@ -40,6 +98,10 @@ const VocabularyBuilder = () => {
 
   const previousCard = () => {
     setCurrentCard((prev) => (prev - 1 + cards.length) % cards.length);
+  };
+
+  const toggleGame = () => {
+    setShowGame(prev => !prev);
   };
 
   return (
@@ -82,7 +144,7 @@ const VocabularyBuilder = () => {
             <div className="flex justify-center">
               <Button 
                 variant="outline"
-                onClick={() => setShowGame(prev => !prev)}
+                onClick={toggleGame}
                 className="mb-4 flex items-center gap-2"
               >
                 <GamepadIcon className="h-4 w-4" />
@@ -90,14 +152,14 @@ const VocabularyBuilder = () => {
               </Button>
             </div>
 
-            {showGame && gameURL && (
+            {showGame && (
               <Card className="w-full">
                 <CardContent className="p-4">
-                  <iframe 
-                    src={gameURL} 
-                    className="w-full h-[600px] border-0"
-                    title="Vocabulary Game"
-                  />
+                  <div 
+                    ref={gameRef} 
+                    className="w-full h-[600px] border-0 bg-gray-100 rounded-lg"
+                    id="phaser-game"
+                  ></div>
                 </CardContent>
               </Card>
             )}
