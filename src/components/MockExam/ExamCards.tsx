@@ -11,6 +11,11 @@ type ExamCardsProps = {
 };
 
 const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
+  const handleDownload = (paperId: string) => {
+    const downloadUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers/${paperId}.pdf`;
+    window.open(downloadUrl, '_blank');
+  };
+
   return (
     <div className="md:hidden">
       {papers.map((paper) => (
@@ -36,7 +41,11 @@ const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
             </div>
           </CardContent>
           <CardFooter className="flex gap-2">
-            <Button variant="outline" className="flex-1">
+            <Button 
+              variant="outline" 
+              className="flex-1" 
+              onClick={() => handleDownload(paper.id)}
+            >
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>
