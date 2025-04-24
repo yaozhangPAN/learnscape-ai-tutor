@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -5,6 +6,7 @@ import { Calendar } from "lucide-react";
 import { useI18n } from "@/contexts/I18nContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 import StreakHeader from "./streak/StreakHeader";
 import StreakStats from "./streak/StreakStats";
 import StreakMetrics from "./streak/StreakMetrics";
