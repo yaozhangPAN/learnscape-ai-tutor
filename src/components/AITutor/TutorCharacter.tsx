@@ -13,7 +13,7 @@ const TutorCharacter = () => {
       </div>
       <div>
         <p className="font-medium text-gray-800">小火球 / Fireball</p>
-        <p className="text-gray-600 text-sm">你好！我是你的小熊猫老师，今天想练习科学问答题吗？</p>
+        <p className="text-gray-600 text-sm">你好！我是Fireball，今天想练习那个科目呢？</p>
       </div>
     </div>
   );
