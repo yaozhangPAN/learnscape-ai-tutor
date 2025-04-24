@@ -32,12 +32,6 @@ const ZoomSessionCard = ({ course, onViewDetails }: ZoomSessionCardProps) => {
   // Get the next upcoming session
   const nextSession = course.upcomingSessions[0];
   
-  // Format the date
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { weekday: 'short', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-  };
-
   return (
     <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
       <div className="h-40 overflow-hidden relative">
@@ -56,11 +50,11 @@ const ZoomSessionCard = ({ course, onViewDetails }: ZoomSessionCardProps) => {
         <div className="bg-gray-50 p-3 rounded-md mb-3">
           <div className="flex items-center text-sm font-medium mb-1">
             <Calendar className="h-4 w-4 mr-2 text-learnscape-blue" />
-            <span>Next Session: {formatDate(nextSession.date)}</span>
+            <span>Next Session: 6月 {nextSession.topic.includes('待定') ? '待定' : ''}</span>
           </div>
           <div className="flex items-center text-sm">
             <Clock className="h-4 w-4 mr-2 text-gray-500" />
-            <span>{nextSession.startTime} - {nextSession.endTime}</span>
+            <span>{nextSession.startTime}</span>
           </div>
           <Badge variant="outline" className="mt-2">
             {nextSession.topic}
