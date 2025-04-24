@@ -1,63 +1,21 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Volume2, GamepadIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
-import Phaser from "phaser";
-import GameScene from "@/components/VocabularyGame/scenes/GameScene";
+import PhaserGame from "@/components/VocabularyGame/PhaserGame";
 
 const VocabularyBuilder = () => {
   const [currentCard, setCurrentCard] = useState(0);
   const [showGame, setShowGame] = useState(false);
-  const gameRef = useRef<HTMLDivElement>(null);
-  const gameInstanceRef = useRef<Phaser.Game | null>(null);
 
   const cards = [
     { word: "Ephemeral", definition: "Lasting for a very short time", example: "The ephemeral beauty of a sunset" },
     { word: "Ubiquitous", definition: "Present everywhere", example: "Smartphones have become ubiquitous in modern life" },
     { word: "Serendipity", definition: "The occurrence of positive events by chance", example: "Finding a perfect job by serendipity" }
   ];
-
-  useEffect(() => {
-    return () => {
-      if (gameInstanceRef.current) {
-        gameInstanceRef.current.destroy(true);
-        gameInstanceRef.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (showGame && gameRef.current && !gameInstanceRef.current) {
-      const config: Phaser.Types.Core.GameConfig = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        parent: gameRef.current,
-        backgroundColor: '#f8f9fa',
-        scene: GameScene
-      };
-
-      gameInstanceRef.current = new Phaser.Game(config);
-    } else if (!showGame && gameInstanceRef.current) {
-      gameInstanceRef.current.destroy(true);
-      gameInstanceRef.current = null;
-    }
-  }, [showGame]);
-
-  const nextCard = () => {
-    setCurrentCard((prev) => (prev + 1) % cards.length);
-  };
-
-  const previousCard = () => {
-    setCurrentCard((prev) => (prev - 1 + cards.length) % cards.length);
-  };
-
-  const toggleGame = () => {
-    setShowGame(prev => !prev);
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -110,11 +68,7 @@ const VocabularyBuilder = () => {
             {showGame && (
               <Card className="w-full">
                 <CardContent className="p-4">
-                  <div 
-                    ref={gameRef} 
-                    className="w-full h-[600px] border-0 bg-gray-100 rounded-lg"
-                    id="phaser-game"
-                  ></div>
+                  <PhaserGame />
                 </CardContent>
               </Card>
             )}
