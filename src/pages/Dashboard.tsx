@@ -28,6 +28,10 @@ interface ActivityDetails {
   is_favorite?: boolean;
 }
 
+interface ActivityRecord {
+  details: Record<string, unknown>;
+}
+
 const Dashboard = () => {
   const { t, lang } = useI18n();
   const { session } = useAuth();
@@ -72,10 +76,10 @@ const Dashboard = () => {
         if (practiceError) throw practiceError;
         
         const uniqueQuestions = new Set<string>();
-        practiceActivities?.forEach((activity) => {
-          const details = activity.details as unknown as ActivityDetails | null;
-          if (details?.question_id) {
-            uniqueQuestions.add(details.question_id);
+        (practiceActivities || []).forEach((activity: ActivityRecord) => {
+          const questionId = activity.details?.question_id as string | undefined;
+          if (questionId) {
+            uniqueQuestions.add(questionId);
           }
         });
         setQuestionCount(uniqueQuestions.size);
@@ -90,10 +94,10 @@ const Dashboard = () => {
         if (wrongError) throw wrongError;
         
         const uniqueWrongQuestions = new Set<string>();
-        wrongAnswers?.forEach((activity) => {
-          const details = activity.details as unknown as ActivityDetails | null;
-          if (details?.question_id) {
-            uniqueWrongQuestions.add(details.question_id);
+        (wrongAnswers || []).forEach((activity: ActivityRecord) => {
+          const questionId = activity.details?.question_id as string | undefined;
+          if (questionId) {
+            uniqueWrongQuestions.add(questionId);
           }
         });
         setWrongQuestionCount(uniqueWrongQuestions.size);
@@ -108,10 +112,10 @@ const Dashboard = () => {
         if (favoriteError) throw favoriteError;
         
         const uniqueFavorites = new Set<string>();
-        favoriteData?.forEach((activity) => {
-          const details = activity.details as unknown as ActivityDetails | null;
-          if (details?.question_id) {
-            uniqueFavorites.add(details.question_id);
+        (favoriteData || []).forEach((activity: ActivityRecord) => {
+          const questionId = activity.details?.question_id as string | undefined;
+          if (questionId) {
+            uniqueFavorites.add(questionId);
           }
         });
         setFavoriteCount(uniqueFavorites.size);
