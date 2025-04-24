@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +17,18 @@ const VocabularyBuilder = () => {
     { word: "Ubiquitous", definition: "Present everywhere", example: "Smartphones have become ubiquitous in modern life" },
     { word: "Serendipity", definition: "The occurrence of positive events by chance", example: "Finding a perfect job by serendipity" }
   ];
+
+  const nextCard = () => {
+    setCurrentCard((prev) => (prev + 1) % cards.length);
+  };
+
+  const previousCard = () => {
+    setCurrentCard((prev) => (prev - 1 + cards.length) % cards.length);
+  };
+
+  const toggleGame = () => {
+    setShowGame(prev => !prev);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
