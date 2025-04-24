@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,8 +5,8 @@ import { ArrowLeft, ArrowRight, Volume2, GamepadIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import Phaser from "phaser";
+import GameScene from "@/components/VocabularyGame/scenes/GameScene";
 
 const VocabularyBuilder = () => {
   const [currentCard, setCurrentCard] = useState(0);
@@ -22,7 +21,6 @@ const VocabularyBuilder = () => {
   ];
 
   useEffect(() => {
-    // Clean up game instance when component unmounts
     return () => {
       if (gameInstanceRef.current) {
         gameInstanceRef.current.destroy(true);
@@ -32,61 +30,18 @@ const VocabularyBuilder = () => {
   }, []);
 
   useEffect(() => {
-    // Initialize the game when showGame changes to true
     if (showGame && gameRef.current && !gameInstanceRef.current) {
-      // Basic game configuration
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
         width: 800,
         height: 600,
         parent: gameRef.current,
         backgroundColor: '#f8f9fa',
-        scene: {
-          preload: function(this: Phaser.Scene) {
-            this.load.setBaseURL('/');
-            // Load game assets
-            this.load.image('background', 'https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/vocabulary-game/background.png');
-            this.load.image('card', 'https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/vocabulary-game/card.png');
-          },
-          create: function(this: Phaser.Scene) {
-            // Add text to the center of the screen
-            const centerX = this.cameras.main.width / 2;
-            const centerY = this.cameras.main.height / 2;
-            
-            this.add.text(centerX, centerY - 100, 'Vocabulary Game', { 
-              fontSize: '48px', 
-              color: '#333',
-              fontFamily: 'Arial'
-            }).setOrigin(0.5);
-            
-            this.add.text(centerX, centerY, 'Match the correct words with their definitions', { 
-              fontSize: '24px', 
-              color: '#555',
-              fontFamily: 'Arial'
-            }).setOrigin(0.5);
-            
-            // Add a start button
-            const startButton = this.add.text(centerX, centerY + 100, 'Start Game', {
-              fontSize: '32px',
-              color: '#fff',
-              backgroundColor: '#4CAF50',
-              padding: { x: 20, y: 10 },
-              fontFamily: 'Arial'
-            }).setOrigin(0.5);
-            
-            startButton.setInteractive({ useHandCursor: true })
-              .on('pointerdown', () => {
-                console.log('Game started!');
-                this.scene.start('gameScene');
-              });
-          }
-        }
+        scene: GameScene
       };
 
-      // Create the game instance
       gameInstanceRef.current = new Phaser.Game(config);
     } else if (!showGame && gameInstanceRef.current) {
-      // Destroy the game instance when hiding
       gameInstanceRef.current.destroy(true);
       gameInstanceRef.current = null;
     }
