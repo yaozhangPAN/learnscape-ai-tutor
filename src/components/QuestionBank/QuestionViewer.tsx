@@ -14,6 +14,15 @@ interface QuestionViewerProps {
   question: Question | null;
 }
 
+// Add the answer data array that was missing
+export const answers = [
+  { id: "1", value: "A" },
+  { id: "2", value: "B" },
+  { id: "3", value: "C" },
+  { id: "4", value: "D" },
+  { id: "5", value: "E" }
+];
+
 const QuestionViewer: React.FC<QuestionViewerProps> = ({
   isOpen,
   onOpenChange,
