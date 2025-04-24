@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 const TutorCharacter = () => {
   return (
     <div className="flex items-center gap-3">
@@ -11,7 +13,7 @@ const TutorCharacter = () => {
       </div>
       <div>
         <p className="font-medium text-gray-800">小熊猫老师</p>
-        <p className="text-gray-600 text-sm">你好！我是你的小熊猫老师。有什么我可以帮你的吗？</p>
+        <p className="text-gray-600 text-sm">你好！我是你的小熊猫老师，今天想练习科学问答题吗？</p>
       </div>
     </div>
   );
