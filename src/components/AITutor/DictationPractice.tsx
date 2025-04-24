@@ -6,12 +6,19 @@ import { DictationFilters } from './DictationFilters';
 import { useCharacterList } from '@/hooks/useCharacterList';
 
 const DictationPractice = () => {
+  // Initialize with empty strings to not filter initially
   const [grade, setGrade] = useState('');
   const [lessonNumber, setLessonNumber] = useState('');
-  const [canRead, setCanRead] = useState(true);
-  const [canWrite, setCanWrite] = useState(true);
+  // Initialize with null instead of boolean to not filter initially
+  const [canRead, setCanRead] = useState<boolean | null>(null);
+  const [canWrite, setCanWrite] = useState<boolean | null>(null);
 
-  const { characters, loading } = useCharacterList(grade, lessonNumber, canRead, canWrite);
+  const { characters, loading } = useCharacterList(
+    grade,
+    lessonNumber,
+    canRead as boolean,
+    canWrite as boolean
+  );
 
   return (
     <div className="min-h-screen w-full bg-gray-50 p-6">
@@ -29,8 +36,8 @@ const DictationPractice = () => {
             <DictationFilters 
               grade={grade}
               lessonNumber={lessonNumber}
-              canRead={canRead}
-              canWrite={canWrite}
+              canRead={canRead === null ? true : canRead}
+              canWrite={canWrite === null ? true : canWrite}
               onGradeChange={setGrade}
               onLessonChange={setLessonNumber}
               onReadChange={(value) => setCanRead(value === 'true')}

@@ -24,20 +24,24 @@ export const useCharacterList = (
   useEffect(() => {
     const fetchCharacters = async () => {
       setLoading(true);
-      let query = supabase
-        .from('chinese_characters')
-        .select('*');
+      console.log('Fetching with filters:', { grade, lessonNumber, canRead, canWrite });
+      
+      let query = supabase.from('chinese_characters').select('*');
 
       if (grade) {
         query = query.eq('grade', grade);
       }
+      
       if (lessonNumber) {
         query = query.eq('lesson_number', lessonNumber);
       }
-      if (canRead !== null) {
+      
+      // Only apply boolean filters when they have true/false values
+      if (canRead === true || canRead === false) {
         query = query.eq('can_read', canRead);
       }
-      if (canWrite !== null) {
+      
+      if (canWrite === true || canWrite === false) {
         query = query.eq('can_write', canWrite);
       }
 
@@ -47,6 +51,7 @@ export const useCharacterList = (
         console.error('Error fetching characters:', error);
         setCharacters([]);
       } else {
+        console.log('Fetched characters:', data);
         setCharacters(data || []);
       }
       setLoading(false);
