@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +8,14 @@ import { TutorSelectors } from "./TutorSelectors";
 import { AIModelSelector } from "./AIModelSelector";
 import { TutorTips } from "./TutorTips";
 import { TutorResponse } from "./TutorResponse";
+
+// Define the subjects array here so it's accessible in this file
+const subjects = [
+  { value: "math", label: "Mathematics" },
+  { value: "english", label: "English" },
+  { value: "chinese", label: "Chinese" },
+  { value: "science", label: "Science" }
+];
 
 const TutorMe = () => {
   const [question, setQuestion] = useState("");
@@ -102,7 +111,7 @@ const TutorMe = () => {
         } else {
           setResponse(`
             <h3>Understanding Your Question</h3>
-            <p>I'd be happy to help with your question about ${subjects.find(s => s.value === subject).label}.</p>
+            <p>I'd be happy to help with your question about ${subjects.find(s => s.value === subject)?.label}.</p>
             
             <p>Based on the Primary ${level.split('-')[1]} level curriculum in Singapore, here's what you need to know:</p>
             
