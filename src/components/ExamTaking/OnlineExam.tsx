@@ -92,7 +92,7 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
-                
+                const answerMap = new Map(answerList.map(a => [a.id, a]));
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   console.log("Processing subQuestion:", subQuestion.question);
                   q_len = q_len + "_" + subQuestion.question;
@@ -110,10 +110,7 @@ const OnlineExam = () => {
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
 
-                    if (answerList.length === 40)
-                    {
-                      //const answerObj = answerList.find(a => a.id === subQuestion.id);
-                    }
+                    const answerObj = answerMap.get(subQuestion.id);
                     //question.correctAnswer = answerObj ? answerObj.value : "1";
                   } else {
                     question.type = "ShortAnswer"
