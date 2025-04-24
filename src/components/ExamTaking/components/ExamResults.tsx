@@ -66,6 +66,11 @@ const ExamResults = ({ exam, score, userAnswers, onRetry, onReturn }: ExamResult
                     {userAnswers[index].isCorrect ? '正确' : '不正确'}
                   </div>
                 </div>
+                <p className="mb-2 text-sm">{question.text.substring(0, 100)}...</p>
+                <div className="flex justify-between text-sm">
+                  <span>你的答案: {userAnswers[index].answer || '(没有答案)'}</span>
+                  <span>得分: {userAnswers[index].marksAwarded}/{question.marks}</span>
+                </div>
                 {!userAnswers[index].isCorrect && question.correctAnswer && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
                     <p className="text-sm text-blue-800">
@@ -74,11 +79,6 @@ const ExamResults = ({ exam, score, userAnswers, onRetry, onReturn }: ExamResult
                     </p>
                   </div>
                 )}
-                <p className="mb-2 text-sm">{question.text.substring(0, 100)}...</p>
-                <div className="flex justify-between text-sm">
-                  <span>你的答案: {userAnswers[index].answer || '(没有答案)'}</span>
-                  <span>得分: {userAnswers[index].marksAwarded}/{question.marks}</span>
-                </div>
               </div>
             ))}
           </div>
