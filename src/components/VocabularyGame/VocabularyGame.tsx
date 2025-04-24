@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import MainGameScene from './scenes/MainGameScene';
 import { GameAssetUploader } from './GameAssetUploader';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { InfoIcon } from "lucide-react";
 
 const VocabularyGame = () => {
   const [gameAssets, setGameAssets] = useState<string[]>([]);
@@ -27,7 +29,7 @@ const VocabularyGame = () => {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { x: 0, y: 0 },  // 移除重力以便更好地操作资源
+          gravity: { x: 0, y: 0 },
           debug: false
         }
       }
@@ -35,7 +37,6 @@ const VocabularyGame = () => {
 
     if (!gameRef.current) {
       gameRef.current = new Phaser.Game(config);
-      // 使用当前资源初始化场景
       gameRef.current.scene.start('MainGameScene', { assets: gameAssets });
     }
 
@@ -48,9 +49,23 @@ const VocabularyGame = () => {
   }, []);
   
   return (
-    <div>
-      <div id="phaser-game" className="w-full h-[600px] max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg" />
-      <div className="mt-4 text-center">
+    <div className="space-y-4">
+      <Alert>
+        <InfoIcon className="h-4 w-4" />
+        <AlertTitle>词汇冲关游戏说明</AlertTitle>
+        <AlertDescription>
+          1. 上传与单词相关的图片资源
+          2. 拖拽图片进行互动学习
+          3. 图片会根据拖拽距离自动回弹
+        </AlertDescription>
+      </Alert>
+      
+      <div id="phaser-game" className="w-full h-[600px] max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg border-2 border-blue-200" />
+      
+      <div className="mt-4 text-center space-y-2">
+        <p className="text-sm text-gray-600 mb-2">
+          上传图片来丰富您的词汇学习体验
+        </p>
         <GameAssetUploader onUploadComplete={handleAssetUpload} />
       </div>
     </div>
