@@ -7,7 +7,7 @@ import UserRecentActivities from "@/components/UserRecentActivities";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { BookX, Book, Star } from "lucide-react";
+import { Book } from "lucide-react";
 
 const mockSubjects = [
   { name: 'Chinese', progress: 75 },
@@ -17,24 +17,6 @@ const mockSubjects = [
 
 // Update mockModules to match the ActivityModule type
 const mockModules = [
-  { 
-    title: "错题本", 
-    description: "Review incorrect answers",
-    icon: <BookX className="h-8 w-8 text-white" />,
-    count: 12, 
-    color: "bg-rose-600",
-    isLoading: false,
-    link: "/wrong-questions"
-  },
-  { 
-    title: "收藏夹", 
-    description: "Your saved questions",
-    icon: <Star className="h-8 w-8 text-white" />,
-    count: 8, 
-    color: "bg-amber-600",
-    isLoading: false,
-    link: "/favorites"
-  },
   { 
     title: "词汇学习", 
     description: "Build vocabulary",

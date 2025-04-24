@@ -312,6 +312,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_behavior_tracking: {
+        Row: {
+          action_details: Json | null
+          activity_type: Database["public"]["Enums"]["user_activity_type"]
+          component_id: string | null
+          created_at: string
+          duration: number | null
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          page_url: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_details?: Json | null
+          activity_type: Database["public"]["Enums"]["user_activity_type"]
+          component_id?: string | null
+          created_at?: string
+          duration?: number | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_details?: Json | null
+          activity_type?: Database["public"]["Enums"]["user_activity_type"]
+          component_id?: string | null
+          created_at?: string
+          duration?: number | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       video_files: {
         Row: {
           course_id: string
@@ -353,6 +401,20 @@ export type Database = {
         }
         Relationships: []
       }
+      user_behavior_daily_summary: {
+        Row: {
+          activity_count: number | null
+          activity_type:
+            | Database["public"]["Enums"]["user_activity_type"]
+            | null
+          avg_duration: number | null
+          day: string | null
+          first_activity: string | null
+          last_activity: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
       zoom_course_enrollment_counts: {
         Row: {
           course_id: string | null
@@ -366,6 +428,19 @@ export type Database = {
         Args: { user_id: number } | { user_uuid: string }
         Returns: boolean
       }
+      track_user_behavior: {
+        Args: {
+          p_user_id: string
+          p_activity_type: Database["public"]["Enums"]["user_activity_type"]
+          p_page_url?: string
+          p_component_id?: string
+          p_action_details?: Json
+          p_metadata?: Json
+          p_session_id?: string
+          p_duration?: number
+        }
+        Returns: string
+      }
     }
     Enums: {
       activity_category:
@@ -375,6 +450,26 @@ export type Database = {
         | "mock_exam"
         | "ai_tutor_use"
         | "quiz_complete"
+      user_activity_type:
+        | "page_view"
+        | "login"
+        | "logout"
+        | "video_watch"
+        | "question_practice"
+        | "homework_complete"
+        | "mock_exam"
+        | "ai_tutor_use"
+        | "quiz_complete"
+        | "favorite_add"
+        | "favorite_remove"
+        | "search"
+        | "click"
+        | "download"
+        | "share"
+        | "time_spent"
+        | "scroll_depth"
+        | "form_submit"
+        | "error_encounter"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -497,6 +592,27 @@ export const Constants = {
         "mock_exam",
         "ai_tutor_use",
         "quiz_complete",
+      ],
+      user_activity_type: [
+        "page_view",
+        "login",
+        "logout",
+        "video_watch",
+        "question_practice",
+        "homework_complete",
+        "mock_exam",
+        "ai_tutor_use",
+        "quiz_complete",
+        "favorite_add",
+        "favorite_remove",
+        "search",
+        "click",
+        "download",
+        "share",
+        "time_spent",
+        "scroll_depth",
+        "form_submit",
+        "error_encounter",
       ],
     },
   },

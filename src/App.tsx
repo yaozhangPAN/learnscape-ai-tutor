@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -35,8 +36,6 @@ import CourseDetails from "./pages/CourseDetails";
 import OralExamRedirect from "./components/AITutor/OralExamRedirect";
 import { I18nProvider } from "@/contexts/I18nContext";
 import Account from "./pages/Account";
-import WrongQuestions from "./pages/WrongQuestions";
-import Favorites from "./pages/Favorites";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -79,9 +78,6 @@ const App = () => {
                   <Route path="/ai-tutor/vocabulary" element={<VocabularyBuilder />} />
                   <Route path="/ai-tutor/language-arts" element={<LanguageArtsRedirect />} />
                   <Route path="/ai-tutor/reading-coach" element={<ReadingCoachRedirect />} />
-                  
-                  <Route path="/wrong-questions" element={<WrongQuestions />} />
-                  <Route path="/favorites" element={<Favorites />} />
                   
                   <Route path="/about" element={<Navigate to="/" replace />} />
                   <Route path="/account" element={<Account />} />
