@@ -34,7 +34,7 @@ const HomeStreakProgressSection: React.FC<Props> = ({
           .select('*')
           .eq('user_id', session.user.id)
           .order('streak_date', { ascending: false })
-          .limit(7);
+          .limit(30);
 
         if (error) throw error;
 
@@ -43,13 +43,31 @@ const HomeStreakProgressSection: React.FC<Props> = ({
         currentDate.setHours(0, 0, 0, 0);
         
         let streak = 0;
+        const practicesDays = new Set();
+        
         if (streaks && streaks.length > 0) {
-          for (const record of streaks) {
-            const streakDate = new Date(record.streak_date);
-            const diffDays = Math.floor((currentDate.getTime() - streakDate.getTime()) / (1000 * 60 * 60 * 24));
+          // Add all streak dates to a set for counting unique days
+          streaks.forEach(record => {
+            practicesDays.add(record.streak_date);
+          });
+
+          // Calculate the consecutive streak
+          const sortedDates = [...practicesDays].sort((a, b) => 
+            new Date(b).getTime() - new Date(a).getTime()
+          );
+          
+          // Start from today and count backwards
+          let lastDate = currentDate;
+          for (const dateStr of sortedDates) {
+            const streakDate = new Date(dateStr);
+            streakDate.setHours(0, 0, 0, 0);
             
-            if (diffDays === streak) {
+            const diffDays = Math.round((lastDate.getTime() - streakDate.getTime()) / (1000 * 60 * 60 * 24));
+            
+            // If this day is consecutive with the last one or it's today
+            if (diffDays <= 1) {
               streak++;
+              lastDate = streakDate;
             } else {
               break;
             }
