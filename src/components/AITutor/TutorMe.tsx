@@ -8,9 +8,17 @@ import InputControls from "./InputControls";
 import { Textarea } from "@/components/ui/textarea";
 import Navbar from "@/components/Navbar";
 
+// Define message interface
+interface Message {
+  id: string;
+  type: 'user' | 'ai';
+  content: string;
+  timestamp: Date;
+}
+
 const TutorMe = () => {
   const [question, setQuestion] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { supabase } = useSupabase();
@@ -51,6 +59,16 @@ const TutorMe = () => {
 
     setIsLoading(true);
     
+    // Add user message to conversation
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: question,
+      timestamp: new Date(),
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
+    
     try {
       const { data, error } = await supabase.functions.invoke('fireball-tutor', {
         body: { prompt: question }
@@ -58,14 +76,15 @@ const TutorMe = () => {
       
       if (error) throw error;
       
-      setResponse(`
-        <div class="flex items-start gap-4">
-          <img src="/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png" alt="小熊猫" class="w-12 h-12 rounded-full" />
-          <div>
-            ${data.reply.replace(/\n/g, '<br>')}
-          </div>
-        </div>
-      `);
+      // Add AI response to conversation
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'ai',
+        content: data.reply,
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       toast({
         title: "提问失败",
@@ -74,28 +93,81 @@ const TutorMe = () => {
       });
     } finally {
       setIsLoading(false);
+      setQuestion("");  // Clear input after sending
     }
   };
 
   const handleClear = () => {
     setQuestion("");
-    setResponse("");
+    setMessages([]);
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="max-w-3xl mx-auto px-4 py-6 flex-1">
-        <div className="space-y-6 border p-4 rounded-lg bg-white shadow-sm">
-          <TutorCharacter />
+      <div className="max-w-3xl mx-auto px-4 py-6 flex-1 flex flex-col">
+        <div className="flex-1 overflow-hidden flex flex-col rounded-lg border bg-white shadow-sm">
+          {/* Welcome message */}
+          <div className="p-4 border-b">
+            <TutorCharacter />
+          </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium block">您的问题</label>
+          {/* Chat conversation area */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((message) => (
+              <div 
+                key={message.id} 
+                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div 
+                  className={`max-w-[80%] rounded-lg p-3 ${
+                    message.type === 'user' 
+                      ? 'bg-primary text-primary-foreground self-end' 
+                      : 'bg-muted'
+                  }`}
+                >
+                  {message.type === 'ai' ? (
+                    <div className="flex items-start gap-4">
+                      <img 
+                        src="/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png" 
+                        alt="小熊猫" 
+                        className="w-8 h-8 rounded-full" 
+                      />
+                      <div className="prose prose-sm">
+                        {message.content.split('\n').map((line, i) => (
+                          <p key={i} className="mb-2">{line}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div>{message.content}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="max-w-[80%] rounded-lg p-3 bg-muted">
+                  <div className="flex items-center space-x-2">
+                    <img 
+                      src="/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png" 
+                      alt="小熊猫" 
+                      className="w-8 h-8 rounded-full" 
+                    />
+                    <div className="text-sm">思考中...</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Input area */}
+          <div className="border-t p-4">
             <div className="flex gap-4">
               <div className="flex-1">
                 <Textarea 
                   placeholder="请输入您的问题..."
-                  className="min-h-[150px] resize-none"
+                  className="min-h-[80px] resize-none"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                 />
@@ -109,8 +181,6 @@ const TutorMe = () => {
               />
             </div>
           </div>
-          
-          {response && <TutorResponse response={response} />}
         </div>
       </div>
     </div>
@@ -118,4 +188,3 @@ const TutorMe = () => {
 };
 
 export default TutorMe;
-
