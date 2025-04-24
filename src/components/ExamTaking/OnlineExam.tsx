@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Clock, CheckCircle, AlertCircle, ArrowRight, ArrowLeft } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import ExamQuestion from "./ExamQuestion";
-import ExamTimer from "./ExamTimer";
-import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
+import { ExamPaper, Question, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
 import { anwser } from "../QuestionBank/QuestionViewer";
+import ExamHeader from "./components/ExamHeader";
+import ExamProgress from "./components/ExamProgress";
+import ExamResults from "./components/ExamResults";
+import ExamStart from "./components/ExamStart";
 
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
@@ -279,6 +281,11 @@ const OnlineExam = () => {
     return Object.entries(groupedQuestions);
   };
 
+  const handleQuestionSelect = (index: number) => {
+    const element = document.getElementById(`question-${index}`);
+    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[500px]">
@@ -305,156 +312,45 @@ const OnlineExam = () => {
 
   if (examCompleted) {
     return (
-      <div className="max-w-4xl mx-auto py-8 px-4">
-        <Card className="mb-8">
-          <CardHeader className="bg-gradient-to-r from-blue-100 to-blue-50">
-            <CardTitle className="flex items-center gap-2 text-2xl">
-              <CheckCircle className="h-6 w-6 text-green-500" />
-              考试结束
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <h2 className="text-xl font-bold mb-4">{currentExam.title}</h2>
-            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
-              <div>
-                <p className="text-gray-600">学校: {currentExam.school}</p>
-                <p className="text-gray-600">级别: {currentExam.level.toUpperCase()}</p>
-              </div>
-              <div>
-                <p className="text-gray-600">类型: {currentExam.type}</p>
-                <p className="text-gray-600">年份: {currentExam.year}</p>
-              </div>
-            </div>
-            
-            <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-              <h3 className="text-xl font-bold mb-2">你的成绩</h3>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="text-3xl font-bold text-green-600">{score}</div>
-                <div className="text-xl text-gray-500">/ {currentExam.totalMarks}</div>
-                <div className="text-xl ml-auto">
-                  {score !== null && `${Math.round((score / currentExam.totalMarks) * 100)}%`}
-                </div>
-              </div>
-              <Progress 
-                value={score !== null ? (score / currentExam.totalMarks) * 100 : 0} 
-                className="h-3 mb-2"
-              />
-            </div>
-            
-            <h3 className="text-lg font-bold mb-4">题目概览</h3>
-            <div className="space-y-4">
-              {currentExam.questions.map((question, index) => (
-                <div key={question.id} className="border rounded-lg p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium">问题 {index + 1}</h4>
-                    <div className={`px-2 py-1 rounded text-sm font-medium ${
-                      userAnswers[index].isCorrect 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {userAnswers[index].isCorrect ? '正确' : '不正确'}
-                    </div>
-                  </div>
-                  {!userAnswers[index].isCorrect && question.correctAnswer && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
-                      <p className="text-sm text-blue-800">
-                        <span className="font-medium">正确答案：</span>
-                        {question.correctAnswer}
-                      </p>
-                    </div>
-                  )}
-                  <p className="mb-2 text-sm">{question.text.substring(0, 100)}...</p>
-                  <div className="flex justify-between text-sm">
-                    <span>你的答案: {userAnswers[index].answer || '(没有答案)'}</span>
-                    <span>得分: {userAnswers[index].marksAwarded}/{question.marks}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={() => navigate("/mock-exam")}>
-              返回考试列表
-            </Button>
-            <Button onClick={() => {
-              setExamStarted(false);
-              setExamCompleted(false);
-              setCurrentQuestionIndex(0);
-              setScore(null);
-              if (currentExam) {
-                const resetAnswers = currentExam.questions.map(q => ({
-                  questionId: q.id,
-                  answer: "",
-                  isCorrect: false,
-                  isAnswered: false,
-                  marksAwarded: 0
-                }));
-                setUserAnswers(resetAnswers);
-              }
-            }}>
-              重新考试
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+      <ExamResults 
+        exam={currentExam}
+        score={score}
+        userAnswers={userAnswers}
+        onRetry={() => {
+          setExamStarted(false);
+          setExamCompleted(false);
+          setCurrentQuestionIndex(0);
+          setScore(null);
+          const resetAnswers = currentExam.questions.map(q => ({
+            questionId: q.id,
+            answer: "",
+            isCorrect: false,
+            isAnswered: false,
+            marksAwarded: 0
+          }));
+          setUserAnswers(resetAnswers);
+        }}
+        onReturn={() => navigate("/mock-exam")}
+      />
     );
   }
 
   if (!examStarted) {
     return (
-      <div className="max-w-4xl mx-auto py-8 px-4">
-        <Card className="mb-8">
-          <CardHeader className="bg-gradient-to-r from-blue-100 to-blue-50">
-            <CardTitle className="text-2xl">{currentExam.title}</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
-              <div>
-                <p className="text-gray-600">学校: {currentExam.school}</p>
-                <p className="text-gray-600">科目: {currentExam.subject}</p>
-                <p className="text-gray-600">级别: {currentExam.level.toUpperCase()}</p>
-              </div>
-              <div>
-                <p className="text-gray-600">类型: {currentExam.type}</p>
-                <p className="text-gray-600">年份: {currentExam.year}</p>
-                <p className="text-gray-600">时长: {currentExam.durationMinutes} 分钟</p>
-              </div>
-            </div>
-            
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-bold mb-2">考试说明</h3>
-              <ul className="list-disc list-inside space-y-2 text-gray-700">
-                <li>你有 {currentExam.durationMinutes} 分钟完成这次考试。</li>
-                <li>考试包含 {currentExam.questions.length} 道题目，总分 {currentExam.totalMarks} 分。</li>
-                <li>可以使用导航按钮在题目之间切换。</li>
-                <li>你的进度会自动保存。</li>
-                <li>可以随时点击"提交考试"按钮提交。</li>
-                <li>提交后，不能重新开始考试。</li>
-              </ul>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button variant="outline" onClick={() => navigate("/mock-exam")}>
-              返回考试列表
-            </Button>
-            <Button onClick={startExam}>
-              开始考试
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+      <ExamStart
+        exam={currentExam}
+        onStart={startExam}
+        onReturn={() => navigate("/mock-exam")}
+      />
     );
   }
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{currentExam?.title}</h1>
-        <ExamTimer 
-          initialTime={currentExam?.durationMinutes * 60} 
-          onTimeExpired={handleTimeExpired}
-        />
-      </div>
+      <ExamHeader 
+        exam={currentExam}
+        onTimeExpired={handleTimeExpired}
+      />
       
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-3/4">
@@ -470,13 +366,7 @@ const OnlineExam = () => {
                   const globalIndex = currentExam?.questions.findIndex(q => q.id === question.id) ?? 0;
                   return (
                     <Card key={question.id} className="mb-6" id={`question-${globalIndex}`}>
-                      <CardHeader className="border-b">
-                        <CardTitle className="flex justify-between">
-                          <span>问题 {globalIndex + 1} / {currentExam?.questions.length}</span>
-                          <span className="text-gray-500">{question.marks} {question.marks === 1 ? '分' : '分'}</span>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
+                      <div className="space-y-4 p-6">
                         <ExamQuestion 
                           question={question}
                           userAnswer={userAnswers[globalIndex]?.answer || ''}
@@ -489,7 +379,7 @@ const OnlineExam = () => {
                           }}
                           examCompleted={examCompleted}
                         />
-                      </CardContent>
+                      </div>
                     </Card>
                   );
                 })}
@@ -499,56 +389,12 @@ const OnlineExam = () => {
         </div>
         
         <div className="w-full lg:w-1/4">
-          <Card className="sticky top-4">
-            <CardHeader className="border-b">
-              <CardTitle>作答进度</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="grid grid-cols-5 gap-2">
-                {userAnswers.map((answer, index) => (
-                  <Button
-                    key={index}
-                    variant={answer.isAnswered ? "outline" : "ghost"}
-                    className={`h-10 w-10 p-0 ${
-                      answer.isAnswered ? "border-green-500 border-2" : "border"
-                    }`}
-                    onClick={() => {
-                      const element = document.getElementById(`question-${index}`);
-                      element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }}
-                  >
-                    {index + 1}
-                  </Button>
-                ))}
-              </div>
-              
-              <div className="mt-6">
-                <div className="flex items-center">
-                  <div className="w-4 h-4 border-2 border-green-500 rounded-full mr-2"></div>
-                  <span className="text-sm">已回答</span>
-                </div>
-              </div>
-              
-              <div className="mt-6">
-                <p className="text-sm text-gray-500 mb-2">
-                  已回答: {userAnswers.filter(a => a.isAnswered).length} / {currentExam?.questions.length}
-                </p>
-                <Progress 
-                  value={(userAnswers.filter(a => a.isAnswered).length / currentExam?.questions.length) * 100} 
-                  className="h-2"
-                />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full"
-                variant="destructive"
-                onClick={submitExam}
-              >
-                提交考试
-              </Button>
-            </CardFooter>
-          </Card>
+          <ExamProgress
+            userAnswers={userAnswers}
+            totalQuestions={currentExam.questions.length}
+            onQuestionSelect={handleQuestionSelect}
+            onSubmit={submitExam}
+          />
         </div>
       </div>
     </div>
