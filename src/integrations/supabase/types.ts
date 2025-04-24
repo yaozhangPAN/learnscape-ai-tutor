@@ -108,6 +108,30 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_streaks: {
+        Row: {
+          activities_count: number
+          created_at: string
+          id: string
+          streak_date: string
+          user_id: string
+        }
+        Insert: {
+          activities_count?: number
+          created_at?: string
+          id?: string
+          streak_date?: string
+          user_id: string
+        }
+        Update: {
+          activities_count?: number
+          created_at?: string
+          id?: string
+          streak_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -236,6 +260,30 @@ export type Database = {
           status?: string
           subscription_type?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_activities: {
+        Row: {
+          activity_details: Json | null
+          activity_type: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activity_details?: Json | null
+          activity_type: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          activity_details?: Json | null
+          activity_type?: string
+          created_at?: string
+          id?: string
           user_id?: string
         }
         Relationships: []

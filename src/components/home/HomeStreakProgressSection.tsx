@@ -1,7 +1,11 @@
 
-import React from "react";
-import MaskOverlay from "../MaskOverlay";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loader2 } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface Props {
   to: string;
@@ -12,17 +16,56 @@ interface Props {
 const HomeStreakProgressSection: React.FC<Props> = ({
   to, title, img
 }) => {
-  const { toast } = useToast();
-  
-  const handleClick = () => {
-    toast({
-      title: "功能升级中",
-      description: "此功能正在开发中，敬请期待！",
-    });
-  };
+  const { session } = useAuth();
+  const { t } = useI18n();
+  const [loading, setLoading] = useState(true);
+  const [currentStreak, setCurrentStreak] = useState(0);
+
+  useEffect(() => {
+    const fetchStreakData = async () => {
+      if (!session?.user.id) return;
+
+      try {
+        const { data: streaks, error } = await supabase
+          .from('daily_streaks')
+          .select('*')
+          .order('streak_date', { ascending: false })
+          .limit(7);
+
+        if (error) throw error;
+
+        // Calculate current streak from the data
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        
+        let streak = 0;
+        if (streaks && streaks.length > 0) {
+          for (const record of streaks) {
+            const streakDate = new Date(record.streak_date);
+            const diffDays = Math.floor((currentDate.getTime() - streakDate.getTime()) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === streak) {
+              streak++;
+            } else {
+              break;
+            }
+          }
+        }
+        
+        setCurrentStreak(streak);
+      } catch (error) {
+        console.error('Error fetching streak data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStreakData();
+  }, [session?.user.id]);
 
   return (
-    <div 
+    <Link 
+      to={to}
       className="flex flex-col rounded-2xl p-4 sm:p-6 shadow-lg relative bg-white text-[#6D5A21] min-h-[180px] overflow-hidden cursor-pointer w-full"
     >
       <div className="absolute top-3 left-3 z-10 bg-white/80 rounded-lg px-4 py-1 font-bold text-[#C48829] text-lg shadow">{title}</div>
@@ -34,9 +77,19 @@ const HomeStreakProgressSection: React.FC<Props> = ({
         draggable={false}
       />
       <div className="absolute inset-0 rounded-2xl bg-yellow-100 opacity-0 hover:opacity-20 transition-opacity z-10"></div>
-      <div className="flex-1 z-20"></div>
-      <MaskOverlay onClick={handleClick} />
-    </div>
+      {loading ? (
+        <div className="flex-1 flex items-center justify-center z-20">
+          <Loader2 className="h-6 w-6 animate-spin text-[#C48829]" />
+        </div>
+      ) : (
+        <div className="flex-1 flex items-center justify-center z-20">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-[#C48829]">{currentStreak}</div>
+            <div className="text-sm text-[#6D5A21]">{t.STREAK.DAY_STREAK}</div>
+          </div>
+        </div>
+      )}
+    </Link>
   );
 };
 
