@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
@@ -78,14 +77,48 @@ export const usePageViewTracking = (pageName: string) => {
   useEffect(() => {
     const startTime = new Date();
     
-    // Track page view on mount
-    trackUserBehavior('page_view', {
-      componentId: pageName,
-      actionDetails: { page: pageName }
-    });
+    // Track page view on mount and update daily streak
+    const trackPageViewAndStreak = async () => {
+      await trackUserBehavior('page_view', {
+        componentId: pageName,
+        actionDetails: { page: pageName }
+      });
+      
+      // Update daily streak
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Check if streak already exists for today
+        const { data: existingStreak } = await supabase
+          .from('daily_streaks')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('streak_date', today)
+          .single();
+        
+        if (!existingStreak) {
+          // Create new streak entry for today
+          await supabase
+            .from('daily_streaks')
+            .insert({
+              user_id: user.id,
+              streak_date: today,
+              activities_count: 1
+            });
+        } else {
+          // Update existing streak
+          await supabase
+            .from('daily_streaks')
+            .update({ activities_count: existingStreak.activities_count + 1 })
+            .eq('id', existingStreak.id);
+        }
+      }
+    };
+    
+    trackPageViewAndStreak();
     
     return () => {
-      // Track time spent when component unmounts
       const duration = Math.floor((new Date().getTime() - startTime.getTime()) / 1000);
       trackUserBehavior('time_spent', {
         componentId: pageName,
