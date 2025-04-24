@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -11,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Users, Calendar, Clock } from "lucide-react";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { useI18n } from "@/contexts/I18nContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 const mockZoomCourses = [
   {
@@ -21,10 +24,9 @@ const mockZoomCourses = [
     subject: "chinese",
     upcomingSessions: [
       { id: "s1", date: "2025-06-03", startTime: "14:00", endTime: "16:00", topic: "第一讲：阅读理解技巧" },
-      { id: "s2", date: "2025-06-05", startTime: "14:00", endTime: "16:00", topic: "第二讲：作文写作框架" },
+      { id: "s2", date: "2025-06-10", startTime: "14:00", endTime: "16:00", topic: "第二讲：作文写作框架" },
     ],
     maxStudents: 25,
-    currentEnrollment: 8,
     price: "S$599",
     isPremium: true,
     tutor: "张丽萍老师",
@@ -38,10 +40,9 @@ const mockZoomCourses = [
     subject: "chinese",
     upcomingSessions: [
       { id: "s3", date: "2025-06-04", startTime: "10:00", endTime: "11:00", topic: "第一讲：看图说话技巧" },
-      { id: "s4", date: "2025-06-06", startTime: "10:00", endTime: "11:00", topic: "第二讲：会话训练" },
+      { id: "s4", date: "2025-06-11", startTime: "10:00", endTime: "11:00", topic: "第二讲：会话训练" },
     ],
     maxStudents: 25,
-    currentEnrollment: 6,
     price: "S$299",
     isPremium: true,
     tutor: "张丽萍老师",
@@ -54,11 +55,10 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     upcomingSessions: [
-      { id: "s5", date: "2025-06-09", startTime: "14:00", endTime: "15:30", topic: "第一讲：记叙文写作技巧" },
-      { id: "s6", date: "2025-06-11", startTime: "14:00", endTime: "15:30", topic: "第二讲：议论文写作方法" },
+      { id: "s5", date: "2025-06-05", startTime: "14:00", endTime: "15:30", topic: "第一讲：记叙文写作技巧" },
+      { id: "s6", date: "2025-06-12", startTime: "14:00", endTime: "15:30", topic: "第二讲：议论文写作方法" },
     ],
     maxStudents: 25,
-    currentEnrollment: 5,
     price: "S$399",
     isPremium: true,
     tutor: "张丽萍老师",
@@ -75,13 +75,21 @@ const mockZoomCourses = [
       { id: "s8", date: "2025-06-13", startTime: "11:00", endTime: "12:00", topic: "第二讲：2023年试题解析" },
     ],
     maxStudents: 25,
-    currentEnrollment: 7,
     price: "S$299",
     isPremium: true,
     tutor: "张丽萍老师",
     image: "https://images.unsplash.com/photo-1555431189-0fabf2667795?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
   }
 ];
+
+const fetchEnrollments = async () => {
+  const { data: enrollments, error } = await supabase
+    .from('zoom_course_enrollment_counts')
+    .select('*');
+
+  if (error) throw error;
+  return enrollments;
+};
 
 const ZoomCourses = () => {
   const { t } = useI18n();
@@ -90,10 +98,19 @@ const ZoomCourses = () => {
   const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
   const [selectedSession, setSelectedSession] = useState<any | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [joinDialogOpen, setJoinDialogOpen] = useState(false);
   const { isPremium, hasAccessToContent, startCheckoutSession } = useSubscription();
 
-  const filteredCourses = mockZoomCourses.filter(
+  const { data: enrollments = [] } = useQuery({
+    queryKey: ['enrollments'],
+    queryFn: fetchEnrollments,
+  });
+
+  const coursesWithEnrollments = mockZoomCourses.map(course => ({
+    ...course,
+    currentEnrollment: enrollments.find(e => e.course_id === course.id)?.enrollment_count || 0
+  }));
+
+  const filteredCourses = coursesWithEnrollments.filter(
     course => 
       (selectedLevel === "all" || course.level === selectedLevel) && 
       (selectedSubject === "all" || course.subject === selectedSubject)

@@ -219,9 +219,36 @@ export type Database = {
         }
         Relationships: []
       }
+      zoom_course_enrollments: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      zoom_course_enrollment_counts: {
+        Row: {
+          course_id: string | null
+          enrollment_count: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_premium_subscription: {
