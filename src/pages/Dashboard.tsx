@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Book, BookX, Star } from "lucide-react";
+import { Book, BookX, Search, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
@@ -9,6 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import UserRecentActivities from "@/components/UserRecentActivities";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -70,14 +72,15 @@ const Dashboard = () => {
           .from('user_activities_tracking')
           .select('details')
           .eq('user_id', session.user.id)
-          .eq('activity_type', 'question_practice') as { data: ActivityRecord[] | null, error: Error | null };
+          .eq('activity_type', 'question_practice');
           
         if (practiceError) throw practiceError;
         
         const uniqueQuestions = new Set<string>();
         practiceActivities?.forEach((activity) => {
-          if (activity.details?.question_id) {
-            uniqueQuestions.add(activity.details.question_id);
+          const details = activity.details as ActivityDetails | null;
+          if (details?.question_id) {
+            uniqueQuestions.add(details.question_id);
           }
         });
         setQuestionCount(uniqueQuestions.size);
@@ -87,14 +90,15 @@ const Dashboard = () => {
           .select('details')
           .eq('user_id', session.user.id)
           .eq('activity_type', 'question_practice')
-          .eq('details->is_correct', false) as { data: ActivityRecord[] | null, error: Error | null };
+          .eq('details->is_correct', false);
           
         if (wrongError) throw wrongError;
         
         const uniqueWrongQuestions = new Set<string>();
         wrongAnswers?.forEach((activity) => {
-          if (activity.details?.question_id) {
-            uniqueWrongQuestions.add(activity.details.question_id);
+          const details = activity.details as ActivityDetails | null;
+          if (details?.question_id) {
+            uniqueWrongQuestions.add(details.question_id);
           }
         });
         setWrongQuestionCount(uniqueWrongQuestions.size);
@@ -104,14 +108,15 @@ const Dashboard = () => {
           .select('details')
           .eq('user_id', session.user.id)
           .eq('activity_type', 'question_practice')
-          .eq('details->is_favorite', true) as { data: ActivityRecord[] | null, error: Error | null };
+          .eq('details->is_favorite', true);
           
         if (favoriteError) throw favoriteError;
         
         const uniqueFavorites = new Set<string>();
         favoriteData?.forEach((activity) => {
-          if (activity.details?.question_id) {
-            uniqueFavorites.add(activity.details.question_id);
+          const details = activity.details as ActivityDetails | null;
+          if (details?.question_id) {
+            uniqueFavorites.add(details.question_id);
           }
         });
         setFavoriteCount(uniqueFavorites.size);
