@@ -10,6 +10,14 @@ import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import { Question } from '@/types/question';
 import { supabase } from '@/integrations/supabase/client';
+import { Json } from '@/integrations/supabase/types';
+
+// Define an interface for the details structure to help TypeScript understand it
+interface QuestionActivityDetails {
+  question_id: string;
+  is_favorite: boolean;
+  [key: string]: any; // Allow for other properties
+}
 
 const Favorites = () => {
   const navigate = useNavigate();
@@ -35,9 +43,13 @@ const Favorites = () => {
 
         if (error) throw error;
 
-        // Extract unique question IDs
+        // Extract unique question IDs with proper type casting
         const questionIds = activities
-          ?.map(activity => activity.details?.question_id as string)
+          ?.map(activity => {
+            // Safely cast Json to our expected structure
+            const details = activity.details as unknown as QuestionActivityDetails;
+            return details?.question_id;
+          })
           .filter(Boolean);
 
         const uniqueQuestionIds = [...new Set(questionIds)];
@@ -51,17 +63,22 @@ const Favorites = () => {
           if (questionsError) throw questionsError;
           
           // Transform the data to match our Question interface
-          const transformedQuestions: Question[] = questionsData?.map(q => ({
-            id: q.id,
-            title: q.title || '',
-            content: {
-              question: typeof q.content === 'object' && q.content ? q.content.question || '' : '',
-              answer: typeof q.content === 'object' && q.content ? q.content.answer || undefined : undefined
-            },
-            subject: q.subject || undefined,
-            level: q.level || undefined,
-            term: q.term || undefined
-          })) || [];
+          const transformedQuestions: Question[] = questionsData?.map(q => {
+            // Safely parse the content field
+            const content = q.content as unknown as { question?: string; answer?: string } | null;
+            
+            return {
+              id: q.id,
+              title: q.title || '',
+              content: {
+                question: content?.question || '',
+                answer: content?.answer
+              },
+              subject: q.subject || undefined,
+              level: q.level || undefined,
+              term: q.term || undefined
+            };
+          }) || [];
           
           setFavorites(transformedQuestions);
         } else {
@@ -99,9 +116,14 @@ const Favorites = () => {
       if (data && data.length > 0) {
         // For each matching activity, update it
         for (const activity of data) {
-          const updatedDetails = { 
-            ...activity.details,
-            is_favorite: false 
+          const activityDetails = activity.details as unknown as QuestionActivityDetails;
+          
+          // Create a new details object instead of trying to spread the original
+          const updatedDetails = {
+            ...Object.fromEntries(
+              Object.entries(activityDetails as object)
+            ),
+            is_favorite: false
           };
           
           const { error: updateError } = await supabase
