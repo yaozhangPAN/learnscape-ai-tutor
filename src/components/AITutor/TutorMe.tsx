@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/hooks/useSupabase";
+import { TutorSelectors } from "./TutorSelectors";
+import { AIModelSelector } from "./AIModelSelector";
+import { TutorTips } from "./TutorTips";
+import { TutorResponse } from "./TutorResponse";
 
 const TutorMe = () => {
   const [question, setQuestion] = useState("");
@@ -17,25 +14,9 @@ const TutorMe = () => {
   const [subject, setSubject] = useState("math");
   const [level, setLevel] = useState("primary-4");
   const [isLoading, setIsLoading] = useState(false);
+  const [isFireball, setIsFireball] = useState(true);
   const { toast } = useToast();
   const { supabase } = useSupabase();
-  const [isFireball, setIsFireball] = useState(true);
-
-  const subjects = [
-    { value: "math", label: "Mathematics" },
-    { value: "english", label: "English" },
-    { value: "chinese", label: "Chinese" },
-    { value: "science", label: "Science" }
-  ];
-
-  const levels = [
-    { value: "primary-1", label: "Primary 1" },
-    { value: "primary-2", label: "Primary 2" },
-    { value: "primary-3", label: "Primary 3" },
-    { value: "primary-4", label: "Primary 4" },
-    { value: "primary-5", label: "Primary 5" },
-    { value: "primary-6", label: "Primary 6" }
-  ];
 
   const handleSubmit = async () => {
     if (!question.trim()) {
@@ -168,60 +149,17 @@ const TutorMe = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-1 space-y-4">
-          <div>
-            <label className="text-sm font-medium block mb-1">AI 助手</label>
-            <Select value={isFireball ? "fireball" : "default"} onValueChange={(v) => setIsFireball(v === "fireball")}>
-              <SelectTrigger>
-                <SelectValue placeholder="选择AI助手" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="fireball">小火苗 - 苏格拉底式教学</SelectItem>
-                <SelectItem value="default">通用AI导师</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium block mb-1">Subject</label>
-            <Select value={subject} onValueChange={setSubject}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Subject" />
-              </SelectTrigger>
-              <SelectContent>
-                {subjects.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    {s.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div>
-            <label className="text-sm font-medium block mb-1">Level</label>
-            <Select value={level} onValueChange={setLevel}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Level" />
-              </SelectTrigger>
-              <SelectContent>
-                {levels.map((l) => (
-                  <SelectItem key={l.value} value={l.value}>
-                    {l.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="bg-blue-50 p-4 rounded-md">
-            <h3 className="font-medium text-sm mb-2">Tips</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>Be specific in your questions</li>
-              <li>Include any relevant information</li>
-              <li>Try different ways of asking</li>
-              <li>Follow up with clarification questions</li>
-            </ul>
-          </div>
+          <AIModelSelector 
+            isFireball={isFireball} 
+            onModelChange={(v) => setIsFireball(v === "fireball")} 
+          />
+          <TutorSelectors 
+            subject={subject}
+            level={level}
+            onSubjectChange={setSubject}
+            onLevelChange={setLevel}
+          />
+          <TutorTips />
         </div>
         
         <div className="md:col-span-3 space-y-6">
@@ -235,14 +173,7 @@ const TutorMe = () => {
             />
           </div>
           
-          {response && (
-            <div>
-              <label className="text-sm font-medium block mb-1">AI Tutor Response</label>
-              <div className="bg-gray-50 border rounded-md p-6 prose prose-sm max-w-none">
-                <div dangerouslySetInnerHTML={{ __html: response }} />
-              </div>
-            </div>
-          )}
+          <TutorResponse response={response} />
         </div>
       </div>
     </div>
