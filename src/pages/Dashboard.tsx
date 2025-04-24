@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Book, BookX, Search, Star } from "lucide-react";
@@ -27,10 +26,6 @@ interface ActivityDetails {
   question_id: string;
   is_correct?: boolean;
   is_favorite?: boolean;
-}
-
-interface ActivityRecord {
-  details: ActivityDetails | null;
 }
 
 const Dashboard = () => {
@@ -78,7 +73,7 @@ const Dashboard = () => {
         
         const uniqueQuestions = new Set<string>();
         practiceActivities?.forEach((activity) => {
-          const details = activity.details as ActivityDetails | null;
+          const details = activity.details as unknown as ActivityDetails | null;
           if (details?.question_id) {
             uniqueQuestions.add(details.question_id);
           }
@@ -96,7 +91,7 @@ const Dashboard = () => {
         
         const uniqueWrongQuestions = new Set<string>();
         wrongAnswers?.forEach((activity) => {
-          const details = activity.details as ActivityDetails | null;
+          const details = activity.details as unknown as ActivityDetails | null;
           if (details?.question_id) {
             uniqueWrongQuestions.add(details.question_id);
           }
@@ -114,7 +109,7 @@ const Dashboard = () => {
         
         const uniqueFavorites = new Set<string>();
         favoriteData?.forEach((activity) => {
-          const details = activity.details as ActivityDetails | null;
+          const details = activity.details as unknown as ActivityDetails | null;
           if (details?.question_id) {
             uniqueFavorites.add(details.question_id);
           }
