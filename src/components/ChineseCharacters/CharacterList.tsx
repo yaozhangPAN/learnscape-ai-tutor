@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useSupabase } from '@/hooks/useSupabase';
 import {
@@ -14,8 +15,8 @@ import ImportCharacters from './ImportCharacters';
 interface ChineseCharacter {
   id: string;
   character: string;
-  grade: number;
-  lesson_number: number;
+  grade: string;
+  lesson_number: string;
   can_read: boolean;
   can_write: boolean;
 }
