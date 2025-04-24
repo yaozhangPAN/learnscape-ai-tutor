@@ -9,6 +9,7 @@ import StreakComponent from "@/components/StreakComponent";
 import { useI18n } from "@/contexts/I18nContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -24,6 +25,20 @@ const progressColors = {
 const Dashboard = () => {
   const { t, lang } = useI18n();
   const { session } = useAuth();
+  const { toast } = useToast();
+  
+  // Add state for dashboard data
+  const [questionCount, setQuestionCount] = useState<number>(0);
+  const [wrongQuestionCount, setWrongQuestionCount] = useState<number>(0);
+  const [favoriteCount, setFavoriteCount] = useState<number>(0);
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState([
+    { name: "Mathematics", progress: 0 },
+    { name: "English", progress: 0 },
+    { name: "Science", progress: 0 },
+    { name: "Chinese", progress: 0 },
+  ]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -34,89 +49,246 @@ const Dashboard = () => {
 
   const greeting = getGreeting();
 
-  const modules = [
-    {
-      title: t.DASHBOARD.MODULES.QUESTION_BANK,
-      description: t.DASHBOARD.MODULES.QUESTION_BANK_DESC,
-      icon: <Book className="h-6 w-6 text-white" />,
-      count: 2500,
-      color: "bg-[#009688] text-white",
-    },
-    {
-      title: t.DASHBOARD.MODULES.WRONG_QUESTIONS,
-      description: t.DASHBOARD.MODULES.WRONG_QUESTIONS_DESC,
-      icon: <BookX className="h-6 w-6 text-white" />,
-      count: 42,
-      color: "bg-[#FF7043] text-white",
-    },
-    {
-      title: t.DASHBOARD.MODULES.FAVORITES,
-      description: t.DASHBOARD.MODULES.FAVORITES_DESC,
-      icon: <Star className="h-6 w-6 text-white" />,
-      count: 78,
-      color: "bg-[#B39DDB] text-white",
-    },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      if (!session?.user.id) {
+        setIsLoading(false);
+        return;
+      }
 
-  const subjects = [
-    { name: "Mathematics", progress: 75 },
-    { name: "English", progress: 60 },
-    { name: "Science", progress: 45 },
-    { name: "Chinese", progress: 30 },
-  ];
+      setIsLoading(true);
+      
+      try {
+        // Fetch question bank count
+        const { count: questionBankCount, error: questionError } = await supabase
+          .from('questions')
+          .select('*', { count: 'exact', head: true });
+          
+        if (questionError) throw questionError;
+        setQuestionCount(questionBankCount || 0);
+        
+        // Fetch user activity statistics
+        const { data: userActivities, error: activitiesError } = await supabase
+          .from('user_activities')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .eq('activity_type', 'wrong_answer')
+          .limit(100);
+          
+        if (activitiesError) throw activitiesError;
+        
+        // Count unique questions answered incorrectly
+        const uniqueWrongQuestions = new Set();
+        userActivities?.forEach(activity => {
+          if (activity.activity_details?.question_id) {
+            uniqueWrongQuestions.add(activity.activity_details.question_id);
+          }
+        });
+        setWrongQuestionCount(uniqueWrongQuestions.size);
+        
+        // Fetch favorite questions
+        const { data: favoriteData, error: favoriteError } = await supabase
+          .from('user_activities')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .eq('activity_type', 'favorite')
+          .limit(100);
+          
+        if (favoriteError) throw favoriteError;
+        
+        // Count unique favorite questions
+        const uniqueFavorites = new Set();
+        favoriteData?.forEach(activity => {
+          if (activity.activity_details?.question_id) {
+            uniqueFavorites.add(activity.activity_details.question_id);
+          }
+        });
+        setFavoriteCount(uniqueFavorites.size);
+        
+        // Get recent activities
+        const { data: recentData, error: recentError } = await supabase
+          .from('user_activities')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .order('created_at', { ascending: false })
+          .limit(3);
+          
+        if (recentError) throw recentError;
+        
+        if (recentData && recentData.length > 0) {
+          const formattedActivities = recentData.map(activity => {
+            const createdAt = new Date(activity.created_at);
+            const now = new Date();
+            const diffHours = Math.round((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60));
+            
+            let dateText;
+            if (diffHours < 1) {
+              dateText = "Just now";
+            } else if (diffHours < 24) {
+              dateText = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            } else if (diffHours < 48) {
+              dateText = "Yesterday";
+            } else {
+              dateText = `${Math.floor(diffHours / 24)} days ago`;
+            }
+            
+            let activityText = "Unknown activity";
+            let score = "N/A";
+            
+            switch(activity.activity_type) {
+              case 'quiz_complete':
+                activityText = `Completed ${activity.activity_details?.subject || ''} quiz`;
+                score = activity.activity_details?.score || "Complete";
+                break;
+              case 'practice_complete':
+                activityText = `Completed ${activity.activity_details?.subject || ''} practice`;
+                score = activity.activity_details?.score 
+                  ? `${activity.activity_details.correct}/${activity.activity_details.total}` 
+                  : "Complete";
+                break;
+              case 'video_watch':
+                activityText = `Watched ${activity.activity_details?.title || ''} video`;
+                score = "Complete";
+                break;
+              case 'exam_start':
+                activityText = `Started ${activity.activity_details?.subject || ''} exam`;
+                score = "In progress";
+                break;
+              default:
+                activityText = `${activity.activity_type.replace('_', ' ')}`;
+            }
+            
+            return {
+              id: activity.id,
+              activity: activityText,
+              date: dateText,
+              score: score
+            };
+          });
+          
+          setRecentActivities(formattedActivities);
+        } else {
+          setRecentActivities([
+            { id: 1, activity: "No recent activities", date: "", score: "" }
+          ]);
+        }
+        
+        // Calculate subject progress based on completed activities
+        const subjectProgress = {
+          Mathematics: 0,
+          English: 0,
+          Science: 0,
+          Chinese: 0
+        };
+        
+        const { data: subjectActivities, error: subjectError } = await supabase
+          .from('user_activities')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .in('activity_type', ['quiz_complete', 'practice_complete', 'video_watch'])
+          .limit(200);
+          
+        if (subjectError) throw subjectError;
+        
+        // Count activities by subject
+        const subjectCounts = {};
+        subjectActivities?.forEach(activity => {
+          const subject = activity.activity_details?.subject;
+          if (subject && subjectProgress.hasOwnProperty(subject)) {
+            subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
+          }
+        });
+        
+        // Calculate percentages (assuming 100 is the target number of activities)
+        const targetPerSubject = 20; // Arbitrary number for progress calculation
+        Object.keys(subjectProgress).forEach(subject => {
+          const count = subjectCounts[subject] || 0;
+          const percentage = Math.min(100, Math.round((count / targetPerSubject) * 100));
+          subjectProgress[subject] = percentage;
+        });
+        
+        setSubjects([
+          { name: "Mathematics", progress: subjectProgress.Mathematics },
+          { name: "English", progress: subjectProgress.English },
+          { name: "Science", progress: subjectProgress.Science },
+          { name: "Chinese", progress: subjectProgress.Chinese }
+        ]);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        toast({
+          title: "Error loading dashboard data",
+          description: "Please refresh the page to try again.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const recentActivities = [
-    { 
-      id: 1, 
-      activity: "Completed Mathematics practice", 
-      date: "1 hour ago", 
-      score: "8/10" 
-    },
-    { 
-      id: 2, 
-      activity: "Started English vocabulary quiz", 
-      date: "Yesterday", 
-      score: "In progress" 
-    },
-    { 
-      id: 3, 
-      activity: "Reviewed Science concepts", 
-      date: "2 days ago", 
-      score: "Complete" 
-    },
-  ];
+    fetchDashboardData();
+  }, [session?.user.id, toast, t]);
 
   useEffect(() => {
     const trackPageVisit = async () => {
       if (session?.user.id) {
-        const { error } = await supabase
-          .from('user_activities')
-          .insert({
-            user_id: session.user.id,
-            activity_type: 'page_visit',
-            activity_details: { page: 'dashboard' }
-          });
+        try {
+          // Record page visit
+          await supabase
+            .from('user_activities')
+            .insert({
+              user_id: session.user.id,
+              activity_type: 'page_visit',
+              activity_details: { page: 'dashboard' }
+            });
 
-        if (error) {
-          console.error('Error tracking page visit:', error);
-        }
+          // Update or create daily streak
+          const { error: streakError } = await supabase
+            .from('daily_streaks')
+            .upsert({
+              user_id: session.user.id,
+              streak_date: new Date().toISOString().split('T')[0]
+            }, { 
+              onConflict: 'user_id,streak_date'
+            });
 
-        // Update or create daily streak
-        const { error: streakError } = await supabase
-          .from('daily_streaks')
-          .upsert({
-            user_id: session.user.id,
-            streak_date: new Date().toISOString().split('T')[0]
-          });
-
-        if (streakError) {
-          console.error('Error updating streak:', streakError);
+          if (streakError) {
+            console.error('Error updating streak:', streakError);
+          }
+        } catch (error) {
+          console.error('Error tracking activity:', error);
         }
       }
     };
 
     trackPageVisit();
   }, [session?.user.id]);
+
+  const modules = [
+    {
+      title: t.DASHBOARD.MODULES.QUESTION_BANK,
+      description: t.DASHBOARD.MODULES.QUESTION_BANK_DESC,
+      icon: <Book className="h-6 w-6 text-white" />,
+      count: questionCount,
+      color: "bg-[#009688] text-white",
+      isLoading
+    },
+    {
+      title: t.DASHBOARD.MODULES.WRONG_QUESTIONS,
+      description: t.DASHBOARD.MODULES.WRONG_QUESTIONS_DESC,
+      icon: <BookX className="h-6 w-6 text-white" />,
+      count: wrongQuestionCount,
+      color: "bg-[#FF7043] text-white",
+      isLoading
+    },
+    {
+      title: t.DASHBOARD.MODULES.FAVORITES,
+      description: t.DASHBOARD.MODULES.FAVORITES_DESC,
+      icon: <Star className="h-6 w-6 text-white" />,
+      count: favoriteCount,
+      color: "bg-[#B39DDB] text-white",
+      isLoading
+    },
+  ];
 
   return (
     <div className={`${mainBg} min-h-screen`}>
@@ -141,7 +313,13 @@ const Dashboard = () => {
               <div className="mb-2">{module.icon}</div>
               <h2 className="text-xl font-bold mb-1 text-white">{module.title}</h2>
               <div className="text-white/90 text-sm font-medium mb-2">{module.description}</div>
-              <div className="text-3xl font-extrabold text-white mb-0">{module.count}</div>
+              <div className="text-3xl font-extrabold text-white mb-0">
+                {module.isLoading ? (
+                  <div className="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
+                ) : (
+                  module.count
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -191,27 +369,43 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="divide-y divide-[#faedca] bg-white rounded-b-3xl">
-                {recentActivities.map((activity) => (
-                  <div key={activity.id} className="py-4 flex justify-between items-center">
-                    <div>
-                      <h4 className="font-semibold text-[#4ABA79]">{activity.activity}</h4>
-                      <p className="text-xs text-[#b197d7]">{activity.date}</p>
+                {isLoading ? (
+                  Array(3).fill(0).map((_, i) => (
+                    <div key={i} className="py-4 flex justify-between items-center">
+                      <div className="space-y-2">
+                        <div className="h-5 w-48 bg-gray-100 rounded animate-pulse"></div>
+                        <div className="h-4 w-24 bg-gray-100 rounded animate-pulse"></div>
+                      </div>
+                      <div className="h-8 w-24 bg-gray-100 rounded animate-pulse"></div>
                     </div>
-                    <div>
-                      <span className={`px-4 py-1 rounded-full text-md font-semibold shadow 
-                        ${
-                          activity.score === "In progress" 
-                            ? "bg-[#e5deff] text-[#6a42b2]"
-                            : activity.score === "Complete" 
-                              ? "bg-[#d2f6e6] text-[#1e5b3a]"
-                              : "bg-[#faedca] text-[#f6c244]"
-                        }`
-                      }>
-                        {activity.score}
-                      </span>
-                    </div>
+                  ))
+                ) : recentActivities.length === 0 ? (
+                  <div className="py-8 text-center text-[#4ABA79]">
+                    No recent activities found
                   </div>
-                ))}
+                ) : (
+                  recentActivities.map((activity) => (
+                    <div key={activity.id} className="py-4 flex justify-between items-center">
+                      <div>
+                        <h4 className="font-semibold text-[#4ABA79]">{activity.activity}</h4>
+                        <p className="text-xs text-[#b197d7]">{activity.date}</p>
+                      </div>
+                      <div>
+                        <span className={`px-4 py-1 rounded-full text-md font-semibold shadow 
+                          ${
+                            activity.score === "In progress" 
+                              ? "bg-[#e5deff] text-[#6a42b2]"
+                              : activity.score === "Complete" 
+                                ? "bg-[#d2f6e6] text-[#1e5b3a]"
+                                : "bg-[#faedca] text-[#f6c244]"
+                          }`
+                        }>
+                          {activity.score}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </div>
