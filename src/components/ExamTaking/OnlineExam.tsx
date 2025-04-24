@@ -11,7 +11,7 @@ import { ExamPaper, Question, QuestionType, UserAnswer } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { mockQuestions } from "./mockData";
 import { mockExamPapers } from "@/data/mockExamPapers";
-import { anwser as anwserList} from "../QuestionBank/QuestionViewer";
+import { anwser } from "../QuestionBank/QuestionViewer";
 
 const formatText = (text: string | object | undefined) => {
   if (!text) return null;
@@ -92,7 +92,9 @@ const OnlineExam = () => {
                 
                 const topic = contentObj.topic || "其他";
                 console.log("Topic for questions:", topic);
-                const answerMap = new Map(anwserList.map(a => [a.id, a]));
+                
+                const answerMap = new Map(anwser.map(a => [a.id, a]));
+                
                 const processedQuestions = contentObj.questionList.map((subQuestion: any, index: number): Question => {
                   console.log("Processing subQuestion:", subQuestion.question);
                   q_len = q_len + "_" + subQuestion.question;
