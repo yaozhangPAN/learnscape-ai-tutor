@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -193,7 +194,7 @@ const TutorMe = () => {
           <TutorTips />
         </div>
         
-        <div className="md:col-span-3 space-y-6">
+        <div className="md:col-span-3 space-y-6 border p-4 rounded-lg bg-white shadow-sm">
           <TutorCharacter />
           
           <div className="space-y-2">
@@ -214,7 +215,7 @@ const TutorMe = () => {
             </div>
           </div>
           
-          <TutorResponse response={response} />
+          {response && <TutorResponse response={response} />}
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ const TutorCharacter = () => {
         />
       </div>
       <div className="flex-1 bg-white p-4 rounded-lg shadow-sm border">
-        <p className="text-xl text-gray-800">你好！我是你的小熊猫老师。有什么我可以帮你的吗？</p>
+        <p className="text-xl font-medium text-gray-800">你好！我是你的小熊猫老师。有什么我可以帮你的吗？</p>
       </div>
     </div>
   );

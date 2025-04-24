@@ -7,7 +7,7 @@ export const TutorResponse = ({ response }: TutorResponseProps) => {
   if (!response) return null;
   
   return (
-    <div>
+    <div className="mt-6">
       <label className="text-sm font-medium block mb-1">AI 导师回答</label>
       <div className="bg-gray-50 border rounded-md p-6 prose prose-sm max-w-none">
         <div dangerouslySetInnerHTML={{ __html: response }} />
