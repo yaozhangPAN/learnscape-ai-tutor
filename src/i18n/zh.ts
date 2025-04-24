@@ -1,4 +1,3 @@
-
 const zh = {
   NAV: {
     HOME: "首页",
@@ -94,10 +93,6 @@ const zh = {
     VOCABULARY_DESC: "闯关答题记单词，词汇量UP!",
     LANGUAGE_ARTS: "语文工坊",
     LANGUAGE_ARTS_DESC: "创意写作&阅读理解，全面提升语文能力。",
-    ERROR_ANALYSIS: "错题分析",
-    ERROR_ANALYSIS_DESC: "分析你的错误并从中学习。",
-    SNAP_AND_SOLVE: "拍照解题",
-    SNAP_AND_SOLVE_DESC: "给问题拍照，立即获得解答。",
     GO: "进入",
     SUBTITLE_WRITING: "写作教练",
     SUBTITLE_ORAL: "口语闯关",

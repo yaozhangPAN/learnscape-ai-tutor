@@ -1,112 +1,100 @@
 
-import React from 'react';
-import TutorOptionCard from './TutorOptionCard';
-import { MessageSquare, PenLine, Mic, Book, LineChart, Camera, Brain, BookOpen } from 'lucide-react';
-import MaskOverlay from '@/components/MaskOverlay';
-import { useI18n } from '@/contexts/I18nContext';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useI18n } from "@/contexts/I18nContext";
+import { useToast } from "@/hooks/use-toast";
+import TutorOptionCard from "./TutorOptionCard";
+import { COLORS } from "./constants";
 
 const TutorOptionsGrid = () => {
+  const navigate = useNavigate();
   const { t } = useI18n();
+  const { toast } = useToast();
 
-  const options = [
+  const handleUpgradeNotice = () => {
+    toast({
+      title: t.NAV.CHINESE === "中文" ? "功能升级中" : "Feature Upgrading",
+      description: t.NAV.CHINESE === "中文" ? "该功能正在升级中，敬请期待上线！" : "This feature is currently being upgraded. Stay tuned!",
+      variant: "default",
+    });
+  };
+
+  const handleLanguageArtsClick = () => {
+    navigate("/ai-tutor/language-arts");
+  };
+
+  const tutorOptions = [
     {
-      title: t.AI_TUTOR.TUTOR_ME || "Tutor Me",
-      description: t.AI_TUTOR.TUTOR_ME_DESC || "Ask AI any academic question anytime.",
-      icon: <MessageSquare className="h-5 w-5" />,
-      path: "/ai-tutor/tutor-me",
-      color: "bg-gradient-to-br from-blue-400 to-indigo-500",
-      showMask: false, // Disabled mask for TutorMe
-      emoji: "✨",
-      subtitle: t.AI_TUTOR.SUBTITLE_TUTOR || "One-on-one Q&A"
+      id: "writing-coach",
+      title: t.AI_TUTOR.WRITING_COACH,
+      subtitle: t.AI_TUTOR.SUBTITLE_WRITING,
+      icon: "/lovable-uploads/1bd5d4e2-d0e7-4caf-a458-e87bbd5e7418.png",
+      color: COLORS.PURPLE,
+      description: t.AI_TUTOR.WRITING_COACH_DESC,
+      path: "#",
+      onClick: handleUpgradeNotice,
+      emoji: "✏️"
     },
     {
-      title: t.AI_TUTOR.WRITING_COACH || "Writing Coach",
-      description: t.AI_TUTOR.WRITING_COACH_DESC || "Improve writing skills with AI feedback and suggestions.",
-      icon: <PenLine className="h-5 w-5" />,
-      path: "/ai-tutor/writing-coach",
-      color: "bg-gradient-to-br from-pink-500 to-red-500",
-      showMask: true,
-      emoji: "📝",
-      subtitle: t.AI_TUTOR.SUBTITLE_WRITING || "Writing Coach"
-    },
-    {
-      title: t.AI_TUTOR.ORAL_EXAM || "Oral Exam Practice",
-      description: t.AI_TUTOR.ORAL_EXAM_DESC || "Fun oral practice to help you ace interviews.",
-      icon: <Mic className="h-5 w-5" />,
+      id: "oral-exam",
+      title: t.AI_TUTOR.ORAL_EXAM,
+      subtitle: t.AI_TUTOR.SUBTITLE_ORAL,
+      icon: "/lovable-uploads/eb69da2f-b824-461b-bcd4-3c65112631ff.png",
+      color: COLORS.BLUE,
+      description: t.AI_TUTOR.ORAL_EXAM_DESC,
       path: "/ai-tutor/oral-exam",
-      color: "bg-gradient-to-br from-green-400 to-teal-500",
-      showMask: true,
-      emoji: "🎤",
-      subtitle: t.AI_TUTOR.SUBTITLE_ORAL || "Oral Exam"
+      emoji: "🎙️"
     },
     {
-      title: t.AI_TUTOR.DICTATION || "Dictation Practice",
-      description: t.AI_TUTOR.DICTATION_DESC || "Chinese & English dictation training, easier with voice input!",
-      icon: <Book className="h-5 w-5" />,
-      path: "/ai-tutor/dictation-practice",
-      color: "bg-gradient-to-br from-orange-400 to-yellow-500",
-      showMask: true,
-      emoji: "🔊",
-      subtitle: t.AI_TUTOR.SUBTITLE_DICTATION || "Dictation"
+      id: "dictation-practice",
+      title: t.AI_TUTOR.DICTATION,
+      subtitle: t.AI_TUTOR.SUBTITLE_DICTATION,
+      icon: "/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png",
+      color: COLORS.MINT,
+      description: t.AI_TUTOR.DICTATION_DESC,
+      path: "#",
+      onClick: handleUpgradeNotice,
+      emoji: "🎧"
     },
     {
-      title: t.AI_TUTOR.ERROR_ANALYSIS || "Error Analysis",
-      description: t.AI_TUTOR.ERROR_ANALYSIS_DESC || "Analyze and learn from your mistakes.",
-      icon: <LineChart className="h-5 w-5" />,
-      path: "/ai-tutor/error-analysis",
-      color: "bg-gradient-to-br from-purple-500 to-pink-500",
-      showMask: true,
-      emoji: "📊",
-      subtitle: "Error Analysis"
+      id: "tutor-me",
+      title: t.AI_TUTOR.TUTOR_ME,
+      subtitle: t.AI_TUTOR.SUBTITLE_TUTOR,
+      icon: "/lovable-uploads/134d4088-5005-41d9-9487-719568001089.png",
+      color: COLORS.GREEN,
+      description: t.AI_TUTOR.TUTOR_ME_DESC,
+      path: "#",
+      onClick: handleUpgradeNotice,
+      emoji: "🧠"
     },
     {
-      title: t.AI_TUTOR.SNAP_AND_SOLVE || "Snap and Solve",
-      description: t.AI_TUTOR.SNAP_AND_SOLVE_DESC || "Take a photo of your problem and get an instant solution.",
-      icon: <Camera className="h-5 w-5" />,
-      path: "/ai-tutor/snap-and-solve",
-      color: "bg-gradient-to-br from-lime-500 to-green-500",
-      showMask: true,
-      emoji: "📸",
-      subtitle: "Snap and Solve"
-    },
-    {
-      title: t.AI_TUTOR.VOCABULARY || "Vocabulary Builder",
-      description: t.AI_TUTOR.VOCABULARY_DESC || "Level-up and remember words by answering word quizzes!",
-      icon: <Brain className="h-5 w-5" />,
+      id: "vocabulary",
+      title: t.AI_TUTOR.VOCABULARY,
+      subtitle: t.AI_TUTOR.SUBTITLE_VOCAB,
+      icon: "/lovable-uploads/3a8a17fe-664a-4c72-990a-dee148e1f5bb.png",
+      color: COLORS.ORANGE,
+      description: t.AI_TUTOR.VOCABULARY_DESC,
       path: "/ai-tutor/vocabulary",
-      color: "bg-gradient-to-br from-teal-500 to-blue-500",
-      showMask: true,
-      emoji: "🔤",
-      subtitle: t.AI_TUTOR.SUBTITLE_VOCAB || "Vocabulary Builder"
+      emoji: "📚"
     },
     {
-      title: t.AI_TUTOR.LANGUAGE_ARTS || "Language Arts Workshop",
-      description: t.AI_TUTOR.LANGUAGE_ARTS_DESC || "Creative writing & reading comprehension to improve language.",
-      icon: <BookOpen className="h-5 w-5" />,
-      path: "/ai-tutor/language-arts",
-      color: "bg-gradient-to-br from-fuchsia-500 to-purple-500",
-      showMask: true,
-      emoji: "📚",
-      subtitle: t.AI_TUTOR.SUBTITLE_LANGUAGE_ARTS || "Language Arts Workshop"
-    },
+      id: "language-arts",
+      title: t.AI_TUTOR.LANGUAGE_ARTS,
+      subtitle: t.AI_TUTOR.SUBTITLE_LANGUAGE_ARTS,
+      icon: "/lovable-uploads/35e5ebeb-cc32-46fc-961d-fb6241e51756.png",
+      color: COLORS.YELLOW,
+      description: t.AI_TUTOR.LANGUAGE_ARTS_DESC,
+      path: "#",
+      onClick: handleLanguageArtsClick,
+      emoji: "📝"
+    }
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {options.map((option, index) => (
-        <div key={index}>
-          <TutorOptionCard
-            id={`tutor-option-${index}`}
-            title={option.title}
-            subtitle={option.subtitle}
-            icon={option.icon.type.render().props.name}
-            description={option.description}
-            color={option.color}
-            path={option.path}
-            emoji={option.emoji}
-          >
-            {option.showMask && <MaskOverlay />}
-          </TutorOptionCard>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      {tutorOptions.map((option) => (
+        <div key={option.id} className="relative group">
+          <TutorOptionCard {...option} />
         </div>
       ))}
     </div>
