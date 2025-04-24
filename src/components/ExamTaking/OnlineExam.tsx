@@ -479,6 +479,7 @@ const OnlineExam = () => {
                                 : a
                             ));
                           }}
+                          examCompleted={examCompleted}
                         />
                       </CardContent>
                     </Card>

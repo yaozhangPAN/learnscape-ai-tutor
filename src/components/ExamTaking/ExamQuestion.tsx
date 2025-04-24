@@ -3,15 +3,22 @@ import React from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { AlertCircle } from "lucide-react";
 import { Question } from "./types";
 
 interface ExamQuestionProps {
   question: Question;
   userAnswer: string;
   onAnswerChange: (value: string) => void;
+  examCompleted?: boolean;
 }
 
-const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProps) => {
+const ExamQuestion = ({ 
+  question, 
+  userAnswer, 
+  onAnswerChange,
+  examCompleted = false
+}: ExamQuestionProps) => {
   const formatHtml = (text: string | undefined) => {
     if (!text) return "";
     return String(text).replace(/\n/g, "<br />");
@@ -25,6 +32,7 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
         value={userAnswer} 
         onValueChange={onAnswerChange}
         className="mt-4 space-y-3"
+        disabled={examCompleted}
       >
         {question.options.map((option, index) => (
           <div key={index} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-md">
@@ -45,13 +53,26 @@ const ExamQuestion = ({ question, userAnswer, onAnswerChange }: ExamQuestionProp
     if (question.type !== "ShortAnswer") return null;
 
     return (
-      <div className="mt-4">
+      <div className="space-y-4">
         <Textarea
           placeholder="在此输入你的答案..."
           value={userAnswer}
           onChange={(e) => onAnswerChange(e.target.value)}
           className="min-h-[120px]"
+          disabled={examCompleted}
         />
+        
+        {examCompleted && question.correctAnswer && userAnswer !== question.correctAnswer && (
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5" />
+              <div>
+                <p className="font-medium text-blue-900">正确答案：</p>
+                <p className="mt-1 text-blue-800">{question.correctAnswer}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
