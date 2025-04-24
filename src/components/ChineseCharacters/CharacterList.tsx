@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useSupabase } from '@/hooks/useSupabase';
 import {
@@ -10,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import ImportCharacters from './ImportCharacters';
 
 interface ChineseCharacter {
   id: string;
@@ -56,6 +56,7 @@ const CharacterList = () => {
         <CardTitle>汉字列表</CardTitle>
       </CardHeader>
       <CardContent>
+        <ImportCharacters onImportComplete={fetchCharacters} />
         <Table>
           <TableHeader>
             <TableRow>
