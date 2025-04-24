@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import LearningProgress from "@/components/dashboard/LearningProgress";
 import ActivityModules from "@/components/dashboard/ActivityModules";
+import StreakComponent from "@/components/StreakComponent";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -65,6 +66,9 @@ const Dashboard = () => {
           <div className="grid gap-8 md:grid-cols-2">
             <Card className="p-6">
               <LearningProgress subjects={mockSubjects} />
+            </Card>
+            <Card className="p-6">
+              <StreakComponent />
             </Card>
           </div>
         </div>
