@@ -11,12 +11,6 @@ type ExamTableProps = {
 };
 
 const ExamTable: React.FC<ExamTableProps> = ({ papers, handleTakeExam }) => {
-  const handleDownload = (paperId: string) => {
-    // Using the exact format from the provided URL
-    const downloadUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers/${paperId}.pdf`;
-    window.open(downloadUrl, '_blank');
-  };
-
   return (
     <div className="hidden md:block overflow-x-auto">
       <Table>
@@ -48,10 +42,7 @@ const ExamTable: React.FC<ExamTableProps> = ({ papers, handleTakeExam }) => {
               <TableCell>{paper.type}</TableCell>
               <TableCell className="text-right">{paper.downloadCount}</TableCell>
               <TableCell className="text-right space-x-2">
-                <Button 
-                  size="sm"
-                  onClick={() => handleDownload(paper.id)}
-                >
+                <Button size="sm">
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
