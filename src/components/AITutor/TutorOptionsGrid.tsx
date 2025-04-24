@@ -2,22 +2,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/contexts/I18nContext";
-import { useToast } from "@/hooks/use-toast";
 import TutorOptionCard from "./TutorOptionCard";
 import { COLORS } from "./constants";
 
 const TutorOptionsGrid = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
-  const { toast } = useToast();
-
-  const handleUpgradeNotice = () => {
-    toast({
-      title: t.NAV.CHINESE === "中文" ? "功能升级中" : "Feature Upgrading",
-      description: t.NAV.CHINESE === "中文" ? "该功能正在升级中，敬请期待上线！" : "This feature is currently being upgraded. Stay tuned!",
-      variant: "default",
-    });
-  };
 
   const handleLanguageArtsClick = () => {
     navigate("/ai-tutor/language-arts");
@@ -31,8 +21,7 @@ const TutorOptionsGrid = () => {
       icon: "/lovable-uploads/1bd5d4e2-d0e7-4caf-a458-e87bbd5e7418.png",
       color: COLORS.PURPLE,
       description: t.AI_TUTOR.WRITING_COACH_DESC,
-      path: "#",
-      onClick: handleUpgradeNotice,
+      path: "/ai-tutor/writing-coach",
       emoji: "✏️"
     },
     {
@@ -52,8 +41,7 @@ const TutorOptionsGrid = () => {
       icon: "/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png",
       color: COLORS.MINT,
       description: t.AI_TUTOR.DICTATION_DESC,
-      path: "#",
-      onClick: handleUpgradeNotice,
+      path: "/ai-tutor/dictation-practice",
       emoji: "🎧"
     },
     {
