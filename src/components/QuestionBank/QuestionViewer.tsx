@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { Star } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Question {
   id: number;
@@ -181,7 +184,7 @@ export const anwser = [
   },
   {
     id: "Q40",
-    value: "我认为当父母看到子懂得为���己的行���负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
+    value: "我认为��父母看到子懂得为���己的行���负责时,就会认为孩子“长大” 了。文中的作者和朋友明华去巴刹时,明华的脚踏车撞到了一位瘦小的老婆婆,作者没有像明华一样溜走,而是帮老婆婆拾起散落在地上的菜,并送老婆婆回家。作者懂得为自己的行为负责,愿意承担自己行为的后果,所以经过这件事以后,作者的爸爸认为作者长大了。"
   }
 ];
 
@@ -191,10 +194,74 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
   question
 }) => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [submittedIndexes, setSubmittedIndexes] = useState<{[key: number]: boolean}>({});
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: number]: { value: string; optionId: string } | undefined
   }>({});
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (!user || !question) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('user_activities_tracking')
+          .select('details')
+          .eq('user_id', user.id)
+          .eq('activity_type', 'question_practice')
+          .eq('details->question_id', question.id)
+          .eq('details->is_favorite', true)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error checking favorite status:', error);
+          return;
+        }
+
+        setIsFavorite(!!data);
+      } catch (error) {
+        console.error('Error checking favorite status:', error);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [user, question]);
+
+  const handleToggleFavorite = async () => {
+    if (!user || !question) return;
+
+    try {
+      const newStatus = !isFavorite;
+      
+      await supabase
+        .from('user_activities_tracking')
+        .insert({
+          user_id: user.id,
+          activity_type: 'question_practice',
+          details: {
+            question_id: question.id,
+            is_favorite: newStatus
+          }
+        });
+
+      setIsFavorite(newStatus);
+      toast({
+        title: newStatus ? "Added to favorites" : "Removed from favorites",
+        description: newStatus ? 
+          "Question has been added to your favorites" : 
+          "Question has been removed from your favorites"
+      });
+    } catch (error) {
+      console.error('Error toggling favorite status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update favorite status",
+        variant: "destructive"
+      });
+    }
+  };
 
   const renderTopicWithLineBreaks = (topic: string) => {
     if (!topic) return null;
@@ -381,7 +448,19 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{question?.title}</DialogTitle>
+          <div className="flex justify-between items-center">
+            <DialogTitle>{question?.title}</DialogTitle>
+            {user && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleToggleFavorite}
+                className={`${isFavorite ? 'text-yellow-500' : 'text-gray-400'}`}
+              >
+                <Star className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
+              </Button>
+            )}
+          </div>
         </DialogHeader>
         <div className="mt-4">
           {question && renderQuestionContent(question.content)}
