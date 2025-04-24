@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -24,6 +25,13 @@ export interface QuestionViewerProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   question: Question | null;
+}
+
+// Define concrete type for question details to prevent infinite type recursion
+interface QuestionDetailRecord {
+  question_id: string;
+  is_favorite?: boolean;
+  is_correct?: boolean;
 }
 
 export const anwser = [

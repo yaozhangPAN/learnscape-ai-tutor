@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -35,7 +34,6 @@ const WrongQuestions = () => {
 
         const questionIds = activities
           ?.map(activity => {
-            // Ensure we're properly handling the details
             const details = activity.details as unknown as QuestionDetails;
             return details?.question_id;
           })

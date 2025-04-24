@@ -16,14 +16,14 @@ import ActivityModules from "@/components/dashboard/ActivityModules";
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
 
-interface ActivityDetails {
+interface QuestionActivityDetails {
   question_id?: string;
   is_correct?: boolean;
   is_favorite?: boolean;
 }
 
 interface ActivityData {
-  details: Json | ActivityDetails;
+  details: Json;
 }
 
 const Dashboard = () => {
@@ -71,7 +71,7 @@ const Dashboard = () => {
         
         const uniqueQuestions = new Set<string>();
         (practiceActivities || []).forEach((activity: ActivityData) => {
-          const details = activity.details as unknown as ActivityDetails;
+          const details = activity.details as unknown as QuestionActivityDetails;
           const questionId = details?.question_id;
           if (questionId) {
             uniqueQuestions.add(questionId);
@@ -90,7 +90,7 @@ const Dashboard = () => {
         
         const uniqueWrongQuestions = new Set<string>();
         (wrongAnswers || []).forEach((activity: ActivityData) => {
-          const details = activity.details as unknown as ActivityDetails;
+          const details = activity.details as unknown as QuestionActivityDetails;
           const questionId = details?.question_id;
           if (questionId) {
             uniqueWrongQuestions.add(questionId);
@@ -109,7 +109,7 @@ const Dashboard = () => {
         
         const uniqueFavorites = new Set<string>();
         (favoriteData || []).forEach((activity: ActivityData) => {
-          const details = activity.details as unknown as ActivityDetails;
+          const details = activity.details as unknown as QuestionActivityDetails;
           const questionId = details?.question_id;
           if (questionId) {
             uniqueFavorites.add(questionId);
