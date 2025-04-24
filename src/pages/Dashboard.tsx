@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Book, BookX, Star, Search } from "lucide-react";
@@ -10,6 +9,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import UserRecentActivities from "@/components/UserRecentActivities";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -27,7 +27,6 @@ const Dashboard = () => {
   const { session } = useAuth();
   const { toast } = useToast();
   
-  // Add state for dashboard data
   const [questionCount, setQuestionCount] = useState<number>(0);
   const [wrongQuestionCount, setWrongQuestionCount] = useState<number>(0);
   const [favoriteCount, setFavoriteCount] = useState<number>(0);
@@ -58,7 +57,6 @@ const Dashboard = () => {
       setIsLoading(true);
       
       try {
-        // Fetch question bank count
         const { count: questionBankCount, error: questionError } = await supabase
           .from('questions')
           .select('*', { count: 'exact', head: true });
@@ -66,7 +64,6 @@ const Dashboard = () => {
         if (questionError) throw questionError;
         setQuestionCount(questionBankCount || 0);
         
-        // Fetch user activity statistics
         const { data: userActivities, error: activitiesError } = await supabase
           .from('user_activities')
           .select('*')
@@ -76,7 +73,6 @@ const Dashboard = () => {
           
         if (activitiesError) throw activitiesError;
         
-        // Count unique questions answered incorrectly
         const uniqueWrongQuestions = new Set();
         userActivities?.forEach((activity) => {
           const details = activity.activity_details as any;
@@ -86,7 +82,6 @@ const Dashboard = () => {
         });
         setWrongQuestionCount(uniqueWrongQuestions.size);
         
-        // Fetch favorite questions
         const { data: favoriteData, error: favoriteError } = await supabase
           .from('user_activities')
           .select('*')
@@ -96,7 +91,6 @@ const Dashboard = () => {
           
         if (favoriteError) throw favoriteError;
         
-        // Count unique favorite questions
         const uniqueFavorites = new Set();
         favoriteData?.forEach((activity) => {
           const details = activity.activity_details as any;
@@ -106,7 +100,6 @@ const Dashboard = () => {
         });
         setFavoriteCount(uniqueFavorites.size);
         
-        // Calculate subject progress based on completed activities
         const subjectProgress = {
           Mathematics: 0,
           English: 0,
@@ -123,7 +116,6 @@ const Dashboard = () => {
           
         if (subjectError) throw subjectError;
         
-        // Count activities by subject
         const subjectCounts: Record<string, number> = {};
         subjectActivities?.forEach((activity) => {
           const details = activity.activity_details as any;
@@ -133,8 +125,7 @@ const Dashboard = () => {
           }
         });
         
-        // Calculate percentages (assuming 100 is the target number of activities)
-        const targetPerSubject = 20; // Arbitrary number for progress calculation
+        const targetPerSubject = 20;
         Object.keys(subjectProgress).forEach(subject => {
           const count = subjectCounts[subject] || 0;
           const percentage = Math.min(100, Math.round((count / targetPerSubject) * 100));
@@ -223,7 +214,7 @@ const Dashboard = () => {
           ))}
         </div>
 
-        <div className="mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className={cardBgClasses}>
             <CardHeader className="rounded-t-3xl bg-[#e5deff] p-6 border-b border-[#ededfa]">
               <CardTitle className={`text-lg font-bold ${textMain}`}>{t.DASHBOARD.LEARNING_PROGRESS}</CardTitle>
@@ -256,6 +247,7 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </div>
+          <UserRecentActivities />
         </div>
 
         <div className="text-center mb-8">

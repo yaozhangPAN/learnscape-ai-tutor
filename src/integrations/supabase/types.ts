@@ -288,6 +288,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activities_tracking: {
+        Row: {
+          activity_type: Database["public"]["Enums"]["activity_category"]
+          created_at: string
+          details: Json | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activity_type: Database["public"]["Enums"]["activity_category"]
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          activity_type?: Database["public"]["Enums"]["activity_category"]
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       video_files: {
         Row: {
           course_id: string
@@ -344,7 +368,13 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      activity_category:
+        | "video_watch"
+        | "question_practice"
+        | "homework_complete"
+        | "mock_exam"
+        | "ai_tutor_use"
+        | "quiz_complete"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -459,6 +489,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      activity_category: [
+        "video_watch",
+        "question_practice",
+        "homework_complete",
+        "mock_exam",
+        "ai_tutor_use",
+        "quiz_complete",
+      ],
+    },
   },
 } as const

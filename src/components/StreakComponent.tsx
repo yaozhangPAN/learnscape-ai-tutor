@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
-// Define the type for calendar days
 interface CalendarDay {
   day: string;
   date: number | null;
@@ -28,28 +26,27 @@ const StreakComponent = () => {
   const { toast } = useToast();
   const currentMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
 
-  // 按照首页配色重定义色卡
   const colors = {
-    mainBg: "bg-[#FFF6D5]", // 奶黄，整体背景
-    primary: "#2F5530",      // 深绿色
-    highlight: "#FFD700",    // 黄色高光点
-    card: "bg-[#FFEFAE]",    // 卡片背景奶黄
-    streakSocietyBg: "bg-[#2F5530]", // 深绿色
+    mainBg: "bg-[#FFF6D5]",
+    primary: "#2F5530",
+    highlight: "#FFD700",
+    card: "bg-[#FFEFAE]",
+    streakSocietyBg: "bg-[#2F5530]",
     streakSocietyText: "text-white",
-    tabBg: "bg-[#FFEFAE]", // tab 背景卡片色，未激活奶黄
+    tabBg: "bg-[#FFEFAE]",
     activeTabBg: "bg-[#2F5530] text-white",
     inactiveTabBg: "bg-[#FFEFAE] text-[#2F5530]",
     cardBgs: {
-      practiced: "bg-[#AED581]", // 草绿
-      freeze: "bg-[#FBC02D]",    // 金黄
+      practiced: "bg-[#AED581]",
+      freeze: "bg-[#FBC02D]",
     },
     cardText: "text-[#2F5530]",
     button: "bg-[#2F5530] text-white hover:bg-[#21401f]",
-    calendarDay: "bg-[#FFEFAE] text-[#2F5530]", // 日历普通天
-    calendarDone: "bg-[#AED581] text-[#2F5530] font-bold", // 打卡完成天
-    calendarFreeze: "bg-[#FBC02D] text-white font-bold", // 冻结
-    calendarActive: "bg-[#FFD700] text-[#2F5530] font-bold", // 重点
-    calendarToday: "bg-[#FF7043] text-white font-bold", // 今日高亮
+    calendarDay: "bg-[#FFEFAE] text-[#2F5530]",
+    calendarDone: "bg-[#AED581] text-[#2F5530] font-bold",
+    calendarFreeze: "bg-[#FBC02D] text-white font-bold",
+    calendarActive: "bg-[#FFD700] text-[#2F5530] font-bold",
+    calendarToday: "bg-[#FF7043] text-white font-bold",
   };
 
   useEffect(() => {
@@ -62,7 +59,6 @@ const StreakComponent = () => {
     const fetchStreakData = async () => {
       setIsLoading(true);
       try {
-        // Fetch streak data
         const { data: streaks, error } = await supabase
           .from('daily_streaks')
           .select('*')
@@ -71,7 +67,6 @@ const StreakComponent = () => {
 
         if (error) throw error;
 
-        // Calculate current streak from the data
         const currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0);
         
@@ -79,19 +74,16 @@ const StreakComponent = () => {
         const practicesDays = new Set<string>();
         
         if (streaks && streaks.length > 0) {
-          // Add all streak dates to a set for counting unique days
           streaks.forEach(record => {
             if (typeof record.streak_date === 'string') {
               practicesDays.add(record.streak_date);
             }
           });
 
-          // Calculate the consecutive streak
           const sortedDates = [...practicesDays].sort((a, b) => 
             new Date(b).getTime() - new Date(a).getTime()
           );
           
-          // Start from today and count backwards
           let lastDate = currentDate;
           for (const dateStr of sortedDates) {
             const streakDate = new Date(dateStr);
@@ -99,7 +91,6 @@ const StreakComponent = () => {
             
             const diffDays = Math.round((lastDate.getTime() - streakDate.getTime()) / (1000 * 60 * 60 * 24));
             
-            // If this day is consecutive with the last one or it's today
             if (diffDays <= 1) {
               streak++;
               lastDate = streakDate;
@@ -112,8 +103,6 @@ const StreakComponent = () => {
         setCurrentStreak(streak);
         setDaysPracticed(practicesDays.size);
 
-        // For this example, we'll assume freeze is a calculated value
-        // In a real app, this might come from a separate table or calculation
         setFreezeUsed(Math.min(3, Math.floor(practicesDays.size / 10)));
         
         generateCalendar(practicesDays);
@@ -140,16 +129,13 @@ const StreakComponent = () => {
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
     
-    // Generate the calendar days
     const days: CalendarDay[] = [];
     const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
     
-    // Add empty slots for days before the 1st of the month
     for (let i = 0; i < 7; i++) {
       days.push({ day: dayNames[i], date: null });
     }
     
-    // Add the days of the month
     for (let i = 1; i <= lastDate; i++) {
       const date = new Date(currentYear, currentMonth, i);
       const dayIndex = date.getDay();
@@ -161,16 +147,13 @@ const StreakComponent = () => {
       if (isToday) {
         status = "today";
       } else if (practicesDays?.has(dateStr)) {
-        // This is a simplification - in a real app you'd have more detailed logic
-        // for determining if a day had practice or used freeze
         status = "completed";
         
-        // For demo purposes, let's say every 5th practice day used freeze
         if (i % 5 === 0) {
           status = "freeze";
         }
       } else if (i === today.getDate() + 1) {
-        status = "active"; // Tomorrow is active
+        status = "active";
       }
       
       days[dayIndex + 7] = { 
@@ -181,52 +164,6 @@ const StreakComponent = () => {
     }
     
     setCalendarDays(days);
-  };
-
-  const handleExtendStreak = async () => {
-    if (!session?.user.id) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to track your streak.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      
-      const { error } = await supabase
-        .from('daily_streaks')
-        .upsert({
-          user_id: session.user.id,
-          streak_date: today,
-          activities_count: 1
-        }, { 
-          onConflict: 'user_id,streak_date'
-        });
-        
-      if (error) throw error;
-      
-      toast({
-        title: "Streak extended!",
-        description: "Keep up the good work!",
-        variant: "default"
-      });
-      
-      // Refresh the streak data
-      setCurrentStreak(prev => prev + 1);
-      setDaysPracticed(prev => prev + 1);
-      generateCalendar(new Set([today]));
-      
-    } catch (error) {
-      console.error('Error extending streak:', error);
-      toast({
-        title: "Error extending streak",
-        description: "Please try again later.",
-        variant: "destructive"
-      });
-    }
   };
 
   return (
@@ -255,7 +192,6 @@ const StreakComponent = () => {
           </TabsTrigger>
         </TabsList>
 
-        {/* 个人连续打卡 */}
         <TabsContent value="personal" className="mt-2">
           <div className="mb-6 flex flex-col items-center">
             <div className={`${colors.streakSocietyBg} ${colors.streakSocietyText} py-2 px-5 rounded-full text-center font-semibold tracking-wide text-sm mb-4 flex items-center gap-2`}>
@@ -279,7 +215,6 @@ const StreakComponent = () => {
             )}
           </div>
 
-          {/* 已练习天数、冻结 */}
           <div className="mb-6 flex flex-col md:flex-row gap-4">
             <Card className={`${colors.cardBgs.practiced} border-none flex-1 shadow`}>
               <CardContent className="p-4 flex items-center gap-4">
@@ -305,7 +240,6 @@ const StreakComponent = () => {
             </Card>
           </div>
 
-          {/* 日历 */}
           <Card className={`${colors.card} border border-[#f8e4a5] shadow-sm p-4`}>
             <CardContent>
               <div>
@@ -363,28 +297,8 @@ const StreakComponent = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* 继续打卡按钮和提醒 */}
-          <div className="mt-6 text-center">
-            <Button 
-              className={`${colors.button} text-lg px-8 py-3 rounded-full font-bold shadow`} 
-              style={{ backgroundColor: colors.primary, color: "#FFF" }}
-              onClick={handleExtendStreak}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : null}
-              {t.STREAK.EXTEND_STREAK}
-            </Button>
-            <div className="mt-2 font-semibold flex justify-center items-center gap-2" style={{ color: colors.primary }}>
-              <Clock className="inline-block h-5 w-5 mr-1" style={{ color: colors.highlight }} />
-              {t.STREAK.STREAK_WARNING}
-            </div>
-          </div>
         </TabsContent>
 
-        {/* 好友 */}
         <TabsContent value="friends">
           <div className={`${colors.card} text-center py-10 rounded-3xl`}>
             <Calendar className="h-16 w-16 mx-auto mb-2" style={{ color: colors.primary, opacity: 0.25 }} />
