@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import MainGameScene from './scenes/MainGameScene';
