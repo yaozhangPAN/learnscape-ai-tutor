@@ -10,6 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { Json } from "@/integrations/supabase/types";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -32,10 +33,11 @@ interface ActivityDetails {
   title?: string;
 }
 
+// Interface to match Supabase's user activity structure
 interface UserActivity {
   id: string;
   activity_type: string;
-  activity_details: ActivityDetails | null;
+  activity_details: Json;
   created_at: string;
   user_id: string;
 }
@@ -105,8 +107,10 @@ const Dashboard = () => {
         // Count unique questions answered incorrectly
         const uniqueWrongQuestions = new Set();
         userActivities?.forEach((activity: UserActivity) => {
-          if (activity.activity_details?.question_id) {
-            uniqueWrongQuestions.add(activity.activity_details.question_id);
+          // Safely access question_id using type assertion
+          const details = activity.activity_details as unknown as ActivityDetails;
+          if (details?.question_id) {
+            uniqueWrongQuestions.add(details.question_id);
           }
         });
         setWrongQuestionCount(uniqueWrongQuestions.size);
@@ -124,8 +128,10 @@ const Dashboard = () => {
         // Count unique favorite questions
         const uniqueFavorites = new Set();
         favoriteData?.forEach((activity: UserActivity) => {
-          if (activity.activity_details?.question_id) {
-            uniqueFavorites.add(activity.activity_details.question_id);
+          // Safely access question_id using type assertion
+          const details = activity.activity_details as unknown as ActivityDetails;
+          if (details?.question_id) {
+            uniqueFavorites.add(details.question_id);
           }
         });
         setFavoriteCount(uniqueFavorites.size);
@@ -160,23 +166,26 @@ const Dashboard = () => {
             let activityText = "Unknown activity";
             let score = "N/A";
             
+            // Safely access activity_details properties using type assertion
+            const details = activity.activity_details as unknown as ActivityDetails;
+            
             switch(activity.activity_type) {
               case 'quiz_complete':
-                activityText = `Completed ${activity.activity_details?.subject || ''} quiz`;
-                score = activity.activity_details?.score?.toString() || "Complete";
+                activityText = `Completed ${details?.subject || ''} quiz`;
+                score = details?.score?.toString() || "Complete";
                 break;
               case 'practice_complete':
-                activityText = `Completed ${activity.activity_details?.subject || ''} practice`;
-                score = activity.activity_details?.correct !== undefined && activity.activity_details?.total !== undefined
-                  ? `${activity.activity_details.correct}/${activity.activity_details.total}` 
+                activityText = `Completed ${details?.subject || ''} practice`;
+                score = details?.correct !== undefined && details?.total !== undefined
+                  ? `${details.correct}/${details.total}` 
                   : "Complete";
                 break;
               case 'video_watch':
-                activityText = `Watched ${activity.activity_details?.title || ''} video`;
+                activityText = `Watched ${details?.title || ''} video`;
                 score = "Complete";
                 break;
               case 'exam_start':
-                activityText = `Started ${activity.activity_details?.subject || ''} exam`;
+                activityText = `Started ${details?.subject || ''} exam`;
                 score = "In progress";
                 break;
               default:
@@ -218,7 +227,9 @@ const Dashboard = () => {
         // Count activities by subject
         const subjectCounts: Record<string, number> = {};
         subjectActivities?.forEach((activity: UserActivity) => {
-          const subject = activity.activity_details?.subject;
+          // Safely access subject using type assertion
+          const details = activity.activity_details as unknown as ActivityDetails;
+          const subject = details?.subject;
           if (subject && subject in subjectProgress) {
             subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
           }
