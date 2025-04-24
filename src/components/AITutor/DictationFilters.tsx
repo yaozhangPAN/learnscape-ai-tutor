@@ -19,7 +19,8 @@ interface DictationFiltersProps {
   onWriteChange: (value: string) => void;
 }
 
-const gradeOptions = ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级"];
+// Using exact values from database
+const gradeOptions = ["一", "二", "三", "四", "五", "六"];
 const yesNoOptions = [
   { value: "true", label: "是" },
   { value: "false", label: "否" },
@@ -46,7 +47,7 @@ export const DictationFilters = ({
           <SelectContent>
             {gradeOptions.map((g) => (
               <SelectItem key={g} value={g}>
-                {g}
+                {g}年级
               </SelectItem>
             ))}
           </SelectContent>
@@ -60,7 +61,7 @@ export const DictationFilters = ({
             <SelectValue placeholder="选择课次" />
           </SelectTrigger>
           <SelectContent>
-            {[...Array(20)].map((_, i) => (
+            {[...Array(10)].map((_, i) => (
               <SelectItem key={i + 1} value={String(i + 1)}>
                 第{i + 1}课
               </SelectItem>
