@@ -7,7 +7,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    // Load game assets
+    // Load game assets from Supabase storage
     this.load.setBaseURL('https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/vocabulary-game/');
     this.load.image('background', 'background.png');
     this.load.image('card', 'card.png');
