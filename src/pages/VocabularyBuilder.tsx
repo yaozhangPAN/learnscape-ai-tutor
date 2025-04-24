@@ -2,15 +2,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Volume2, GamepadIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, Volume2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
-import PhaserGame from "@/components/VocabularyGame/PhaserGame";
 
 const VocabularyBuilder = () => {
   const [currentCard, setCurrentCard] = useState(0);
-  const [showGame, setShowGame] = useState(false);
 
   const cards = [
     { word: "Ephemeral", definition: "Lasting for a very short time", example: "The ephemeral beauty of a sunset" },
@@ -24,10 +22,6 @@ const VocabularyBuilder = () => {
 
   const previousCard = () => {
     setCurrentCard((prev) => (prev - 1 + cards.length) % cards.length);
-  };
-
-  const toggleGame = () => {
-    setShowGame(prev => !prev);
   };
 
   return (
@@ -66,25 +60,6 @@ const VocabularyBuilder = () => {
                 </div>
               </CardContent>
             </Card>
-
-            <div className="flex justify-center">
-              <Button 
-                variant="outline"
-                onClick={toggleGame}
-                className="mb-4 flex items-center gap-2"
-              >
-                <GamepadIcon className="h-4 w-4" />
-                {showGame ? "Hide Game" : "Play Vocabulary Game"}
-              </Button>
-            </div>
-
-            {showGame && (
-              <Card className="w-full">
-                <CardContent className="p-4">
-                  <PhaserGame />
-                </CardContent>
-              </Card>
-            )}
           </div>
         </div>
       </main>
