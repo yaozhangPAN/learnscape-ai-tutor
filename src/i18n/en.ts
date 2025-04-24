@@ -1,3 +1,4 @@
+
 const en = {
   NAV: {
     HOME: "Home",
@@ -93,6 +94,10 @@ const en = {
     VOCABULARY_DESC: "Level-up and remember words by answering word quizzes!",
     LANGUAGE_ARTS: "Language Arts Workshop",
     LANGUAGE_ARTS_DESC: "Creative writing & reading comprehension to improve language.",
+    ERROR_ANALYSIS: "Error Analysis",
+    ERROR_ANALYSIS_DESC: "Analyze and learn from your mistakes.",
+    SNAP_AND_SOLVE: "Snap and Solve",
+    SNAP_AND_SOLVE_DESC: "Take a photo of your problem and get an instant solution.",
     GO: "Enter",
     SUBTITLE_WRITING: "Writing Coach",
     SUBTITLE_ORAL: "Oral Exam",

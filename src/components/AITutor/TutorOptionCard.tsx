@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,9 @@ interface TutorOptionProps {
   color: string;
   description: string;
   path: string;
-  onClick?: () => void;
   emoji: string;
+  onClick?: () => void;
+  children?: ReactNode;
 }
 
 const TutorOptionCard: React.FC<TutorOptionProps> = ({
@@ -25,7 +26,8 @@ const TutorOptionCard: React.FC<TutorOptionProps> = ({
   description,
   path,
   onClick,
-  emoji
+  emoji,
+  children
 }) => {
   const { t } = useI18n();
 
@@ -91,6 +93,11 @@ const TutorOptionCard: React.FC<TutorOptionProps> = ({
           {t.AI_TUTOR.GO} {title}
         </Button>
       </CardFooter>
+      {children && (
+        <div className="absolute inset-0">
+          {children}
+        </div>
+      )}
     </Card>
   );
 
