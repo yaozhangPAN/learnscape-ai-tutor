@@ -6,6 +6,7 @@ import { TutorResponse } from "./TutorResponse";
 import TutorCharacter from "./TutorCharacter";
 import InputControls from "./InputControls";
 import { Textarea } from "@/components/ui/textarea";
+import Navbar from "@/components/Navbar";
 
 const TutorMe = () => {
   const [question, setQuestion] = useState("");
@@ -82,35 +83,39 @@ const TutorMe = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
-      <div className="space-y-6 border p-4 rounded-lg bg-white shadow-sm">
-        <TutorCharacter />
-        
-        <div className="space-y-2">
-          <label className="text-sm font-medium block">您的问题</label>
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <Textarea 
-                placeholder="请输入您的问题..."
-                className="min-h-[150px] resize-none"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="max-w-3xl mx-auto px-4 py-6 flex-1">
+        <div className="space-y-6 border p-4 rounded-lg bg-white shadow-sm">
+          <TutorCharacter />
+          
+          <div className="space-y-2">
+            <label className="text-sm font-medium block">您的问题</label>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <Textarea 
+                  placeholder="请输入您的问题..."
+                  className="min-h-[150px] resize-none"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                />
+              </div>
+              <InputControls 
+                onVoiceInput={handleVoiceInput}
+                onImageUpload={handleImageUpload}
+                onSubmit={handleSubmit}
+                onClear={handleClear}
+                isLoading={isLoading}
               />
             </div>
-            <InputControls 
-              onVoiceInput={handleVoiceInput}
-              onImageUpload={handleImageUpload}
-              onSubmit={handleSubmit}
-              onClear={handleClear}
-              isLoading={isLoading}
-            />
           </div>
+          
+          {response && <TutorResponse response={response} />}
         </div>
-        
-        {response && <TutorResponse response={response} />}
       </div>
     </div>
   );
 };
 
 export default TutorMe;
+
