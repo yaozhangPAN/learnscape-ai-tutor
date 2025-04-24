@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,9 +8,13 @@ import { useI18n } from '@/contexts/I18nContext';
 interface CourseCardProps {
   course: Course;
   onWatchNow: (course: Course) => void;
+  stats?: {
+    views: number;
+    enrollment_count: number | null;
+  };
 }
 
-export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) => {
+export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow, stats }) => {
   const { t } = useI18n();
 
   return (
@@ -54,7 +57,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow }) =>
           </div>
           <div className="flex items-center">
             <Eye className="h-3.5 w-3.5 mr-1" />
-            <span>{course.views} {t.VIDEO_TUTORIALS.VIEWS}</span>
+            <span>{stats?.views || course.views} {t.VIDEO_TUTORIALS.VIEWS}</span>
           </div>
         </div>
       </CardContent>

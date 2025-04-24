@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -29,6 +28,7 @@ const Courses = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const contentId = searchParams.get("content");
   const [hasAccessToSelected, setHasAccessToSelected] = useState(false);
+  const [courseStats, setCourseStats] = useState<{[key: string]: any}>({});
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -49,7 +49,25 @@ const Courses = () => {
     }
   }, [contentId]);
 
-  // Check access whenever selected course changes
+  useEffect(() => {
+    const fetchCourseStats = async () => {
+      const { data: stats, error } = await supabase
+        .from('course_combined_stats')
+        .select('*')
+        .eq('class_type', 'video');
+      
+      if (!error && stats) {
+        const statsMap = stats.reduce((acc: any, stat: any) => {
+          acc[stat.course_id] = stat;
+          return acc;
+        }, {});
+        setCourseStats(statsMap);
+      }
+    };
+
+    fetchCourseStats();
+  }, []);
+
   useEffect(() => {
     const checkAccess = async () => {
       if (selectedCourse) {
@@ -78,10 +96,8 @@ const Courses = () => {
     setSelectedCourse(course);
     
     if (course.isPremium) {
-      // We will check access in the useEffect
       setDialogOpen(true);
     } else {
-      // No need to check access for non-premium courses
       setHasAccessToSelected(true);
       setDialogOpen(true);
     }
@@ -128,6 +144,7 @@ const Courses = () => {
               <CourseCard
                 course={course}
                 onWatchNow={handleWatchNow}
+                stats={courseStats[course.id]}
               />
             </Link>
           ))}

@@ -57,6 +57,57 @@ export type Database = {
         }
         Relationships: []
       }
+      course_enrollments: {
+        Row: {
+          class_type: string
+          course_id: string
+          created_at: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          class_type?: string
+          course_id: string
+          created_at?: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          class_type?: string
+          course_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      course_statistics: {
+        Row: {
+          class_type: string
+          course_id: string
+          created_at: string
+          id: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          class_type: string
+          course_id: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          class_type?: string
+          course_id?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -219,29 +270,17 @@ export type Database = {
         }
         Relationships: []
       }
-      zoom_course_enrollments: {
+    }
+    Views: {
+      course_combined_stats: {
         Row: {
-          course_id: string
-          created_at: string
-          id: string
-          user_id: string | null
-        }
-        Insert: {
-          course_id: string
-          created_at?: string
-          id?: string
-          user_id?: string | null
-        }
-        Update: {
-          course_id?: string
-          created_at?: string
-          id?: string
-          user_id?: string | null
+          class_type: string | null
+          course_id: string | null
+          enrollment_count: number | null
+          views: number | null
         }
         Relationships: []
       }
-    }
-    Views: {
       zoom_course_enrollment_counts: {
         Row: {
           course_id: string | null
