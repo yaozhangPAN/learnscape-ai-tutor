@@ -11,10 +11,10 @@ import TutorCharacter from "./TutorCharacter";
 import InputControls from "./InputControls";
 
 const subjects = [
-  { value: "math", label: "Mathematics" },
-  { value: "english", label: "English" },
-  { value: "chinese", label: "Chinese" },
-  { value: "science", label: "Science" }
+  { value: "math", label: "数学" },
+  { value: "english", label: "英语" },
+  { value: "chinese", label: "语文" },
+  { value: "science", label: "科学" }
 ];
 
 const TutorMe = () => {
@@ -73,7 +73,7 @@ const TutorMe = () => {
         
         setResponse(`
           <div class="flex items-start gap-4">
-            <img src="/lovable-uploads/dc7bd353-69bb-44b9-b3f0-158965f3a8eb.png" alt="Fireball" class="w-12 h-12 rounded-full" />
+            <img src="/lovable-uploads/41bfbaa7-c654-469f-ac7e-8a2a618c3f2c.png" alt="小熊猫" class="w-12 h-12 rounded-full" />
             <div>
               ${data.reply.replace(/\n/g, '<br>')}
             </div>
@@ -163,17 +163,15 @@ const TutorMe = () => {
     }
   };
 
-  const handleClear = () => {
-    setQuestion("");
-    setResponse("");
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-learnscape-darkBlue">AI 导师</h2>
+        <h2 className="text-2xl font-bold text-learnscape-darkBlue">AI 小熊猫导师</h2>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleClear}>清空</Button>
+          <Button variant="outline" onClick={() => {
+            setQuestion("");
+            setResponse("");
+          }}>清空</Button>
           <Button onClick={handleSubmit} disabled={isLoading}>
             {isLoading ? "思考中..." : "提问"}
           </Button>
