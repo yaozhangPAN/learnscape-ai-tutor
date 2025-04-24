@@ -43,12 +43,14 @@ const HomeStreakProgressSection: React.FC<Props> = ({
         currentDate.setHours(0, 0, 0, 0);
         
         let streak = 0;
-        const practicesDays = new Set();
+        const practicesDays = new Set<string>();
         
         if (streaks && streaks.length > 0) {
           // Add all streak dates to a set for counting unique days
           streaks.forEach(record => {
-            practicesDays.add(record.streak_date);
+            if (typeof record.streak_date === 'string') {
+              practicesDays.add(record.streak_date);
+            }
           });
 
           // Calculate the consecutive streak

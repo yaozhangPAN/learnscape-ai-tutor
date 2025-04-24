@@ -9,13 +9,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
+// Define the type for calendar days
+interface CalendarDay {
+  day: string;
+  date: number | null;
+  status?: string;
+}
+
 const StreakComponent = () => {
   const [activeTab, setActiveTab] = useState("personal");
   const [currentStreak, setCurrentStreak] = useState(0);
   const [daysPracticed, setDaysPracticed] = useState(0);
   const [freezeUsed, setFreezeUsed] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [calendarDays, setCalendarDays] = useState<Array<{day: string, date: number | null, status?: string}>>([]);
+  const [calendarDays, setCalendarDays] = useState<Array<CalendarDay>>([]);
   const { t } = useI18n();
   const { session } = useAuth();
   const { toast } = useToast();
@@ -69,12 +76,14 @@ const StreakComponent = () => {
         currentDate.setHours(0, 0, 0, 0);
         
         let streak = 0;
-        const practicesDays = new Set();
+        const practicesDays = new Set<string>();
         
         if (streaks && streaks.length > 0) {
           // Add all streak dates to a set for counting unique days
           streaks.forEach(record => {
-            practicesDays.add(record.streak_date);
+            if (typeof record.streak_date === 'string') {
+              practicesDays.add(record.streak_date);
+            }
           });
 
           // Calculate the consecutive streak
@@ -132,7 +141,7 @@ const StreakComponent = () => {
     const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
     
     // Generate the calendar days
-    const days = [];
+    const days: CalendarDay[] = [];
     const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
     
     // Add empty slots for days before the 1st of the month
@@ -317,7 +326,7 @@ const StreakComponent = () => {
                     if (!day.date) return <div key={`empty-${index}`}></div>;
 
                     let cellClass = `${colors.calendarDay} rounded-full w-9 h-9 flex items-center justify-center mx-auto font-semibold text-base border border-[#F0E0A8]`;
-                    let content = day.date;
+                    let content: React.ReactNode = day.date;
 
                     if (day.status === "completed") {
                       cellClass = `${colors.calendarDone} rounded-full w-9 h-9 flex items-center justify-center mx-auto border border-[#AED581]`;
