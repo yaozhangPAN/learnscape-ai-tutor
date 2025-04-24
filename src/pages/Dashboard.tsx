@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Book, BookX, Star, Search } from "lucide-react";
@@ -6,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Navbar from "@/components/Navbar";
 import StreakComponent from "@/components/StreakComponent";
 import { useI18n } from "@/contexts/I18nContext";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -21,6 +23,7 @@ const progressColors = {
 
 const Dashboard = () => {
   const { t, lang } = useI18n();
+  const { session } = useAuth();
 
   const getGreeting = () => {
     const hour = new Date().getHours();

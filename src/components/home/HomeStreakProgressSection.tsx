@@ -23,12 +23,16 @@ const HomeStreakProgressSection: React.FC<Props> = ({
 
   useEffect(() => {
     const fetchStreakData = async () => {
-      if (!session?.user.id) return;
+      if (!session?.user.id) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const { data: streaks, error } = await supabase
           .from('daily_streaks')
           .select('*')
+          .eq('user_id', session.user.id)
           .order('streak_date', { ascending: false })
           .limit(7);
 
