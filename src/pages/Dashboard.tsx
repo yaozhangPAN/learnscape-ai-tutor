@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Book, BookX, Star, Search } from "lucide-react";
+import { Book, BookX, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
@@ -10,7 +9,6 @@ import { useI18n } from "@/contexts/I18nContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import UserRecentActivities from "@/components/UserRecentActivities";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -22,6 +20,16 @@ const progressColors = {
   mid: "bg-[#f6c244]",
   low: "bg-[#e47069]"
 };
+
+interface ActivityDetails {
+  question_id: string;
+  is_correct?: boolean;
+  is_favorite?: boolean;
+}
+
+interface ActivityRecord {
+  details: ActivityDetails | null;
+}
 
 const Dashboard = () => {
   const { t, lang } = useI18n();
@@ -58,54 +66,51 @@ const Dashboard = () => {
       setIsLoading(true);
       
       try {
-        // Get the count of unique questions the user has practiced
         const { data: practiceActivities, error: practiceError } = await supabase
           .from('user_activities_tracking')
           .select('details')
           .eq('user_id', session.user.id)
-          .eq('activity_type', 'question_practice');
+          .eq('activity_type', 'question_practice') as { data: ActivityRecord[] | null, error: Error | null };
           
         if (practiceError) throw practiceError;
         
-        const uniqueQuestions = new Set();
+        const uniqueQuestions = new Set<string>();
         practiceActivities?.forEach((activity) => {
-          if (activity.details && typeof activity.details === 'object' && 'question_id' in activity.details) {
+          if (activity.details?.question_id) {
             uniqueQuestions.add(activity.details.question_id);
           }
         });
         setQuestionCount(uniqueQuestions.size);
         
-        // Get wrong answers count
         const { data: wrongAnswers, error: wrongError } = await supabase
           .from('user_activities_tracking')
           .select('details')
           .eq('user_id', session.user.id)
           .eq('activity_type', 'question_practice')
-          .eq('details->is_correct', false);
+          .eq('details->is_correct', false) as { data: ActivityRecord[] | null, error: Error | null };
           
         if (wrongError) throw wrongError;
         
-        const uniqueWrongQuestions = new Set();
+        const uniqueWrongQuestions = new Set<string>();
         wrongAnswers?.forEach((activity) => {
-          if (activity.details && typeof activity.details === 'object' && 'question_id' in activity.details) {
+          if (activity.details?.question_id) {
             uniqueWrongQuestions.add(activity.details.question_id);
           }
         });
         setWrongQuestionCount(uniqueWrongQuestions.size);
         
-        // Get favorites count - using question_practice with a favorite flag
         const { data: favoriteData, error: favoriteError } = await supabase
           .from('user_activities_tracking')
           .select('details')
           .eq('user_id', session.user.id)
           .eq('activity_type', 'question_practice')
-          .eq('details->is_favorite', true);
+          .eq('details->is_favorite', true) as { data: ActivityRecord[] | null, error: Error | null };
           
         if (favoriteError) throw favoriteError;
         
-        const uniqueFavorites = new Set();
+        const uniqueFavorites = new Set<string>();
         favoriteData?.forEach((activity) => {
-          if (activity.details && typeof activity.details === 'object' && 'question_id' in activity.details) {
+          if (activity.details?.question_id) {
             uniqueFavorites.add(activity.details.question_id);
           }
         });
