@@ -22,7 +22,7 @@ const VocabularyBuilder = () => {
 
   useEffect(() => {
     const fetchGameFile = async () => {
-      const { data, error } = await supabase.storage
+      const { data } = await supabase.storage
         .from('vocabulary-game')
         .getPublicUrl('index.html');
 
