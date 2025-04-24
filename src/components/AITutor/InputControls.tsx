@@ -1,5 +1,4 @@
-
-import { Mic, Image, Trash2, MessageSquareQuestion } from "lucide-react";
+import { Mic, Image, Trash2, MessageSquareQuoteIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { useState } from "react";
@@ -75,7 +74,7 @@ const InputControls = ({
           disabled={isLoading}
           className="flex-1"
         >
-          <MessageSquareQuestion className="h-4 w-4 mr-2" />
+          <MessageSquareQuoteIcon className="h-4 w-4 mr-2" />
           {isLoading ? "思考中..." : "提问"}
         </Button>
         <Button 
