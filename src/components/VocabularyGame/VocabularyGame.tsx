@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import MainGameScene from './scenes/MainGameScene';
@@ -10,7 +9,6 @@ const VocabularyGame = () => {
 
   const handleAssetUpload = (url: string) => {
     setGameAssets(prev => [...prev, url]);
-    // 重启游戏场景以加载新资源
     if (gameRef.current) {
       gameRef.current.scene.start('MainGameScene', { assets: [...gameAssets, url] });
     }
@@ -27,16 +25,20 @@ const VocabularyGame = () => {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { x: 0, y: 0 },  // 移除重力以便更好地操作资源
+          gravity: { x: 0, y: 0 },
           debug: false
         }
       }
     };
 
     if (!gameRef.current) {
-      gameRef.current = new Phaser.Game(config);
-      // 使用当前资源初始化场景
-      gameRef.current.scene.start('MainGameScene', { assets: gameAssets });
+      const script = document.createElement('script');
+      script.src = 'https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/vocabulary-game//phaser.js';
+      script.onload = () => {
+        gameRef.current = new Phaser.Game(config);
+        gameRef.current.scene.start('MainGameScene', { assets: gameAssets });
+      };
+      document.head.appendChild(script);
     }
 
     return () => {
@@ -46,7 +48,7 @@ const VocabularyGame = () => {
       }
     };
   }, []);
-  
+
   return (
     <div>
       <div id="phaser-game" className="w-full h-[600px] max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg" />

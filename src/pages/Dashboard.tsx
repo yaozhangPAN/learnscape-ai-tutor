@@ -8,6 +8,18 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+const mockSubjects = [
+  { name: 'Chinese', progress: 75 },
+  { name: 'English', progress: 60 },
+  { name: 'Math', progress: 85 }
+];
+
+const mockModules = [
+  { name: 'Vocabulary', completed: 12, total: 20 },
+  { name: 'Grammar', completed: 8, total: 15 },
+  { name: 'Writing', completed: 5, total: 10 }
+];
+
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -25,10 +37,10 @@ const Dashboard = () => {
           <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
           <div className="grid gap-8 md:grid-cols-2">
             <Card className="p-6">
-              <LearningProgress />
+              <LearningProgress subjects={mockSubjects} />
             </Card>
             <Card className="p-6">
-              <ActivityModules />
+              <ActivityModules modules={mockModules} />
             </Card>
           </div>
         </div>
