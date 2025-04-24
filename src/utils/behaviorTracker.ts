@@ -1,4 +1,5 @@
 
+import React, { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -74,7 +75,7 @@ export const trackUserBehavior = async (
  * @param pageName The name of the page being viewed
  */
 export const usePageViewTracking = (pageName: string) => {
-  React.useEffect(() => {
+  useEffect(() => {
     const startTime = new Date();
     
     // Track page view on mount
