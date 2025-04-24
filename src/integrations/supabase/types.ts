@@ -63,27 +63,27 @@ export type Database = {
           can_write: boolean | null
           character: string
           created_at: string | null
-          grade: number
+          grade: string
           id: string
-          lesson_number: number
+          lesson_number: string
         }
         Insert: {
           can_read?: boolean | null
           can_write?: boolean | null
           character: string
           created_at?: string | null
-          grade: number
+          grade: string
           id?: string
-          lesson_number: number
+          lesson_number: string
         }
         Update: {
           can_read?: boolean | null
           can_write?: boolean | null
           character?: string
           created_at?: string | null
-          grade?: number
+          grade?: string
           id?: string
-          lesson_number?: number
+          lesson_number?: string
         }
         Relationships: []
       }

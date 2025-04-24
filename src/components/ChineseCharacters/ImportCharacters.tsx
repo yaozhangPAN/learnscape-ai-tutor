@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useSupabase } from '@/hooks/useSupabase';
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,6 @@ const ImportCharacters = ({ onImportComplete }: { onImportComplete: () => void }
     try {
       const data = await readExcelFile(file);
       
-      // Validate data before importing
       const { validData, invalidRows } = validateCharacterData(data);
       
       if (invalidRows > 0) {
@@ -51,7 +49,6 @@ const ImportCharacters = ({ onImportComplete }: { onImportComplete: () => void }
       });
     } finally {
       setImporting(false);
-      // Reset file input
       event.target.value = '';
     }
   };
@@ -62,15 +59,14 @@ const ImportCharacters = ({ onImportComplete }: { onImportComplete: () => void }
 
     data.forEach(row => {
       const character = row.character || row['汉字'];
-      const grade = parseInt(row.grade || row['年级']);
-      const lessonNumber = parseInt(row.lesson_number || row['课次']);
+      const grade = row.grade || row['年级'];
+      const lessonNumber = row.lesson_number || row['课次'];
       
-      // Check if required fields are present and valid
-      if (character && !isNaN(grade) && !isNaN(lessonNumber)) {
+      if (character && grade && lessonNumber) {
         validData.push({
           character: character,
-          grade: grade,
-          lesson_number: lessonNumber,
+          grade: grade.toString(),
+          lesson_number: lessonNumber.toString(),
           can_read: row.can_read !== false && row['识读'] !== false,
           can_write: row.can_write !== false && row['识写'] !== false,
         });
