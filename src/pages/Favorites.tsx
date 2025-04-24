@@ -28,24 +28,42 @@ const Favorites = () => {
       try {
         const { data: activities, error } = await supabase
           .from('user_activities_tracking')
-          .select('details:details->question_id')
+          .select('details')
           .eq('user_id', user.id)
           .eq('activity_type', 'question_practice')
           .eq('details->is_favorite', true);
 
         if (error) throw error;
 
-        // Get unique question IDs
-        const questionIds = [...new Set(activities?.map(a => a.details) || [])];
+        // Extract unique question IDs
+        const questionIds = activities
+          ?.map(activity => activity.details?.question_id as string)
+          .filter(Boolean);
 
-        if (questionIds.length > 0) {
-          const { data: questions, error: questionsError } = await supabase
+        const uniqueQuestionIds = [...new Set(questionIds)];
+
+        if (uniqueQuestionIds.length > 0) {
+          const { data: questionsData, error: questionsError } = await supabase
             .from('questions')
             .select('*')
-            .in('id', questionIds);
+            .in('id', uniqueQuestionIds);
 
           if (questionsError) throw questionsError;
-          setFavorites(questions || []);
+          
+          // Transform the data to match our Question interface
+          const transformedQuestions: Question[] = questionsData?.map(q => ({
+            id: q.id,
+            title: q.title || '',
+            content: {
+              question: typeof q.content === 'object' && q.content ? q.content.question || '' : '',
+              answer: typeof q.content === 'object' && q.content ? q.content.answer || undefined : undefined
+            },
+            subject: q.subject || undefined,
+            level: q.level || undefined,
+            term: q.term || undefined
+          })) || [];
+          
+          setFavorites(transformedQuestions);
         } else {
           setFavorites([]);
         }
@@ -68,16 +86,32 @@ const Favorites = () => {
   const handleRemoveFromFavorites = async (id: string) => {
     try {
       // Update the activity in the database
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('user_activities_tracking')
-        .update({ 
-          'details': { is_favorite: false }
-        })
+        .select('id, details')
         .eq('user_id', user?.id)
+        .eq('activity_type', 'question_practice')
         .eq('details->question_id', id)
         .eq('details->is_favorite', true);
 
       if (error) throw error;
+
+      if (data && data.length > 0) {
+        // For each matching activity, update it
+        for (const activity of data) {
+          const updatedDetails = { 
+            ...activity.details,
+            is_favorite: false 
+          };
+          
+          const { error: updateError } = await supabase
+            .from('user_activities_tracking')
+            .update({ details: updatedDetails })
+            .eq('id', activity.id);
+
+          if (updateError) throw updateError;
+        }
+      }
 
       // Update local state
       setFavorites(favorites.filter(fav => fav.id !== id));
@@ -128,10 +162,12 @@ const Favorites = () => {
                       <p className="text-sm text-gray-500">Level: {question.level}</p>
                     </div>
                     <p className="font-medium mb-2">{question.content.question}</p>
-                    <div className="border-t pt-2 mt-4">
-                      <p className="text-sm font-medium text-gray-900">Answer:</p>
-                      <p className="text-sm text-gray-700">{question.content.answer}</p>
-                    </div>
+                    {question.content.answer && (
+                      <div className="border-t pt-2 mt-4">
+                        <p className="text-sm font-medium text-gray-900">Answer:</p>
+                        <p className="text-sm text-gray-700">{question.content.answer}</p>
+                      </div>
+                    )}
                     <div className="flex justify-end mt-4">
                       <Button 
                         variant="outline" 
