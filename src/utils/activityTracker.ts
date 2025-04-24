@@ -1,6 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
+import { Json } from "@/integrations/supabase/types";
 
 export const trackActivity = async (
   activityType: Tables<"user_activities_tracking">["activity_type"], 
@@ -16,7 +17,7 @@ export const trackActivity = async (
       .insert({
         user_id: user.id,
         activity_type: activityType,
-        details: details || {}
+        details: details as Json
       });
 
     if (error) console.error('Activity tracking error:', error);

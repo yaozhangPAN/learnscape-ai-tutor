@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Book, BookX, Search, Star } from "lucide-react";
@@ -10,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import UserRecentActivities from "@/components/UserRecentActivities";
+import { Json } from "@/integrations/supabase/types";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -23,13 +25,17 @@ const progressColors = {
 };
 
 interface ActivityDetails {
-  question_id: string;
+  question_id?: string;
   is_correct?: boolean;
   is_favorite?: boolean;
 }
 
 interface ActivityRecord {
-  details: Record<string, unknown>;
+  details: ActivityDetails;
+}
+
+interface ActivityData {
+  details: Json;
 }
 
 const Dashboard = () => {
@@ -76,8 +82,9 @@ const Dashboard = () => {
         if (practiceError) throw practiceError;
         
         const uniqueQuestions = new Set<string>();
-        (practiceActivities || []).forEach((activity: ActivityRecord) => {
-          const questionId = activity.details?.question_id as string | undefined;
+        (practiceActivities || []).forEach((activity: ActivityData) => {
+          const details = activity.details as unknown as ActivityDetails;
+          const questionId = details?.question_id;
           if (questionId) {
             uniqueQuestions.add(questionId);
           }
@@ -94,8 +101,9 @@ const Dashboard = () => {
         if (wrongError) throw wrongError;
         
         const uniqueWrongQuestions = new Set<string>();
-        (wrongAnswers || []).forEach((activity: ActivityRecord) => {
-          const questionId = activity.details?.question_id as string | undefined;
+        (wrongAnswers || []).forEach((activity: ActivityData) => {
+          const details = activity.details as unknown as ActivityDetails;
+          const questionId = details?.question_id;
           if (questionId) {
             uniqueWrongQuestions.add(questionId);
           }
@@ -112,8 +120,9 @@ const Dashboard = () => {
         if (favoriteError) throw favoriteError;
         
         const uniqueFavorites = new Set<string>();
-        (favoriteData || []).forEach((activity: ActivityRecord) => {
-          const questionId = activity.details?.question_id as string | undefined;
+        (favoriteData || []).forEach((activity: ActivityData) => {
+          const details = activity.details as unknown as ActivityDetails;
+          const questionId = details?.question_id;
           if (questionId) {
             uniqueFavorites.add(questionId);
           }
