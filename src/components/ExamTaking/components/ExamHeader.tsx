@@ -2,7 +2,7 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Clock, AlertCircle } from "lucide-react";
-import { ExamTimer } from "../ExamTimer";
+import ExamTimer from "../ExamTimer";
 import { ExamPaper } from "../types";
 
 interface ExamHeaderProps {

@@ -61,6 +61,7 @@ const ExamQuestion = ({
           className="min-h-[120px]"
           disabled={examCompleted}
         />
+      </div>
     );
   };
 
