@@ -1,9 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Book, BookX, Search, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import StreakComponent from "@/components/StreakComponent";
 import { useI18n } from "@/contexts/I18nContext";
@@ -12,26 +10,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import UserRecentActivities from "@/components/UserRecentActivities";
 import { Json } from "@/integrations/supabase/types";
+import LearningProgress from "@/components/dashboard/LearningProgress";
+import ActivityModules from "@/components/dashboard/ActivityModules";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
-const cardBgClasses = "bg-white shadow-sm border-0 rounded-3xl";
-const textMain = "text-[#1E5B3A]";
-const textAccent = "text-[#4ABA79]";
-const progressColors = {
-  high: "bg-[#4ABA79]",
-  mid: "bg-[#f6c244]",
-  low: "bg-[#e47069]"
-};
 
 interface ActivityDetails {
   question_id?: string;
   is_correct?: boolean;
   is_favorite?: boolean;
-}
-
-interface ActivityRecord {
-  details: ActivityDetails;
 }
 
 interface ActivityData {
@@ -229,58 +217,10 @@ const Dashboard = () => {
           <StreakComponent />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {modules.map((module, index) => (
-            <Link key={index} to={module.link}>
-              <div className={`rounded-3xl ${module.color} p-6 shadow-sm flex flex-col items-center hover:opacity-90 transition-opacity`}>
-                <div className="mb-2">{module.icon}</div>
-                <h2 className="text-xl font-bold mb-1 text-white">{module.title}</h2>
-                <div className="text-white/90 text-sm font-medium mb-2">{module.description}</div>
-                <div className="text-3xl font-extrabold text-white mb-0">
-                  {module.isLoading ? (
-                    <div className="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
-                  ) : (
-                    module.count
-                  )}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <ActivityModules modules={modules} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className={cardBgClasses}>
-            <CardHeader className="rounded-t-3xl bg-[#e5deff] p-6 border-b border-[#ededfa]">
-              <CardTitle className={`text-lg font-bold ${textMain}`}>{t.DASHBOARD.LEARNING_PROGRESS}</CardTitle>
-              <CardDescription className="text-[#4ABA79] font-medium">
-                {t.DASHBOARD.PERFORMANCE}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6 py-4">
-                {subjects.map((subject) => (
-                  <div key={subject.name} className="space-y-2">
-                    <div className="flex justify-between text-sm font-bold text-[#4ABA79]">
-                      <span>{subject.name}</span>
-                      <span>{subject.progress}%</span>
-                    </div>
-                    <div className="h-3 bg-[#fbed96] rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full rounded-full transition-all duration-700 ${
-                          subject.progress > 65 
-                            ? progressColors.high
-                            : subject.progress > 40 
-                              ? progressColors.mid
-                              : progressColors.low
-                        }`}
-                        style={{ width: `${subject.progress}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </div>
+          <LearningProgress subjects={subjects} />
           <UserRecentActivities />
         </div>
 
