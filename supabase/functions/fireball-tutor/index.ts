@@ -16,6 +16,42 @@ serve(async (req) => {
 
   try {
     const { prompt } = await req.json();
+    
+    // Extract image URL from the prompt if present
+    const imageUrlMatch = prompt.match(/\[上传的图片: (.*?)\]/);
+    const imageUrl = imageUrlMatch ? imageUrlMatch[1] : null;
+    
+    // Clean prompt by removing the image URL syntax
+    const cleanPrompt = prompt.replace(/\[上传的图片: .*?\]/, '').trim();
+
+    // Prepare messages array
+    const messages = [
+      { 
+        role: "system", 
+        content: "你是一位有专业知识的小熊猫老师。当用户分享图片时，请仔细分析并给出详细的中文解释。你要经常使用emoji来让回答更生动。" 
+      }
+    ];
+
+    // If there's an image, add it to the messages with content format for GPT-4 Vision
+    if (imageUrl) {
+      messages.push({
+        role: "user",
+        content: [
+          { type: "text", text: cleanPrompt },
+          { 
+            type: "image_url", 
+            image_url: {
+              url: imageUrl
+            }
+          }
+        ]
+      });
+    } else {
+      messages.push({
+        role: "user",
+        content: cleanPrompt
+      });
+    }
 
     const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -25,13 +61,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "gpt-4o",
-        messages: [
-          { 
-            role: "system", 
-            content: "You are a helpful Chinese tutor. When users share images, analyze them carefully and provide detailed explanations in Chinese." 
-          },
-          { role: "user", content: prompt }
-        ],
+        messages: messages,
         max_tokens: 1000
       }),
     });
