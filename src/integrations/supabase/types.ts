@@ -57,6 +57,36 @@ export type Database = {
         }
         Relationships: []
       }
+      chinese_characters: {
+        Row: {
+          can_read: boolean | null
+          can_write: boolean | null
+          character: string
+          created_at: string | null
+          grade: number
+          id: string
+          lesson_number: number
+        }
+        Insert: {
+          can_read?: boolean | null
+          can_write?: boolean | null
+          character: string
+          created_at?: string | null
+          grade: number
+          id?: string
+          lesson_number: number
+        }
+        Update: {
+          can_read?: boolean | null
+          can_write?: boolean | null
+          character?: string
+          created_at?: string | null
+          grade?: number
+          id?: string
+          lesson_number?: number
+        }
+        Relationships: []
+      }
       course_enrollments: {
         Row: {
           class_type: string

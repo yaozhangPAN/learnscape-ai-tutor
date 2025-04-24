@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -37,8 +36,8 @@ import CourseDetails from "./pages/CourseDetails";
 import OralExamRedirect from "./components/AITutor/OralExamRedirect";
 import { I18nProvider } from "@/contexts/I18nContext";
 import Account from "./pages/Account";
+import ChineseCharacters from "./pages/ChineseCharacters";
 
-// Router tracking component
 const RouteTracker = () => {
   const location = useLocation();
   
@@ -98,6 +97,8 @@ const App = () => {
                   <Route path="/ai-tutor/vocabulary" element={<VocabularyBuilder />} />
                   <Route path="/ai-tutor/language-arts" element={<LanguageArtsRedirect />} />
                   <Route path="/ai-tutor/reading-coach" element={<ReadingCoachRedirect />} />
+                  
+                  <Route path="/chinese-characters" element={<ChineseCharacters />} />
                   
                   <Route path="/about" element={<Navigate to="/" replace />} />
                   <Route path="/account" element={<Account />} />
