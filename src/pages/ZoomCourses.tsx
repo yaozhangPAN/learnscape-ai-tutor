@@ -15,119 +15,119 @@ import { useI18n } from "@/contexts/I18nContext";
 
 const mockZoomCourses = [
   {
-    id: "z1",
-    title: "PSLE Math: Problem Solving Strategies",
-    description: "Live interactive sessions focused on problem-solving techniques for PSLE Mathematics. Get real-time feedback from our expert tutors.",
+    id: "psle-reading-writing-intensive",
+    title: "PSLE阅读理解+作文专项冲刺",
+    description: "针对PSLE考试的阅读理解和作文进行专项训练，由资深名师主讲，提供实战技巧和写作方法。",
     level: "p6",
-    subject: "mathematics",
+    subject: "chinese",
     upcomingSessions: [
       { 
         id: "s1", 
-        date: "2025-04-15", 
-        startTime: "16:00", 
-        endTime: "17:30", 
-        topic: "Word Problems Mastery" 
+        date: "2025-06-02", 
+        startTime: "14:00", 
+        endTime: "16:00", 
+        topic: "第一讲：阅读理解技巧入门" 
       },
       { 
         id: "s2", 
-        date: "2025-04-22", 
-        startTime: "16:00", 
-        endTime: "17:30", 
-        topic: "Geometry and Angles" 
+        date: "2025-06-04", 
+        startTime: "14:00", 
+        endTime: "16:00", 
+        topic: "第二讲：作文写作框架" 
       }
     ],
     maxStudents: 20,
-    currentEnrollment: 12,
-    price: "S$30 per session",
-    isPremium: false,
-    tutor: "Ms. Wong",
+    currentEnrollment: 8,
+    price: "S$599",
+    isPremium: true,
+    tutor: "陈老师",
     image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
   },
   {
-    id: "z2",
-    title: "PSLE Science: Experimental Techniques",
-    description: "Guided virtual experiments and demonstrations to help students understand key scientific concepts for PSLE Science.",
+    id: "psle-oral-intensive",
+    title: "PSLE口试专项冲刺",
+    description: "专注于PSLE口试考试，通过实战练习和点评，帮助学生提高口语表达能力。",
     level: "p6",
-    subject: "science",
+    subject: "chinese",
     upcomingSessions: [
       { 
         id: "s3", 
-        date: "2025-04-16", 
-        startTime: "17:00", 
-        endTime: "18:30", 
-        topic: "Forces and Energy" 
+        date: "2025-06-03", 
+        startTime: "10:00", 
+        endTime: "11:00", 
+        topic: "第一讲：看图说话技巧" 
       },
       { 
         id: "s4", 
-        date: "2025-04-23", 
-        startTime: "17:00", 
-        endTime: "18:30", 
-        topic: "Electrical Circuits" 
+        date: "2025-06-05", 
+        startTime: "10:00", 
+        endTime: "11:00", 
+        topic: "第二讲：会话训练" 
       }
     ],
     maxStudents: 15,
-    currentEnrollment: 8,
-    price: "S$35 per session",
+    currentEnrollment: 6,
+    price: "S$399",
     isPremium: true,
-    tutor: "Mr. Tan",
+    tutor: "林老师",
     image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
   },
   {
-    id: "z3",
-    title: "PSLE English: Composition Techniques",
-    description: "Interactive writing sessions to improve composition skills with immediate feedback from experienced English teachers.",
+    id: "psle-composition-intensive",
+    title: "PSLE作文专项冲刺",
+    description: "深入讲解PSLE作文考试要求，提供写作技巧和范文赏析，助力提高写作水平。",
     level: "p6",
-    subject: "english",
+    subject: "chinese",
     upcomingSessions: [
       { 
         id: "s5", 
-        date: "2025-04-17", 
-        startTime: "15:30", 
-        endTime: "17:00", 
-        topic: "Narrative Writing" 
+        date: "2025-06-09", 
+        startTime: "14:00", 
+        endTime: "15:30", 
+        topic: "第一讲：记叙文写作技巧" 
       },
       { 
         id: "s6", 
-        date: "2025-04-24", 
-        startTime: "15:30", 
-        endTime: "17:00", 
-        topic: "Descriptive Techniques" 
+        date: "2025-06-11", 
+        startTime: "14:00", 
+        endTime: "15:30", 
+        topic: "第二讲：议论文写作方法" 
       }
     ],
-    maxStudents: 12,
-    currentEnrollment: 10,
-    price: "S$30 per session",
-    isPremium: false,
-    tutor: "Mrs. Lee",
+    maxStudents: 15,
+    currentEnrollment: 5,
+    price: "S$499",
+    isPremium: true,
+    tutor: "黄老师",
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
   },
   {
-    id: "z4",
-    title: "P5 Chinese: Oral Practice Sessions",
-    description: "Small group sessions focused on improving Chinese speaking and comprehension skills through interactive conversations.",
-    level: "p5",
+    id: "psle-past-papers",
+    title: "PSLE历届真题讲解",
+    description: "详细解析PSLE往年真题，掌握考试重点和答题技巧。",
+    level: "p6",
     subject: "chinese",
     upcomingSessions: [
       { 
         id: "s7", 
-        date: "2025-04-18", 
-        startTime: "16:00", 
-        endTime: "17:00", 
-        topic: "Picture Description" 
+        date: "2025-06-06", 
+        startTime: "11:00", 
+        endTime: "12:00", 
+        topic: "第一讲：2024年试题解析" 
       },
       { 
         id: "s8", 
-        date: "2025-04-25", 
-        startTime: "16:00", 
-        endTime: "17:00", 
-        topic: "Conversation Practice" 
+        date: "2025-06-13", 
+        startTime: "11:00", 
+        endTime: "12:00", 
+        topic: "第二讲：2023年试题解析" 
       }
     ],
-    maxStudents: 8,
-    currentEnrollment: 6,
-    price: "S$40 per session",
+    maxStudents: 20,
+    currentEnrollment: 7,
+    price: "S$399",
     isPremium: true,
-    tutor: "Ms. Zhang",
+    tutor: "王老师",
     image: "https://images.unsplash.com/photo-1555431189-0fabf2667795?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
   }
 ];
