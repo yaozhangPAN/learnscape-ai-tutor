@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,13 +6,10 @@ import { ArrowLeft, ArrowRight, Volume2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
-import VocabularyGame from "@/components/VocabularyGame/VocabularyGame";
 
 const VocabularyBuilder = () => {
   const [currentCard, setCurrentCard] = useState(0);
-  const [showGame, setShowGame] = useState(false);
 
-  // Example vocabulary cards (in a real app, this would come from an API)
   const cards = [
     { word: "Ephemeral", definition: "Lasting for a very short time", example: "The ephemeral beauty of a sunset" },
     { word: "Ubiquitous", definition: "Present everywhere", example: "Smartphones have become ubiquitous in modern life" },
@@ -62,24 +60,6 @@ const VocabularyBuilder = () => {
                 </div>
               </CardContent>
             </Card>
-
-            <div className="flex justify-center">
-              <Button 
-                variant="outline"
-                onClick={() => setShowGame(prev => !prev)}
-                className="mb-4"
-              >
-                {showGame ? "Hide Game" : "Play Vocabulary Game"}
-              </Button>
-            </div>
-
-            {showGame && (
-              <Card className="w-full">
-                <CardContent className="p-4">
-                  <VocabularyGame />
-                </CardContent>
-              </Card>
-            )}
           </div>
         </div>
       </main>
