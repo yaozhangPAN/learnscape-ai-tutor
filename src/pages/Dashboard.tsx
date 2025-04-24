@@ -10,7 +10,6 @@ import { useI18n } from "@/contexts/I18nContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { Json } from "@/integrations/supabase/types";
 
 const mainBg = "bg-[#e2fded]";
 const sectionBox = "rounded-3xl bg-[#fbed96] shadow-sm p-4 md:p-6 mb-8 border border-[#4ABA79]/10";
@@ -23,32 +22,6 @@ const progressColors = {
   low: "bg-[#e47069]"
 };
 
-// Define types for activity details
-interface ActivityDetails {
-  question_id?: string;
-  subject?: string;
-  score?: string | number;
-  correct?: number;
-  total?: number;
-  title?: string;
-}
-
-// Interface to match Supabase's user activity structure
-interface UserActivity {
-  id: string;
-  activity_type: string;
-  activity_details: Json;
-  created_at: string;
-  user_id: string;
-}
-
-interface RecentActivity {
-  id: string;
-  activity: string;
-  date: string;
-  score: string;
-}
-
 const Dashboard = () => {
   const { t, lang } = useI18n();
   const { session } = useAuth();
@@ -58,7 +31,6 @@ const Dashboard = () => {
   const [questionCount, setQuestionCount] = useState<number>(0);
   const [wrongQuestionCount, setWrongQuestionCount] = useState<number>(0);
   const [favoriteCount, setFavoriteCount] = useState<number>(0);
-  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
   const [subjects, setSubjects] = useState([
     { name: "Mathematics", progress: 0 },
     { name: "English", progress: 0 },
@@ -106,9 +78,8 @@ const Dashboard = () => {
         
         // Count unique questions answered incorrectly
         const uniqueWrongQuestions = new Set();
-        userActivities?.forEach((activity: UserActivity) => {
-          // Safely access question_id using type assertion
-          const details = activity.activity_details as unknown as ActivityDetails;
+        userActivities?.forEach((activity) => {
+          const details = activity.activity_details as any;
           if (details?.question_id) {
             uniqueWrongQuestions.add(details.question_id);
           }
@@ -127,85 +98,13 @@ const Dashboard = () => {
         
         // Count unique favorite questions
         const uniqueFavorites = new Set();
-        favoriteData?.forEach((activity: UserActivity) => {
-          // Safely access question_id using type assertion
-          const details = activity.activity_details as unknown as ActivityDetails;
+        favoriteData?.forEach((activity) => {
+          const details = activity.activity_details as any;
           if (details?.question_id) {
             uniqueFavorites.add(details.question_id);
           }
         });
         setFavoriteCount(uniqueFavorites.size);
-        
-        // Get recent activities
-        const { data: recentData, error: recentError } = await supabase
-          .from('user_activities')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .order('created_at', { ascending: false })
-          .limit(3);
-          
-        if (recentError) throw recentError;
-        
-        if (recentData && recentData.length > 0) {
-          const formattedActivities = recentData.map((activity: UserActivity) => {
-            const createdAt = new Date(activity.created_at);
-            const now = new Date();
-            const diffHours = Math.round((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60));
-            
-            let dateText;
-            if (diffHours < 1) {
-              dateText = "Just now";
-            } else if (diffHours < 24) {
-              dateText = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-            } else if (diffHours < 48) {
-              dateText = "Yesterday";
-            } else {
-              dateText = `${Math.floor(diffHours / 24)} days ago`;
-            }
-            
-            let activityText = "Unknown activity";
-            let score = "N/A";
-            
-            // Safely access activity_details properties using type assertion
-            const details = activity.activity_details as unknown as ActivityDetails;
-            
-            switch(activity.activity_type) {
-              case 'quiz_complete':
-                activityText = `Completed ${details?.subject || ''} quiz`;
-                score = details?.score?.toString() || "Complete";
-                break;
-              case 'practice_complete':
-                activityText = `Completed ${details?.subject || ''} practice`;
-                score = details?.correct !== undefined && details?.total !== undefined
-                  ? `${details.correct}/${details.total}` 
-                  : "Complete";
-                break;
-              case 'video_watch':
-                activityText = `Watched ${details?.title || ''} video`;
-                score = "Complete";
-                break;
-              case 'exam_start':
-                activityText = `Started ${details?.subject || ''} exam`;
-                score = "In progress";
-                break;
-              default:
-                activityText = `${activity.activity_type.replace('_', ' ')}`;
-            }
-            
-            return {
-              id: activity.id,
-              activity: activityText,
-              date: dateText,
-              score: score
-            };
-          });
-          
-          setRecentActivities(formattedActivities);
-        } else {
-          setRecentActivities([
-            { id: "1", activity: "No recent activities", date: "", score: "" }
-          ]);
-        }
         
         // Calculate subject progress based on completed activities
         const subjectProgress = {
@@ -226,9 +125,8 @@ const Dashboard = () => {
         
         // Count activities by subject
         const subjectCounts: Record<string, number> = {};
-        subjectActivities?.forEach((activity: UserActivity) => {
-          // Safely access subject using type assertion
-          const details = activity.activity_details as unknown as ActivityDetails;
+        subjectActivities?.forEach((activity) => {
+          const details = activity.activity_details as any;
           const subject = details?.subject;
           if (subject && subject in subjectProgress) {
             subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
@@ -263,41 +161,6 @@ const Dashboard = () => {
 
     fetchDashboardData();
   }, [session?.user.id, toast, t]);
-
-  useEffect(() => {
-    const trackPageVisit = async () => {
-      if (session?.user.id) {
-        try {
-          // Record page visit
-          await supabase
-            .from('user_activities')
-            .insert({
-              user_id: session.user.id,
-              activity_type: 'page_visit',
-              activity_details: { page: 'dashboard' }
-            });
-
-          // Update or create daily streak
-          const { error: streakError } = await supabase
-            .from('daily_streaks')
-            .upsert({
-              user_id: session.user.id,
-              streak_date: new Date().toISOString().split('T')[0]
-            }, { 
-              onConflict: 'user_id,streak_date'
-            });
-
-          if (streakError) {
-            console.error('Error updating streak:', streakError);
-          }
-        } catch (error) {
-          console.error('Error tracking activity:', error);
-        }
-      }
-    };
-
-    trackPageVisit();
-  }, [session?.user.id]);
 
   const modules = [
     {
@@ -390,58 +253,6 @@ const Dashboard = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            </CardContent>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <div className={cardBgClasses}>
-            <CardHeader className="bg-[#fbed96] p-6 rounded-t-3xl border-b border-[#faedca]">
-              <CardTitle className={`text-lg font-bold ${textAccent}`}>{t.DASHBOARD.RECENT_ACTIVITIES}</CardTitle>
-              <CardDescription className="text-[#e2a44a] font-medium">
-                {t.DASHBOARD.LEARNING_JOURNEY}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="divide-y divide-[#faedca] bg-white rounded-b-3xl">
-                {isLoading ? (
-                  Array(3).fill(0).map((_, i) => (
-                    <div key={i} className="py-4 flex justify-between items-center">
-                      <div className="space-y-2">
-                        <div className="h-5 w-48 bg-gray-100 rounded animate-pulse"></div>
-                        <div className="h-4 w-24 bg-gray-100 rounded animate-pulse"></div>
-                      </div>
-                      <div className="h-8 w-24 bg-gray-100 rounded animate-pulse"></div>
-                    </div>
-                  ))
-                ) : recentActivities.length === 0 ? (
-                  <div className="py-8 text-center text-[#4ABA79]">
-                    No recent activities found
-                  </div>
-                ) : (
-                  recentActivities.map((activity) => (
-                    <div key={activity.id} className="py-4 flex justify-between items-center">
-                      <div>
-                        <h4 className="font-semibold text-[#4ABA79]">{activity.activity}</h4>
-                        <p className="text-xs text-[#b197d7]">{activity.date}</p>
-                      </div>
-                      <div>
-                        <span className={`px-4 py-1 rounded-full text-md font-semibold shadow 
-                          ${
-                            activity.score === "In progress" 
-                              ? "bg-[#e5deff] text-[#6a42b2]"
-                              : activity.score === "Complete" 
-                                ? "bg-[#d2f6e6] text-[#1e5b3a]"
-                                : "bg-[#faedca] text-[#f6c244]"
-                          }`
-                        }>
-                          {activity.score}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                )}
               </div>
             </CardContent>
           </div>
