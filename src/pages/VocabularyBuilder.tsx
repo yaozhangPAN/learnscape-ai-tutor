@@ -1,20 +1,38 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Volume2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Volume2, GamepadIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import Phaser from "phaser";
 
 const VocabularyBuilder = () => {
   const [currentCard, setCurrentCard] = useState(0);
+  const [gameURL, setGameURL] = useState<string | null>(null);
+  const [showGame, setShowGame] = useState(false);
 
   const cards = [
     { word: "Ephemeral", definition: "Lasting for a very short time", example: "The ephemeral beauty of a sunset" },
     { word: "Ubiquitous", definition: "Present everywhere", example: "Smartphones have become ubiquitous in modern life" },
     { word: "Serendipity", definition: "The occurrence of positive events by chance", example: "Finding a perfect job by serendipity" }
   ];
+
+  useEffect(() => {
+    const fetchGameFile = async () => {
+      const { data, error } = await supabase.storage
+        .from('vocabulary-game')
+        .getPublicUrl('index.html');
+
+      if (data) {
+        setGameURL(data.publicUrl);
+      }
+    };
+
+    fetchGameFile();
+  }, []);
 
   const nextCard = () => {
     setCurrentCard((prev) => (prev + 1) % cards.length);
@@ -60,6 +78,29 @@ const VocabularyBuilder = () => {
                 </div>
               </CardContent>
             </Card>
+
+            <div className="flex justify-center">
+              <Button 
+                variant="outline"
+                onClick={() => setShowGame(prev => !prev)}
+                className="mb-4 flex items-center gap-2"
+              >
+                <GamepadIcon className="h-4 w-4" />
+                {showGame ? "Hide Game" : "Play Vocabulary Game"}
+              </Button>
+            </div>
+
+            {showGame && gameURL && (
+              <Card className="w-full">
+                <CardContent className="p-4">
+                  <iframe 
+                    src={gameURL} 
+                    className="w-full h-[600px] border-0"
+                    title="Vocabulary Game"
+                  />
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </main>
