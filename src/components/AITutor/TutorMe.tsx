@@ -104,6 +104,20 @@ const TutorMe = () => {
             
             <h3>Would you like to learn more about any specific part of the water cycle?</h3>
           `);
+        } else if (subject === "chinese") {
+          setResponse(`
+            <h3>学习中文</h3>
+            <p>欢迎来到中文学习模块！</p>
+            
+            <h3>学习重点</h3>
+            <ul>
+              <li>语法基础</li>
+              <li>词汇积累</li>
+              <li>听说读写全面发展</li>
+            </ul>
+            
+            <p>我们将帮助您逐步提高中文水平。</p>
+          `);
         } else {
           setResponse(`
             <h3>Understanding Your Question</h3>
