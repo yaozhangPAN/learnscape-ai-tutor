@@ -84,7 +84,7 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
         return;
       }
 
-      // Grant access by inserting into purchased_content
+      // Begin transaction
       const { error: purchaseError } = await supabase
         .from("purchased_content")
         .insert({
@@ -97,12 +97,21 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
 
       if (purchaseError) {
         console.error("Error recording access:", purchaseError);
-        toast({
-          variant: "destructive",
-          title: "处理错误",
-          description: "无法记录您的访问权限，请稍后再试",
+        throw purchaseError;
+      }
+
+      // Add enrollment record
+      const { error: enrollmentError } = await supabase
+        .from("course_enrollments")
+        .insert({
+          course_id: courseId,
+          user_id: user.id,
+          class_type: "video"
         });
-        return;
+
+      if (enrollmentError) {
+        console.error("Error recording enrollment:", enrollmentError);
+        throw enrollmentError;
       }
 
       toast({
@@ -112,8 +121,8 @@ export const AccessCodeDialog = ({ isOpen, onOpenChange, courseId, onSuccess }: 
       
       onSuccess();
       onOpenChange(false);
-    } catch (error) {
-      console.error("Error verifying code:", error);
+    } catch (error: any) {
+      console.error("Full error:", error);
       toast({
         variant: "destructive",
         title: "发生错误",
