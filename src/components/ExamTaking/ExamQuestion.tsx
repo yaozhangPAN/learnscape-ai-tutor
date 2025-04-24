@@ -1,4 +1,3 @@
-
 import React from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
@@ -61,16 +60,6 @@ const ExamQuestion = ({
           className="min-h-[120px]"
           disabled={examCompleted}
         />
-        
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="h-5 w-5 text-blue-500 mt-0.5" />
-            <div>
-              <p className="font-medium text-blue-900">正确答案：</p>
-              <p className="mt-1 text-blue-800">{question.correctAnswer}</p>
-            </div>
-          </div>
-        </div>
       </div>
     );
   };
