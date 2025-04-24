@@ -1,11 +1,26 @@
 
-# project_id must be first
-project_id = "your-project-id"
+# The project ID of the Supabase project
+project_id = "xfwnjocfdvuocvwjopke"
 
 [api]
 enabled = true
 port = 54321
 schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
 
-[functions.fireball-tutor]
-verify_jwt = true
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[realtime]
+enabled = true
+
+[studio]
+enabled = true
+port = 54323
+api_url = "http://localhost"
+
+[storage]
+enabled = true

@@ -2,18 +2,17 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/hooks/useSupabase";
-import { TutorResponse } from "./TutorResponse";
 import TutorCharacter from "./TutorCharacter";
 import InputControls from "./InputControls";
 import { Textarea } from "@/components/ui/textarea";
 import Navbar from "@/components/Navbar";
 
-// Define message interface
 interface Message {
   id: string;
   type: 'user' | 'ai';
   content: string;
   timestamp: Date;
+  imageUrl?: string;
 }
 
 const TutorMe = () => {
@@ -35,8 +34,12 @@ const TutorMe = () => {
 
       if (error) throw error;
 
+      const { data: { publicUrl } } = supabase.storage
+        .from('tutor-uploads')
+        .getPublicUrl(data.path);
+
       setQuestion((prev) => 
-        prev + `\n[上传的图片: ${data.path}]\n请帮我分析这张图片。`
+        prev + `\n[上传的图片: ${publicUrl}]\n请帮我分析这张图片。`
       );
     } catch (error) {
       toast({
@@ -59,12 +62,12 @@ const TutorMe = () => {
 
     setIsLoading(true);
     
-    // Add user message to conversation
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
       content: question,
       timestamp: new Date(),
+      imageUrl: question.match(/\[上传的图片: (.*?)\]/)?.[1]
     };
     
     setMessages(prev => [...prev, userMessage]);
@@ -76,7 +79,6 @@ const TutorMe = () => {
       
       if (error) throw error;
       
-      // Add AI response to conversation
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'ai',
@@ -93,7 +95,7 @@ const TutorMe = () => {
       });
     } finally {
       setIsLoading(false);
-      setQuestion("");  // Clear input after sending
+      setQuestion("");
     }
   };
 
@@ -105,8 +107,8 @@ const TutorMe = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="max-w-3xl mx-auto px-4 py-6 flex-1 flex flex-col">
-        <div className="flex-1 overflow-hidden flex flex-col rounded-lg border bg-white shadow-sm">
+      <div className="flex-1 flex flex-col">
+        <div className="flex-1 overflow-hidden flex flex-col">
           {/* Welcome message */}
           <div className="p-4 border-b">
             <TutorCharacter />
@@ -140,7 +142,16 @@ const TutorMe = () => {
                       </div>
                     </div>
                   ) : (
-                    <div>{message.content}</div>
+                    <div>
+                      {message.imageUrl && (
+                        <img 
+                          src={message.imageUrl} 
+                          alt="Uploaded content"
+                          className="max-w-full h-auto rounded-lg mb-2" 
+                        />
+                      )}
+                      {message.content}
+                    </div>
                   )}
                 </div>
               </div>
@@ -162,23 +173,25 @@ const TutorMe = () => {
           </div>
           
           {/* Input area */}
-          <div className="border-t p-4">
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <Textarea 
-                  placeholder="请输入您的问题..."
-                  className="min-h-[80px] resize-none"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
+          <div className="border-t p-4 bg-background">
+            <div className="max-w-[1200px] mx-auto">
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <Textarea 
+                    placeholder="请输入您的问题..."
+                    className="min-h-[80px] resize-none"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                  />
+                </div>
+                <InputControls 
+                  onVoiceInput={handleVoiceInput}
+                  onImageUpload={handleImageUpload}
+                  onSubmit={handleSubmit}
+                  onClear={handleClear}
+                  isLoading={isLoading}
                 />
               </div>
-              <InputControls 
-                onVoiceInput={handleVoiceInput}
-                onImageUpload={handleImageUpload}
-                onSubmit={handleSubmit}
-                onClear={handleClear}
-                isLoading={isLoading}
-              />
             </div>
           </div>
         </div>
