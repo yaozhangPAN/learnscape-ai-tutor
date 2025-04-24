@@ -32,12 +32,13 @@ export default class MainGameScene extends Phaser.Scene {
     console.log('Phaser game scene created');
   }
 
-  shutdown() {
-    // Clean up when the scene is shut down
+  // Fix the method name and implementation to use destroy instead of shutdown
+  destroy(fromScene?: boolean): void {
+    // Clean up when the scene is destroyed
     if (this.phaserScript) {
       document.head.removeChild(this.phaserScript);
       this.phaserScript = null;
     }
-    super.shutdown();
+    super.destroy(fromScene);
   }
 }
