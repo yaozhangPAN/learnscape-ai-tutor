@@ -23,7 +23,7 @@ interface ActivityDetails {
 }
 
 interface ActivityData {
-  details: Json;
+  details: Json | ActivityDetails;
 }
 
 const Dashboard = () => {

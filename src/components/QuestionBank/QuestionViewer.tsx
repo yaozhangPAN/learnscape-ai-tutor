@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { trackActivity } from "@/utils/activityTracker";
 
 interface Question {
   id: number;
@@ -180,7 +181,7 @@ export const anwser = [
   },
   {
     id: "Q39",
-    value: "这句话的意思是作者知道爸爸看到了明华和作者撞倒老婆婆,但是爸爸当时只是在人群中默默地看着他,这让他心里很慌,后来作者回到家,发现爸爸一直在他的房间里,这让作者感到更加不安,到了晚餐时间,爸爸坐下来后便看着他,他因此猜想爸爸一定会严厉批评他。"
+    value: "这句话的意思是作者知道爸爸看到了明华和作者撞倒老婆婆,但是爸爸当时只是在人群中默默地看着他,这让他心里很慌,后来作者回到家,发现爸爸一直在他的房间里,这让作者感到更加不安,到了晚餐时间,���爸坐下来后便看着他,他因此猜想爸爸一定会严厉批评他。"
   },
   {
     id: "Q40",
@@ -227,6 +228,8 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
     };
 
     checkFavoriteStatus();
+    setSubmittedIndexes({});
+    setSelectedOptions({});
   }, [user, question]);
 
   const handleToggleFavorite = async () => {
@@ -235,16 +238,10 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
     try {
       const newStatus = !isFavorite;
       
-      await supabase
-        .from('user_activities_tracking')
-        .insert({
-          user_id: user.id,
-          activity_type: 'question_practice',
-          details: {
-            question_id: question.id,
-            is_favorite: newStatus
-          }
-        });
+      await trackActivity('question_practice', {
+        question_id: question.id,
+        is_favorite: newStatus
+      });
 
       setIsFavorite(newStatus);
       toast({
@@ -260,6 +257,33 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
         description: "Failed to update favorite status",
         variant: "destructive"
       });
+    }
+  };
+
+  const handleSubmitAnswer = async (index: number, questionItem: any) => {
+    if (!user || !question) return;
+    
+    setSubmittedIndexes((prev) => ({
+      ...prev,
+      [index]: true
+    }));
+    
+    const selectedObj = selectedOptions[index];
+    if (!selectedObj) return;
+    
+    const [questionId, questionValue] = selectedObj.optionId.split("-");
+    const answerObj = anwser.find(a => a.id === questionId);
+    const correctValue = answerObj ? answerObj.value : "N/A";
+    const isCorrect = questionValue === correctValue;
+    
+    try {
+      await trackActivity('question_practice', {
+        question_id: question.id,
+        is_correct: isCorrect,
+        is_favorite: isFavorite
+      });
+    } catch (error) {
+      console.error('Error tracking question practice:', error);
     }
   };
 
@@ -288,7 +312,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                 {renderTopicWithLineBreaks(parsedContent.topic)}
               </div>
             )}
-            {parsedContent.questionList.map((questionItem, index) => {
+            {parsedContent.questionList.map((questionItem: any, index: number) => {
               const isSubmitted = submittedIndexes[index] || false;
               const selectedObj = selectedOptions[index];
               const selectedValue = selectedObj?.value ?? "";
@@ -356,7 +380,7 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                             }}
                             disabled={isSubmitted}
                           >
-                            {questionItem.options.map((optionItem, optionIndex) => (
+                            {questionItem.options.map((optionItem: any, optionIndex: number) => (
                               <div key={optionIndex} className="flex items-center space-x-2 p-2">
                                 <RadioGroupItem
                                   value={String(optionIndex)}
@@ -377,13 +401,8 @@ const QuestionViewer: React.FC<QuestionViewerProps> = ({
                           <Button
                             variant="default"
                             className="bg-learnscape-blue text-white"
-                            disabled={!user || isSubmitted}
-                            onClick={() => {
-                              setSubmittedIndexes((prev) => ({
-                                ...prev,
-                                [index]: true
-                              }));
-                            }}
+                            disabled={!user || isSubmitted || !selectedOptions[index]}
+                            onClick={() => handleSubmitAnswer(index, questionItem)}
                           >
                             Submit
                           </Button>

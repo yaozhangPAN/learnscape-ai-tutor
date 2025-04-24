@@ -7,6 +7,11 @@ import QuestionViewer from "@/components/QuestionBank/QuestionViewer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+interface QuestionDetails {
+  question_id: string;
+  is_correct: boolean;
+}
+
 const WrongQuestions = () => {
   const { user } = useAuth();
   const [questions, setQuestions] = useState<any[]>([]);
@@ -29,7 +34,11 @@ const WrongQuestions = () => {
         if (error) throw error;
 
         const questionIds = activities
-          ?.map(activity => activity.details?.question_id)
+          ?.map(activity => {
+            // Ensure we're properly handling the details
+            const details = activity.details as unknown as QuestionDetails;
+            return details?.question_id;
+          })
           .filter(Boolean);
 
         if (questionIds && questionIds.length > 0) {
