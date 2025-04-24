@@ -109,12 +109,14 @@ const OnlineExam = () => {
                       value: opt.key ? String(opt.key) : String(optIndex + 1),
                       label: `${String.fromCharCode(65 + optIndex)}. ${opt.value}`
                     }));
+
+                    const answerObj = answerMap.get(subQuestion.id);
+                    question.correctAnswer = answerObj ? answerObj.value : "N/A";
+                  
                   } else {
                     question.type = "ShortAnswer"
                   }
 
-                  const answerObj = answerMap.get(subQuestion.id);
-                  question.correctAnswer = answerObj ? answerObj.value : "N/A";
                   
                   return question;
                 });
