@@ -32,15 +32,15 @@ export default class MainGameScene extends Phaser.Scene {
     console.log('Phaser game scene created');
   }
 
-  // Correctly handle scene lifecycle method
-  destroy() {
+  // 修复 destroy 方法
+  shutdown() {
     // Clean up when the scene is destroyed
     if (this.phaserScript) {
       document.head.removeChild(this.phaserScript);
       this.phaserScript = null;
     }
     
-    // Call the parent class's destroy method if it exists
-    super.destroy?.();
+    // 调用父类的销毁方法
+    super.shutdown?.();
   }
 }
