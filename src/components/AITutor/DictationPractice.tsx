@@ -3,12 +3,15 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen } from 'lucide-react';
 import { DictationFilters } from './DictationFilters';
+import { useCharacterList } from '@/hooks/useCharacterList';
 
 const DictationPractice = () => {
   const [grade, setGrade] = useState('');
   const [lessonNumber, setLessonNumber] = useState('');
   const [canRead, setCanRead] = useState(true);
   const [canWrite, setCanWrite] = useState(true);
+
+  const { characters, loading } = useCharacterList(grade, lessonNumber, canRead, canWrite);
 
   return (
     <div className="min-h-screen w-full bg-gray-50 p-6">
@@ -41,9 +44,24 @@ const DictationPractice = () => {
             <CardTitle className="text-center">听写练习</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-center text-gray-500">
-              准备开始听写练习
-            </div>
+            {loading ? (
+              <div className="text-center text-gray-500">加载中...</div>
+            ) : characters.length === 0 ? (
+              <div className="text-center text-gray-500">
+                没有找到符合条件的汉字
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {characters.map((char) => (
+                  <div
+                    key={char.id}
+                    className="flex items-center justify-center p-4 border rounded-lg bg-white hover:shadow-md transition-shadow"
+                  >
+                    <span className="text-2xl">{char.character}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
