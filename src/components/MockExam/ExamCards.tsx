@@ -13,7 +13,7 @@ type ExamCardsProps = {
 const ExamCards: React.FC<ExamCardsProps> = ({ papers, handleTakeExam }) => {
   const handleDownload = (paperId: string) => {
     // Using the exact format from the provided URL
-    const downloadUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers/${paperId}.pdf`;
+    const downloadUrl = `https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/public/exam-papers//8c9f4838-12f0-4487-b4f6-b6d8a0bcdf0e.pdf`;
     window.open(downloadUrl, '_blank');
   };
 
