@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { 
   Select,
   SelectContent,
@@ -25,9 +24,8 @@ const TutorMe = () => {
   const subjects = [
     { value: "math", label: "Mathematics" },
     { value: "english", label: "English" },
-    { value: "science", label: "Science" },
-    { value: "history", label: "History" },
-    { value: "geography", label: "Geography" }
+    { value: "chinese", label: "Chinese" },
+    { value: "science", label: "Science" }
   ];
 
   const levels = [
