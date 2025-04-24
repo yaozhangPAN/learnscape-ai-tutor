@@ -57,45 +57,54 @@ const Dashboard = () => {
       setIsLoading(true);
       
       try {
-        const { count: questionBankCount, error: questionError } = await supabase
-          .from('questions')
-          .select('*', { count: 'exact', head: true });
-          
-        if (questionError) throw questionError;
-        setQuestionCount(questionBankCount || 0);
-        
-        const { data: userActivities, error: activitiesError } = await supabase
-          .from('user_activities')
-          .select('*')
+        // Get the count of unique questions the user has practiced
+        const { data: practiceActivities, error: practiceError } = await supabase
+          .from('user_activities_tracking')
+          .select('details')
           .eq('user_id', session.user.id)
-          .eq('activity_type', 'wrong_answer')
-          .limit(100);
+          .eq('activity_type', 'question_practice');
           
-        if (activitiesError) throw activitiesError;
+        if (practiceError) throw practiceError;
+        
+        const uniqueQuestions = new Set();
+        practiceActivities?.forEach((activity) => {
+          if (activity.details?.question_id) {
+            uniqueQuestions.add(activity.details.question_id);
+          }
+        });
+        setQuestionCount(uniqueQuestions.size);
+        
+        // Get wrong answers count
+        const { data: wrongAnswers, error: wrongError } = await supabase
+          .from('user_activities_tracking')
+          .select('details')
+          .eq('user_id', session.user.id)
+          .eq('activity_type', 'question_practice')
+          .eq('details->is_correct', false);
+          
+        if (wrongError) throw wrongError;
         
         const uniqueWrongQuestions = new Set();
-        userActivities?.forEach((activity) => {
-          const details = activity.activity_details as any;
-          if (details?.question_id) {
-            uniqueWrongQuestions.add(details.question_id);
+        wrongAnswers?.forEach((activity) => {
+          if (activity.details?.question_id) {
+            uniqueWrongQuestions.add(activity.details.question_id);
           }
         });
         setWrongQuestionCount(uniqueWrongQuestions.size);
         
+        // Get favorites count
         const { data: favoriteData, error: favoriteError } = await supabase
-          .from('user_activities')
-          .select('*')
+          .from('user_activities_tracking')
+          .select('details')
           .eq('user_id', session.user.id)
-          .eq('activity_type', 'favorite')
-          .limit(100);
+          .eq('activity_type', 'favorite');
           
         if (favoriteError) throw favoriteError;
         
         const uniqueFavorites = new Set();
         favoriteData?.forEach((activity) => {
-          const details = activity.activity_details as any;
-          if (details?.question_id) {
-            uniqueFavorites.add(details.question_id);
+          if (activity.details?.question_id) {
+            uniqueFavorites.add(activity.details.question_id);
           }
         });
         setFavoriteCount(uniqueFavorites.size);
@@ -160,7 +169,8 @@ const Dashboard = () => {
       icon: <Book className="h-6 w-6 text-white" />,
       count: questionCount,
       color: "bg-[#009688] text-white",
-      isLoading
+      isLoading,
+      link: "/question-bank"
     },
     {
       title: t.DASHBOARD.MODULES.WRONG_QUESTIONS,
@@ -168,7 +178,8 @@ const Dashboard = () => {
       icon: <BookX className="h-6 w-6 text-white" />,
       count: wrongQuestionCount,
       color: "bg-[#FF7043] text-white",
-      isLoading
+      isLoading,
+      link: "/wrong-questions"
     },
     {
       title: t.DASHBOARD.MODULES.FAVORITES,
@@ -176,7 +187,8 @@ const Dashboard = () => {
       icon: <Star className="h-6 w-6 text-white" />,
       count: favoriteCount,
       color: "bg-[#B39DDB] text-white",
-      isLoading
+      isLoading,
+      link: "/favorites"
     },
   ];
 
@@ -199,18 +211,20 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {modules.map((module, index) => (
-            <div key={index} className={`rounded-3xl ${module.color} p-6 shadow-sm flex flex-col items-center`}>
-              <div className="mb-2">{module.icon}</div>
-              <h2 className="text-xl font-bold mb-1 text-white">{module.title}</h2>
-              <div className="text-white/90 text-sm font-medium mb-2">{module.description}</div>
-              <div className="text-3xl font-extrabold text-white mb-0">
-                {module.isLoading ? (
-                  <div className="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
-                ) : (
-                  module.count
-                )}
+            <Link key={index} to={module.link}>
+              <div className={`rounded-3xl ${module.color} p-6 shadow-sm flex flex-col items-center hover:opacity-90 transition-opacity`}>
+                <div className="mb-2">{module.icon}</div>
+                <h2 className="text-xl font-bold mb-1 text-white">{module.title}</h2>
+                <div className="text-white/90 text-sm font-medium mb-2">{module.description}</div>
+                <div className="text-3xl font-extrabold text-white mb-0">
+                  {module.isLoading ? (
+                    <div className="w-16 h-8 bg-white/20 rounded animate-pulse"></div>
+                  ) : (
+                    module.count
+                  )}
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
