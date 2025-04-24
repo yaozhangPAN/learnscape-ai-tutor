@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,8 +7,9 @@ import { TutorSelectors } from "./TutorSelectors";
 import { AIModelSelector } from "./AIModelSelector";
 import { TutorTips } from "./TutorTips";
 import { TutorResponse } from "./TutorResponse";
+import TutorCharacter from "./TutorCharacter";
+import InputControls from "./InputControls";
 
-// Define the subjects array here so it's accessible in this file
 const subjects = [
   { value: "math", label: "Mathematics" },
   { value: "english", label: "English" },
@@ -26,6 +26,30 @@ const TutorMe = () => {
   const [isFireball, setIsFireball] = useState(true);
   const { toast } = useToast();
   const { supabase } = useSupabase();
+
+  const handleVoiceInput = (text: string) => {
+    setQuestion(text);
+  };
+
+  const handleImageUpload = async (file: File) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('tutor-uploads')
+        .upload(`${Date.now()}-${file.name}`, file);
+
+      if (error) throw error;
+
+      setQuestion((prev) => 
+        prev + `\n[上传的图片: ${data.path}]\n请帮我分析这张图片。`
+      );
+    } catch (error) {
+      toast({
+        title: "图片上传失败",
+        description: "请稍后重试",
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleSubmit = async () => {
     if (!question.trim()) {
@@ -172,14 +196,24 @@ const TutorMe = () => {
         </div>
         
         <div className="md:col-span-3 space-y-6">
-          <div>
-            <label className="text-sm font-medium block mb-1">Your Question</label>
-            <Textarea 
-              placeholder="What would you like help with today? E.g., How do I calculate the area of a rectangle?"
-              className="min-h-[150px] resize-none"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-            />
+          <TutorCharacter />
+          
+          <div className="space-y-2">
+            <label className="text-sm font-medium block">您的问题</label>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <Textarea 
+                  placeholder="请输入您的问题..."
+                  className="min-h-[150px] resize-none"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                />
+              </div>
+              <InputControls 
+                onVoiceInput={handleVoiceInput}
+                onImageUpload={handleImageUpload}
+              />
+            </div>
           </div>
           
           <TutorResponse response={response} />
