@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Book, BookX, Star, Search } from "lucide-react";
@@ -68,7 +69,7 @@ const Dashboard = () => {
         
         const uniqueQuestions = new Set();
         practiceActivities?.forEach((activity) => {
-          if (activity.details?.question_id) {
+          if (activity.details && typeof activity.details === 'object' && 'question_id' in activity.details) {
             uniqueQuestions.add(activity.details.question_id);
           }
         });
@@ -86,24 +87,25 @@ const Dashboard = () => {
         
         const uniqueWrongQuestions = new Set();
         wrongAnswers?.forEach((activity) => {
-          if (activity.details?.question_id) {
+          if (activity.details && typeof activity.details === 'object' && 'question_id' in activity.details) {
             uniqueWrongQuestions.add(activity.details.question_id);
           }
         });
         setWrongQuestionCount(uniqueWrongQuestions.size);
         
-        // Get favorites count
+        // Get favorites count - using question_practice with a favorite flag
         const { data: favoriteData, error: favoriteError } = await supabase
           .from('user_activities_tracking')
           .select('details')
           .eq('user_id', session.user.id)
-          .eq('activity_type', 'favorite');
+          .eq('activity_type', 'question_practice')
+          .eq('details->is_favorite', true);
           
         if (favoriteError) throw favoriteError;
         
         const uniqueFavorites = new Set();
         favoriteData?.forEach((activity) => {
-          if (activity.details?.question_id) {
+          if (activity.details && typeof activity.details === 'object' && 'question_id' in activity.details) {
             uniqueFavorites.add(activity.details.question_id);
           }
         });
