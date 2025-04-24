@@ -63,8 +63,7 @@ const TutorOptionsGrid = () => {
       icon: "/lovable-uploads/134d4088-5005-41d9-9487-719568001089.png",
       color: COLORS.GREEN,
       description: t.AI_TUTOR.TUTOR_ME_DESC,
-      path: "#",
-      onClick: handleUpgradeNotice,
+      path: "/ai-tutor/tutor-me",
       emoji: "🧠"
     },
     {
