@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { trackUserBehavior } from "@/utils/behaviorTracker";
 
 type AuthContextType = {
   user: User | null;
@@ -31,6 +32,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             title: "Signed in",
             description: "You have successfully signed in.",
           });
+          
+          // Track login event
+          setTimeout(() => {
+            trackUserBehavior('login', {
+              actionDetails: { 
+                userId: session?.user.id,
+                email: session?.user.email,
+                authProvider: session?.user?.app_metadata?.provider || 'email'
+              }
+            });
+          }, 0);
         }
         
         if (event === "SIGNED_OUT") {
@@ -49,6 +61,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
+      
+      // Track session restore if user exists
+      if (session?.user) {
+        setTimeout(() => {
+          trackUserBehavior('page_view', {
+            actionDetails: { 
+              eventType: 'session_restored',
+              userId: session.user.id
+            }
+          });
+        }, 0);
+      }
     });
 
     return () => subscription.unsubscribe();

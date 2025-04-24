@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { Menu, User, Languages } from "lucide-react";
 import LearnScapeLogo from "./LearnScapeLogo";
+import { trackUserBehavior } from "@/utils/behaviorTracker";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
@@ -23,29 +23,71 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  const handleSignOut = async () => {
+    trackUserBehavior('logout', {
+      actionDetails: { userId: user?.id }
+    });
+    await signOut();
+  };
+
+  const handleNavigation = (destination: string, label: string) => {
+    trackUserBehavior('click', {
+      componentId: 'navigation',
+      actionDetails: { destination, label }
+    });
+  };
+
+  const handleLanguageToggle = () => {
+    trackUserBehavior('click', {
+      componentId: 'language-toggle',
+      actionDetails: { from: lang, to: lang === 'en' ? 'zh' : 'en' }
+    });
+    toggleLang();
+  };
+
   return (
     <header className="border-b bg-white">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center" onClick={() => handleNavigation("/", "home")}>
           <LearnScapeLogo />
         </Link>
         <nav className="items-center space-x-6 hidden md:flex">
-          <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+          <Link 
+            to="/video-tutorials" 
+            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
+            onClick={() => handleNavigation("/video-tutorials", t.NAV.VIDEO_LESSONS)}
+          >
             {t.NAV.VIDEO_LESSONS}
           </Link>
-          <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+          <Link 
+            to="/ai-tutor" 
+            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
+            onClick={() => handleNavigation("/ai-tutor", t.NAV.AI_TUTOR)}
+          >
             {t.NAV.AI_TUTOR}
           </Link>
-          <Link to="/zoom-courses" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+          <Link 
+            to="/zoom-courses" 
+            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
+            onClick={() => handleNavigation("/zoom-courses", t.NAV.ONLINE_CLASSROOM)}
+          >
             {t.NAV.ONLINE_CLASSROOM}
           </Link>
-          <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+          <Link 
+            to="/question-bank" 
+            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
+            onClick={() => handleNavigation("/question-bank", t.NAV.QUESTION_BANK)}
+          >
             {t.NAV.QUESTION_BANK}
           </Link>
-          <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+          <Link 
+            to="/mock-exam" 
+            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
+            onClick={() => handleNavigation("/mock-exam", t.NAV.MOCK_EXAM)}
+          >
             {t.NAV.MOCK_EXAM}
           </Link>
-          <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-2">
+          <Button variant="ghost" size="sm" onClick={handleLanguageToggle} className="gap-2">
             <Languages className="h-4 w-4" />
             {lang === 'en' ? '中文' : 'English'}
           </Button>
@@ -54,20 +96,31 @@ const Navbar = () => {
               <Link
                 to="/account"
                 className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:text-learnscape-darkBlue transition-colors"
+                onClick={() => handleNavigation("/account", "my-account")}
               >
                 <User className="h-4 w-4" />
                 {lang === 'zh' ? '我的账户' : 'My Account'}
               </Link>
-              <Button size="sm" variant="outline" onClick={() => signOut()}>
+              <Button size="sm" variant="outline" onClick={handleSignOut}>
                 {t.NAV.LOGOUT}
               </Button>
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+              <Link 
+                to="/login" 
+                className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
+                onClick={() => handleNavigation("/login", t.NAV.LOGIN)}
+              >
                 {t.NAV.LOGIN}
               </Link>
-              <Button size="sm" onClick={() => navigate("/register")}>
+              <Button 
+                size="sm" 
+                onClick={() => {
+                  handleNavigation("/register", "get-started");
+                  navigate("/register");
+                }}
+              >
                 {lang === 'zh' ? '开始使用' : 'Get Started'}
               </Button>
             </>
@@ -75,7 +128,14 @@ const Navbar = () => {
         </nav>
         <Sheet>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="sm">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => trackUserBehavior('click', {
+                componentId: 'mobile-menu-open',
+                actionDetails: { action: 'open' }
+              })}
+            >
               <Menu className="h-4 w-4" />
             </Button>
           </SheetTrigger>
@@ -102,7 +162,7 @@ const Navbar = () => {
               <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAV.MOCK_EXAM}
               </Link>
-              <Button variant="ghost" size="sm" onClick={toggleLang} className="gap-2 justify-start">
+              <Button variant="ghost" size="sm" onClick={handleLanguageToggle} className="gap-2 justify-start">
                 <Languages className="h-4 w-4" />
                 {lang === 'en' ? '中文' : 'English'}
               </Button>
@@ -115,7 +175,7 @@ const Navbar = () => {
                     <User className="h-4 w-4" />
                     {lang === 'zh' ? '我的账户' : 'My Account'}
                   </Link>
-                  <Button size="sm" variant="outline" onClick={() => signOut()}>
+                  <Button size="sm" variant="outline" onClick={handleSignOut}>
                     {t.NAV.LOGOUT}
                   </Button>
                 </>

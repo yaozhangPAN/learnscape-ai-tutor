@@ -1,9 +1,11 @@
-import React from "react";
+
+import React, { useEffect } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { AlertCircle } from "lucide-react";
 import { Question } from "./types";
+import { trackUserBehavior } from "@/utils/behaviorTracker";
 
 interface ExamQuestionProps {
   question: Question;
@@ -18,6 +20,34 @@ const ExamQuestion = ({
   onAnswerChange,
   examCompleted = false
 }: ExamQuestionProps) => {
+  useEffect(() => {
+    // Track when a question is viewed
+    trackUserBehavior('question_practice', {
+      componentId: `question-${question.id}`,
+      actionDetails: {
+        questionId: question.id,
+        questionType: question.type,
+        action: 'view'
+      }
+    });
+  }, [question.id, question.type]);
+
+  const handleAnswerChange = (value: string) => {
+    // Track when an answer is submitted
+    trackUserBehavior('question_practice', {
+      componentId: `question-${question.id}`,
+      actionDetails: {
+        questionId: question.id,
+        questionType: question.type,
+        action: 'answer',
+        // Don't store the actual answer for privacy reasons
+        hasAnswer: true
+      }
+    });
+    
+    onAnswerChange(value);
+  };
+
   const formatHtml = (text: string | undefined) => {
     if (!text) return "";
     return String(text).replace(/\n/g, "<br />");
@@ -29,7 +59,7 @@ const ExamQuestion = ({
     return (
       <RadioGroup 
         value={userAnswer} 
-        onValueChange={onAnswerChange}
+        onValueChange={handleAnswerChange}
         className="mt-4 space-y-3"
         disabled={examCompleted}
       >
@@ -56,7 +86,7 @@ const ExamQuestion = ({
         <Textarea
           placeholder="在此输入你的答案..."
           value={userAnswer}
-          onChange={(e) => onAnswerChange(e.target.value)}
+          onChange={(e) => handleAnswerChange(e.target.value)}
           className="min-h-[120px]"
           disabled={examCompleted}
         />

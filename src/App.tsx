@@ -3,10 +3,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { trackUserBehavior } from "@/utils/behaviorTracker";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -37,6 +38,24 @@ import OralExamRedirect from "./components/AITutor/OralExamRedirect";
 import { I18nProvider } from "@/contexts/I18nContext";
 import Account from "./pages/Account";
 
+// Router tracking component
+const RouteTracker = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    trackUserBehavior('page_view', {
+      pageUrl: location.pathname,
+      actionDetails: {
+        path: location.pathname,
+        search: location.search,
+        hash: location.hash
+      }
+    });
+  }, [location]);
+  
+  return null;
+};
+
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
   return (
@@ -48,6 +67,7 @@ const App = () => {
               <Toaster />
               <Sonner />
               <BrowserRouter>
+                <RouteTracker />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/login" element={<Login />} />

@@ -1,181 +1,134 @@
-
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { trackUserBehavior } from "@/utils/behaviorTracker";
 
-// Form schemas
-const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-});
+interface AuthFormProps {}
 
-const registerSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-  confirmPassword: z.string(),
-  userType: z.enum(["student", "parent", "teacher"])
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-type RegisterFormValues = z.infer<typeof registerSchema>;
-
-// Admin credentials
-const ADMIN_EMAIL = "admin@example.com";
-const ADMIN_PASSWORD = "admin123";
-
-const AuthForm = () => {
-  const [activeTab, setActiveTab] = useState<string>("login");
+const AuthForm: React.FC<AuthFormProps> = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [userType, setUserType] = useState("student");
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { signOut } = useAuth();
 
-  // Login form
-  const loginForm = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: ""
-    }
-  });
-
-  // Register form
-  const registerForm = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      userType: "student"
-    }
-  });
-
-  const onLoginSubmit = async (data: LoginFormValues) => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     
+    trackUserBehavior('form_submit', {
+      componentId: 'login-form',
+      actionDetails: { 
+        email,
+        // Don't track passwords
+        hasPassword: !!password.trim() 
+      }
+    });
+    
     try {
-      // Check if user is trying to login as admin
-      const isAdmin = data.email === ADMIN_EMAIL && data.password === ADMIN_PASSWORD;
-      
-      if (isAdmin) {
-        // Admin login - create a special session
-        const { error } = await supabase.auth.signInWithPassword({
-          email: data.email,
-          password: data.password,
-        });
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
 
-        if (error) {
-          // If admin doesn't exist yet, create admin account
-          if (error.message.includes("Invalid login credentials")) {
-            const { error: signUpError } = await supabase.auth.signUp({
-              email: ADMIN_EMAIL,
-              password: ADMIN_PASSWORD,
-              options: {
-                data: {
-                  name: "Administrator",
-                  userType: "teacher",
-                }
-              }
-            });
-
-            if (signUpError) {
-              throw signUpError;
-            }
-
-            // Try logging in again
-            const { error: retryError } = await supabase.auth.signInWithPassword({
-              email: ADMIN_EMAIL,
-              password: ADMIN_PASSWORD,
-            });
-
-            if (retryError) {
-              throw retryError;
-            }
-          } else {
-            throw error;
-          }
-        }
-
+      if (error) {
         toast({
-          title: "Admin Login Successful",
-          description: "Welcome, Administrator!",
-          variant: "success",
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
         });
       } else {
-        // Regular user login
-        const { error } = await supabase.auth.signInWithPassword({
-          email: data.email,
-          password: data.password,
-        });
-
-        if (error) {
-          throw error;
-        }
-
         toast({
-          title: "Login Successful",
-          description: "Welcome back to Learnscape!",
+          title: "Success",
+          description: "Logged in successfully!",
         });
+        navigate("/dashboard");
       }
-      
-      // Redirect to dashboard
-      navigate("/dashboard");
-    } catch (error: any) {
+    } catch (error) {
       toast({
-        title: "Login Failed",
-        description: error.message || "Please check your credentials and try again.",
+        title: "Error",
+        description: "Something went wrong!",
         variant: "destructive",
+      });
+      
+      trackUserBehavior('error_encounter', {
+        componentId: 'login-form',
+        actionDetails: { 
+          email,
+          errorType: 'login_failure',
+          errorMessage: (error as Error).message
+        }
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const onRegisterSubmit = async (data: RegisterFormValues) => {
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     
+    trackUserBehavior('form_submit', {
+      componentId: 'signup-form',
+      actionDetails: { 
+        email,
+        // Don't track passwords
+        hasPassword: !!password.trim(),
+        hasName: !!name.trim(),
+        userType
+      }
+    });
+    
     try {
-      // Register the user with Supabase
       const { error } = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
+        email: email,
+        password: password,
         options: {
           data: {
-            name: data.name,
-            userType: data.userType,
+            name: name,
+            user_type: userType,
           },
         },
       });
 
       if (error) {
-        throw error;
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: "Signed up successfully! Please check your email to verify your account.",
+        });
+        signOut();
+        navigate("/login");
       }
-
+    } catch (error) {
       toast({
-        title: "Registration Successful",
-        description: "Your account has been created successfully! Please check your email for verification.",
+        title: "Error",
+        description: "Something went wrong!",
+        variant: "destructive",
       });
       
-      // Redirect to dashboard or confirmation page
-      navigate("/dashboard");
-    } catch (error: any) {
-      toast({
-        title: "Registration Failed",
-        description: error.message || "An error occurred during registration.",
-        variant: "destructive",
+      trackUserBehavior('error_encounter', {
+        componentId: 'signup-form',
+        actionDetails: { 
+          email,
+          errorType: 'signup_failure',
+          errorMessage: (error as Error).message
+        }
       });
     } finally {
       setIsLoading(false);
@@ -183,154 +136,96 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-learnscape-yellow/30">
-      <div className="w-full max-w-md px-4">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="register">Register</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="login">
-            <Card>
-              <CardHeader>
-                <CardTitle>Login</CardTitle>
-                <CardDescription>Enter your credentials to access your account</CardDescription>
-              </CardHeader>
-              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="your.email@example.com"
-                      {...loginForm.register("email")}
-                      disabled={isLoading}
-                    />
-                    {loginForm.formState.errors.email && (
-                      <p className="text-sm text-red-500">{loginForm.formState.errors.email.message}</p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="password">Password</Label>
-                      <Link to="#" className="text-sm text-learnscape-blue hover:underline">
-                        Forgot password?
-                      </Link>
-                    </div>
-                    <Input
-                      id="password"
-                      type="password"
-                      {...loginForm.register("password")}
-                      disabled={isLoading}
-                    />
-                    {loginForm.formState.errors.password && (
-                      <p className="text-sm text-red-500">{loginForm.formState.errors.password.message}</p>
-                    )}
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button type="submit" className="w-full bg-learnscape-blue hover:bg-blue-700" disabled={isLoading}>
-                    {isLoading ? "Logging in..." : "Login"}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="register">
-            <Card>
-              <CardHeader>
-                <CardTitle>Create an Account</CardTitle>
-                <CardDescription>Fill in your details to join Learnscape</CardDescription>
-              </CardHeader>
-              <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)}>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input
-                      id="name"
-                      placeholder="John Doe"
-                      {...registerForm.register("name")}
-                      disabled={isLoading}
-                    />
-                    {registerForm.formState.errors.name && (
-                      <p className="text-sm text-red-500">{registerForm.formState.errors.name.message}</p>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="register-email">Email</Label>
-                    <Input
-                      id="register-email"
-                      type="email"
-                      placeholder="your.email@example.com"
-                      {...registerForm.register("email")}
-                      disabled={isLoading}
-                    />
-                    {registerForm.formState.errors.email && (
-                      <p className="text-sm text-red-500">{registerForm.formState.errors.email.message}</p>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="register-password">Password</Label>
-                    <Input
-                      id="register-password"
-                      type="password"
-                      {...registerForm.register("password")}
-                      disabled={isLoading}
-                    />
-                    {registerForm.formState.errors.password && (
-                      <p className="text-sm text-red-500">{registerForm.formState.errors.password.message}</p>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
-                    <Input
-                      id="confirm-password"
-                      type="password"
-                      {...registerForm.register("confirmPassword")}
-                      disabled={isLoading}
-                    />
-                    {registerForm.formState.errors.confirmPassword && (
-                      <p className="text-sm text-red-500">{registerForm.formState.errors.confirmPassword.message}</p>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="user-type">I am a</Label>
-                    <select
-                      id="user-type"
-                      className="w-full h-10 px-3 rounded-md border border-input bg-background"
-                      {...registerForm.register("userType")}
-                      disabled={isLoading}
-                    >
-                      <option value="student">Student</option>
-                      <option value="parent">Parent</option>
-                      <option value="teacher">Teacher</option>
-                    </select>
-                  </div>
-                  
-                  <div className="text-sm text-gray-500">
-                    By registering, you agree to our{" "}
-                    <Link to="#" className="text-learnscape-blue hover:underline">Terms of Service</Link>{" "}
-                    and{" "}
-                    <Link to="#" className="text-learnscape-blue hover:underline">Privacy Policy</Link>.
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button type="submit" className="w-full bg-learnscape-blue hover:bg-blue-700" disabled={isLoading}>
-                    {isLoading ? "Creating account..." : "Register"}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+    <div className="container py-24 flex justify-center items-center">
+      <Card className="w-[500px]">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl text-center">Authentication</CardTitle>
+          <CardDescription className="text-center">
+            Complete the form below to {window.location.pathname === "/login" ? "login" : "register"}.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <Tabs defaultValue={window.location.pathname === "/login" ? "login" : "register"} className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="login">Login</TabsTrigger>
+              <TabsTrigger value="register">Register</TabsTrigger>
+            </TabsList>
+            <TabsContent value="login">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  placeholder="m@example.com"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <CardFooter>
+                <Button disabled={isLoading} className="w-full" onClick={handleLogin}>
+                  {isLoading ? "Loading" : "Login"}
+                </Button>
+              </CardFooter>
+            </TabsContent>
+            <TabsContent value="register">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  placeholder="m@example.com"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="userType">User Type</Label>
+                <select
+                  id="userType"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  value={userType}
+                  onChange={(e) => setUserType(e.target.value)}
+                >
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                </select>
+              </div>
+              <CardFooter>
+                <Button disabled={isLoading} className="w-full" onClick={handleSignup}>
+                  {isLoading ? "Loading" : "Register"}
+                </Button>
+              </CardFooter>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 };
