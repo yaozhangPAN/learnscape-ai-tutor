@@ -7,7 +7,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Star, StarOff } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Question } from '@/types/question';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -26,52 +26,31 @@ const Favorites = () => {
 
     const fetchFavorites = async () => {
       try {
-        // For now, let's use mock data to illustrate the functionality
-        const mockFavorites: Question[] = [
-          {
-            id: "1",
-            title: "Chinese Comprehension",
-            content: {
-              question: "阅读下面的段落，然后回答问题：中国是世界上历史最悠久的国家之一...",
-              answer: "中国有着悠久的历史和丰富的文化。"
-            },
-            subject: "Chinese",
-            level: "Primary 6"
-          },
-          {
-            id: "2",
-            title: "Science Experiment",
-            content: {
-              question: "What happens when you mix vinegar and baking soda?",
-              answer: "A chemical reaction occurs producing carbon dioxide gas, making it bubble and fizz."
-            },
-            subject: "Science",
-            level: "Primary 5"
-          },
-          {
-            id: "3",
-            title: "English Grammar",
-            content: {
-              question: "Identify the correct sentence:",
-              answer: "She doesn't like coffee, nor does she like tea."
-            },
-            subject: "English",
-            level: "Primary 6"
-          }
-        ];
-        
-        setFavorites(mockFavorites);
-        setLoading(false);
+        const { data: activities, error } = await supabase
+          .from('user_activities_tracking')
+          .select('details:details->question_id')
+          .eq('user_id', user.id)
+          .eq('activity_type', 'question_practice')
+          .eq('details->is_favorite', true);
 
-        // In a real app, we would fetch data from the database
-        // const { data, error } = await supabase
-        //  .from('favorite_questions')
-        //  .select('*')
-        //  .eq('user_id', user.id);
-        //
-        // if (error) throw error;
-        // setFavorites(data);
-        // setLoading(false);
+        if (error) throw error;
+
+        // Get unique question IDs
+        const questionIds = [...new Set(activities?.map(a => a.details) || [])];
+
+        if (questionIds.length > 0) {
+          const { data: questions, error: questionsError } = await supabase
+            .from('questions')
+            .select('*')
+            .in('id', questionIds);
+
+          if (questionsError) throw questionsError;
+          setFavorites(questions || []);
+        } else {
+          setFavorites([]);
+        }
+        
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching favorites:", error);
         toast({
@@ -86,12 +65,35 @@ const Favorites = () => {
     fetchFavorites();
   }, [user, navigate, toast]);
 
-  const handleRemoveFromFavorites = (id: string) => {
-    setFavorites(favorites.filter(fav => fav.id !== id));
-    toast({
-      title: "Question removed",
-      description: "Question removed from favorites",
-    });
+  const handleRemoveFromFavorites = async (id: string) => {
+    try {
+      // Update the activity in the database
+      const { error } = await supabase
+        .from('user_activities_tracking')
+        .update({ 
+          'details': { is_favorite: false }
+        })
+        .eq('user_id', user?.id)
+        .eq('details->question_id', id)
+        .eq('details->is_favorite', true);
+
+      if (error) throw error;
+
+      // Update local state
+      setFavorites(favorites.filter(fav => fav.id !== id));
+      
+      toast({
+        title: "Success",
+        description: "Question removed from favorites",
+      });
+    } catch (error) {
+      console.error("Error removing favorite:", error);
+      toast({
+        title: "Error",
+        description: "Failed to remove from favorites. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -131,7 +133,14 @@ const Favorites = () => {
                       <p className="text-sm text-gray-700">{question.content.answer}</p>
                     </div>
                     <div className="flex justify-end mt-4">
-                      <Button variant="outline" size="sm" className="mr-2">Practice</Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mr-2"
+                        onClick={() => navigate(`/question-bank?id=${question.id}`)}
+                      >
+                        Practice
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
