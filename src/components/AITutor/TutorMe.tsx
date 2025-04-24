@@ -1,12 +1,11 @@
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/hooks/useSupabase";
 import { TutorResponse } from "./TutorResponse";
 import TutorCharacter from "./TutorCharacter";
 import InputControls from "./InputControls";
+import { Textarea } from "@/components/ui/textarea";
 
 const TutorMe = () => {
   const [question, setQuestion] = useState("");
@@ -77,21 +76,13 @@ const TutorMe = () => {
     }
   };
 
+  const handleClear = () => {
+    setQuestion("");
+    setResponse("");
+  };
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-learnscape-darkBlue">AI 小熊猫导师</h2>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => {
-            setQuestion("");
-            setResponse("");
-          }}>清空</Button>
-          <Button onClick={handleSubmit} disabled={isLoading}>
-            {isLoading ? "思考中..." : "提问"}
-          </Button>
-        </div>
-      </div>
-      
       <div className="space-y-6 border p-4 rounded-lg bg-white shadow-sm">
         <TutorCharacter />
         
@@ -109,6 +100,9 @@ const TutorMe = () => {
             <InputControls 
               onVoiceInput={handleVoiceInput}
               onImageUpload={handleImageUpload}
+              onSubmit={handleSubmit}
+              onClear={handleClear}
+              isLoading={isLoading}
             />
           </div>
         </div>
