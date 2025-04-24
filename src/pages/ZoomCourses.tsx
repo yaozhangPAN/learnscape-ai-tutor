@@ -23,8 +23,20 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     upcomingSessions: [
-      { id: "s1", date: "2025-06-03", startTime: "14:00", endTime: "16:00", topic: "第一讲：阅读理解技巧" },
-      { id: "s2", date: "2025-06-10", startTime: "14:00", endTime: "16:00", topic: "第二讲：作文写作框架" },
+      { 
+        id: "s1", 
+        date: "2025-06-01", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第一讲：阅读理解技巧（6月假期期间）" 
+      },
+      { 
+        id: "s2", 
+        date: "2025-06-15", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第二讲：作文写作框架（6月假期期间）" 
+      },
     ],
     maxStudents: 25,
     price: "S$599",
@@ -39,8 +51,20 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     upcomingSessions: [
-      { id: "s3", date: "2025-06-04", startTime: "10:00", endTime: "11:00", topic: "第一讲：看图说话技巧" },
-      { id: "s4", date: "2025-06-11", startTime: "10:00", endTime: "11:00", topic: "第二讲：会话训练" },
+      { 
+        id: "s3", 
+        date: "2025-06-02", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第一讲：看图说话技巧（6月假期期间）" 
+      },
+      { 
+        id: "s4", 
+        date: "2025-06-16", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第二讲：会话训练（6月假期期间）" 
+      },
     ],
     maxStudents: 25,
     price: "S$299",
@@ -55,8 +79,20 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     upcomingSessions: [
-      { id: "s5", date: "2025-06-05", startTime: "14:00", endTime: "15:30", topic: "第一讲：记叙文写作技巧" },
-      { id: "s6", date: "2025-06-12", startTime: "14:00", endTime: "15:30", topic: "第二讲：议论文写作方法" },
+      { 
+        id: "s5", 
+        date: "2025-06-03", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第一讲：记叙文写作技巧（6月假期期间）" 
+      },
+      { 
+        id: "s6", 
+        date: "2025-06-17", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第二讲：议论文写作方法（6月假期期间）" 
+      },
     ],
     maxStudents: 25,
     price: "S$399",
@@ -71,8 +107,20 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     upcomingSessions: [
-      { id: "s7", date: "2025-06-06", startTime: "11:00", endTime: "12:00", topic: "第一讲：2024年试题解析" },
-      { id: "s8", date: "2025-06-13", startTime: "11:00", endTime: "12:00", topic: "第二讲：2023年试题解析" },
+      { 
+        id: "s7", 
+        date: "2025-06-04", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第一讲：2024年试题解析（6月假期期间）" 
+      },
+      { 
+        id: "s8", 
+        date: "2025-06-18", 
+        startTime: "待定", 
+        endTime: "待定", 
+        topic: "第二讲：2023年试题解析（6月假期期间）" 
+      },
     ],
     maxStudents: 25,
     price: "S$299",
