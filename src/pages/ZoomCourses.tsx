@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ZoomCourseFilters from "@/components/ZoomCourses/ZoomCourseFilters";
@@ -6,9 +7,11 @@ import ZoomCourseGrid from "@/components/ZoomCourses/ZoomCourseGrid";
 import UpcomingSessions from "@/components/ZoomCourses/UpcomingSessions";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-// Mock data for zoom courses
-const mockZoomCourses = [
+// Base course data
+const baseZoomCourses = [
   {
     id: "zoom-course-1",
     title: "PSLE阅读理解+作文专项冲刺",
@@ -16,7 +19,6 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     maxStudents: 25,
-    currentEnrollment: 15,
     price: "S$599",
     isPremium: true,
     tutor: "Zhang Liping",
@@ -38,7 +40,6 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     maxStudents: 25,
-    currentEnrollment: 18,
     price: "S$299",
     isPremium: false,
     tutor: "Zhang Liping",
@@ -60,7 +61,6 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     maxStudents: 25,
-    currentEnrollment: 12,
     price: "S$399",
     isPremium: false,
     tutor: "Zhang Liping",
@@ -82,7 +82,6 @@ const mockZoomCourses = [
     level: "p6",
     subject: "chinese",
     maxStudents: 25,
-    currentEnrollment: 20,
     price: "S$299",
     isPremium: false,
     tutor: "Zhang Liping",
@@ -99,28 +98,45 @@ const mockZoomCourses = [
   }
 ];
 
-// Mock upcoming sessions based on the courses
-const mockUpcomingSessions = mockZoomCourses.map(course => ({
-  id: course.upcomingSessions[0].id,
-  courseId: course.id,
-  courseTitle: course.title,
-  subject: course.subject,
-  level: course.level,
-  date: course.upcomingSessions[0].date,
-  startTime: course.upcomingSessions[0].startTime,
-  endTime: course.upcomingSessions[0].endTime,
-  topic: course.upcomingSessions[0].topic,
-  tutor: course.tutor
-}));
-
 const ZoomCourses = () => {
   const { user } = useAuth();
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [activeSession, setActiveSession] = useState(null);
 
+  // Fetch enrollment data from Supabase
+  const { data: enrollmentData, isLoading: isLoadingEnrollments } = useQuery({
+    queryKey: ['courseEnrollments'],
+    queryFn: async () => {
+      const { data: enrollments, error } = await supabase
+        .from('course_enrollments')
+        .select('course_id, count')
+        .eq('class_type', 'zoom')
+        .select('course_id')
+        .select('count(*)')
+        .groupBy('course_id');
+
+      if (error) {
+        console.error('Error fetching enrollments:', error);
+        return {};
+      }
+
+      // Convert to a map of course_id -> enrollment count
+      return enrollments.reduce((acc, curr) => {
+        acc[curr.course_id] = parseInt(curr.count);
+        return acc;
+      }, {});
+    }
+  });
+
+  // Combine base course data with enrollment counts
+  const zoomCourses = baseZoomCourses.map(course => ({
+    ...course,
+    currentEnrollment: enrollmentData?.[course.id] || 0
+  }));
+
   // Filter courses based on selections
-  const filteredCourses = mockZoomCourses.filter(
+  const filteredCourses = zoomCourses.filter(
     course => 
       (selectedLevel === "all" || course.level === selectedLevel) && 
       (selectedSubject === "all" || course.subject === selectedSubject)
@@ -128,14 +144,26 @@ const ZoomCourses = () => {
 
   const handleViewCourseDetails = (course) => {
     console.log("View course details:", course);
-    // In a real app, this would navigate to a course details page
   };
 
   const handleJoinSession = (session, courseId) => {
     console.log("Joining session:", session, "for course:", courseId);
     setActiveSession(session);
-    // In a real implementation, this would open the Zoom session
   };
+
+  // Create upcoming sessions based on the courses
+  const upcomingSessions = zoomCourses.map(course => ({
+    id: course.upcomingSessions[0].id,
+    courseId: course.id,
+    courseTitle: course.title,
+    subject: course.subject,
+    level: course.level,
+    date: course.upcomingSessions[0].date,
+    startTime: course.upcomingSessions[0].startTime,
+    endTime: course.upcomingSessions[0].endTime,
+    topic: course.upcomingSessions[0].topic,
+    tutor: course.tutor
+  }));
 
   return (
     <div className="min-h-screen flex flex-col relative">
@@ -150,7 +178,7 @@ const ZoomCourses = () => {
         </div>
 
         <UpcomingSessions 
-          sessions={mockUpcomingSessions}
+          sessions={upcomingSessions}
           onJoinSession={handleJoinSession}
         />
 
@@ -164,6 +192,7 @@ const ZoomCourses = () => {
         <ZoomCourseGrid
           courses={filteredCourses}
           onViewDetails={handleViewCourseDetails}
+          isLoading={isLoadingEnrollments}
         />
       </div>
       <Footer />
@@ -172,3 +201,4 @@ const ZoomCourses = () => {
 };
 
 export default ZoomCourses;
+
