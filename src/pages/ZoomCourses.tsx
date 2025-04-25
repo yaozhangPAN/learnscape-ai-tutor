@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,111 +11,107 @@ import { BookOpen } from "lucide-react";
 const mockZoomCourses = [
   {
     id: "zoom-course-1",
-    title: "PSLE 数学备考",
-    description: "通过练习和讲解帮助学生掌握PSLE所需的数学技能和解题策略。",
+    title: "PSLE阅读理解+作文专项冲刺",
+    description: "共十堂课，每堂2小时。系统性地提升阅读理解能力和写作技巧，帮助学生在PSLE中取得优异成绩。",
     level: "p6",
-    subject: "mathematics",
-    maxStudents: 20,
-    currentEnrollment: 12,
-    price: "S$25 / 课时",
+    subject: "chinese",
+    maxStudents: 25,
+    currentEnrollment: 15,
+    price: "S$599",
     isPremium: true,
-    tutor: "林老师",
+    tutor: "Zhang Liping",
     image: "/lovable-uploads/67febdd9-e430-46e6-b523-5036340c4c65.png",
     upcomingSessions: [
       {
         id: "session-1",
-        date: "2025-05-15",
+        date: "2025-06-01",
         startTime: "14:00",
-        endTime: "15:30",
-        topic: "分数和小数"
+        endTime: "16:00",
+        topic: "第一课 (具体时间待定)"
       }
     ]
   },
   {
     id: "zoom-course-2",
-    title: "PSLE 英语口语指导",
-    description: "帮助学生准备PSLE英语口语部分，包括朗读和会话练习。",
+    title: "PSLE口试专项冲刺",
+    description: "共十堂课，每堂1小时。针对性训练口语表达能力，提高朗读和会话技巧，为PSLE口试做好充分准备。",
     level: "p6",
-    subject: "english",
-    maxStudents: 10,
-    currentEnrollment: 8,
-    price: "S$30 / 课时",
+    subject: "chinese",
+    maxStudents: 25,
+    currentEnrollment: 18,
+    price: "S$299",
     isPremium: false,
-    tutor: "Ms. Lee",
+    tutor: "Zhang Liping",
     image: "/lovable-uploads/35e5ebeb-cc32-46fc-961d-fb6241e51756.png",
     upcomingSessions: [
       {
         id: "session-2",
-        date: "2025-05-10",
+        date: "2025-06-02",
         startTime: "16:00",
-        endTime: "17:30",
-        topic: "口语表达技巧"
+        endTime: "17:00",
+        topic: "第一课 (具体时间待定)"
       }
     ]
   },
   {
     id: "zoom-course-3",
-    title: "科学实验课",
-    description: "通过实际实验加深对科学概念的理解，提高学生学习兴趣。",
-    level: "p5",
-    subject: "science",
-    maxStudents: 15,
-    currentEnrollment: 10,
-    price: "S$28 / 课时",
+    title: "PSLE作文专项冲刺",
+    description: "共十堂课，每堂1.5小时。深入讲解作文技巧，提供实战练习和个性化指导，帮助学生在作文考试中脱颖而出。",
+    level: "p6",
+    subject: "chinese",
+    maxStudents: 25,
+    currentEnrollment: 12,
+    price: "S$399",
     isPremium: false,
-    tutor: "张教授",
+    tutor: "Zhang Liping",
     image: "/lovable-uploads/1bd5d4e2-d0e7-4caf-a458-e87bbd5e7418.png",
     upcomingSessions: [
       {
         id: "session-3",
-        date: "2025-05-12",
+        date: "2025-06-03",
         startTime: "15:00",
         endTime: "16:30",
-        topic: "物质的性质"
+        topic: "第一课 (具体时间待定)"
+      }
+    ]
+  },
+  {
+    id: "zoom-course-4",
+    title: "PSLE历届真题讲解",
+    description: "共十堂课，每堂1小时。深度解析历年PSLE真题，掌握考试重点和答题技巧，提高应试能力。",
+    level: "p6",
+    subject: "chinese",
+    maxStudents: 25,
+    currentEnrollment: 20,
+    price: "S$299",
+    isPremium: false,
+    tutor: "Zhang Liping",
+    image: "/lovable-uploads/67cac78a-0f2f-4d46-bac8-47aa2d863a2c.png",
+    upcomingSessions: [
+      {
+        id: "session-4",
+        date: "2025-06-04",
+        startTime: "17:00",
+        endTime: "18:00",
+        topic: "第一课 (具体时间待定)"
       }
     ]
   }
 ];
 
-// Mock upcoming sessions
-const mockUpcomingSessions = [
-  {
-    id: "session-1",
-    courseId: "zoom-course-1",
-    courseTitle: "PSLE 数学备考",
-    subject: "mathematics",
-    level: "p6",
-    date: "2025-05-15",
-    startTime: "14:00",
-    endTime: "15:30",
-    topic: "分数和小数",
-    tutor: "林老师"
-  },
-  {
-    id: "session-2", 
-    courseId: "zoom-course-2",
-    courseTitle: "PSLE 英语口语指导",
-    subject: "english",
-    level: "p6",
-    date: "2025-05-10",
-    startTime: "16:00",
-    endTime: "17:30",
-    topic: "口语表达技巧",
-    tutor: "Ms. Lee"
-  },
-  {
-    id: "today-session",
-    courseId: "zoom-course-3",
-    courseTitle: "科学实验课",
-    subject: "science",
-    level: "p5",
-    date: new Date().toISOString().split('T')[0],
-    startTime: "15:00",
-    endTime: "16:30",
-    topic: "物质的性质",
-    tutor: "张教授"
-  }
-];
+// Mock upcoming sessions based on the courses
+const mockUpcomingSessions = mockZoomCourses.map(course => ({
+  id: course.upcomingSessions[0].id,
+  courseId: course.id,
+  courseTitle: course.title,
+  subject: course.subject,
+  level: course.level,
+  date: course.upcomingSessions[0].date,
+  startTime: course.upcomingSessions[0].startTime,
+  endTime: course.upcomingSessions[0].endTime,
+  topic: course.upcomingSessions[0].topic,
+  tutor: course.tutor
+}));
 
 const ZoomCourses = () => {
   const { user } = useAuth();
