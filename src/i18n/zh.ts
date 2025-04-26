@@ -1,3 +1,4 @@
+
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -166,11 +167,6 @@ export const zh = {
     NO_QUESTIONS: "未找到题目",
     SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 条结果"
   },
-  LEADERBOARD_PAGE: {
-    POSITION: "排名",
-    USER_NAME: "姓名",
-    POINTS: "分数"
-  },
   LEADERBOARD: {
     TITLE: "排行榜",
     SUBTITLE: "看看谁排名靠前！",
@@ -190,7 +186,9 @@ export const zh = {
     THIRD_PLACE: "季军",
     SEARCH_PLACEHOLDER: "搜索用户...",
     USER: "用户",
-    BADGE: "徽章"
+    BADGE: "徽章",
+    POSITION: "排名",
+    USER_NAME: "姓名"
   },
   WORKSHEETS_PAGE: {
     DOWNLOAD: "下载",

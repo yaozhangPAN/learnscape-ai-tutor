@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -9,18 +10,22 @@ import ExamPagination from "@/components/MockExam/ExamPagination";
 import EmptyState from "@/components/MockExam/EmptyState";
 import { mockExamPapers, schools, years, paperTypes } from "@/data/mockExamPapers";
 import { useI18n } from "@/contexts/I18nContext";
+import { useToast } from "@/components/ui/use-toast";
 
 const MockExam = () => {
   const { t } = useI18n();
+  const { toast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  
+  const [searchQuery, setSearchQuery] = useState<string>(searchParams.get("search") || "");
   const [selectedLevel, setSelectedLevel] = useState<string>(searchParams.get("grade") || "all");
   const [selectedSubject, setSelectedSubject] = useState<string>(searchParams.get("subject") || "all");
   const [selectedSchool, setSelectedSchool] = useState<string>(searchParams.get("schoolId") || "all");
   const [selectedYear, setSelectedYear] = useState<string>(searchParams.get("paperYear") || "all");
   const [selectedType, setSelectedType] = useState<string>(searchParams.get("paperType") || "all");
   const [currentPage, setCurrentPage] = useState<number>(parseInt(searchParams.get("page") || "1"));
+  const [viewMode, setViewMode] = useState<"table" | "cards">("cards");
   const itemsPerPage = 10;
 
   const filteredPapers = mockExamPapers.filter(paper => {
@@ -64,7 +69,8 @@ const MockExam = () => {
     setSearchParams(params);
   }, [
     selectedLevel, selectedSubject, selectedSchool, 
-    selectedYear, selectedType, currentPage, searchQuery
+    selectedYear, selectedType, currentPage, searchQuery,
+    setSearchParams
   ]);
 
   useEffect(() => {
@@ -81,10 +87,18 @@ const MockExam = () => {
     setSelectedYear("all");
     setSelectedType("all");
     setSearchQuery("");
+    toast({
+      title: "筛选已重置",
+      description: "所有筛选条件已清除",
+    });
   };
 
   const handleTakeExam = (examId: string) => {
     navigate(`/take-exam/${examId}`);
+    toast({
+      title: "正在加载考试",
+      description: `正在准备考试 #${examId}`,
+    });
   };
 
   return (
@@ -113,6 +127,8 @@ const MockExam = () => {
           schools={schools}
           years={years}
           paperTypes={paperTypes}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
         />
 
         <div className="bg-white rounded-lg shadow-md mb-8">
@@ -129,8 +145,8 @@ const MockExam = () => {
 
           {filteredPapers.length > 0 ? (
             <div>
-              <ExamTable papers={currentItems} handleTakeExam={handleTakeExam} />
-              <ExamCards papers={currentItems} handleTakeExam={handleTakeExam} />
+              {viewMode === "table" && <ExamTable papers={currentItems} handleTakeExam={handleTakeExam} />}
+              {viewMode === "cards" && <ExamCards papers={currentItems} handleTakeExam={handleTakeExam} />}
               <ExamPagination
                 currentPage={currentPage}
                 totalPages={totalPages}
