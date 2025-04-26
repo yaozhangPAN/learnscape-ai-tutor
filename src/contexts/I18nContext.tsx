@@ -14,20 +14,20 @@ interface I18nContextValue {
 }
 
 const I18nContext = createContext<I18nContextValue>({
-  lang: "zh",
+  lang: "en",  // Changed default from "zh" to "en"
   setLang: () => {},
   toggleLang: () => {},
-  t: zh,
+  t: en,  // Changed default translation to English
 });
 
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLang] = useState<Lang>("zh");
+  const [lang, setLang] = useState<Lang>("en");  // Changed initial state to "en"
 
   const toggleLang = () => {
-    setLang(prevLang => prevLang === "zh" ? "en" : "zh");
+    setLang(prevLang => prevLang === "en" ? "zh" : "en");
   };
 
-  const t = lang === "zh" ? zh : en;
+  const t = lang === "en" ? en : zh;
 
   return (
     <I18nContext.Provider value={{ lang, setLang, toggleLang, t }}>
