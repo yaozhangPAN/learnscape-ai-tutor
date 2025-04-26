@@ -4,13 +4,21 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { useSupabaseUpload } from '@/hooks/useS3Upload';  // 使用新的上传钩子
+import { Progress } from '@/components/ui/progress';
+import { Loader } from 'lucide-react';
+import { useSupabaseUpload } from '@/hooks/useS3Upload';
 
 export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [uploadCount, setUploadCount] = useState(0);
-  const { uploadToSupabase, isUploading } = useSupabaseUpload();
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const { uploadToSupabase, isUploading } = useSupabaseUpload({
+    onProgress: (progress) => {
+      setUploadProgress(progress);
+    },
+    maxFileSize: 2 * 1024 * 1024 * 1024 // 2GB in bytes
+  });
 
   useEffect(() => {
     const fetchUploadCount = async () => {
@@ -54,14 +62,20 @@ export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) 
         
         // 更新上传计数
         setUploadCount(prev => prev + 1);
+        setUploadProgress(0);
       } catch (error) {
         console.error("上传错误:", error);
+        toast({
+          title: "上传失败",
+          description: error instanceof Error ? error.message : "发生未知错误",
+          variant: "destructive",
+        });
       }
     }
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <input 
         type="file" 
         accept="video/*" 
@@ -74,10 +88,26 @@ export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) 
         onClick={() => document.getElementById('video-upload-input')?.click()} 
         variant="outline"
         disabled={isUploading}
+        className="w-full"
       >
-        上传视频 ({uploadCount} 个视频)
+        {isUploading ? (
+          <span className="flex items-center gap-2">
+            <Loader className="animate-spin" />
+            正在上传...
+          </span>
+        ) : (
+          `上传视频 (${uploadCount} 个视频)`
+        )}
       </Button>
+      
+      {isUploading && (
+        <div className="space-y-2">
+          <Progress value={uploadProgress} className="w-full" />
+          <p className="text-sm text-gray-500 text-center">
+            {uploadProgress.toFixed(0)}%
+          </p>
+        </div>
+      )}
     </div>
   );
 };
-

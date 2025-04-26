@@ -88,4 +88,3 @@ export const useSupabaseUpload = ({ onProgress, maxFileSize }: UseSupabaseUpload
 
 // 为了向后兼容，我们保留原始的名称
 export const useS3Upload = useSupabaseUpload;
-
