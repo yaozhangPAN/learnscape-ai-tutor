@@ -1,10 +1,10 @@
-
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Lock, Send } from "lucide-react";
+import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -33,24 +33,19 @@ export const CapyzenComment: React.FC<CapyzenCommentProps> = ({ feedback, isPrem
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        "https://xfwnjocfdvuocvwjopke.supabase.co/functions/v1/ai-capyzen-feedback",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            type: "chat",
-            messages: [...messages, userMessage].map(m => ({
-              role: m.role,
-              content: m.content,
-            })),
-          }),
-        }
-      );
-      const data = await response.json();
-      if (data.reply) {
+      const { data, error } = await supabase.functions.invoke('ai-capyzen-feedback', {
+        body: {
+          type: "chat",
+          messages: [...messages, userMessage].map(m => ({
+            role: m.role,
+            content: m.content,
+          })),
+        },
+      });
+
+      if (error) {
+        console.error('Error getting AI chat reply:', error);
+      } else if (data?.reply) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
       }
     } catch (e) {

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { HelpCircle } from "lucide-react";
@@ -15,23 +14,21 @@ import { PremiumHint } from "./PremiumHint";
 
 const getAIFeedback = async (question: string, answer: string, imageUrl?: string): Promise<string> => {
   try {
-    const response = await fetch(
-      "https://xfwnjocfdvuocvwjopke.supabase.co/functions/v1/ai-capyzen-feedback",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "feedback",
-          question,
-          answer,
-          imageUrl,
-        }),
-      }
-    );
-    const data = await response.json();
-    if (data.feedback) return data.feedback;
+    const { data, error } = await supabase.functions.invoke('ai-capyzen-feedback', {
+      body: {
+        type: "feedback",
+        question,
+        answer,
+        imageUrl,
+      },
+    });
+
+    if (error) {
+      console.error("Error getting AI feedback:", error);
+      return "Capyzen点评：服务器异常，请稍后再试。";
+    }
+
+    if (data?.feedback) return data.feedback;
     return "Capyzen点评：AI助教暂时无法点评，请稍后再试。";
   } catch (e) {
     console.error("Error getting AI feedback:", e);

@@ -73,6 +73,7 @@ const TutorMe = () => {
     setMessages(prev => [...prev, userMessage]);
     
     try {
+      // Use Supabase functions.invoke with proper authorization
       const { data, error } = await supabase.functions.invoke('fireball-tutor', {
         body: { prompt: question }
       });
@@ -88,6 +89,7 @@ const TutorMe = () => {
       
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
+      console.error('Error querying AI tutor:', error);
       toast({
         title: "提问失败",
         description: "抱歉，暂时无法回答您的问题，请稍后再试。",

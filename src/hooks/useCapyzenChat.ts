@@ -1,24 +1,48 @@
 
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-// 用于存储全局AI对话内容或"转发"操作（如题&答案）
+// Used to store global AI conversation content or "forwarding" operations (like question & answers)
 export function useCapyzenChat() {
   const [pendingContext, setPendingContext] = useState<{
     question?: string;
     answer?: string;
   } | null>(null);
 
-  // 设置待对话内容（用于"转发到对话"功能）
+  // Set pending content (for "forward to chat" functionality)
   const forwardToChat = (payload: { question: string; answer: string }) => {
     console.log("Setting pending context:", payload);
     setPendingContext(payload);
   };
 
-  // 重置内容
+  // Reset content
   const clearContext = () => {
     console.log("Clearing context");
     setPendingContext(null);
   };
 
-  return { pendingContext, forwardToChat, clearContext };
+  // Function to get AI chat response using Supabase function
+  const getAIChatResponse = async (messages: Array<{ role: string; content: string }>) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-capyzen-feedback', {
+        body: {
+          type: "chat",
+          messages,
+        },
+      });
+
+      if (error) {
+        console.error("Error getting AI chat response:", error);
+        return "AI助教服务器异常，请稍后再试。";
+      }
+
+      if (data?.reply) return data.reply;
+      return "AI助教暂时无法回复，请稍后再试。";
+    } catch (e) {
+      console.error("Error getting AI chat response:", e);
+      return "AI助教服务器异常，请稍后再试。";
+    }
+  };
+
+  return { pendingContext, forwardToChat, clearContext, getAIChatResponse };
 }

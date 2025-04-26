@@ -7,6 +7,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { AvatarImage } from "@/components/ui/avatar";
 import { MessageCircle, Send } from "lucide-react";
 import { useCapyzenChat } from "@/hooks/useCapyzenChat";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -17,34 +18,10 @@ interface AITutorChatProps {
   onSubmitHomework?: (answer: string) => void;
 }
 
-const getAIChatReply = async (messages: { role: 'user' | 'assistant'; content: string }[]): Promise<string> => {
-  try {
-    const response = await fetch(
-      "https://xfwnjocfdvuocvwjopke.supabase.co/functions/v1/ai-capyzen-feedback",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "chat",
-          messages,
-        }),
-      }
-    );
-    const data = await response.json();
-    if (data.reply) return data.reply;
-    return "AI助教暂时无法回复，请稍后再试。";
-  } catch (e) {
-    console.error("Error getting AI chat reply:", e);
-    return "AI助教服务器异常，请稍后再试。";
-  }
-};
-
 export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
-  const { pendingContext, clearContext } = useCapyzenChat();
+  const { pendingContext, clearContext, getAIChatResponse } = useCapyzenChat();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isBotReplying, setIsBotReplying] = useState(false);
@@ -84,19 +61,39 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ onSubmitHomework }) =>
       content: m.content,
     }));
 
-    const aiContent = await getAIChatReply(formattedHistory);
-    setMessages(prev => [...prev, { role: "assistant", content: aiContent }]);
-    setIsBotReplying(false);
+    try {
+      // Use Supabase functions.invoke instead of direct fetch
+      const { data, error } = await supabase.functions.invoke('ai-capyzen-feedback', {
+        body: {
+          type: "chat",
+          messages: formattedHistory,
+        },
+      });
 
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-    }
-
-    setTimeout(() => {
-      if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      if (error) {
+        console.error('Error getting AI chat reply:', error);
+        setMessages(prev => [...prev, { role: "assistant", content: "AI助教服务器异常，请稍后再试。" }]);
+      } else if (data?.reply) {
+        setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+      } else {
+        setMessages(prev => [...prev, { role: "assistant", content: "AI助教暂时无法回复，请稍后再试。" }]);
       }
-    }, 150);
+    } catch (e) {
+      console.error('Error in AI chat:', e);
+      setMessages(prev => [...prev, { role: "assistant", content: "AI助教服务器异常，请稍后再试。" }]);
+    } finally {
+      setIsBotReplying(false);
+
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
+
+      setTimeout(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, 150);
+    }
   };
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

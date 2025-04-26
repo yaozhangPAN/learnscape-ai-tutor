@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +26,6 @@ const SnapAndSolve = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -49,7 +47,6 @@ const SnapAndSolve = () => {
     }
   };
 
-  // Handle camera access
   const openCamera = async () => {
     setIsCameraOpen(true);
     setIsUsingCamera(true);
@@ -74,29 +71,24 @@ const SnapAndSolve = () => {
     }
   };
 
-  // Capture image from camera
   const captureImage = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
       
-      // Set canvas dimensions to match video
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       
-      // Draw video frame to canvas
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         
-        // Convert canvas to blob
         canvas.toBlob((blob) => {
           if (blob) {
             const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
             setImageFile(file);
             setImagePreview(canvas.toDataURL('image/jpeg'));
             
-            // Stop camera stream
             const stream = video.srcObject as MediaStream;
             if (stream) {
               stream.getTracks().forEach(track => track.stop());
@@ -110,7 +102,6 @@ const SnapAndSolve = () => {
     }
   };
 
-  // Close camera
   const closeCamera = () => {
     if (videoRef.current) {
       const stream = videoRef.current.srcObject as MediaStream;
@@ -122,7 +113,6 @@ const SnapAndSolve = () => {
     setIsUsingCamera(false);
   };
 
-  // Clear selected image
   const clearImage = () => {
     setImageFile(null);
     setImagePreview(null);
@@ -132,7 +122,6 @@ const SnapAndSolve = () => {
     }
   };
 
-  // Submit image for processing
   const analyzeImage = () => {
     if (!imageFile) {
       toast({
@@ -146,7 +135,6 @@ const SnapAndSolve = () => {
     setIsLoading(true);
     setProgress(0);
     
-    // Simulate progress for demo purposes
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
@@ -157,12 +145,10 @@ const SnapAndSolve = () => {
       });
     }, 300);
 
-    // Simulate AI solution generation (would be replaced with actual API call)
     setTimeout(() => {
       clearInterval(interval);
       setProgress(100);
       
-      // Sample solution based on math problem
       const sampleSolution = `
         <h3>Step 1: Identify the Problem</h3>
         <p>This appears to be a quadratic equation in the form <strong>ax² + bx + c = 0</strong>, where a = 2, b = -7, and c = 3.</p>
@@ -310,7 +296,6 @@ const SnapAndSolve = () => {
         </div>
       </div>
       
-      {/* Camera Dialog */}
       <Dialog open={isCameraOpen} onOpenChange={(open) => !open && closeCamera()}>
         <DialogContent className="max-w-xl">
           <DialogHeader>
