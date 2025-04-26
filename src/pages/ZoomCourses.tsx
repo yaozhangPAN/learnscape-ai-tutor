@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ZoomCourseFilters from "@/components/ZoomCourses/ZoomCourseFilters";
@@ -104,28 +104,27 @@ const ZoomCourses = () => {
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [activeSession, setActiveSession] = useState(null);
 
-  // Fetch enrollment data from Supabase
+  // Fetch enrollment counts from Supabase VIEW
   const { data: enrollmentData, isLoading: isLoadingEnrollments } = useQuery({
-    queryKey: ['courseEnrollments'],
+    queryKey: ['zoomCourseEnrollmentCounts'],
     queryFn: async () => {
-      const { data: enrollments, error } = await supabase
-        .from('course_enrollments')
-        .select('course_id, count')
-        .eq('class_type', 'zoom')
-        .select('course_id')
-        .select('count(*)')
-        .groupBy('course_id');
+      const { data, error } = await supabase
+        .from('zoom_course_enrollment_counts')
+        .select('course_id,enrollment_count');
 
       if (error) {
-        console.error('Error fetching enrollments:', error);
+        console.error('Error fetching enrollment counts:', error);
         return {};
       }
 
-      // Convert to a map of course_id -> enrollment count
-      return enrollments.reduce((acc, curr) => {
-        acc[curr.course_id] = parseInt(curr.count);
-        return acc;
-      }, {});
+      // Convert list to map: course_id -> enrollment_count
+      const map: Record<string, number> = {};
+      (data || []).forEach(row => {
+        if (row.course_id) {
+          map[row.course_id] = Number(row.enrollment_count) || 0;
+        }
+      });
+      return map;
     }
   });
 
@@ -201,4 +200,3 @@ const ZoomCourses = () => {
 };
 
 export default ZoomCourses;
-
