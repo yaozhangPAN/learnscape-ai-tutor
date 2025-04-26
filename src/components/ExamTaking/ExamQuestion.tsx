@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { AlertCircle } from "lucide-react";
 import { Question } from "./types";
 import { trackUserBehavior } from "@/utils/behaviorTracker";
 
@@ -54,7 +53,7 @@ const ExamQuestion = ({
   };
 
   const renderMcqOptions = () => {
-    if (question.type !== "MCQ") return null;
+    if (question.type !== "MCQ" || !question.options) return null;
 
     return (
       <RadioGroup 

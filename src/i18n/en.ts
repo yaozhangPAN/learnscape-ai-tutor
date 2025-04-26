@@ -1,4 +1,3 @@
-
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -392,7 +391,7 @@ export const en = {
     SELECT_TERM: "Select Term",
     CLEAR_FILTERS: "Clear Filters",
     QUESTION_TITLE: "Question Title",
-    LEVEL: "Grade",
+    LEVEL: "Level",
     TERM: "Term",
     DATE: "Date",
     ACTION: "Action",
