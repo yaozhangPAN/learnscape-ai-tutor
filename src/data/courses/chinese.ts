@@ -127,6 +127,26 @@ export const oralPracticeCourses: Course[] = [
   }
 ];
 
+export const oralPracticeSeries = {
+  id: "psle-chinese-oral-practice",
+  title: "PSLE Chinese Oral Practice Series",
+  titleZh: "PSLE 华文口试练习系列",
+  description: "Comprehensive oral practice series with detailed demonstrations and tips for PSLE Chinese oral exam",
+  descriptionZh: "全面的PSLE华文口试练习系列，包含详细示范和应试技巧",
+  level: "p6",
+  subject: "chinese",
+  duration: "7 videos",
+  durationZh: "7个视频",
+  rating: 4.8,
+  views: 1789,
+  price: "Free",
+  priceZh: "免费",
+  isPremium: false,
+  image: "https://images.unsplash.com/photo-1555431189-0fabf2667795",
+  type: "tutorial" as const,
+  courses: oralPracticeCourses
+};
+
 export const chineseProfMarkingCourse = {
   id: "psle-chinese-masterclass",
   title: "PSLE Chinese Masterclass",

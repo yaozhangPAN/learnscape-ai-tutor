@@ -2,10 +2,11 @@ import { CourseSeries } from "@/types/course";
 import { mathematicsCourses, mathematicsPastPapers } from "./mathematics";
 import { scienceCourses, sciencePastPapers } from "./science";
 import { englishCourses, englishPastPapers } from "./english";
-import { chineseProfMarkingCourse } from "./chinese";
+import { chineseProfMarkingCourse, oralPracticeSeries } from "./chinese";
 
 export const mockCourseSeries: CourseSeries[] = [
   chineseProfMarkingCourse,
+  oralPracticeSeries,
   {
     id: "psle-math-masterclass",
     title: "PSLE Mathematics Masterclass",
