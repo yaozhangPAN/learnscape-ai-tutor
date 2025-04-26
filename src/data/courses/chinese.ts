@@ -12,8 +12,9 @@ export const masterclassCourse: Course = {
   price: "S$399",
   isPremium: true,
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
-  type: "tutorial",
+  type: "masterclass",
   requiresAccessCode: true,
+  seriesId: "psle-chinese-masterclass"
 };
 
 export const oralPracticeCourse: Course = {
@@ -143,7 +144,7 @@ export const chineseProfMarkingCourse = {
   isPremium: true,
   image: "/lovable-uploads/3a8a17fe-664a-4c72-990a-dee148e1f5bb.png",
   type: "masterclass" as const,
-  courses: []
+  courses: [masterclassCourse]
 };
 
 export const chineseCourses = [
