@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,8 @@ const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
 const QuestionBank = () => {
   const { t } = useI18n();
+  const translations = t.QUESTION_BANK_PAGE;
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGrade, setSelectedGrade] = useState("All Grades");
@@ -185,29 +188,27 @@ const QuestionBank = () => {
     }
   };
 
-  const translations = t.QUESTION_BANK_PAGE || {};
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
       <div className="bg-learnscape-darkBlue text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">{translations.TITLE || "Question Bank"}</h1>
-          <p className="text-lg max-w-3xl">{translations.SUBTITLE || "Practice with our comprehensive question bank"}</p>
+          <h1 className="text-4xl font-bold mb-4">{translations.TITLE}</h1>
+          <p className="text-lg max-w-3xl">{translations.SUBTITLE}</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{translations.QUESTION_LIST || "Question List"}</h2>
+          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{translations.QUESTION_LIST}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="relative flex items-center col-span-1 md:col-span-4">
               <Search className="absolute left-3 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder={translations.SEARCH_PLACEHOLDER || "Search for questions"}
+                placeholder={translations.SEARCH_PLACEHOLDER}
                 className="pl-10 pr-4"
                 value={searchTerm}
                 onChange={(e) => {
@@ -226,7 +227,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.SELECT_SUBJECT || "Select Subject"} />
+                  <SelectValue placeholder={translations.SELECT_SUBJECT} />
                 </SelectTrigger>
                 <SelectContent>
                   {subjects.map((subject) => (
@@ -247,7 +248,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.SELECT_GRADE || "Select Grade"} />
+                  <SelectValue placeholder={translations.SELECT_GRADE} />
                 </SelectTrigger>
                 <SelectContent>
                   {grades.map((grade) => (
@@ -268,7 +269,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.SELECT_TERM || "Select Term"} />
+                  <SelectValue placeholder={translations.SELECT_TERM} />
                 </SelectTrigger>
                 <SelectContent>
                   {terms.map((term) => (
@@ -292,7 +293,7 @@ const QuestionBank = () => {
                   handleFilterChange();
                 }}
               >
-                {translations.CLEAR_FILTERS || "Clear Filters"}
+                {translations.CLEAR_FILTERS}
               </Button>
             </div>
           </div>
@@ -308,12 +309,12 @@ const QuestionBank = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>{translations.QUESTION_TITLE || "Question Title"}</TableHead>
-                        <TableHead>{translations.SUBJECT || "Subject"}</TableHead>
-                        <TableHead>{translations.LEVEL || "Level"}</TableHead>
-                        <TableHead>{translations.TERM || "Term"}</TableHead>
-                        <TableHead>{translations.DATE || "Date"}</TableHead>
-                        <TableHead className="text-right">{translations.ACTION || "Action"}</TableHead>
+                        <TableHead>{translations.QUESTION_TITLE}</TableHead>
+                        <TableHead>{translations.SUBJECT}</TableHead>
+                        <TableHead>{translations.LEVEL}</TableHead>
+                        <TableHead>{translations.TERM}</TableHead>
+                        <TableHead>{translations.DATE}</TableHead>
+                        <TableHead className="text-right">{translations.ACTION}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -332,7 +333,7 @@ const QuestionBank = () => {
                                 className="bg-learnscape-blue text-white"
                                 onClick={() => handleViewQuestion(question)}
                               >
-                                {translations.VIEW || "View"}
+                                {translations.VIEW}
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -340,7 +341,7 @@ const QuestionBank = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                            {translations.NO_QUESTIONS || "No questions found"}
+                            {translations.NO_QUESTIONS}
                           </TableCell>
                         </TableRow>
                       )}
@@ -350,7 +351,7 @@ const QuestionBank = () => {
               </Card>
 
               <div className="mt-4 text-sm text-gray-500">
-                {(translations.SHOWING_RESULTS || "Showing {start} to {end} of {total} results")
+                {translations.SHOWING_RESULTS
                   .replace('{start}', String((currentPage - 1) * QUESTIONS_PER_PAGE + 1))
                   .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
                   .replace('{total}', String(filteredQuestions.length))}

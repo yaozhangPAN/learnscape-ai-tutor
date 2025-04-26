@@ -1,3 +1,4 @@
+
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -309,7 +310,7 @@ export const en = {
     HEALTH: "Health",
     WELL_BEING: "Well-being",
     PEACE: "Peace",
-    SECURITY_ABBREV: "Security",
+    SECURITY_ABBREV: "Security"
   },
   VIDEO_TUTORIALS: {
     TITLE: "Video Lessons",
@@ -453,25 +454,6 @@ export const en = {
     SELECT_TERM: "Select Term",
     CLEAR_FILTERS: "Clear Filters",
     QUESTION_TITLE: "Question Title",
-    LEVEL: "Grade",
-    TERM: "Term",
-    DATE: "Date",
-    ACTION: "Action",
-    VIEW: "View",
-    NO_QUESTIONS: "No questions found",
-    SHOWING_RESULTS: "Showing {start} to {end} of {total} results"
-  },
-  QUESTION_BANK: {
-    TITLE: "Question Bank",
-    SUBTITLE: "Practice with our comprehensive question bank",
-    QUESTION_LIST: "Question List",
-    SEARCH_PLACEHOLDER: "Search questions",
-    SELECT_SUBJECT: "Select Subject",
-    SELECT_GRADE: "Select Grade",
-    SELECT_TERM: "Select Term",
-    CLEAR_FILTERS: "Clear Filters",
-    QUESTION_TITLE: "Question Title",
-    SUBJECT: "Subject",
     LEVEL: "Grade",
     TERM: "Term",
     DATE: "Date",

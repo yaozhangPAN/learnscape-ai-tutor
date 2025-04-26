@@ -1,3 +1,4 @@
+
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -157,25 +158,6 @@ export const zh = {
     SELECT_TERM: "选择学期",
     CLEAR_FILTERS: "清除筛选",
     QUESTION_TITLE: "题目标题",
-    LEVEL: "年级",
-    TERM: "学期",
-    DATE: "日期",
-    ACTION: "操作",
-    VIEW: "查看",
-    NO_QUESTIONS: "未找到题目",
-    SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 条结果"
-  },
-  QUESTION_BANK: {
-    TITLE: "题库",
-    SUBTITLE: "使用我们全面的题库进行练习",
-    QUESTION_LIST: "题目列表",
-    SEARCH_PLACEHOLDER: "搜索题目",
-    SELECT_SUBJECT: "选择科目",
-    SELECT_GRADE: "选择年级",
-    SELECT_TERM: "选择学期",
-    CLEAR_FILTERS: "清除筛选",
-    QUESTION_TITLE: "题目标题",
-    SUBJECT: "科目",
     LEVEL: "年级",
     TERM: "学期",
     DATE: "日期",
