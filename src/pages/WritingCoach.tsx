@@ -1,113 +1,85 @@
 
 import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { useI18n } from "@/contexts/I18nContext";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { ArrowLeft, Pen, MessageSquare, Book } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
 
 const WritingCoach = () => {
   useRequirePremium();
   const { lang } = useI18n();
-  const [userInput, setUserInput] = useState("");
+
+  const features = [
+    {
+      title: lang === 'en' ? 'Image Analysis' : '图像智能分析',
+      description: lang === 'en' ? 'Automatically analyze image elements for writing inspiration.' : '自动识别图片要素，提供作文灵感。',
+      icon: <Pen className="w-6 h-6 mb-4 text-green-600" />
+    },
+    {
+      title: lang === 'en' ? 'Interactive Guidance' : '对话式辅导',
+      description: lang === 'en' ? 'Step-by-step guidance while you write.' : '分阶段引导，边写边学。',
+      icon: <MessageSquare className="w-6 h-6 mb-4 text-green-600" />
+    },
+    {
+      title: lang === 'en' ? 'Real-time Feedback' : '实时反馈',
+      description: lang === 'en' ? 'Corrections, advanced expressions, and structure optimization.' : '错别字、高级表达、结构优化。',
+      icon: <Book className="w-6 h-6 mb-4 text-green-600" />
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Progress Header */}
-      <header className="bg-white shadow">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <div className="flex items-center space-x-8">
-            <span className="font-medium">
-              {lang === 'en' ? 'My Essays' : '我的作文'}
-            </span>
-            <nav className="flex items-center space-x-4 text-sm text-gray-600">
-              <span className="text-blue-600 font-semibold">
-                {lang === 'en' ? 'Understanding' : '理解'}
-              </span>
-              <span>—</span>
-              <span>{lang === 'en' ? 'Outlining' : '大纲'}</span>
-              <span>—</span>
-              <span>{lang === 'en' ? 'Drafting' : '草稿'}</span>
-              <span>—</span>
-              <span>{lang === 'en' ? 'Revising' : '修改'}</span>
-            </nav>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1">
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-6">
+            <Link to="/ai-tutor" className="inline-flex items-center text-learnscape-blue hover:text-blue-700 mb-4">
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              {lang === 'en' ? 'Back to AI Tutor' : '返回 AI 导师'}
+            </Link>
           </div>
-          <Button>
-            {lang === 'en' ? 'Next: Start Outlining' : '下一步：开始写大纲'}
-          </Button>
+
+          <div className="text-center bg-gradient-to-br from-green-50 to-green-100 py-16 rounded-2xl mb-12">
+            <h1 className="text-4xl font-extrabold text-learnscape-darkBlue mb-4">
+              {lang === 'en' ? 'AI Writing Coach' : '看图写作 AI 教练'}
+            </h1>
+            <p className="text-lg text-gray-600 mb-8">
+              {lang === 'en' ? 'Step-by-step Guidance · Real-time Feedback · Continuous Improvement' : '分步引导 · 实时反馈 · 持续进步'}
+            </p>
+            <Button className="bg-learnscape-blue hover:bg-green-700">
+              {lang === 'en' ? 'Start Writing' : '马上体验'}
+            </Button>
+          </div>
+
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-center text-learnscape-darkBlue mb-12">
+              {lang === 'en' ? 'Key Features' : '功能亮点'}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {features.map((feature, index) => (
+                <div key={index} className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 text-center">
+                  <div className="flex justify-center">
+                    {feature.icon}
+                  </div>
+                  <h3 className="font-semibold text-xl mb-2 text-learnscape-darkBlue">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+          
+          <div className="text-center text-gray-500">
+            {lang === 'en' ? 'Writing practice features coming soon...' : '写作练习功能即将推出...'}
+          </div>
         </div>
-      </header>
-
-      <main className="flex-1 container mx-auto px-6 py-8 grid grid-cols-12 gap-6">
-        {/* Left Content Section */}
-        <section className="col-span-8 bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4">
-            {lang === 'en' ? 'Picture Composition' : '看图写作'}
-          </h2>
-          <div className="space-y-4 text-gray-800">
-            <div>
-              <span className="font-semibold">
-                {lang === 'en' ? 'Grade level' : '年级'}
-              </span>: {lang === 'en' ? 'Primary 3' : '小学三年级'}
-            </div>
-            <div>
-              <span className="font-semibold">
-                {lang === 'en' ? 'Essay type' : '作文类型'}
-              </span>: {lang === 'en' ? 'Picture Composition' : '看图写作'}
-            </div>
-            <div>
-              <span className="font-semibold">
-                {lang === 'en' ? 'Prompt / Instructions' : '要求与说明'}
-              </span>:
-              <ul className="list-disc list-inside ml-4">
-                <li>
-                  {lang === 'en' 
-                    ? 'Write a 120-150 word composition based on the picture.'
-                    : '根据图片写一篇 120-150 字短文。'
-                  }
-                </li>
-                <li>
-                  {lang === 'en'
-                    ? 'Ensure complete content, logical plot, and relevant conclusion.'
-                    : '内容完整，情节合理，结尾点题。'
-                  }
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Right AI Chat Section */}
-        <aside className="col-span-4 bg-white p-6 rounded-lg shadow flex flex-col">
-          <div className="flex-1 overflow-auto space-y-4 mb-4">
-            <div className="text-sm">
-              <strong>AI:</strong> 📝 {lang === 'en' 
-                ? "Hi, I'm your writing coach. Let's understand this assignment."
-                : "Hi，我是你的写作教练，先来理解这道题目。"
-              }
-            </div>
-            <div className="text-sm">
-              <strong>AI:</strong> {lang === 'en'
-                ? "Please look at the picture and tell me: What main characters or scenes do you see?"
-                : "请观察图片，然后回答："图片中有哪些主要人物或场景？""
-              }
-            </div>
-          </div>
-          <div>
-            <Input
-              placeholder={lang === 'en' ? "Ask away..." : "请输入..."}
-              className="w-full"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-            />
-          </div>
-        </aside>
       </main>
-
-      <footer className="bg-white py-4">
-        <div className="container mx-auto text-center text-xs text-gray-500">
-          © 2025 {lang === 'en' ? 'AI Writing Coach' : '看图写作 AI 教练'}
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
