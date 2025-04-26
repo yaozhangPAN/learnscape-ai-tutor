@@ -1,6 +1,6 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Image } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -16,10 +16,22 @@ import { Textarea } from "@/components/ui/textarea";
 
 const NewEssayForm = () => {
   const navigate = useNavigate();
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     navigate("/ai-tutor/writing-coach/practice");
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImagePreview(event.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -44,6 +56,43 @@ const NewEssayForm = () => {
             placeholder="未命名作文"
             className="mt-1"
           />
+        </div>
+
+        <div>
+          <Label>上传作文图片</Label>
+          <div className="mt-2 space-y-4">
+            <div className="flex items-center justify-center w-full">
+              <label htmlFor="image-upload" className="w-full cursor-pointer">
+                <div className={`border-2 border-dashed rounded-lg p-6 ${imagePreview ? 'border-gray-300' : 'border-gray-400'} hover:border-primary transition-colors`}>
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img 
+                        src={imagePreview} 
+                        alt="Preview" 
+                        className="mx-auto max-h-[200px] object-contain"
+                      />
+                      <p className="text-sm text-gray-500 text-center mt-2">点击更换图片</p>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <Image className="mx-auto h-12 w-12 text-gray-400" />
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-500">点击或拖拽图片至此处上传</p>
+                        <p className="text-xs text-gray-400 mt-1">支持 JPG, PNG 格式</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <input
+                  id="image-upload"
+                  type="file"
+                  className="hidden"
+                  accept="image/jpeg,image/png"
+                  onChange={handleImageUpload}
+                />
+              </label>
+            </div>
+          </div>
         </div>
 
         <div>
