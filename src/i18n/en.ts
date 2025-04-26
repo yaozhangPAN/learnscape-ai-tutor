@@ -1,3 +1,4 @@
+
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -247,7 +248,8 @@ export const en = {
     POLICE: "Police",
     FIRE: "Fire",
     EMERGENCY: "Emergency",
-    SECURITY: "Security"
+    SECURITY: "Security",
+    UPLOAD_IMAGE: "Upload Image"
   },
   VIDEO_TUTORIALS: {
     TITLE: "Video Lessons",

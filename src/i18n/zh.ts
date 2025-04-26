@@ -1,3 +1,4 @@
+
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -238,7 +239,7 @@ export const zh = {
     BENEFITS: "解锁所有高级功能",
     ALREADY_PREMIUM: "您已经是高级会员",
     AI_TUTOR_TITLE: "AI 辅导",
-    AI_TUTOR_DESC: "获得任科目的帮助",
+    AI_TUTOR_DESC: "获得任何科目的帮助",
     DAILY_REC_TITLE: "每日推荐",
     DAILY_REC_DESC: "个性化每日学习路径",
     VIDEO_TITLE: "高级视频",

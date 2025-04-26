@@ -47,6 +47,26 @@ const ExamQuestion = ({
     onAnswerChange(value);
   };
 
+  // Process question content
+  const getQuestionContent = () => {
+    if (!question.content) return { 
+      question: "Question content not available",
+      options: []
+    };
+    
+    if (typeof question.content === 'string') {
+      try {
+        return JSON.parse(question.content);
+      } catch (error) {
+        return { question: question.content, options: [] };
+      }
+    }
+    
+    return question.content;
+  };
+
+  const content = getQuestionContent();
+
   const formatHtml = (text: string | undefined) => {
     if (!text) return "";
     return String(text).replace(/\n/g, "<br />");
@@ -97,7 +117,7 @@ const ExamQuestion = ({
     <div className="space-y-4">
       <div className="prose max-w-none">
         <div className="text-lg font-medium mb-4">
-          <div dangerouslySetInnerHTML={{ __html: formatHtml(question.text) }} />
+          <div dangerouslySetInnerHTML={{ __html: formatHtml(typeof content === 'object' ? content.question : question.text || '') }} />
         </div>
         
         {question.image && (
