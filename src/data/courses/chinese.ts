@@ -162,7 +162,7 @@ export const chineseProfMarkingCourse = {
   price: "S$399",
   priceZh: "399新币",
   isPremium: true,
-  image: "/lovable-uploads/3a8a17fe-664a-4c72-990a-dee148e1f5bb.png",
+  image: "/lovable-uploads/bea0789a-216e-4b8c-ad8d-db7cbc87bb78.png",
   type: "masterclass" as const,
   courses: [masterclassCourse]
 };
