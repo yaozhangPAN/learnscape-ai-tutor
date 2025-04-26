@@ -4,14 +4,16 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface CourseFiltersProps {
   onLevelChange: (level: string) => void;
-  onSubjectChange: (subject: string) => void;
+  onSubjectChange?: (subject: string) => void;
   onTypeChange: (type: string) => void;
+  hiddenFilters?: string[];
 }
 
 export const CourseFilters: React.FC<CourseFiltersProps> = ({
   onLevelChange,
   onSubjectChange,
-  onTypeChange
+  onTypeChange,
+  hiddenFilters = []
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -26,28 +28,34 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
             </TabsList>
           </Tabs>
         </div>
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Subject</h3>
-          <Tabs defaultValue="all" onValueChange={onSubjectChange}>
-            <TabsList className="grid grid-cols-5 w-full">
-              <TabsTrigger value="english">English</TabsTrigger>
-              <TabsTrigger value="mathematics">Math</TabsTrigger>
-              <TabsTrigger value="science">Science</TabsTrigger>
-              <TabsTrigger value="chinese">Chinese</TabsTrigger>
-              <TabsTrigger value="all">All</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Content Type</h3>
-          <Tabs defaultValue="all" onValueChange={onTypeChange}>
-            <TabsList className="grid grid-cols-3 w-full">
-              <TabsTrigger value="tutorial">Tutorials</TabsTrigger>
-              <TabsTrigger value="past_paper">Past Papers</TabsTrigger>
-              <TabsTrigger value="all">All Types</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
+        
+        {!hiddenFilters.includes('subject') && (
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Subject</h3>
+            <Tabs defaultValue="all" onValueChange={onSubjectChange || (() => {})}>
+              <TabsList className="grid grid-cols-5 w-full">
+                <TabsTrigger value="english">English</TabsTrigger>
+                <TabsTrigger value="mathematics">Math</TabsTrigger>
+                <TabsTrigger value="science">Science</TabsTrigger>
+                <TabsTrigger value="chinese">Chinese</TabsTrigger>
+                <TabsTrigger value="all">All</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        )}
+        
+        {!hiddenFilters.includes('type') && (
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Content Type</h3>
+            <Tabs defaultValue="all" onValueChange={onTypeChange}>
+              <TabsList className="grid grid-cols-3 w-full">
+                <TabsTrigger value="tutorial">Tutorials</TabsTrigger>
+                <TabsTrigger value="past_paper">Past Papers</TabsTrigger>
+                <TabsTrigger value="all">All Types</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        )}
       </div>
     </div>
   );
