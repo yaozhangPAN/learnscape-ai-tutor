@@ -401,9 +401,9 @@ export const en = {
     SHOWING_RESULTS: "Showing {start} to {end} of {total} results"
   },
   LEADERBOARD_PAGE: {
-    RANK: "Rank",
-    NAME: "Name",
-    SCORE: "Score",
+    POSITION: "Rank",
+    USER_NAME: "Name",
+    POINTS: "Score"
   },
   LEADERBOARD: {
     TITLE: "Leaderboard",

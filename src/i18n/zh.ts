@@ -1,4 +1,3 @@
-
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -168,9 +167,9 @@ export const zh = {
     SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 条结果"
   },
   LEADERBOARD_PAGE: {
-    RANK: "排名",
-    NAME: "姓名",
-    SCORE: "分数",
+    POSITION: "排名",
+    USER_NAME: "姓名",
+    POINTS: "分数"
   },
   LEADERBOARD: {
     TITLE: "排行榜",
