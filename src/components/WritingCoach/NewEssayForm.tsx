@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Image } from "lucide-react";
@@ -98,7 +97,7 @@ const NewEssayForm = () => {
           <p className="text-gray-600">填写以下信息，AI助教将指导你完成作文。</p>
         </div>
         <img 
-          src="/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png" 
+          src="/lovable-uploads/1eabcd5f-326e-4849-bf2d-db471b7a4428.png" 
           alt="Writing illustration" 
           className="w-32 h-32 object-contain"
         />
