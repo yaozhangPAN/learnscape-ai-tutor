@@ -2,14 +2,14 @@ import { Course } from "@/types/course";
 
 export const masterclassCourse: Course = {
   id: "psle-chinese-masterclass",
-  title: "PSLE 华文名师阅读理解、作文专项提分课",
-  description: "由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
+  title: "PSLE 华文名师课赠课",
+  description: "赠课：本系列课试听内容，由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
   level: "p6",
   subject: "chinese",
   duration: "10 weeks",
   rating: 4.9,
   views: 156,
-  price: "S$399",
+  price: "free",
   isPremium: true,
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
@@ -149,10 +149,10 @@ export const oralPracticeSeries = {
 
 export const chineseProfMarkingCourse = {
   id: "psle-chinese-masterclass",
-  title: "PSLE Chinese Masterclass",
-  titleZh: "PSLE 华文名师专项提分课",
+  title: "PSLE Chinese Masterclass-Comprehension and composition",
+  titleZh: "PSLE 华文名师阅读理解、作文专项提分课",
   description: "Get your Chinese essays and papers marked by experienced PSLE teachers with detailed feedback.",
-  descriptionZh: "由资深华文名师主讲，针对PSLE华文考试重点难点进行专项训练，助你提升成绩。",
+  descriptionZh: "由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
   level: "p6",
   subject: "chinese",
   duration: "10 weeks",
