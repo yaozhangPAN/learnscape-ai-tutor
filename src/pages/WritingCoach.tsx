@@ -3,10 +3,12 @@ import { useRequirePremium } from "@/hooks/useRequirePremium";
 import { useI18n } from "@/contexts/I18nContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 const WritingCoach = () => {
   useRequirePremium();
   const { lang } = useI18n();
+  const [userInput, setUserInput] = useState("");
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -94,6 +96,8 @@ const WritingCoach = () => {
             <Input
               placeholder={lang === 'en' ? "Ask away..." : "请输入..."}
               className="w-full"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
             />
           </div>
         </aside>
