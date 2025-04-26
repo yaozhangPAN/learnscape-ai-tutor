@@ -98,7 +98,7 @@ const NewEssayForm = () => {
           <p className="text-gray-600">填写以下信息，AI助教将指导你完成作文。</p>
         </div>
         <img 
-          src="/lovable-uploads/3be2a2dc-3175-4068-b3ac-fd1eeeedc4fe.png" 
+          src="/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png" 
           alt="Writing illustration" 
           className="w-32 h-32 object-contain"
         />
