@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import { useSupabase } from './useSupabase';
 import { useToast } from './use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const useWritingSession = () => {
   const { supabase } = useSupabase();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,6 +23,10 @@ export const useWritingSession = () => {
     try {
       setIsLoading(true);
 
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+
       // 1. Upload image to Supabase Storage
       const fileExt = imageFile.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
@@ -33,13 +39,18 @@ export const useWritingSession = () => {
       if (uploadError) throw uploadError;
 
       // 2. Create image record
-      const imageUrl = `${supabase.storageUrl}/object/public/writing-images/${fileName}`;
+      const { data: publicUrlData } = supabase.storage
+        .from('writing-images')
+        .getPublicUrl(filePath);
+      
+      const imageUrl = publicUrlData.publicUrl;
       
       const { data: imageData, error: imageError } = await supabase
         .from('images')
         .insert({
           url: imageUrl,
           title: formData.title,
+          uploaded_by: user.id
         })
         .select('id')
         .single();
@@ -56,6 +67,7 @@ export const useWritingSession = () => {
           word_count: formData.word_count,
           instructions: formData.instructions,
           image_id: imageData.id,
+          user_id: user.id
         })
         .select('id')
         .single();
