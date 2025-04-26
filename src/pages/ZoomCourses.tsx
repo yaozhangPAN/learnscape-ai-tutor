@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,7 +9,6 @@ import { BookOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-// Base course data
 const baseZoomCourses = [
   {
     id: "zoom-course-1",
@@ -22,7 +20,7 @@ const baseZoomCourses = [
     price: "S$599",
     isPremium: true,
     tutor: "Zhang Liping",
-    image: "/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png", // 卡通图标
+    image: "/lovable-uploads/08dd607c-c712-4811-a7fb-d18a717613dd.png", // Swapped image
     upcomingSessions: [
       {
         id: "session-1",
@@ -43,7 +41,7 @@ const baseZoomCourses = [
     price: "S$299",
     isPremium: false,
     tutor: "Zhang Liping",
-    image: "/lovable-uploads/08dd607c-c712-4811-a7fb-d18a717613dd.png", // 卡通图标
+    image: "/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png", // Swapped image
     upcomingSessions: [
       {
         id: "session-2",
@@ -104,7 +102,6 @@ const ZoomCourses = () => {
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [activeSession, setActiveSession] = useState(null);
 
-  // Fetch enrollment counts from Supabase VIEW
   const { data: enrollmentData, isLoading: isLoadingEnrollments } = useQuery({
     queryKey: ['zoomCourseEnrollmentCounts'],
     queryFn: async () => {
@@ -117,7 +114,6 @@ const ZoomCourses = () => {
         return {};
       }
 
-      // Convert list to map: course_id -> enrollment_count
       const map: Record<string, number> = {};
       (data || []).forEach(row => {
         if (row.course_id) {
@@ -128,13 +124,11 @@ const ZoomCourses = () => {
     }
   });
 
-  // Combine base course data with enrollment counts
   const zoomCourses = baseZoomCourses.map(course => ({
     ...course,
     currentEnrollment: enrollmentData?.[course.id] || 0
   }));
 
-  // Filter courses based on selections
   const filteredCourses = zoomCourses.filter(
     course => 
       (selectedLevel === "all" || course.level === selectedLevel) && 
@@ -150,7 +144,6 @@ const ZoomCourses = () => {
     setActiveSession(session);
   };
 
-  // Create upcoming sessions based on the courses
   const upcomingSessions = zoomCourses.map(course => ({
     id: course.upcomingSessions[0].id,
     courseId: course.id,
