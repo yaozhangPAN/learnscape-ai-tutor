@@ -126,7 +126,28 @@ export const oralPracticeCourses: Course[] = [
   }
 ];
 
-export const chineseCourses: Course[] = [
+export const chineseProfMarkingCourse = {
+  id: "psle-chinese-prof-marking",
+  title: "PSLE Chinese Papers Professional Marking",
+  titleZh: "PSLE 华文名师专项提分课",
+  description: "Get your Chinese essays and papers marked by experienced PSLE teachers with detailed feedback.",
+  descriptionZh: "由资深华文名师主讲，针对PSLE华文考试重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "10 weeks",
+  durationZh: "10周",
+  rating: 4.9,
+  views: 156,
+  price: "S$399",
+  priceZh: "399新币",
+  isPremium: true,
+  image: "/lovable-uploads/47dff8f2-25a7-4d51-b09b-92406d7858c1.png",
+  type: "masterclass",
+  courses: []
+};
+
+export const chineseCourses = [
+  chineseProfMarkingCourse,
   masterclassCourse,
   ...oralPracticeCourses
 ];

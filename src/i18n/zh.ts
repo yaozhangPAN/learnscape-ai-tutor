@@ -1,4 +1,3 @@
-
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -299,6 +298,14 @@ export const zh = {
     RECEIPT: "收据",
     DOWNLOAD_RECEIPT: "下载收据",
     BACK_HOME: "返回控制面板",
-    EXPLORE_PREMIUM: "探索高级功能"
+    EXPLORE_PREMIUM: "探索高级功能",
+    DESC: "您现在是高级会员，可以使用所有功能！",
+    TITLE_PREMIUM: "高级会员资格",
+    DESC_PREMIUM: "完全访问所有高级功能",
+    TITLE_VIDEO: "视频课程购买",
+    DESC_VIDEO: "访问已购买的视频课程",
+    BUTTON_AI_TUTOR: "试用AI辅导",
+    BUTTON_VIDEO: "观看视频课程",
+    BUTTON_DASHBOARD: "前往控制面板"
   }
 };

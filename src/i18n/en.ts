@@ -448,7 +448,7 @@ export const en = {
     TITLE: "Question Bank",
     SUBTITLE: "Practice with our comprehensive question bank",
     QUESTION_LIST: "Question List",
-    SEARCH_PLACEHOLDER: "Search for questions",
+    SEARCH_PLACEHOLDER: "Search questions",
     SELECT_SUBJECT: "Select Subject",
     SELECT_GRADE: "Select Grade",
     SELECT_TERM: "Select Term",
@@ -582,7 +582,7 @@ export const en = {
     TERMS_OF_SERVICE: "Terms of Service"
   },
   STREAK: {
-    TITLE: "Streak Progress",
+    TITLE: "Learning Streak",
     DAY_STREAK: "Day Streak",
     STREAK_SOCIETY: "Streak Society",
     PERSONAL: "Personal",
@@ -604,6 +604,14 @@ export const en = {
     RECEIPT: "Receipt",
     DOWNLOAD_RECEIPT: "Download Receipt",
     BACK_HOME: "Back to Dashboard",
-    EXPLORE_PREMIUM: "Explore Premium Features"
+    EXPLORE_PREMIUM: "Explore Premium Features",
+    DESC: "You're now a premium member with access to all features!",
+    TITLE_PREMIUM: "Premium Membership",
+    DESC_PREMIUM: "Full access to all premium features",
+    TITLE_VIDEO: "Video Course Purchase",
+    DESC_VIDEO: "Access to purchased video courses",
+    BUTTON_AI_TUTOR: "Try AI Tutor",
+    BUTTON_VIDEO: "Watch Video Courses",
+    BUTTON_DASHBOARD: "Go to Dashboard"
   }
 };
