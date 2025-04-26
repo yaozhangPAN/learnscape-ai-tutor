@@ -162,6 +162,184 @@ export type Database = {
         }
         Relationships: []
       }
+      dictionary_entries: {
+        Row: {
+          created_at: string
+          example: string | null
+          id: string
+          meaning: string | null
+          themes: string[] | null
+          word: string
+          word_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          example?: string | null
+          id?: string
+          meaning?: string | null
+          themes?: string[] | null
+          word: string
+          word_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          example?: string | null
+          id?: string
+          meaning?: string | null
+          themes?: string[] | null
+          word?: string
+          word_type?: string | null
+        }
+        Relationships: []
+      }
+      drafts: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          session_id: string
+          version: number
+          word_count: number
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          session_id: string
+          version?: number
+          word_count: number
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          session_id?: string
+          version?: number
+          word_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drafts_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "writing_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feedbacks: {
+        Row: {
+          created_at: string
+          draft_id: string
+          id: string
+          score_expression: number
+          score_language: number
+          score_structure: number
+          score_theme: number
+          session_id: string
+          suggestions: Json | null
+        }
+        Insert: {
+          created_at?: string
+          draft_id: string
+          id?: string
+          score_expression: number
+          score_language: number
+          score_structure: number
+          score_theme: number
+          session_id: string
+          suggestions?: Json | null
+        }
+        Update: {
+          created_at?: string
+          draft_id?: string
+          id?: string
+          score_expression?: number
+          score_language?: number
+          score_structure?: number
+          score_theme?: number
+          session_id?: string
+          suggestions?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedbacks_draft_id_fkey"
+            columns: ["draft_id"]
+            isOneToOne: false
+            referencedRelation: "drafts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedbacks_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "writing_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      images: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          title: string | null
+          uploaded_by: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          title?: string | null
+          uploaded_by?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          title?: string | null
+          uploaded_by?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          sender: string
+          session_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          sender: string
+          session_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          sender?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "writing_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -251,6 +429,42 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      recommendations: {
+        Row: {
+          entry_id: string
+          id: string
+          recommended_at: string
+          session_id: string
+        }
+        Insert: {
+          entry_id: string
+          id?: string
+          recommended_at?: string
+          session_id: string
+        }
+        Update: {
+          entry_id?: string
+          id?: string
+          recommended_at?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendations_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "dictionary_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendations_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "writing_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscriptions: {
         Row: {
@@ -419,6 +633,59 @@ export type Database = {
           uploaded_by?: string
         }
         Relationships: []
+      }
+      writing_sessions: {
+        Row: {
+          created_at: string
+          current_stage: string
+          essay_type: string | null
+          grade: string | null
+          id: string
+          image_id: string | null
+          instructions: string | null
+          is_active: boolean
+          title: string | null
+          updated_at: string
+          user_id: string
+          word_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          current_stage?: string
+          essay_type?: string | null
+          grade?: string | null
+          id?: string
+          image_id?: string | null
+          instructions?: string | null
+          is_active?: boolean
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          word_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          current_stage?: string
+          essay_type?: string | null
+          grade?: string | null
+          id?: string
+          image_id?: string | null
+          instructions?: string | null
+          is_active?: boolean
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          word_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "writing_sessions_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: false
+            referencedRelation: "images"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

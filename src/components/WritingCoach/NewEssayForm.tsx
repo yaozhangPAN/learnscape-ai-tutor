@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Image } from "lucide-react";
+import { useWritingSession } from "@/hooks/useWritingSession";
+import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -16,22 +18,74 @@ import { Textarea } from "@/components/ui/textarea";
 
 const NewEssayForm = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { createWritingSession, isLoading } = useWritingSession();
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate("/ai-tutor/writing-coach/practice");
-  };
+  const [formData, setFormData] = useState({
+    title: "",
+    essay_type: "",
+    grade: "",
+    word_count: "",
+    instructions: "",
+  });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          variant: "destructive",
+          title: "文件过大",
+          description: "请上传 5MB 以内的图片",
+        });
+        return;
+      }
+      setImageFile(file);
       const reader = new FileReader();
       reader.onload = (event) => {
         setImagePreview(event.target?.result as string);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!imageFile) {
+      toast({
+        variant: "destructive",
+        title: "请上传图片",
+        description: "写作练习需要配图",
+      });
+      return;
+    }
+
+    if (!formData.title || !formData.grade || !formData.essay_type) {
+      toast({
+        variant: "destructive",
+        title: "请填写完整信息",
+        description: "标题、年级和作文类型为必填项",
+      });
+      return;
+    }
+
+    const result = await createWritingSession(imageFile, {
+      ...formData,
+      word_count: formData.word_count ? parseInt(formData.word_count) : undefined,
+    });
+
+    if (!result.error) {
+      navigate(`/ai-tutor/writing-coach/practice?session=${result.sessionId}`);
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   return (
@@ -55,6 +109,8 @@ const NewEssayForm = () => {
             id="title"
             placeholder="未命名作文"
             className="mt-1"
+            value={formData.title}
+            onChange={(e) => handleInputChange('title', e.target.value)}
           />
         </div>
 
@@ -97,7 +153,11 @@ const NewEssayForm = () => {
 
         <div>
           <Label>选择作文类型</Label>
-          <RadioGroup defaultValue="full" className="grid grid-cols-2 gap-4 mt-2">
+          <RadioGroup 
+            defaultValue="picture" 
+            className="grid grid-cols-2 gap-4 mt-2"
+            onValueChange={(value) => handleInputChange('essay_type', value)}
+          >
             <div className="flex items-start space-x-2 rounded-lg border p-4">
               <RadioGroupItem value="full" id="full" className="mt-1" />
               <div className="grid gap-1.5">
@@ -126,7 +186,7 @@ const NewEssayForm = () => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>年级</Label>
-            <Select>
+            <Select onValueChange={(value) => handleInputChange('grade', value)}>
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="选择年级" />
               </SelectTrigger>
@@ -140,7 +200,7 @@ const NewEssayForm = () => {
           </div>
           <div>
             <Label>作文体裁</Label>
-            <Select>
+            <Select onValueChange={(value) => handleInputChange('essay_type', value)}>
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="选择体裁" />
               </SelectTrigger>
@@ -159,6 +219,8 @@ const NewEssayForm = () => {
             type="number"
             placeholder="建议字数（最多1750字）"
             className="mt-1"
+            value={formData.word_count}
+            onChange={(e) => handleInputChange('word_count', e.target.value)}
           />
           <p className="text-xs text-gray-500 mt-1">不填写则按照年级标准设定字数范围</p>
         </div>
@@ -168,12 +230,14 @@ const NewEssayForm = () => {
           <Textarea 
             placeholder="输入作文题目和具体要求..."
             className="mt-1 min-h-[100px]"
+            value={formData.instructions}
+            onChange={(e) => handleInputChange('instructions', e.target.value)}
           />
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" size="lg">
-            开始写作
+          <Button type="submit" size="lg" disabled={isLoading}>
+            {isLoading ? "正在创建..." : "开始写作"}
           </Button>
         </div>
       </form>
