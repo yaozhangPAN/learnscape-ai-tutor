@@ -1,18 +1,18 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import QuestionViewer from "@/components/QuestionBank/QuestionViewer";
-import QuestionCard from "@/components/QuestionBank/QuestionCard";
 import { useI18n } from "@/contexts/I18nContext";
-import { useToast } from "@/components/ui/use-toast";
 
 const QUESTIONS_PER_PAGE = 10;
 const EXCLUDED_TITLES = ["巧练题（一）", "巧练题（二）", "巧练题（三）", "看图作文题"];
@@ -51,7 +51,6 @@ const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 const QuestionBank = () => {
   const { t } = useI18n();
   const translations = t.QUESTION_BANK_PAGE;
-  const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,7 +61,6 @@ const QuestionBank = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [viewMode, setViewMode] = useState("table");
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -74,11 +72,6 @@ const QuestionBank = () => {
         
         if (error) {
           console.error('Error fetching questions:', error);
-          toast({
-            title: "加载失败",
-            description: "无法获取题目数据，使��默认题目。",
-            variant: "destructive",
-          });
           setQuestionData(defaultQuestionData);
         } else if (data && data.length > 0) {
           const formattedData = data
@@ -96,21 +89,12 @@ const QuestionBank = () => {
             }));
           setQuestionData(formattedData);
           console.log('Fetched questions:', data);
-          toast({
-            title: "加载成功",
-            description: `成功加载 ${formattedData.length} 个题目`,
-          });
         } else {
           console.log('No data found in questions table, using default data');
           setQuestionData(defaultQuestionData);
         }
       } catch (error) {
         console.error('Exception when fetching questions:', error);
-        toast({
-          title: "加载出错",
-          description: "获取题目时发生错误，使用默认题目。",
-          variant: "destructive",
-        });
         setQuestionData(defaultQuestionData);
       } finally {
         setIsLoading(false);
@@ -118,7 +102,7 @@ const QuestionBank = () => {
     };
 
     fetchQuestions();
-  }, [toast]);
+  }, []);
 
   const filteredQuestions = questionData.filter(question => {
     const matchesSearch = 
@@ -128,7 +112,9 @@ const QuestionBank = () => {
       question.subject?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesGrade = selectedGrade === "All Grades" || question.level === selectedGrade;
+    
     const matchesSubject = selectedSubject === "All Subjects" || question.subject === selectedSubject;
+    
     const matchesTerm = selectedTerm === "All Terms" || question.term === selectedTerm;
     
     return matchesSearch && matchesGrade && matchesSubject && matchesTerm;
@@ -164,6 +150,44 @@ const QuestionBank = () => {
     setDialogOpen(true);
   };
 
+  const renderQuestionContent = (content: any) => {
+    if (!content) return <p className="text-gray-500">No content available for this question.</p>;
+
+    try {
+      const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
+      
+      return (
+        <div className="space-y-6">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-lg font-medium mb-2">Question:</h3>
+            <pre className="whitespace-pre-wrap font-mono text-sm">
+              {JSON.stringify(parsedContent.question, null, 2)}
+            </pre>
+          </div>
+
+          {parsedContent.options && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">Options:</h3>
+              <RadioGroup defaultValue={parsedContent.correctAnswer}>
+                {Object.entries(parsedContent.options).map(([key, value]) => (
+                  <div key={key} className="flex items-center space-x-2 p-2">
+                    <RadioGroupItem value={key} id={key} />
+                    <label htmlFor={key} className="text-sm">
+                      {value as string}
+                    </label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          )}
+        </div>
+      );
+    } catch (error) {
+      console.error('Error parsing question content:', error);
+      return <p className="text-red-500">Error displaying question content</p>;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -177,23 +201,7 @@ const QuestionBank = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-learnscape-darkBlue">{translations.QUESTION_LIST}</h2>
-            <div className="flex space-x-2">
-              <Button 
-                variant={viewMode === "table" ? "default" : "outline"} 
-                onClick={() => setViewMode("table")}
-              >
-                表格视图
-              </Button>
-              <Button 
-                variant={viewMode === "grid" ? "default" : "outline"} 
-                onClick={() => setViewMode("grid")}
-              >
-                卡片视图
-              </Button>
-            </div>
-          </div>
+          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{translations.QUESTION_LIST}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="relative flex items-center col-span-1 md:col-span-4">
@@ -296,73 +304,55 @@ const QuestionBank = () => {
             </div>
           ) : (
             <>
-              {viewMode === "table" ? (
-                <Card>
-                  <CardContent className="p-0">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>{translations.QUESTION_TITLE}</TableHead>
-                          <TableHead>{translations.SUBJECT}</TableHead>
-                          <TableHead>{translations.LEVEL}</TableHead>
-                          <TableHead>{translations.TERM}</TableHead>
-                          <TableHead>{translations.DATE}</TableHead>
-                          <TableHead className="text-right">{translations.ACTION}</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {currentQuestions.length > 0 ? (
-                          currentQuestions.map((question) => (
-                            <TableRow key={question.id}>
-                              <TableCell className="font-medium">{question.title}</TableCell>
-                              <TableCell>{question.subject}</TableCell>
-                              <TableCell>{question.level}</TableCell>
-                              <TableCell>{question.term}</TableCell>
-                              <TableCell>
-                                {formatDate(question.date)}
-                              </TableCell>
-                              <TableCell className="text-right">
-                                <Button 
-                                  className="bg-learnscape-blue text-white"
-                                  onClick={() => handleViewQuestion(question)}
-                                >
-                                  {translations.VIEW}
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          ))
-                        ) : (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                              {translations.NO_QUESTIONS}
+              <Card>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{translations.QUESTION_TITLE}</TableHead>
+                        <TableHead>{translations.SUBJECT}</TableHead>
+                        <TableHead>{translations.LEVEL}</TableHead>
+                        <TableHead>{translations.TERM}</TableHead>
+                        <TableHead>{translations.DATE}</TableHead>
+                        <TableHead className="text-right">{translations.ACTION}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {currentQuestions.length > 0 ? (
+                        currentQuestions.map((question) => (
+                          <TableRow key={question.id}>
+                            <TableCell className="font-medium">{question.title}</TableCell>
+                            <TableCell>{question.subject}</TableCell>
+                            <TableCell>{question.level}</TableCell>
+                            <TableCell>{question.term}</TableCell>
+                            <TableCell>
+                              {formatDate(question.date)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Button 
+                                className="bg-learnscape-blue text-white"
+                                onClick={() => handleViewQuestion(question)}
+                              >
+                                {translations.VIEW}
+                              </Button>
                             </TableCell>
                           </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {currentQuestions.length > 0 ? (
-                    currentQuestions.map((question) => (
-                      <QuestionCard 
-                        key={question.id} 
-                        question={question} 
-                        onView={handleViewQuestion} 
-                      />
-                    ))
-                  ) : (
-                    <div className="col-span-full text-center py-12 text-gray-500">
-                      {translations.NO_QUESTIONS}
-                    </div>
-                  )}
-                </div>
-              )}
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            {translations.NO_QUESTIONS}
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
 
               <div className="mt-4 text-sm text-gray-500">
                 {translations.SHOWING_RESULTS
-                  .replace('{start}', String((currentPage - 1) * QUESTIONS_PER_PAGE + (filteredQuestions.length ? 1 : 0)))
+                  .replace('{start}', String((currentPage - 1) * QUESTIONS_PER_PAGE + 1))
                   .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
                   .replace('{total}', String(filteredQuestions.length))}
               </div>
@@ -404,8 +394,6 @@ const QuestionBank = () => {
         </div>
       </div>
 
-      <Footer />
-      
       <QuestionViewer
         isOpen={dialogOpen}
         onOpenChange={setDialogOpen}

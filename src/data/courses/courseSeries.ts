@@ -1,4 +1,3 @@
-
 import { CourseSeries } from "@/types/course";
 import { mathematicsCourses, mathematicsPastPapers } from "./mathematics";
 import { scienceCourses, sciencePastPapers } from "./science";
@@ -6,25 +5,7 @@ import { englishCourses, englishPastPapers } from "./english";
 import { chineseProfMarkingCourse, oralPracticeSeries } from "./chinese";
 
 export const mockCourseSeries: CourseSeries[] = [
-  {
-    id: "psle-chinese-masterclass",
-    title: "PSLE Chinese Masterclass-Comprehension and composition",
-    titleZh: "PSLE 华文名师阅读理解、作文专项提分课",
-    description: "Get your Chinese essays and papers marked by experienced PSLE teachers with detailed feedback.",
-    descriptionZh: "由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
-    level: "p6",
-    subject: "chinese",
-    duration: "10 weeks",
-    durationZh: "10周",
-    rating: 4.9,
-    views: 156,
-    price: "S$399",
-    priceZh: "399新币",
-    isPremium: true,
-    image: "/lovable-uploads/3a8a17fe-664a-4c72-990a-dee148e1f5bb.png",
-    type: "masterclass" as const,
-    courses: [chineseProfMarkingCourse]
-  },
+  chineseProfMarkingCourse,
   oralPracticeSeries,
   {
     id: "psle-math-masterclass",
