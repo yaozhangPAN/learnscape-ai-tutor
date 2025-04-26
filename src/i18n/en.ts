@@ -403,16 +403,6 @@ export const en = {
     RANK: "Rank",
     NAME: "Name",
     SCORE: "Score",
-    POINTS: "Points",
-    NO_RESULTS: "No leaderboard results found",
-    TOP_ACHIEVERS: "Top Achievers",
-    QUESTIONS: "Questions",
-    CHAMPION: "Champion",
-    RUNNER_UP: "Runner-up",
-    THIRD_PLACE: "Third Place",
-    SEARCH_PLACEHOLDER: "Search users...",
-    USER: "User",
-    BADGE: "Badge"
   },
   LEADERBOARD: {
     TITLE: "Leaderboard",

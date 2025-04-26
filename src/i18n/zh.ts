@@ -1,3 +1,4 @@
+
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -175,7 +176,7 @@ export const zh = {
     TITLE: "排行榜",
     SUBTITLE: "看看谁排名靠前！",
     DAILY: "日榜",
-    WEEKLY: "周榜",
+    WEEKLY: "周榜", 
     MONTHLY: "月榜",
     ALL_TIME: "总榜",
     RANK: "排名",
