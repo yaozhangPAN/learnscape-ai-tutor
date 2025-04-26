@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Image } from "lucide-react";
@@ -24,10 +25,11 @@ const NewEssayForm = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
-    essay_type: "",
-    grade: "",
-    word_count: "",
-    instructions: "",
+    session_type: "",
+    grade_level: "",
+    genre: "",
+    word_limit: "",
+    prompt_text: "",
   });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,18 +64,18 @@ const NewEssayForm = () => {
       return;
     }
 
-    if (!formData.title || !formData.grade || !formData.essay_type) {
+    if (!formData.title || !formData.grade_level || !formData.genre || !formData.session_type) {
       toast({
         variant: "destructive",
         title: "请填写完整信息",
-        description: "标题、年级和作文类型为必填项",
+        description: "标题、年级、作文类型和作文体裁为必填项",
       });
       return;
     }
 
     const result = await createWritingSession(imageFile, {
       ...formData,
-      word_count: formData.word_count ? parseInt(formData.word_count) : undefined,
+      word_limit: formData.word_limit ? parseInt(formData.word_limit) : undefined,
     });
 
     if (!result.error) {
@@ -154,14 +156,13 @@ const NewEssayForm = () => {
         <div>
           <Label>选择作文类型</Label>
           <RadioGroup 
-            defaultValue="picture" 
             className="grid grid-cols-2 gap-4 mt-2"
-            onValueChange={(value) => handleInputChange('essay_type', value)}
+            onValueChange={(value) => handleInputChange('session_type', value)}
           >
             <div className="flex items-start space-x-2 rounded-lg border p-4">
-              <RadioGroupItem value="full" id="full" className="mt-1" />
+              <RadioGroupItem value="full_process" id="full_process" className="mt-1" />
               <div className="grid gap-1.5">
-                <Label htmlFor="full" className="font-medium">
+                <Label htmlFor="full_process" className="font-medium">
                   完整写作过程
                 </Label>
                 <p className="text-sm text-gray-500">
@@ -170,9 +171,9 @@ const NewEssayForm = () => {
               </div>
             </div>
             <div className="flex items-start space-x-2 rounded-lg border p-4">
-              <RadioGroupItem value="feedback" id="feedback" className="mt-1" />
+              <RadioGroupItem value="revision" id="revision" className="mt-1" />
               <div className="grid gap-1.5">
-                <Label htmlFor="feedback" className="font-medium">
+                <Label htmlFor="revision" className="font-medium">
                   修改与反馈
                 </Label>
                 <p className="text-sm text-gray-500">
@@ -186,26 +187,26 @@ const NewEssayForm = () => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>年级</Label>
-            <Select onValueChange={(value) => handleInputChange('grade', value)}>
+            <Select onValueChange={(value) => handleInputChange('grade_level', value)}>
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="选择年级" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="p3">小学三年级</SelectItem>
-                <SelectItem value="p4">小学四年级</SelectItem>
-                <SelectItem value="p5">小学五年级</SelectItem>
-                <SelectItem value="p6">小学六年级</SelectItem>
+                <SelectItem value="grade_3">小学三年级</SelectItem>
+                <SelectItem value="grade_4">小学四年级</SelectItem>
+                <SelectItem value="grade_5">小学五年级</SelectItem>
+                <SelectItem value="grade_6">小学六年级</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div>
             <Label>作文体裁</Label>
-            <Select onValueChange={(value) => handleInputChange('essay_type', value)}>
+            <Select onValueChange={(value) => handleInputChange('genre', value)}>
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="选择体裁" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="picture">看图写作</SelectItem>
+                <SelectItem value="picture_composition">看图写作</SelectItem>
                 <SelectItem value="narrative">记叙文</SelectItem>
                 <SelectItem value="descriptive">说明文</SelectItem>
               </SelectContent>
@@ -219,8 +220,8 @@ const NewEssayForm = () => {
             type="number"
             placeholder="建议字数（最多1750字）"
             className="mt-1"
-            value={formData.word_count}
-            onChange={(e) => handleInputChange('word_count', e.target.value)}
+            value={formData.word_limit}
+            onChange={(e) => handleInputChange('word_limit', e.target.value)}
           />
           <p className="text-xs text-gray-500 mt-1">不填写则按照年级标准设定字数范围</p>
         </div>
@@ -230,8 +231,8 @@ const NewEssayForm = () => {
           <Textarea 
             placeholder="输入作文题目和具体要求..."
             className="mt-1 min-h-[100px]"
-            value={formData.instructions}
-            onChange={(e) => handleInputChange('instructions', e.target.value)}
+            value={formData.prompt_text}
+            onChange={(e) => handleInputChange('prompt_text', e.target.value)}
           />
         </div>
 

@@ -1,13 +1,24 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useSupabase } from "@/hooks/useSupabase";
+import { useToast } from "@/hooks/use-toast";
 
 const WritingPractice = () => {
+  const location = useLocation();
+  const { supabase } = useSupabase();
+  const { toast } = useToast();
   const [userInput, setUserInput] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
+  const [sessionData, setSessionData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [imageUrl, setImageUrl] = useState("");
+  
+  // Extract session ID from URL query parameters
+  const sessionId = new URLSearchParams(location.search).get("session");
 
   const steps = [
     { label: "理解", status: "current" },
@@ -27,10 +38,91 @@ const WritingPractice = () => {
     }
   ];
 
-  const handleSendMessage = () => {
-    if (!userInput.trim()) return;
-    setUserInput("");
+  // Fetch session data when component mounts
+  useEffect(() => {
+    if (sessionId) {
+      fetchSessionData(sessionId);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "无效的会话",
+        description: "未能找到写作会话信息",
+      });
+      setIsLoading(false);
+    }
+  }, [sessionId]);
+
+  const fetchSessionData = async (id) => {
+    try {
+      setIsLoading(true);
+      
+      // Fetch writing session data
+      const { data: session, error: sessionError } = await supabase
+        .from("writing_sessions")
+        .select("*, images(*)")
+        .eq("id", id)
+        .single();
+      
+      if (sessionError) throw sessionError;
+      if (!session) throw new Error("未找到写作会话");
+      
+      setSessionData(session);
+      setImageUrl(session.images?.url || "");
+      
+      // Fetch messages for this session
+      const { data: messages, error: messagesError } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("session_id", id)
+        .order("created_at", { ascending: true });
+      
+      if (messagesError) throw messagesError;
+      // We could set the messages here if needed
+      
+    } catch (error) {
+      console.error("Error fetching session data:", error);
+      toast({
+        variant: "destructive",
+        title: "获取数据失败",
+        description: error.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const handleSendMessage = async () => {
+    if (!userInput.trim() || !sessionId) return;
+    
+    try {
+      // Add user message to the database
+      await supabase.from("messages").insert({
+        session_id: sessionId,
+        sender: "USER",
+        content: userInput
+      });
+      
+      // In a real app, this would trigger an AI response
+      // which would be inserted as a message with sender: 'AI'
+      
+      setUserInput("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast({
+        variant: "destructive",
+        title: "发送失败",
+        description: "无法发送您的消息",
+      });
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500">正在加载...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -65,23 +157,43 @@ const WritingPractice = () => {
       <div className="container mx-auto px-6 py-8 grid grid-cols-12 gap-6">
         <section className="col-span-8 space-y-6">
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-bold mb-4">看图写作</h2>
+            <h2 className="text-xl font-bold mb-4">{sessionData?.title || "未命名作文"}</h2>
             <div className="space-y-4 text-gray-800">
               <div>
-                <span className="font-semibold">年级</span>: 小学三年级
+                <span className="font-semibold">年级</span>: {sessionData?.grade_level === 'grade_3' ? '小学三年级' : 
+                                                            sessionData?.grade_level === 'grade_4' ? '小学四年级' : 
+                                                            sessionData?.grade_level === 'grade_5' ? '小学五年级' : 
+                                                            sessionData?.grade_level === 'grade_6' ? '小学六年级' : '未知年级'}
               </div>
               <div>
-                <span className="font-semibold">类型</span>: 看图写作
+                <span className="font-semibold">类型</span>: {sessionData?.genre === 'picture_composition' ? '看图写作' : 
+                                                           sessionData?.genre === 'narrative' ? '记叙文' : 
+                                                           sessionData?.genre === 'descriptive' ? '说明文' : '未知类型'}
               </div>
-              <div>
-                <span className="font-semibold">题目要求</span>:
-                <ul className="list-disc list-inside ml-4">
-                  <li>根据图片写一篇 120-150 字短文。</li>
-                  <li>内容完整，情节合理，结尾点题。</li>
-                </ul>
-              </div>
+              {sessionData?.word_limit && (
+                <div>
+                  <span className="font-semibold">字数要求</span>: 约 {sessionData.word_limit} 字
+                </div>
+              )}
+              {sessionData?.prompt_text && (
+                <div>
+                  <span className="font-semibold">题目要求</span>:
+                  <div className="ml-4 mt-1">{sessionData.prompt_text}</div>
+                </div>
+              )}
             </div>
           </div>
+
+          {imageUrl && (
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="font-medium mb-4">作文图片</h3>
+              <img 
+                src={imageUrl} 
+                alt="作文题目图片"
+                className="mx-auto max-h-[300px] object-contain rounded"
+              />
+            </div>
+          )}
 
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="font-medium mb-4">写作步骤</h3>

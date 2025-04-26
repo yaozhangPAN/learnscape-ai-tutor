@@ -5,8 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Routes, Route, Navigate } from "react-router-dom";
 import NewEssayForm from "@/components/WritingCoach/NewEssayForm";
-
-// Rename the existing writing practice component
 import WritingPractice from "@/components/WritingCoach/WritingPractice";
 
 const WritingCoach = () => {

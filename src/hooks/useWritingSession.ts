@@ -14,10 +14,11 @@ export const useWritingSession = () => {
     imageFile: File,
     formData: {
       title: string;
-      essay_type: string;
-      grade: string;
-      word_count?: number;
-      instructions?: string;
+      session_type: string;
+      grade_level: string;
+      genre: string;
+      word_limit?: number;
+      prompt_text?: string;
     }
   ) => {
     try {
@@ -62,10 +63,11 @@ export const useWritingSession = () => {
         .from('writing_sessions')
         .insert({
           title: formData.title,
-          essay_type: formData.essay_type,
-          grade: formData.grade,
-          word_count: formData.word_count,
-          instructions: formData.instructions,
+          session_type: formData.session_type,
+          grade_level: formData.grade_level,
+          genre: formData.genre,
+          word_limit: formData.word_limit,
+          prompt_text: formData.prompt_text,
           image_id: imageData.id,
           user_id: user.id
         })
