@@ -1,3 +1,4 @@
+
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -396,7 +397,8 @@ export const en = {
     ACCOUNT: "Account",
     LOGOUT: "Logout",
     LOGIN: "Login",
-    REGISTER: "Register"
+    REGISTER: "Register",
+    STREAK_PROGRESS: "Learning Streak"
   },
   DASHBOARD_PAGE: {
     WELCOME: "Welcome back",

@@ -142,7 +142,7 @@ export const chineseProfMarkingCourse = {
   priceZh: "399新币",
   isPremium: true,
   image: "/lovable-uploads/47dff8f2-25a7-4d51-b09b-92406d7858c1.png",
-  type: "masterclass",
+  type: "tutorial",
   courses: []
 };
 

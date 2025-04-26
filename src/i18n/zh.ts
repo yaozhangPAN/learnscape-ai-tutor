@@ -1,3 +1,4 @@
+
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -47,7 +48,8 @@ export const zh = {
     ACCOUNT: "帐户",
     LOGOUT: "登出",
     LOGIN: "登录",
-    REGISTER: "注册"
+    REGISTER: "注册",
+    STREAK_PROGRESS: "连续学习记录"
   },
   DASHBOARD_PAGE: {
     WELCOME: "欢迎回来",

@@ -4,6 +4,7 @@ import { chineseCourses, masterclassCourse, oralPracticeCourse, oralPracticeCour
 
 export { masterclassCourse, oralPracticeCourse, oralPracticeCourses };
 
+// Filter out any items that don't match the Course type
 export const mockCourses: Course[] = [
-  ...chineseCourses
+  ...chineseCourses.filter(course => !('courses' in course) || course.courses === undefined)
 ];

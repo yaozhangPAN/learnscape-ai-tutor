@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -45,7 +44,7 @@ const Index = () => {
       bg: "bg-[#A48CF6]",
       text: "text-white",
       icon: <Grid2x2 className="w-8 h-8 mr-2" />,
-      img: "/lovable-uploads/08dd607c-c712-4811-a7fb-d18a717613dd.png", // New AI Tutor icon
+      img: "/lovable-uploads/08dd607c-c712-4811-a7fb-d18a717613dd.png",
       to: "/ai-tutor"
     },
     {
@@ -97,7 +96,7 @@ const Index = () => {
     },
     {
       key: "streak-progress",
-      title: t.NAV.STREAK_PROGRESS,
+      title: lang === "zh" ? t.STREAK.TITLE : t.STREAK.TITLE,
       desc: "",
       img: "/lovable-uploads/db9f7a45-8c5c-4cea-a1cc-534fd2cf61f5.png",
       to: "/dashboard",

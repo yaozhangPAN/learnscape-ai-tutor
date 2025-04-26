@@ -37,9 +37,8 @@ export type Course = {
   priceZh?: string;
   isPremium: boolean;
   image: string;
-  type: "tutorial" | "past_paper";
+  type: "tutorial" | "past_paper" | "masterclass";
   videoUrl?: string;
   requiresAccessCode?: boolean;
   seriesId?: string;
 };
-
