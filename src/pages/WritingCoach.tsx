@@ -1,4 +1,5 @@
 
+import React, { useState } from "react";
 import { useRequirePremium } from "@/hooks/useRequirePremium";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 const WritingCoach = () => {
   useRequirePremium();
