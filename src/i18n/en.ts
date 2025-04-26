@@ -1,3 +1,4 @@
+
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -319,6 +320,146 @@ export const en = {
     STUDENTS: "students",
     DURATION: "Duration",
     VIEWS: "views",
-    COURSES: "lessons" // Added missing property
+    COURSES: "lessons"
   },
+  DAILY_RECOMMENDATION: {
+    REC1_TITLE: "Practice Word Problems",
+    SUBJECT_MATH: "Mathematics",
+    DIFFICULTY_MEDIUM: "Medium",
+    REC1_DESC: "Practice word problems for better understanding",
+    REC2_TITLE: "Reading Comprehension",
+    SUBJECT_ENGLISH: "English",
+    DIFFICULTY_EASY: "Easy",
+    REC2_DESC: "Improve your reading skills",
+    REC3_TITLE: "Science Experiment",
+    SUBJECT_SCIENCE: "Science",
+    DIFFICULTY_EASY: "Easy",
+    REC3_DESC: "Fun science experiment to do at home",
+    REC4_TITLE: "Advanced Algebra",
+    DIFFICULTY_HARD: "Hard",
+    REC4_DESC: "Challenge yourself with advanced algebra",
+    REC5_TITLE: "Essay Writing",
+    REC5_DESC: "Practice your essay writing skills",
+    TOAST_STARTED_TITLE: "Activity Started",
+    TOAST_STARTED_DESC: "You've started a new learning activity",
+    TOAST_COMPLETED_TITLE: "Activity Completed",
+    TOAST_COMPLETED_DESC: "Great job! You've completed an activity",
+    LEARNING_PATH: "Today's Learning Path",
+    COMPLETED_TODAY: "{n} of {n} completed today",
+    REFRESH_PATH: "Refresh Path",
+    JOURNEY_TITLE: "Continue Your Learning Journey",
+    JOURNEY_DESC: "Complete these activities to earn XP and keep your streak",
+    LOADING: "Loading your personalized recommendations...",
+    WEEKLY_PROGRESS: "Weekly Progress",
+    DAYS_STREAK: "day streak",
+    BONUS_TIP: "Complete tomorrow to earn a bonus",
+    WEEK_DAYS: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    REVIEW: "Review",
+    CONTINUE: "Continue",
+    START: "Start"
+  },
+  DAILY_PLAN: {
+    TITLE: "Daily Adventure",
+    XP: "150 XP",
+    DESC: "Your personalized daily learning path based on your progress and goals",
+    PATH_TITLE: "Today's Learning Adventure",
+    JOIN_ZOOM: "Join Live Class"
+  },
+  NAVBAR: {
+    HOME: "Home",
+    DASHBOARD: "Dashboard",
+    MOCK_EXAM: "Mock Exam",
+    VIDEO_TUTORIALS: "Video Tutorials",
+    QUESTION_BANK: "Question Bank",
+    LEADERBOARD: "Leaderboard",
+    WORKSHEETS: "Worksheets",
+    REFERRAL: "Referral",
+    AI_TUTOR: "AI Tutor",
+    CHINESE_CHARACTERS: "Chinese Characters",
+    ACCOUNT: "Account",
+    LOGOUT: "Logout",
+    LOGIN: "Login",
+    REGISTER: "Register"
+  },
+  DASHBOARD_PAGE: {
+    WELCOME: "Welcome back",
+    MOCK_EXAM_SUMMARY: "Mock Exam Summary",
+    AVERAGE_SCORE: "Average Score",
+    TIME_SPENT: "Time Spent",
+    LESSON_COMPLETION: "Lesson Completion",
+    RECENT_ACTIVITY: "Recent Activity",
+    VIEW_ALL: "View All"
+  },
+  MOCK_EXAM_PAGE: {
+    START_EXAM: "Start Exam",
+    EXAM_HISTORY: "Exam History",
+    NO_EXAM_HISTORY: "No exam history",
+    EXAM_NAME: "Exam Name",
+    SCORE: "Score",
+    DATE: "Date",
+    REVIEW: "Review"
+  },
+  QUESTION_BANK_PAGE: {
+    FILTER: "Filter",
+    SUBJECT: "Subject",
+    DIFFICULTY: "Difficulty",
+    QUESTION_TYPE: "Question Type",
+    SEARCH: "Search"
+  },
+  LEADERBOARD_PAGE: {
+    RANK: "Rank",
+    NAME: "Name",
+    SCORE: "Score"
+  },
+  WORKSHEETS_PAGE: {
+    DOWNLOAD: "Download",
+    SUBJECT: "Subject",
+    TOPIC: "Topic"
+  },
+  REFERRAL_PAGE: {
+    REFERRAL_CODE: "Referral Code",
+    SHARE_LINK: "Share Link",
+    REFERRAL_EARNINGS: "Referral Earnings",
+    REFERRAL_HISTORY: "Referral History",
+    FRIEND_NAME: "Friend Name",
+    EARNED: "Earned"
+  },
+  AI_TUTOR: {
+    TITLE: "AI Tutor",
+    WRITING_COACH: "Writing Coach",
+    ORAL_EXAM_PRACTICE: "Oral Exam Practice",
+    DICTATION_PRACTICE: "Dictation Practice",
+    TUTOR_ME: "Tutor Me",
+    ERROR_ANALYSIS: "Error Analysis",
+    SNAP_AND_SOLVE: "Snap and Solve",
+    VOCABULARY_BUILDER: "Vocabulary Builder",
+    LANGUAGE_ARTS: "Language Arts",
+    READING_COACH: "Reading Coach"
+  },
+  ACCOUNT_PAGE: {
+    ACCOUNT: "Account",
+    PROFILE: "Profile",
+    SUBSCRIPTION: "Subscription",
+    PAYMENT_HISTORY: "Payment History",
+    SETTINGS: "Settings",
+    UPDATE_PROFILE: "Update Profile",
+    USERNAME: "Username",
+    EMAIL: "Email",
+    UPDATE_PASSWORD: "Update Password",
+    CURRENT_PASSWORD: "Current Password",
+    NEW_PASSWORD: "New Password",
+    CONFIRM_PASSWORD: "Confirm Password"
+  },
+  CHINESE_CHARACTERS_PAGE: {
+    PINYIN: "Pinyin",
+    STROKES: "Strokes",
+    DEFINITION: "Definition",
+    SENTENCES: "Sentences"
+  },
+  FOOTER: {
+    ABOUT_US: "About Us",
+    CONTACT_US: "Contact Us",
+    PRIVACY_POLICY: "Privacy Policy",
+    TERMS_OF_SERVICE: "Terms of Service"
+  }
 };

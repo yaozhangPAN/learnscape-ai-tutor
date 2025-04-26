@@ -1,3 +1,4 @@
+
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -50,6 +51,49 @@ export const zh = {
     VIEWS: "次观看",
     COURSES: "课程"
   },
+  DAILY_RECOMMENDATION: {
+    REC1_TITLE: "练习应用题",
+    SUBJECT_MATH: "数学",
+    DIFFICULTY_MEDIUM: "中等",
+    REC1_DESC: "练习应用题以加深理解",
+    REC2_TITLE: "阅读理解",
+    SUBJECT_ENGLISH: "英语",
+    DIFFICULTY_EASY: "简单",
+    REC2_DESC: "提高阅读理解能力",
+    REC3_TITLE: "科学实验",
+    SUBJECT_SCIENCE: "科学",
+    DIFFICULTY_EASY: "简单",
+    REC3_DESC: "在家可进行的有趣科学实验",
+    REC4_TITLE: "高级代数",
+    DIFFICULTY_HARD: "困难",
+    REC4_DESC: "挑战自我的高级代数题",
+    REC5_TITLE: "写作练习",
+    REC5_DESC: "练习你的作文写作技巧",
+    TOAST_STARTED_TITLE: "活动已开始",
+    TOAST_STARTED_DESC: "你已经开始了一个新的学习活动",
+    TOAST_COMPLETED_TITLE: "活动已完成",
+    TOAST_COMPLETED_DESC: "太棒了！你已完成一项活动",
+    LEARNING_PATH: "今日学习路径",
+    COMPLETED_TODAY: "今天已完成 {n} / {n}",
+    REFRESH_PATH: "刷新路径",
+    JOURNEY_TITLE: "继续你的学习旅程",
+    JOURNEY_DESC: "完成这些活动来获得经验值并保持你的连续学习记录",
+    LOADING: "正在加载你的个性化推荐...",
+    WEEKLY_PROGRESS: "每周进度",
+    DAYS_STREAK: "天连续学习",
+    BONUS_TIP: "明天完成可获得奖励",
+    WEEK_DAYS: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+    REVIEW: "复习",
+    CONTINUE: "继续",
+    START: "开始"
+  },
+  DAILY_PLAN: {
+    TITLE: "每日冒险",
+    XP: "150 经验",
+    DESC: "根据你的进度和目标定制的每日学习路径",
+    PATH_TITLE: "今日学习冒险",
+    JOIN_ZOOM: "加入直播课"
+  },
   QUESTION_BANK_PAGE: {
     FILTER: "筛选",
     SUBJECT: "科目",
@@ -75,7 +119,7 @@ export const zh = {
     FRIEND_NAME: "朋友姓名",
     EARNED: "已赚取",
   },
-  AI_TUTOR_PAGE: {
+  AI_TUTOR: {
     AI_TUTOR: "AI 辅导",
     WRITING_COACH: "写作教练",
     ORAL_EXAM_PRACTICE: "口语考试练习",
