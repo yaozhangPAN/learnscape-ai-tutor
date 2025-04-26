@@ -1,4 +1,3 @@
-
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -121,7 +120,7 @@ export const zh = {
     TOAST_STARTED_TITLE: "活动已开始",
     TOAST_STARTED_DESC: "你已经开始了一个新的学习活动",
     TOAST_COMPLETED_TITLE: "活动已完成",
-    TOAST_COMPLETED_DESC: "太棒了！你已完成一项活动",
+    TOAST_COMPLETED_DESC: "太棒了！你已完成一��活动",
     LEARNING_PATH: "今日学习路径",
     COMPLETED_TODAY: "今天已完成 {n} / {n}",
     REFRESH_PATH: "刷新路径",
