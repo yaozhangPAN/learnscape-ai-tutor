@@ -1,4 +1,3 @@
-
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -14,7 +13,8 @@ export const zh = {
     UPLOAD: "上传",
     RESET: "重置",
     NEXT: "下一步",
-    PREVIOUS: "上一步"
+    PREVIOUS: "上一步",
+    SECURITY: "安全"
   },
   NAVBAR: {
     HOME: "首页",
@@ -121,7 +121,7 @@ export const zh = {
     TOAST_STARTED_TITLE: "活动已开始",
     TOAST_STARTED_DESC: "你已经开始了一个新的学习活动",
     TOAST_COMPLETED_TITLE: "活动已完成",
-    TOAST_COMPLETED_DESC: "太棒了！你已完成一项活动",
+    TOAST_COMPLETED_DESC: "太棒了！你已完成一��活动",
     LEARNING_PATH: "今日学习路径",
     COMPLETED_TODAY: "今天已完成 {n} / {n}",
     REFRESH_PATH: "刷新路径",
@@ -238,7 +238,7 @@ export const zh = {
     BENEFITS: "解锁所有高级功能",
     ALREADY_PREMIUM: "您已经是高级会员",
     AI_TUTOR_TITLE: "AI 辅导",
-    AI_TUTOR_DESC: "获得任何科目的帮助",
+    AI_TUTOR_DESC: "获得任��科目的帮助",
     DAILY_REC_TITLE: "每日推荐",
     DAILY_REC_DESC: "个性化每日学习路径",
     VIDEO_TITLE: "高级视频",
