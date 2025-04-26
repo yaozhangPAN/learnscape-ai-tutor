@@ -87,6 +87,9 @@ const HomeStreakProgressSection: React.FC<Props> = ({
     fetchStreakData();
   }, [session?.user.id]);
 
+  // Add a fallback for t.STREAK in case it's undefined
+  const streakText = t.STREAK?.DAY_STREAK || 'Day Streak';
+
   return (
     <Link 
       to={to}
@@ -109,7 +112,7 @@ const HomeStreakProgressSection: React.FC<Props> = ({
         <div className="flex-1 flex items-center justify-center z-20">
           <div className="text-center">
             <div className="text-3xl font-bold text-[#C48829]">{currentStreak}</div>
-            <div className="text-sm text-[#6D5A21]">{t.STREAK.DAY_STREAK}</div>
+            <div className="text-sm text-[#6D5A21]">{streakText}</div>
           </div>
         </div>
       )}

@@ -499,5 +499,13 @@ export const en = {
     CONTACT_US: "Contact Us",
     PRIVACY_POLICY: "Privacy Policy",
     TERMS_OF_SERVICE: "Terms of Service"
+  },
+  STREAK: {
+    TITLE: "Streak Progress",
+    DAY_STREAK: "Day Streak",
+    STREAK_SOCIETY: "Streak Society",
+    PERSONAL: "Personal",
+    FRIENDS: "Friends",
+    FRIENDS_MESSAGE: "Connect with friends to see their streaks!"
   }
 };

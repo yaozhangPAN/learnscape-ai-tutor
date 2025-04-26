@@ -1,4 +1,3 @@
-
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -205,4 +204,12 @@ export const zh = {
     PRIVACY_POLICY: "隐私政策",
     TERMS_OF_SERVICE: "服务条款",
   },
+  STREAK: {
+    TITLE: "连续学习记录",
+    DAY_STREAK: "天连续学习",
+    STREAK_SOCIETY: "连续学习社区",
+    PERSONAL: "个人",
+    FRIENDS: "朋友",
+    FRIENDS_MESSAGE: "连接朋友查看他们的连续学习记录！"
+  }
 };
