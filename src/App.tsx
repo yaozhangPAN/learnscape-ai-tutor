@@ -37,6 +37,7 @@ import OralExamRedirect from "./components/AITutor/OralExamRedirect";
 import { I18nProvider } from "@/contexts/I18nContext";
 import Account from "./pages/Account";
 import ChineseCharacters from "./pages/ChineseCharacters";
+import VideoUpload from "./pages/VideoUpload";
 
 const RouteTracker = () => {
   const location = useLocation();
@@ -103,6 +104,7 @@ const App = () => {
                   <Route path="/about" element={<Navigate to="/" replace />} />
                   <Route path="/account" element={<Account />} />
                   
+                  <Route path="/video-upload" element={<VideoUpload />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
