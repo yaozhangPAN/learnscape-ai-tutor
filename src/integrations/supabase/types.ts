@@ -604,6 +604,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       video_files: {
         Row: {
           course_id: string
@@ -725,6 +746,13 @@ export type Database = {
         Args: { user_id: number } | { user_uuid: string }
         Returns: boolean
       }
+      has_role: {
+        Args: {
+          user_id: string
+          required_role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: boolean
+      }
       track_user_behavior: {
         Args: {
           p_user_id: string
@@ -747,6 +775,7 @@ export type Database = {
         | "mock_exam"
         | "ai_tutor_use"
         | "quiz_complete"
+      app_role: "administrator" | "moderator" | "user"
       user_activity_type:
         | "page_view"
         | "login"
@@ -890,6 +919,7 @@ export const Constants = {
         "ai_tutor_use",
         "quiz_complete",
       ],
+      app_role: ["administrator", "moderator", "user"],
       user_activity_type: [
         "page_view",
         "login",

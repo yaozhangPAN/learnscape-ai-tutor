@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +9,7 @@ type AuthContextType = {
   session: Session | null;
   signOut: () => Promise<void>;
   isLoading: boolean;
+  isAdmin: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,12 +18,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -32,6 +32,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             title: "Signed in",
             description: "You have successfully signed in.",
           });
+          
+          // Check admin role after sign in
+          if (session?.user) {
+            const { data } = await supabase
+              .from('user_roles')
+              .select('role')
+              .eq('user_id', session.user.id)
+              .eq('role', 'administrator')
+              .single();
+            
+            setIsAdmin(!!data);
+          }
           
           // Track login event
           setTimeout(() => {
@@ -50,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             title: "Signed out",
             description: "You have successfully signed out.",
           });
+          setIsAdmin(false);
         }
         
         setIsLoading(false);
@@ -57,9 +70,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        const { data } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .eq('role', 'administrator')
+          .single();
+        
+        setIsAdmin(!!data);
+      }
+      
       setIsLoading(false);
       
       // Track session restore if user exists
@@ -87,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, signOut, isLoading }}>
+    <AuthContext.Provider value={{ user, session, signOut, isLoading, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );
