@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import en from "@/i18n/en";
-import zh from "@/i18n/zh";
+import { en } from "@/i18n/en";
+import { zh } from "@/i18n/zh";
 
 type Lang = "en" | "zh";
 type I18nStrings = typeof en;
@@ -14,14 +14,14 @@ interface I18nContextValue {
 }
 
 const I18nContext = createContext<I18nContextValue>({
-  lang: "en",  // Changed default from "zh" to "en"
+  lang: "en",
   setLang: () => {},
   toggleLang: () => {},
-  t: en,  // Changed default translation to English
+  t: en,
 });
 
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [lang, setLang] = useState<Lang>("en");  // Changed initial state to "en"
+  const [lang, setLang] = useState<Lang>("en");
 
   const toggleLang = () => {
     setLang(prevLang => prevLang === "en" ? "zh" : "en");
