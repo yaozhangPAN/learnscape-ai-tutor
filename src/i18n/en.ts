@@ -1,3 +1,4 @@
+
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -408,7 +409,7 @@ export const en = {
     TITLE: "Leaderboard",
     SUBTITLE: "See who's on top!",
     DAILY: "Daily",
-    WEEKLY: "Weekly",
+    WEEKLY: "Weekly", 
     MONTHLY: "Monthly",
     ALL_TIME: "All Time",
     RANK: "Rank",
