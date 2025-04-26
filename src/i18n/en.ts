@@ -1,3 +1,4 @@
+
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -402,7 +403,7 @@ export const en = {
   LEADERBOARD_PAGE: {
     POSITION: "Rank",
     USER_NAME: "Name",
-    POINTS: "Points"
+    POINTS: "Score"
   },
   LEADERBOARD: {
     TITLE: "Leaderboard",
@@ -414,6 +415,7 @@ export const en = {
     RANK: "Rank",
     NAME: "Name",
     SCORE: "Score",
+    POINTS: "Points",
     NO_RESULTS: "No leaderboard results found",
     TOP_ACHIEVERS: "Top Achievers",
     QUESTIONS: "Questions",

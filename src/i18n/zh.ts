@@ -121,7 +121,7 @@ export const zh = {
     TOAST_STARTED_TITLE: "活动已开始",
     TOAST_STARTED_DESC: "你已经开始了一个新的学习活动",
     TOAST_COMPLETED_TITLE: "活动已完成",
-    TOAST_COMPLETED_DESC: "太棒了！你已完成一���活动",
+    TOAST_COMPLETED_DESC: "太棒了！你已完成一��活动",
     LEARNING_PATH: "今日学习路径",
     COMPLETED_TODAY: "今天已完成 {n} / {n}",
     REFRESH_PATH: "刷新路径",
@@ -169,7 +169,7 @@ export const zh = {
   LEADERBOARD_PAGE: {
     POSITION: "排名",
     USER_NAME: "姓名",
-    POINTS: "积分"
+    POINTS: "分数"
   },
   LEADERBOARD: {
     TITLE: "排行榜",
@@ -181,6 +181,7 @@ export const zh = {
     RANK: "排名",
     NAME: "姓名",
     SCORE: "分数",
+    POINTS: "积分",
     NO_RESULTS: "未找到排行榜结果",
     TOP_ACHIEVERS: "顶尖成就者",
     QUESTIONS: "问题",
