@@ -1,4 +1,3 @@
-
 export const zh = {
   COMMON: {
     EDIT: "编辑",

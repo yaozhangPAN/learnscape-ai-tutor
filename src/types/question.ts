@@ -10,4 +10,6 @@ export interface Question {
   subject?: string;
   level?: string;
   term?: string;
+  text?: string; // Added for compatibility with ExamQuestion component
+  type?: string; // Added for compatibility with ExamQuestion component
 }

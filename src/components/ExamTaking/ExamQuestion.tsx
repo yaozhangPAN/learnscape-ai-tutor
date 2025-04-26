@@ -50,7 +50,7 @@ const ExamQuestion = ({
   // Process question content
   const getQuestionContent = () => {
     if (!question.content) return { 
-      question: "Question content not available",
+      question: question.text || "Question content not available",
       options: []
     };
     

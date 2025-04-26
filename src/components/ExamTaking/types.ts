@@ -14,7 +14,12 @@ export interface Question {
   image?: string;
   options?: QuestionOption[];
   correctAnswer?: string;
-  topic?: string; // Added topic property
+  topic?: string;
+  content?: string | {
+    question: string;
+    options?: Record<string, string>;
+    answer?: string;
+  };
 }
 
 export interface ExamPaper {
