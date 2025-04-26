@@ -80,6 +80,7 @@ const App = () => {
                   <Route path="/mock-exam" element={<MockExam />} />
                   <Route path="/take-exam/:examId" element={<OnlineExam />} />
                   <Route path="/courses" element={<Courses />} />
+                  <Route path="/courses/series/:seriesId" element={<CourseSeries />} />
                   <Route path="/courses/:courseId" element={<CourseDetails />} />
                   <Route path="/worksheets" element={<Worksheets />} />
                   <Route path="/question-bank" element={<QuestionBank />} />
