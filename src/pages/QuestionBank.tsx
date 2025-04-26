@@ -185,27 +185,30 @@ const QuestionBank = () => {
     }
   };
 
+  const questionBank = t.QUESTION_BANK || {};
+  const questionBankPage = t.QUESTION_BANK_PAGE || {};
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
       <div className="bg-learnscape-darkBlue text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">{t.QUESTION_BANK.TITLE}</h1>
-          <p className="text-lg max-w-3xl">{t.QUESTION_BANK.SUBTITLE}</p>
+          <h1 className="text-4xl font-bold mb-4">{questionBank.TITLE || "Question Bank"}</h1>
+          <p className="text-lg max-w-3xl">{questionBank.SUBTITLE || "Practice with our comprehensive question bank"}</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{t.QUESTION_BANK.QUESTION_LIST}</h2>
+          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{questionBank.QUESTION_LIST || "Question List"}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="relative flex items-center col-span-1 md:col-span-4">
               <Search className="absolute left-3 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder={t.QUESTION_BANK.SEARCH_PLACEHOLDER}
+                placeholder={questionBank.SEARCH_PLACEHOLDER || "Search for questions"}
                 className="pl-10 pr-4"
                 value={searchTerm}
                 onChange={(e) => {
@@ -224,7 +227,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t.QUESTION_BANK.SELECT_SUBJECT} />
+                  <SelectValue placeholder={questionBank.SELECT_SUBJECT || "Select Subject"} />
                 </SelectTrigger>
                 <SelectContent>
                   {subjects.map((subject) => (
@@ -245,7 +248,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t.QUESTION_BANK.SELECT_GRADE} />
+                  <SelectValue placeholder={questionBank.SELECT_GRADE || "Select Grade"} />
                 </SelectTrigger>
                 <SelectContent>
                   {grades.map((grade) => (
@@ -266,7 +269,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t.QUESTION_BANK.SELECT_TERM} />
+                  <SelectValue placeholder={questionBank.SELECT_TERM || "Select Term"} />
                 </SelectTrigger>
                 <SelectContent>
                   {terms.map((term) => (
@@ -290,7 +293,7 @@ const QuestionBank = () => {
                   handleFilterChange();
                 }}
               >
-                {t.QUESTION_BANK.CLEAR_FILTERS}
+                {questionBank.CLEAR_FILTERS || "Clear Filters"}
               </Button>
             </div>
           </div>
@@ -306,12 +309,12 @@ const QuestionBank = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>{t.QUESTION_BANK.QUESTION_TITLE}</TableHead>
-                        <TableHead>{t.QUESTION_BANK.SUBJECT}</TableHead>
-                        <TableHead>{t.QUESTION_BANK.LEVEL}</TableHead>
-                        <TableHead>{t.QUESTION_BANK.TERM}</TableHead>
-                        <TableHead>{t.QUESTION_BANK.DATE}</TableHead>
-                        <TableHead className="text-right">{t.QUESTION_BANK.ACTION}</TableHead>
+                        <TableHead>{questionBank.QUESTION_TITLE || "Question Title"}</TableHead>
+                        <TableHead>{questionBankPage.SUBJECT || questionBank.SUBJECT || "Subject"}</TableHead>
+                        <TableHead>{questionBank.LEVEL || "Level"}</TableHead>
+                        <TableHead>{questionBank.TERM || "Term"}</TableHead>
+                        <TableHead>{questionBank.DATE || "Date"}</TableHead>
+                        <TableHead className="text-right">{questionBank.ACTION || "Action"}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -330,7 +333,7 @@ const QuestionBank = () => {
                                 className="bg-learnscape-blue text-white"
                                 onClick={() => handleViewQuestion(question)}
                               >
-                                {t.QUESTION_BANK.VIEW}
+                                {questionBank.VIEW || "View"}
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -338,7 +341,7 @@ const QuestionBank = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                            {t.QUESTION_BANK.NO_QUESTIONS}
+                            {questionBank.NO_QUESTIONS || "No questions found"}
                           </TableCell>
                         </TableRow>
                       )}
@@ -348,9 +351,10 @@ const QuestionBank = () => {
               </Card>
 
               <div className="mt-4 text-sm text-gray-500">
-                {t.QUESTION_BANK.SHOWING_RESULTS.replace('{start}', String((currentPage - 1) * QUESTIONS_PER_PAGE + 1))
-                                                .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
-                                                .replace('{total}', String(filteredQuestions.length))}
+                {(questionBank.SHOWING_RESULTS || "Showing {start} to {end} of {total} results")
+                  .replace('{start}', String((currentPage - 1) * QUESTIONS_PER_PAGE + 1))
+                  .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
+                  .replace('{total}', String(filteredQuestions.length))}
               </div>
 
               {totalPages > 1 && (

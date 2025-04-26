@@ -127,10 +127,42 @@ export const zh = {
     QUESTION_TYPE: "题型",
     SEARCH: "搜索",
   },
+  QUESTION_BANK: {
+    TITLE: "题库",
+    SUBTITLE: "使用我们全面的题库进行练习",
+    QUESTION_LIST: "题目列表",
+    SEARCH_PLACEHOLDER: "搜索题目",
+    SELECT_SUBJECT: "选择科目",
+    SELECT_GRADE: "选择年级",
+    SELECT_TERM: "选择学期",
+    CLEAR_FILTERS: "清除筛选",
+    QUESTION_TITLE: "题目标题",
+    SUBJECT: "科目",
+    LEVEL: "年级",
+    TERM: "学期",
+    DATE: "日期",
+    ACTION: "操作",
+    VIEW: "查看",
+    NO_QUESTIONS: "未找到题目",
+    SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 条结果"
+  },
   LEADERBOARD_PAGE: {
     RANK: "排名",
     NAME: "姓名",
     SCORE: "分数",
+  },
+  LEADERBOARD: {
+    TITLE: "排行榜",
+    SUBTITLE: "看看谁排名靠前！",
+    DAILY: "日榜",
+    WEEKLY: "周榜",
+    MONTHLY: "月榜",
+    ALL_TIME: "总榜",
+    RANK: "排名",
+    NAME: "姓名",
+    SCORE: "分数",
+    POINTS: "积分",
+    NO_RESULTS: "未找到排行榜结果"
   },
   WORKSHEETS_PAGE: {
     DOWNLOAD: "下载",
@@ -176,7 +208,17 @@ export const zh = {
   SUBSCRIPTION: {
     UPGRADE: "升级到高级版",
     BENEFITS: "解锁所有高级功能",
-    ALREADY_PREMIUM: "您已经是高级会员"
+    ALREADY_PREMIUM: "您已经是高级会员",
+    AI_TUTOR_TITLE: "AI 辅导",
+    AI_TUTOR_DESC: "获得任何科目的帮助",
+    DAILY_REC_TITLE: "每日推荐",
+    DAILY_REC_DESC: "个性化每日学习路径",
+    VIDEO_TITLE: "高级视频",
+    VIDEO_DESC: "访问所有高级视频课程",
+    PURCHASE_VIDEO: "购买视频",
+    SUBSCRIBE_BUTTON: "订阅",
+    SUBSCRIBE_PREMIUM: "订阅高级版",
+    PER_MONTH: "/月"
   },
   ACCOUNT_PAGE: {
     ACCOUNT: "帐户",

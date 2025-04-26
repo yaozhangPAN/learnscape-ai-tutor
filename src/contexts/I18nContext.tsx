@@ -27,7 +27,7 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
     setLang(prevLang => prevLang === "en" ? "zh" : "en");
   };
 
-  const t = lang === "en" ? en : zh;
+  const t = lang === "en" ? en : zh as unknown as typeof en;
 
   return (
     <I18nContext.Provider value={{ lang, setLang, toggleLang, t }}>

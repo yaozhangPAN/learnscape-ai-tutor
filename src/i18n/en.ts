@@ -423,10 +423,44 @@ export const en = {
     QUESTION_TYPE: "Question Type",
     SEARCH: "Search"
   },
+  QUESTION_BANK: {
+    TITLE: "Question Bank",
+    SUBTITLE: "Practice with our comprehensive question bank",
+    QUESTION_LIST: "Question List",
+    SEARCH_PLACEHOLDER: "Search for questions",
+    SELECT_SUBJECT: "Select Subject",
+    SELECT_GRADE: "Select Grade",
+    SELECT_TERM: "Select Term",
+    CLEAR_FILTERS: "Clear Filters",
+    QUESTION_TITLE: "Question Title",
+    SUBJECT: "Subject",
+    LEVEL: "Level",
+    TERM: "Term",
+    DATE: "Date",
+    ACTION: "Action",
+    VIEW: "View",
+    NO_QUESTIONS: "No questions found",
+    SHOWING_RESULTS: "Showing {start} to {end} of {total} results"
+  },
   LEADERBOARD_PAGE: {
     RANK: "Rank",
     NAME: "Name",
-    SCORE: "Score"
+    SCORE: "Score",
+    POINTS: "Points",
+    NO_RESULTS: "No leaderboard results found"
+  },
+  LEADERBOARD: {
+    TITLE: "Leaderboard",
+    SUBTITLE: "See who's on top!",
+    DAILY: "Daily",
+    WEEKLY: "Weekly",
+    MONTHLY: "Monthly",
+    ALL_TIME: "All Time",
+    RANK: "Rank",
+    NAME: "Name",
+    SCORE: "Score",
+    POINTS: "Points",
+    NO_RESULTS: "No leaderboard results found"
   },
   WORKSHEETS_PAGE: {
     DOWNLOAD: "Download",
@@ -472,7 +506,17 @@ export const en = {
   SUBSCRIPTION: {
     UPGRADE: "Upgrade to Premium",
     BENEFITS: "Unlock all premium features",
-    ALREADY_PREMIUM: "You're already a premium member"
+    ALREADY_PREMIUM: "You're already a premium member",
+    AI_TUTOR_TITLE: "AI Tutor",
+    AI_TUTOR_DESC: "Get help with any subject",
+    DAILY_REC_TITLE: "Daily Recommendations",
+    DAILY_REC_DESC: "Personalized daily learning path",
+    VIDEO_TITLE: "Premium Videos",
+    VIDEO_DESC: "Access to all premium video courses",
+    PURCHASE_VIDEO: "Purchase Video",
+    SUBSCRIBE_BUTTON: "Subscribe",
+    SUBSCRIBE_PREMIUM: "Subscribe to Premium",
+    PER_MONTH: "/month"
   },
   ACCOUNT_PAGE: {
     ACCOUNT: "Account",
