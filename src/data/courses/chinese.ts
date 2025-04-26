@@ -2,8 +2,8 @@ import { Course } from "@/types/course";
 
 export const masterclassCourse: Course = {
   id: "psle-chinese-masterclass",
-  title: "PSLE 华文名师专项提分课",
-  description: "由资深华文名师主讲，针对PSLE华文考试重点难点进行专项训练，助你提升成绩。",
+  title: "PSLE 华文名师阅读理解、作文专项提分课",
+  description: "由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
   level: "p6",
   subject: "chinese",
   duration: "10 weeks",
