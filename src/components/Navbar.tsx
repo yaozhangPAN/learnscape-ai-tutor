@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -55,37 +56,37 @@ const Navbar = () => {
           <Link 
             to="/video-tutorials" 
             className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-            onClick={() => handleNavigation("/video-tutorials", t.NAV.VIDEO_LESSONS)}
+            onClick={() => handleNavigation("/video-tutorials", t.NAVBAR.VIDEO_TUTORIALS)}
           >
-            {t.NAV.VIDEO_LESSONS}
+            {t.NAVBAR.VIDEO_TUTORIALS}
           </Link>
           <Link 
             to="/ai-tutor" 
             className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-            onClick={() => handleNavigation("/ai-tutor", t.NAV.AI_TUTOR)}
+            onClick={() => handleNavigation("/ai-tutor", t.NAVBAR.AI_TUTOR)}
           >
-            {t.NAV.AI_TUTOR}
+            {t.NAVBAR.AI_TUTOR}
           </Link>
           <Link 
             to="/zoom-courses" 
             className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-            onClick={() => handleNavigation("/zoom-courses", t.NAV.ONLINE_CLASSROOM)}
+            onClick={() => handleNavigation("/zoom-courses", "online-classroom")}
           >
-            {t.NAV.ONLINE_CLASSROOM}
+            {lang === 'zh' ? '线上课堂' : 'Online Classroom'}
           </Link>
           <Link 
             to="/question-bank" 
             className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-            onClick={() => handleNavigation("/question-bank", t.NAV.QUESTION_BANK)}
+            onClick={() => handleNavigation("/question-bank", t.NAVBAR.QUESTION_BANK)}
           >
-            {t.NAV.QUESTION_BANK}
+            {t.NAVBAR.QUESTION_BANK}
           </Link>
           <Link 
             to="/mock-exam" 
             className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-            onClick={() => handleNavigation("/mock-exam", t.NAV.MOCK_EXAM)}
+            onClick={() => handleNavigation("/mock-exam", t.NAVBAR.MOCK_EXAM)}
           >
-            {t.NAV.MOCK_EXAM}
+            {t.NAVBAR.MOCK_EXAM}
           </Link>
           <Button variant="ghost" size="sm" onClick={handleLanguageToggle} className="gap-2">
             <Languages className="h-4 w-4" />
@@ -102,7 +103,7 @@ const Navbar = () => {
                 {lang === 'zh' ? '我的账户' : 'My Account'}
               </Link>
               <Button size="sm" variant="outline" onClick={handleSignOut}>
-                {t.NAV.LOGOUT}
+                {t.NAVBAR.LOGOUT}
               </Button>
             </>
           ) : (
@@ -110,9 +111,9 @@ const Navbar = () => {
               <Link 
                 to="/login" 
                 className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-                onClick={() => handleNavigation("/login", t.NAV.LOGIN)}
+                onClick={() => handleNavigation("/login", t.NAVBAR.LOGIN)}
               >
-                {t.NAV.LOGIN}
+                {t.NAVBAR.LOGIN}
               </Link>
               <Button 
                 size="sm" 
@@ -148,19 +149,19 @@ const Navbar = () => {
             </SheetHeader>
             <div className="grid gap-4 py-4">
               <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                {t.NAV.VIDEO_LESSONS}
+                {t.NAVBAR.VIDEO_TUTORIALS}
               </Link>
               <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                {t.NAV.AI_TUTOR}
+                {t.NAVBAR.AI_TUTOR}
               </Link>
               <Link to="/zoom-courses" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                {t.NAV.ONLINE_CLASSROOM}
+                {lang === 'zh' ? '线上课堂' : 'Online Classroom'}
               </Link>
               <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                {t.NAV.QUESTION_BANK}
+                {t.NAVBAR.QUESTION_BANK}
               </Link>
               <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                {t.NAV.MOCK_EXAM}
+                {t.NAVBAR.MOCK_EXAM}
               </Link>
               <Button variant="ghost" size="sm" onClick={handleLanguageToggle} className="gap-2 justify-start">
                 <Languages className="h-4 w-4" />
@@ -176,13 +177,13 @@ const Navbar = () => {
                     {lang === 'zh' ? '我的账户' : 'My Account'}
                   </Link>
                   <Button size="sm" variant="outline" onClick={handleSignOut}>
-                    {t.NAV.LOGOUT}
+                    {t.NAVBAR.LOGOUT}
                   </Button>
                 </>
               ) : (
                 <>
                   <Link to="/login" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                    {t.NAV.LOGIN}
+                    {t.NAVBAR.LOGIN}
                   </Link>
                   <Button size="sm" onClick={() => navigate("/register")}>
                     {lang === 'zh' ? '开始使用' : 'Get Started'}

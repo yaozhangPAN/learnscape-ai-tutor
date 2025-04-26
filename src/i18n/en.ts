@@ -1,4 +1,3 @@
-
 export const en = {
   COMMON: {
     EDIT: "Edit",
@@ -379,6 +378,24 @@ export const en = {
     ACCOUNT: "Account",
     LOGOUT: "Logout",
     LOGIN: "Login",
+    REGISTER: "Register",
+    ONLINE_CLASSROOM: "Online Classroom"
+  },
+  NAV: {
+    HOME: "Home",
+    DASHBOARD: "Dashboard",
+    MOCK_EXAM: "Mock Exam",
+    VIDEO_LESSONS: "Video Lessons",
+    ONLINE_CLASSROOM: "Online Classroom",
+    QUESTION_BANK: "Question Bank",
+    LEADERBOARD: "Leaderboard",
+    WORKSHEETS: "Worksheets",
+    REFERRAL: "Referral",
+    AI_TUTOR: "AI Tutor",
+    CHINESE_CHARACTERS: "Chinese Characters",
+    ACCOUNT: "Account",
+    LOGOUT: "Logout",
+    LOGIN: "Login",
     REGISTER: "Register"
   },
   DASHBOARD_PAGE: {
@@ -427,14 +444,35 @@ export const en = {
   AI_TUTOR: {
     TITLE: "AI Tutor",
     WRITING_COACH: "Writing Coach",
+    WRITING_COACH_DESC: "Get personalized feedback on your writing",
+    SUBTITLE_WRITING: "Improve your essay writing skills",
+    ORAL_EXAM: "Oral Exam",
     ORAL_EXAM_PRACTICE: "Oral Exam Practice",
+    ORAL_EXAM_DESC: "Practice your speaking skills for exams",
+    SUBTITLE_ORAL: "Practice your speaking skills",
+    DICTATION: "Dictation",
     DICTATION_PRACTICE: "Dictation Practice",
+    DICTATION_DESC: "Improve your listening and spelling",
+    SUBTITLE_DICTATION: "Improve your listening and spelling",
     TUTOR_ME: "Tutor Me",
+    TUTOR_ME_DESC: "Get personalized tutoring on any subject",
+    SUBTITLE_TUTOR: "Get help with any subject",
     ERROR_ANALYSIS: "Error Analysis",
     SNAP_AND_SOLVE: "Snap and Solve",
+    VOCABULARY: "Vocabulary",
     VOCABULARY_BUILDER: "Vocabulary Builder",
+    VOCABULARY_DESC: "Build your vocabulary effectively",
+    SUBTITLE_VOCAB: "Expand your word knowledge",
     LANGUAGE_ARTS: "Language Arts",
-    READING_COACH: "Reading Coach"
+    LANGUAGE_ARTS_DESC: "Develop your language skills",
+    SUBTITLE_LANGUAGE_ARTS: "Develop comprehensive language skills",
+    READING_COACH: "Reading Coach",
+    GO: "Go"
+  },
+  SUBSCRIPTION: {
+    UPGRADE: "Upgrade to Premium",
+    BENEFITS: "Unlock all premium features",
+    ALREADY_PREMIUM: "You're already a premium member"
   },
   ACCOUNT_PAGE: {
     ACCOUNT: "Account",
