@@ -27,7 +27,28 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
     setLang(prevLang => prevLang === "en" ? "zh" : "en");
   };
 
-  const t = lang === "en" ? en : zh as unknown as typeof en;
+  // Create a proxied version of the translations to handle missing keys gracefully
+  const createTranslationProxy = (translations: any): I18nStrings => {
+    return new Proxy(translations, {
+      get(target, prop, receiver) {
+        const value = Reflect.get(target, prop, receiver);
+        
+        // If the property exists, return it
+        if (value !== undefined) return value;
+        
+        // If the property doesn't exist, return a proxy for nested access
+        // that returns the key path as a fallback
+        return new Proxy({}, {
+          get(_, nestedProp) {
+            console.warn(`Translation missing: ${String(prop)}.${String(nestedProp)}`);
+            return `[${String(prop)}.${String(nestedProp)}]`;
+          }
+        });
+      }
+    });
+  };
+
+  const t = createTranslationProxy(lang === "en" ? en : zh);
 
   return (
     <I18nContext.Provider value={{ lang, setLang, toggleLang, t }}>

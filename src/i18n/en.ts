@@ -416,6 +416,27 @@ export const en = {
     DATE: "Date",
     REVIEW: "Review"
   },
+  MOCK_EXAM: {
+    TITLE: "Mock Exams",
+    SUBTITLE: "Practice with real past papers and get instant feedback",
+    EXAMS: "Exam Papers",
+    RESULTS: "results found",
+    START: "Start Exam",
+    VIEW_DETAILS: "View Details",
+    EXAM_HISTORY: "Exam History",
+    NO_EXAM_HISTORY: "No exam history found",
+    RECENT_EXAMS: "Recent Exams",
+    FILTER_SUBJECTS: "Filter by Subject",
+    FILTER_LEVELS: "Filter by Level",
+    FILTER_SCHOOLS: "Filter by School",
+    FILTER_YEARS: "Filter by Year",
+    FILTER_TYPES: "Filter by Type",
+    CLEAR_FILTERS: "Clear Filters",
+    SEARCH_PLACEHOLDER: "Search exams...",
+    NO_RESULTS: "No exam papers found matching your criteria",
+    RESET_FILTERS: "Reset Filters",
+    TRY_AGAIN: "Try Again"
+  },
   QUESTION_BANK_PAGE: {
     FILTER: "Filter",
     SUBJECT: "Subject",
@@ -447,7 +468,15 @@ export const en = {
     NAME: "Name",
     SCORE: "Score",
     POINTS: "Points",
-    NO_RESULTS: "No leaderboard results found"
+    NO_RESULTS: "No leaderboard results found",
+    TOP_ACHIEVERS: "Top Achievers",
+    QUESTIONS: "Questions",
+    CHAMPION: "Champion",
+    RUNNER_UP: "Runner-up",
+    THIRD_PLACE: "Third Place",
+    SEARCH_PLACEHOLDER: "Search users...",
+    USER: "User",
+    BADGE: "Badge"
   },
   LEADERBOARD: {
     TITLE: "Leaderboard",
@@ -460,7 +489,15 @@ export const en = {
     NAME: "Name",
     SCORE: "Score",
     POINTS: "Points",
-    NO_RESULTS: "No leaderboard results found"
+    NO_RESULTS: "No leaderboard results found",
+    TOP_ACHIEVERS: "Top Achievers",
+    QUESTIONS: "Questions",
+    CHAMPION: "Champion",
+    RUNNER_UP: "Runner-up",
+    THIRD_PLACE: "Third Place",
+    SEARCH_PLACEHOLDER: "Search users...",
+    USER: "User",
+    BADGE: "Badge"
   },
   WORKSHEETS_PAGE: {
     DOWNLOAD: "Download",
@@ -551,5 +588,22 @@ export const en = {
     PERSONAL: "Personal",
     FRIENDS: "Friends",
     FRIENDS_MESSAGE: "Connect with friends to see their streaks!"
+  },
+  NOT_FOUND: {
+    TITLE: "Page Not Found",
+    MESSAGE: "The page you are looking for does not exist or has been moved.",
+    BACK_HOME: "Back to Home"
+  },
+  PAYMENT_SUCCESS: {
+    TITLE: "Payment Successful",
+    SUBTITLE: "Thank you for your purchase!",
+    ORDER_SUMMARY: "Order Summary",
+    PLAN_DETAILS: "Plan Details",
+    TOTAL_AMOUNT: "Total Amount",
+    PAYMENT_DATE: "Payment Date",
+    RECEIPT: "Receipt",
+    DOWNLOAD_RECEIPT: "Download Receipt",
+    BACK_HOME: "Back to Dashboard",
+    EXPLORE_PREMIUM: "Explore Premium Features"
   }
 };

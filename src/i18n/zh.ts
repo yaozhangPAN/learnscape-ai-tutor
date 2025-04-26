@@ -1,3 +1,4 @@
+
 export const zh = {
   COMMON: {
     EDIT: "编辑",
@@ -66,6 +67,27 @@ export const zh = {
     SCORE: "分数",
     DATE: "日期",
     REVIEW: "复习",
+  },
+  MOCK_EXAM: {
+    TITLE: "模拟考试",
+    SUBTITLE: "练习真实的历年试卷并获得即时反馈",
+    EXAMS: "试卷",
+    RESULTS: "个结果",
+    START: "开始考试",
+    VIEW_DETAILS: "查看详情",
+    EXAM_HISTORY: "考试历史",
+    NO_EXAM_HISTORY: "未找到考试历史",
+    RECENT_EXAMS: "最近考试",
+    FILTER_SUBJECTS: "按科目筛选",
+    FILTER_LEVELS: "按级别筛选",
+    FILTER_SCHOOLS: "按学校筛选",
+    FILTER_YEARS: "按年份筛选",
+    FILTER_TYPES: "按类型筛选",
+    CLEAR_FILTERS: "清除筛选",
+    SEARCH_PLACEHOLDER: "搜索考试...",
+    NO_RESULTS: "未找到符合条件的试卷",
+    RESET_FILTERS: "重置筛选",
+    TRY_AGAIN: "重试"
   },
   VIDEO_TUTORIALS: {
     TITLE: "视频课程",
@@ -162,7 +184,15 @@ export const zh = {
     NAME: "姓名",
     SCORE: "分数",
     POINTS: "积分",
-    NO_RESULTS: "未找到排行榜结果"
+    NO_RESULTS: "未找到排行榜结果",
+    TOP_ACHIEVERS: "顶尖成就者",
+    QUESTIONS: "问题",
+    CHAMPION: "冠军",
+    RUNNER_UP: "亚军",
+    THIRD_PLACE: "季军",
+    SEARCH_PLACEHOLDER: "搜索用户...",
+    USER: "用户",
+    BADGE: "徽章"
   },
   WORKSHEETS_PAGE: {
     DOWNLOAD: "下载",
@@ -253,5 +283,22 @@ export const zh = {
     PERSONAL: "个人",
     FRIENDS: "朋友",
     FRIENDS_MESSAGE: "连接朋友查看他们的连续学习记录！"
+  },
+  NOT_FOUND: {
+    TITLE: "页面未找到",
+    MESSAGE: "您查找的页面不存在或已被移动。",
+    BACK_HOME: "返回首页"
+  },
+  PAYMENT_SUCCESS: {
+    TITLE: "支付成功",
+    SUBTITLE: "感谢您的购买！",
+    ORDER_SUMMARY: "订单摘要",
+    PLAN_DETAILS: "计划详情",
+    TOTAL_AMOUNT: "总金额",
+    PAYMENT_DATE: "支付日期",
+    RECEIPT: "收据",
+    DOWNLOAD_RECEIPT: "下载收据",
+    BACK_HOME: "返回控制面板",
+    EXPLORE_PREMIUM: "探索高级功能"
   }
 };
