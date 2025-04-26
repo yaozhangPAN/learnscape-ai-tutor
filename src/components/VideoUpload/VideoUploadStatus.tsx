@@ -4,11 +4,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useSupabaseUpload } from '@/hooks/useS3Upload';  // 使用新的上传钩子
 
 export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [uploadCount, setUploadCount] = useState(0);
+  const { uploadToSupabase, isUploading } = useSupabaseUpload();
 
   useEffect(() => {
     const fetchUploadCount = async () => {
@@ -26,58 +28,56 @@ export const VideoUploadStatus: React.FC<{ courseId: string }> = ({ courseId }) 
     fetchUploadCount();
   }, [courseId, user]);
 
-  const checkUploadStatus = async () => {
-    if (!user) {
-      toast({
-        title: "未登录",
-        description: "请先登录",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from('video_files')
-        .select('*')
-        .eq('course_id', courseId)
-        .eq('uploaded_by', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1);
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        const latestUpload = data[0];
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && user) {
+      try {
+        const fileUrl = await uploadToSupabase(file, courseId);
+        
+        // 存储视频文件记录到数据库
+        const { error } = await supabase
+          .from('video_files')
+          .insert({
+            course_id: courseId,
+            file_name: file.name,
+            file_size: file.size,
+            file_url: fileUrl,
+            uploaded_by: user.id
+          });
+        
+        if (error) throw error;
+        
         toast({
-          title: "上传状态",
-          description: `最近上传的视频: ${latestUpload.file_name}
-                       课程 ID: ${latestUpload.course_id}
-                       大小: ${(latestUpload.file_size / 1024 / 1024).toFixed(2)} MB
-                       总共上传: ${uploadCount} 个视频`,
-          variant: "default"
+          title: "上传成功",
+          description: `视频 ${file.name} 已上传`,
         });
-      } else {
-        toast({
-          title: "暂无上传记录",
-          description: "没有找到该课程的视频上传记录",
-          variant: "default"
-        });
+        
+        // 更新上传计数
+        setUploadCount(prev => prev + 1);
+      } catch (error) {
+        console.error("上传错误:", error);
       }
-    } catch (error) {
-      toast({
-        title: "查询错误",
-        description: error instanceof Error ? error.message : "未知错误",
-        variant: "destructive"
-      });
     }
   };
 
   return (
     <div className="space-y-2">
-      <Button onClick={checkUploadStatus} variant="outline">
-        查看上传状态 ({uploadCount} 个视频)
+      <input 
+        type="file" 
+        accept="video/*" 
+        onChange={handleFileUpload}
+        disabled={isUploading}
+        className="hidden" 
+        id="video-upload-input"
+      />
+      <Button 
+        onClick={() => document.getElementById('video-upload-input')?.click()} 
+        variant="outline"
+        disabled={isUploading}
+      >
+        上传视频 ({uploadCount} 个视频)
       </Button>
     </div>
   );
 };
+
