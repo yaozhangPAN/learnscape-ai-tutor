@@ -22,7 +22,7 @@ const baseZoomCourses = [
     price: "S$599",
     isPremium: true,
     tutor: "Zhang Liping",
-    image: "/lovable-uploads/67febdd9-e430-46e6-b523-5036340c4c65.png",
+    image: "/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png", // 卡通图标
     upcomingSessions: [
       {
         id: "session-1",
@@ -43,7 +43,7 @@ const baseZoomCourses = [
     price: "S$299",
     isPremium: false,
     tutor: "Zhang Liping",
-    image: "/lovable-uploads/35e5ebeb-cc32-46fc-961d-fb6241e51756.png",
+    image: "/lovable-uploads/08dd607c-c712-4811-a7fb-d18a717613dd.png", // 卡通图标
     upcomingSessions: [
       {
         id: "session-2",
@@ -64,7 +64,7 @@ const baseZoomCourses = [
     price: "S$399",
     isPremium: false,
     tutor: "Zhang Liping",
-    image: "/lovable-uploads/1bd5d4e2-d0e7-4caf-a458-e87bbd5e7418.png",
+    image: "/lovable-uploads/673f2711-1205-4d7f-b4cd-7ac68b6ca77e.png", // 卡通图标
     upcomingSessions: [
       {
         id: "session-3",
@@ -85,7 +85,7 @@ const baseZoomCourses = [
     price: "S$299",
     isPremium: false,
     tutor: "Zhang Liping",
-    image: "/lovable-uploads/67cac78a-0f2f-4d46-bac8-47aa2d863a2c.png",
+    image: "/lovable-uploads/87e2cca6-743b-42dc-81ac-356df86c7e4f.png", // 卡通图标
     upcomingSessions: [
       {
         id: "session-4",
