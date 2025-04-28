@@ -10,7 +10,7 @@ export const masterclassCourse: Course = {
   rating: 4.9,
   views: 156,
   price: "free",
-  isPremium: true,
+  isPremium: false,
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
   requiresAccessCode: true,
