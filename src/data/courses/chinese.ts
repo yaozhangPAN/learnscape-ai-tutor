@@ -260,7 +260,7 @@ export const chineseProfMarkingCourse = {
   title: "PSLE Chinese Masterclass-Comprehension and composition",
   titleZh: "PSLE 华文名师阅读理解、作文专项提分课",
   description: "Get your Chinese essays and papers marked by experienced PSLE teachers with detailed feedback.",
-  descriptionZh: "由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
+  descriptionZh: "由资深华文名师主讲，针对PSLE华文考试阅��理解和作文重点难点进行专项训练，助你提升成绩。",
   level: "p6",
   subject: "chinese",
   duration: "10 weeks",
@@ -272,17 +272,17 @@ export const chineseProfMarkingCourse = {
   isPremium: true,
   image: "/lovable-uploads/bea0789a-216e-4b8c-ad8d-db7cbc87bb78.png",
   type: "masterclass" as const,
-  courses: [masterclassCourse, masterclassLesson1, masterclassLesson2, masterclassLesson3, masterclassLesson4, masterclassLesson5, masterclassLesson6]
+  courses: [masterclassLesson1, masterclassLesson2, masterclassLesson3, masterclassLesson4, masterclassLesson5, masterclassLesson6]
 };
 
 export const chineseCourses = [
-  chineseProfMarkingCourse,
   masterclassCourse,
+  ...oralPracticeCourses,
+  chineseProfMarkingCourse,
   masterclassLesson1,
   masterclassLesson2, 
   masterclassLesson3,
   masterclassLesson4,
   masterclassLesson5,
-  masterclassLesson6,
-  ...oralPracticeCourses
+  masterclassLesson6
 ];
