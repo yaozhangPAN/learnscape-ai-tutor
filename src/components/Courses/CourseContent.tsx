@@ -37,7 +37,8 @@ export const CourseContent = ({
   
   return (
     <div className="space-y-8">
-      {hasAccess || isAdmin ? (
+      {/* Here we need to respect the access rule determined by the SubscriptionContext */}
+      {(hasAccess || isAdmin) ? (
         <>
           <CourseVideo
             bucketName={course?.videoUrl ? undefined : "course-videos"}

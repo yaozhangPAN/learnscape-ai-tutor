@@ -37,7 +37,8 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
           <DialogDescription>{course.description}</DialogDescription>
         </DialogHeader>
         
-        {(isPremium || !course.isPremium || hasAccess) ? (
+        {/* Changed condition: Now we only check hasAccess for premium content, not isPremium status */}
+        {(!course.isPremium || hasAccess) ? (
           <div className="aspect-video bg-black rounded-md overflow-hidden">
             <div className="w-full h-full flex items-center justify-center text-white">
               <div className="text-center">

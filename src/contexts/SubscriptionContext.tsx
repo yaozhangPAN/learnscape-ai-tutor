@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
@@ -53,10 +52,6 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     if (!user) return false;
 
     try {
-      // Premium users have access to all content
-      if (isPremium) return true;
-
-      // Check if the user has purchased this specific content
       const { data, error } = await supabase
         .from("purchased_content")
         .select("*")
@@ -69,7 +64,6 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         return false;
       }
 
-      // If we found any matching records, the user has access
       return data && data.length > 0;
     } catch (error: any) {
       console.error("Error checking content access:", error.message);
@@ -112,7 +106,6 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Check premium status when auth state changes
   useEffect(() => {
     if (user) {
       checkPremiumStatus();

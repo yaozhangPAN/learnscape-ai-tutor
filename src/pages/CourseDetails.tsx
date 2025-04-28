@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -35,11 +36,14 @@ const CourseDetails: React.FC = () => {
         return;
       }
 
+      // Free courses that don't require access codes are always accessible
       if (course && !course.isPremium && !course.requiresAccessCode) {
         setHasAccess(true);
         return;
       }
 
+      // For all other courses (premium or requiring access code),
+      // we now check if the user has purchased specific access
       const access = await hasAccessToContent(courseId, "video_tutorial");
       setHasAccess(access);
     };
