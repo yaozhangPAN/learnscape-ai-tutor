@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const useExamData = () => {
   const { language } = useI18n();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [examData, setExamData] = useState(mockExamPapers);
+  const [examData, setExamData] = useState<ExamPaper[]>(mockExamPapers);
   const [dataError, setDataError] = useState<boolean>(false);
 
   const fetchExams = async () => {
@@ -20,20 +20,39 @@ export const useExamData = () => {
       
       // Try to fetch real data from Supabase
       console.log("Attempting to fetch exams from Supabase database...");
-      const { data: supabaseExams, error } = await supabase
-        .from('mock_exams')
-        .select('*');
       
-      if (error) {
-        console.error("Supabase error fetching mock exams:", error);
-        throw error;
+      // First check if the 'questions' table contains any exam data
+      const { data: examQuestions, error: questionsError } = await supabase
+        .from('questions')
+        .select('*')
+        .eq('subject', 'exam')
+        .order('created_at', { ascending: false });
+      
+      if (questionsError) {
+        console.error("Supabase error fetching exams from questions table:", questionsError);
+        throw questionsError;
       }
       
-      if (supabaseExams && supabaseExams.length > 0) {
-        console.log(`Successfully loaded ${supabaseExams.length} exams from Supabase`);
-        setExamData(supabaseExams);
+      if (examQuestions && examQuestions.length > 0) {
+        console.log(`Successfully loaded ${examQuestions.length} exams from Supabase questions table`);
+        
+        // Convert the question data to the ExamPaper format
+        const convertedExams: ExamPaper[] = examQuestions.map(q => ({
+          id: q.id,
+          title: q.title || 'Untitled Exam',
+          school: q.content?.school || 'Unknown School',
+          year: q.content?.year || new Date().getFullYear().toString(),
+          type: q.content?.type || 'Practice',
+          subject: q.subject || 'general',
+          level: q.level || 'p6',
+          downloadCount: q.content?.downloadCount || 0,
+          isTopSchool: q.content?.isTopSchool || false,
+          isOnlineAvailable: true
+        }));
+        
+        setExamData(convertedExams);
       } else {
-        console.log("No exam data found in Supabase, using mock data instead");
+        console.log("No exam data found in Supabase questions table, using mock data instead");
         setExamData(mockExamPapers);
       }
       

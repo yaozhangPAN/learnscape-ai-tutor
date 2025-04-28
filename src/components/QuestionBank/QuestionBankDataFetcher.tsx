@@ -40,7 +40,8 @@ const QuestionBankDataFetcher: React.FC<QuestionBankDataFetcherProps> = ({
         // Now fetch the actual data
         const { data, error } = await supabase
           .from('questions')
-          .select('*');
+          .select('*')
+          .order('created_at', { ascending: false });
         
         if (error) {
           console.error('Error fetching questions:', error);

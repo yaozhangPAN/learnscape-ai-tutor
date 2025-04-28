@@ -10,14 +10,39 @@ interface SupabaseConnectionCheckerProps {
 
 const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ className }) => {
   const [isChecking, setIsChecking] = useState(false);
+  const [tables, setTables] = useState<string[]>([]);
   
+  const listTables = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('pg_catalog.pg_tables')
+        .select('tablename')
+        .eq('schemaname', 'public');
+      
+      if (error) {
+        console.error("Error fetching tables:", error);
+        return [];
+      }
+      
+      return data.map(t => t.tablename);
+    } catch (err) {
+      console.error("Exception when fetching tables:", err);
+      return [];
+    }
+  };
+
   const checkConnection = async () => {
     try {
       setIsChecking(true);
       console.log("Testing Supabase connection...");
       console.log("Supabase client:", !!supabase);
       
-      // Test if we can make a simple query
+      // Get a list of available tables
+      const tablesList = await listTables();
+      setTables(tablesList);
+      console.log("Available tables:", tablesList);
+      
+      // Test if we can make a simple query to the questions table
       const { data, error } = await supabase.from('questions').select('count(*)', { count: 'exact', head: true });
       
       if (error) {
