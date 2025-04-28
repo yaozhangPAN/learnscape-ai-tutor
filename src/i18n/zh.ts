@@ -12,6 +12,7 @@ import { streak } from './translations/streak';
 import { leaderboard } from './translations/leaderboard';
 import { notFound } from './translations/notFound';
 import { paymentSuccess } from './translations/paymentSuccess';
+import { questionBank } from './translations/questionBank';
 
 export const zh = {
   COMMON: common.zh,
@@ -27,5 +28,6 @@ export const zh = {
   STREAK: streak.zh,
   LEADERBOARD: leaderboard.zh,
   NOT_FOUND: notFound.zh,
-  PAYMENT_SUCCESS: paymentSuccess.zh
+  PAYMENT_SUCCESS: paymentSuccess.zh,
+  QUESTION_BANK_PAGE: questionBank.zh
 };

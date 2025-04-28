@@ -16,7 +16,8 @@ export const navigation = {
     MY_ACCOUNT: "My Account",
     LOGOUT: "Logout",
     LANGUAGE: "Language",
-    ONLINE_CLASSROOM: "Online Classroom"
+    ONLINE_CLASSROOM: "Online Classroom",
+    LOGIN: "Login"  // Added missing LOGIN property
   },
   zh: {
     HOME: "首页",
@@ -34,6 +35,7 @@ export const navigation = {
     MY_ACCOUNT: "我的账户",
     LOGOUT: "登出",
     LANGUAGE: "语言",
-    ONLINE_CLASSROOM: "在线课堂"
+    ONLINE_CLASSROOM: "在线课堂",
+    LOGIN: "登录"  // Added missing LOGIN property
   }
 };

@@ -1,0 +1,39 @@
+
+export const questionBank = {
+  en: {
+    TITLE: "Question Bank",
+    SUBTITLE: "Practice with our extensive collection of questions",
+    QUESTION_TITLE: "Question Title",
+    SUBJECT: "Subject",
+    LEVEL: "Level",
+    TERM: "Term",
+    DATE: "Date",
+    ACTION: "Action",
+    VIEW: "View",
+    NO_QUESTIONS: "No questions found matching your criteria",
+    SEARCH_PLACEHOLDER: "Search for questions...",
+    SELECT_SUBJECT: "Select Subject",
+    SELECT_GRADE: "Select Grade",
+    SELECT_TERM: "Select Term",
+    CLEAR_FILTERS: "Clear Filters",
+    SHOWING_RESULTS: "Showing {start} to {end} of {total} results"
+  },
+  zh: {
+    TITLE: "题库",
+    SUBTITLE: "使用我们广泛的题目集合进行练习",
+    QUESTION_TITLE: "题目标题",
+    SUBJECT: "学科",
+    LEVEL: "级别",
+    TERM: "学期",
+    DATE: "日期",
+    ACTION: "操作",
+    VIEW: "查看",
+    NO_QUESTIONS: "未找到符合您条件的问题",
+    SEARCH_PLACEHOLDER: "搜索题目...",
+    SELECT_SUBJECT: "选择学科",
+    SELECT_GRADE: "选择年级",
+    SELECT_TERM: "选择学期",
+    CLEAR_FILTERS: "清除筛选",
+    SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 结果"
+  }
+};
