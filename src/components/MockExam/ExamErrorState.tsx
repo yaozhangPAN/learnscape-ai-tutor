@@ -9,8 +9,8 @@ interface ExamErrorStateProps {
 
 const ExamErrorState: React.FC<ExamErrorStateProps> = ({ onRetry }) => {
   const { t } = useI18n();
-  // Set a default empty object with optional chaining to handle potential missing translations
-  const translations = t.MOCK_EXAM || {};
+  // Use optional chaining to safely access translations
+  const translations = t?.MOCK_EXAM ?? {};
 
   return (
     <div className="text-center py-12">
