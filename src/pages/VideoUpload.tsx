@@ -15,6 +15,7 @@ const VideoUpload = () => {
   const [sessionData, setSessionData] = useState<any>(null);
   const [checkCount, setCheckCount] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [hasShownLoginToast, setHasShownLoginToast] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -25,19 +26,26 @@ const VideoUpload = () => {
         setSessionData(data);
         console.log("Supabase会话状态：", data);
         
-        if (data.session) {
+        if (data.session && !hasShownLoginToast) {
           toast.success(`用户 ${data.session.user.email} 已登录`);
-        } else if (checkCount < 3) {
+          setHasShownLoginToast(true);
+        } else if (!data.session && checkCount < 3) {
           toast.error("获取不到用户会话，请尝试重新登录");
         }
       } catch (err) {
         console.error("检查认证状态出错:", err);
-        toast.error("检查认证状态失败");
+        if (!hasShownLoginToast) {
+          toast.error("检查认证状态失败");
+        }
       } finally {
         setAuthChecked(true);
         setCheckCount(prev => prev + 1);
       }
     };
+    
+    if (!hasShownLoginToast && (!authChecked || checkCount === 0)) {
+      checkAuth();
+    }
     
     const timeoutId = setTimeout(() => {
       if (!authChecked && isLoading) {
@@ -45,12 +53,8 @@ const VideoUpload = () => {
       }
     }, 5000);
     
-    if (!isLoading || checkCount === 0) {
-      checkAuth();
-    }
-    
     return () => clearTimeout(timeoutId);
-  }, [user, session, isLoading, authChecked, checkCount]);
+  }, [user, session, isLoading, authChecked, checkCount, hasShownLoginToast]);
 
   const handleRefreshSession = async () => {
     setIsRefreshing(true);

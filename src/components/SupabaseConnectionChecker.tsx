@@ -16,6 +16,7 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
   const [connectionStatus, setConnectionStatus] = useState<'unknown' | 'success' | 'error'>('unknown');
   const [connectionDetails, setConnectionDetails] = useState<string>("");
   const [retryCount, setRetryCount] = useState(0);
+  const [hasShownToast, setHasShownToast] = useState(false);
   
   const listTables = async () => {
     try {
@@ -35,7 +36,8 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       return { tables: knownTables, error: null };
     } catch (err) {
       console.error("查询表时出现异常:", err);
-      return { tables: [], error: err instanceof Error ? err.message : '未知错误' };
+      const errorMessage = err instanceof Error ? err.message : '未知错误';
+      return { tables: [], error: errorMessage };
     }
   };
 
@@ -61,12 +63,12 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
         // 如果获取表失败，并且没有有效会话
         setConnectionDetails("身份验证会话无效，且获取表格列表失败，请尝试重新登录");
         setConnectionStatus('error');
-        throw new Error(String(tablesError));
+        throw new Error(tablesError);
       } else if (tablesError) {
         // 如果有会话但获取表失败，可能是权限问题
-        setConnectionDetails(`获取表格列表失败，但身份验证成功。可能是权限问题: ${String(tablesError)}`);
+        setConnectionDetails(`获取表格列表失败，但身份验证成功。可能是权限问题: ${tablesError}`);
         setConnectionStatus('error');
-        throw new Error(String(tablesError));
+        throw new Error(tablesError);
       } else if (!authData.data.session) {
         // 如果没有会话但获取表成功（公开表）
         setConnectionDetails("数据库连接成功，但用户未登录。使用的是公开表访问权限。");
@@ -80,11 +82,16 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       }
       
       console.log("Supabase 连接成功:", { tables: tablesList });
-      toast.success("成功连接到 Supabase 数据库");
+      if (!hasShownToast) {
+        toast.success("成功连接到 Supabase 数据库");
+        setHasShownToast(true);
+      }
       
     } catch (err) {
       console.error("测试 Supabase 连接时出错:", err);
-      toast.error("Supabase 连接失败");
+      if (!hasShownToast) {
+        toast.error("Supabase 连接失败");
+      }
       setConnectionStatus('error');
     } finally {
       setIsChecking(false);

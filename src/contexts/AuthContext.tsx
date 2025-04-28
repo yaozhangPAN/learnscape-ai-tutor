@@ -13,6 +13,7 @@ type AuthContextType = {
   isLoading: boolean;
   isAdmin: boolean;
   refreshSession: () => Promise<Session | null>;
+  hasShownLoginToast: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loadingErrors, setLoadingErrors] = useState<string[]>([]);
+  const [hasShownLoginToast, setHasShownLoginToast] = useState(false);
   const { toast: uiToast } = useToast();
 
   // 刷新会话的函数，可以在应用中任何需要重新验证的地方调用
@@ -76,8 +78,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(newSession);
         setUser(newSession?.user ?? null);
         
-        if (event === "SIGNED_IN") {
+        if (event === "SIGNED_IN" && !hasShownLoginToast) {
           toast.success("登录成功");
+          setHasShownLoginToast(true);
           
           // 检查管理员角色 - 使用setTimeout防止阻塞
           if (newSession?.user) {
@@ -101,6 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (event === "SIGNED_OUT") {
           toast.info("已退出登录");
           setIsAdmin(false);
+          setHasShownLoginToast(false); // 重置toast标记，以便下次登录时可以显示
         }
         
         // 无论如何都设置加载状态为false
@@ -123,7 +127,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSession(currentSession);
           setUser(currentSession?.user ?? null);
           
-          if (currentSession?.user) {
+          if (currentSession?.user && !hasShownLoginToast) {
+            // 在初始化时显示登录提示（但只显示一次）
+            setHasShownLoginToast(true);
+            
             try {
               await checkAdminRole(currentSession.user.id);
             } catch (roleError) {
@@ -193,6 +200,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      setHasShownLoginToast(false); // 退出登录后重置标记
       toast.success("已成功退出登录");
     } catch (error) {
       console.error("退出登录时出错:", error);
@@ -201,7 +209,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, signOut, isLoading, isAdmin, refreshSession }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      signOut, 
+      isLoading, 
+      isAdmin, 
+      refreshSession, 
+      hasShownLoginToast 
+    }}>
       {children}
     </AuthContext.Provider>
   );
