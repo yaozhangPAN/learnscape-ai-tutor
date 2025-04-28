@@ -89,6 +89,24 @@ export const masterclassLesson4: Course = {
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson4.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjQubXA0IiwiaWF0IjoxNzQ1ODYwOTA4LCJleHAiOjE3NzczOTY5MDh9.D3qEUSBQGt-eEHZEsO1Fw-NwA7D9LM6ONpS4Ev3_fYg"
 };
 
+export const masterclassLesson5: Course = {
+  id: "psle-chinese-masterclass-lesson5",
+  title: "PSLE 华文名师课 - 第五课",
+  description: "本系列第五课，由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "10 weeks",
+  rating: 4.9,
+  views: 156,
+  price: "S$399",
+  isPremium: true,
+  image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
+  type: "masterclass",
+  requiresAccessCode: false,
+  seriesId: "psle-chinese-masterclass",
+  videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson5.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjUubXA0IiwiaWF0IjoxNzQ1ODYxMDA2LCJleHAiOjE3NzczOTcwMDZ9.y_ICXhJA9B4fb8ovMoUq09CkCju_B36vrIdSkpWXQPY"
+};
+
 export const oralPracticeCourse: Course = {
   id: "psle-chinese-oral-practice-1",
   title: "PSLE 华文口试练习1",
@@ -236,7 +254,7 @@ export const chineseProfMarkingCourse = {
   isPremium: true,
   image: "/lovable-uploads/bea0789a-216e-4b8c-ad8d-db7cbc87bb78.png",
   type: "masterclass" as const,
-  courses: [masterclassCourse, masterclassLesson1, masterclassLesson2, masterclassLesson3, masterclassLesson4]
+  courses: [masterclassCourse, masterclassLesson1, masterclassLesson2, masterclassLesson3, masterclassLesson4, masterclassLesson5]
 };
 
 export const chineseCourses = [
@@ -246,5 +264,6 @@ export const chineseCourses = [
   masterclassLesson2, 
   masterclassLesson3,
   masterclassLesson4,
+  masterclassLesson5,
   ...oralPracticeCourses
 ];
