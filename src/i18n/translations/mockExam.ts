@@ -1,0 +1,45 @@
+
+export const mockExam = {
+  en: {
+    TITLE: "Mock Exams",
+    SUBTITLE: "Practice with real past papers and get instant feedback",
+    EXAMS: "Exam Papers",
+    RESULTS: "results found",
+    START: "Start Exam",
+    VIEW_DETAILS: "View Details",
+    EXAM_HISTORY: "Exam History",
+    NO_EXAM_HISTORY: "No exam history found",
+    RECENT_EXAMS: "Recent Exams",
+    FILTER_SUBJECTS: "Filter by Subject",
+    FILTER_LEVELS: "Filter by Level",
+    FILTER_SCHOOLS: "Filter by School",
+    FILTER_YEARS: "Filter by Year",
+    FILTER_TYPES: "Filter by Type",
+    CLEAR_FILTERS: "Clear Filters",
+    SEARCH_PLACEHOLDER: "Search exams...",
+    NO_RESULTS: "No exam papers found matching your criteria",
+    RESET_FILTERS: "Reset Filters",
+    TRY_AGAIN: "Try Again"
+  },
+  zh: {
+    TITLE: "模拟考试",
+    SUBTITLE: "练习真实的历年试卷并获得即时反馈",
+    EXAMS: "试卷",
+    RESULTS: "个结果",
+    START: "开始考试",
+    VIEW_DETAILS: "查看详情",
+    EXAM_HISTORY: "考试历史",
+    NO_EXAM_HISTORY: "未找到考试历史",
+    RECENT_EXAMS: "最近考试",
+    FILTER_SUBJECTS: "按科目筛选",
+    FILTER_LEVELS: "按级别筛选",
+    FILTER_SCHOOLS: "按学校筛选",
+    FILTER_YEARS: "按年份筛选",
+    FILTER_TYPES: "按类型筛选",
+    CLEAR_FILTERS: "清除筛选",
+    SEARCH_PLACEHOLDER: "搜索考试...",
+    NO_RESULTS: "未找到符合条件的试卷",
+    RESET_FILTERS: "重置筛选",
+    TRY_AGAIN: "重试"
+  }
+};
