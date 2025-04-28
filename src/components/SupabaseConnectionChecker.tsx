@@ -72,10 +72,10 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
         {isChecking ? (
           <>
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
-            <span>Testing...</span>
+            <span>测试中...</span>
           </>
         ) : (
-          "Test Supabase Connection"
+          "测试数据库连接"
         )}
       </Button>
     </div>

@@ -42,6 +42,9 @@ export const useExamData = () => {
         throw questionsError;
       }
       
+      // Log raw data for debugging
+      console.log("Raw exam data from database:", examQuestions);
+      
       if (examQuestions && examQuestions.length > 0) {
         console.log(`Successfully loaded ${examQuestions.length} exams from Supabase questions table`);
         

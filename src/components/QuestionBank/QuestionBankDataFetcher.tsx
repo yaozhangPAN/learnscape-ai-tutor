@@ -48,6 +48,9 @@ const QuestionBankDataFetcher: React.FC<QuestionBankDataFetcherProps> = ({
           throw error;
         }
         
+        // Log the raw data received for debugging
+        console.log('Raw data from questions table:', data);
+        
         if (data && data.length > 0) {
           console.log('Successfully fetched questions:', data.length);
           onDataLoaded(data);
