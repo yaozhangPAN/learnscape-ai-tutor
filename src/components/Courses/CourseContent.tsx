@@ -30,7 +30,8 @@ export const CourseContent = ({
   const isFirstLesson = courseId === 'psle-chinese-masterclass-lesson1';
   const isSecondLesson = courseId === 'psle-chinese-masterclass-lesson2';
   const isThirdLesson = courseId === 'psle-chinese-masterclass-lesson3';
-  const isMasterclassLesson = isFirstLesson || isSecondLesson || isThirdLesson;
+  const isFourthLesson = courseId === 'psle-chinese-masterclass-lesson4';
+  const isMasterclassLesson = isFirstLesson || isSecondLesson || isThirdLesson || isFourthLesson;
   
   return (
     <div className="space-y-8">
@@ -70,4 +71,3 @@ export const CourseContent = ({
     </div>
   );
 };
-
