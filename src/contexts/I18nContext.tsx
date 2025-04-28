@@ -8,6 +8,7 @@ type I18nStrings = typeof en;
 
 interface I18nContextValue {
   lang: Lang;
+  language: Lang; // Add language as an alias for lang
   setLang: (lang: Lang) => void;
   toggleLang: () => void;
   t: I18nStrings;
@@ -15,6 +16,7 @@ interface I18nContextValue {
 
 const I18nContext = createContext<I18nContextValue>({
   lang: "en",
+  language: "en", // Add language as an alias for lang
   setLang: () => {},
   toggleLang: () => {},
   t: en,
@@ -51,7 +53,13 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const t = createTranslationProxy(lang === "en" ? en : zh);
 
   return (
-    <I18nContext.Provider value={{ lang, setLang, toggleLang, t }}>
+    <I18nContext.Provider value={{ 
+      lang, 
+      language: lang, // Add language as an alias for lang
+      setLang, 
+      toggleLang, 
+      t 
+    }}>
       {children}
     </I18nContext.Provider>
   );
