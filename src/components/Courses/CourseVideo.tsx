@@ -18,6 +18,7 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const iframeOverlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (bucketName && filePath) {
@@ -100,6 +101,7 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
+    return false;
   };
 
   const handleEnterFullscreen = () => {
@@ -146,16 +148,36 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
         pointer-events: auto;
       }
       
-      .${preventSelectionClass} video::-internal-media-controls-download-button {
-        display: none;
+      .${preventSelectionClass} video::-internal-media-controls-download-button,
+      .${preventSelectionClass} iframe::-internal-media-controls-download-button {
+        display: none !important;
       }
       
-      .${preventSelectionClass} video::-webkit-media-controls-enclosure {
-        overflow: hidden;
+      .${preventSelectionClass} video::-webkit-media-controls-enclosure,
+      .${preventSelectionClass} iframe::-webkit-media-controls-enclosure {
+        overflow: hidden !important;
       }
       
-      .${preventSelectionClass} video::-webkit-media-controls-panel {
-        width: calc(100% + 30px);
+      .${preventSelectionClass} video::-webkit-media-controls-panel,
+      .${preventSelectionClass} iframe::-webkit-media-controls-panel {
+        width: calc(100% + 30px) !important;
+      }
+      
+      .iframe-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        background: transparent;
+        display: flex;
+        pointer-events: auto;
+      }
+
+      /* Only target actual click events but not controls */
+      .iframe-overlay.clicked {
+        pointer-events: none;
       }
     `;
     document.head.appendChild(style);
@@ -164,6 +186,46 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
       document.head.removeChild(style);
     };
   }, []);
+
+  // Handle iframe overlay clicks - especially for lesson1 and lesson2
+  useEffect(() => {
+    if (!iframeOverlayRef.current || !iframeRef.current || !videoUrl) return;
+    
+    const overlay = iframeOverlayRef.current;
+    let clickTimeout: number;
+    
+    const handleOverlayClick = (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Toggle the 'clicked' class to temporarily disable the overlay
+      overlay.classList.add('clicked');
+      
+      // If it's a YouTube embed, send postMessage to play/pause
+      try {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+          iframeRef.current.contentWindow.postMessage('{"event":"command","func":"togglePlayPause","args":""}', '*');
+        }
+      } catch (err) {
+        console.error('Failed to toggle video state:', err);
+      }
+      
+      // Re-enable the overlay after a short delay
+      clearTimeout(clickTimeout);
+      clickTimeout = window.setTimeout(() => {
+        overlay.classList.remove('clicked');
+      }, 300);
+      
+      return false;
+    };
+    
+    overlay.addEventListener('click', handleOverlayClick);
+    
+    return () => {
+      overlay.removeEventListener('click', handleOverlayClick);
+      clearTimeout(clickTimeout);
+    };
+  }, [videoUrl]);
 
   return (
     <div 
@@ -183,11 +245,11 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
             <iframe
               ref={iframeRef}
               className="w-full h-full"
-              src={`${videoUrl}${videoUrl.includes('?') ? '&' : '?'}modestbranding=1&enablejsapi=1&rel=0&fs=0&disablekb=1`}
+              src={`${videoUrl}${videoUrl.includes('?') ? '&' : '?'}modestbranding=1&enablejsapi=1&rel=0&fs=0&disablekb=1&controls=1`}
               title={title}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
+              allowFullScreen={false}
               referrerPolicy="strict-origin-when-cross-origin"
               onLoad={() => setIsLoading(false)}
               style={{
@@ -197,9 +259,11 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
               }}
               onContextMenu={handleContextMenu}
             />
+            {/* Overlay div to intercept right clicks and control interactions */}
             <div 
-              className="absolute inset-0 pointer-events-none" 
-              onContextMenu={handleContextMenu}
+              ref={iframeOverlayRef}
+              className="iframe-overlay"
+              onContextMenu={handleContextMenu} 
             />
           </>
         ) : signedUrl ? (
