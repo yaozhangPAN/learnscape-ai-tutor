@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,14 +10,17 @@ import { AccessCodeDialog } from "@/components/Courses/AccessCodeDialog";
 import { AccessCodeManager } from "@/components/Courses/AccessCodeManager";
 import { CourseHeader } from "@/components/Courses/CourseHeader";
 import { CourseContent } from "@/components/Courses/CourseContent";
+import { useToast } from "@/hooks/use-toast";
 
 const CourseDetails: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [accessCodeDialogOpen, setAccessCodeDialogOpen] = useState(false);
-  const { hasAccessToContent } = useSubscription();
+  const { hasAccessToContent, startCheckoutSession } = useSubscription();
   
   const course = mockCourses.find(c => c.id === courseId);
 
@@ -63,6 +66,32 @@ const CourseDetails: React.FC = () => {
     setHasAccess(true);
   };
 
+  const handlePurchaseCourse = async () => {
+    if (!user) {
+      toast({
+        title: "请先登录",
+        description: "您需要先登录才能购买课程",
+        variant: "destructive",
+      });
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const checkoutUrl = await startCheckoutSession("video_tutorial", courseId);
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      }
+    } catch (error) {
+      console.error("Failed to initiate checkout:", error);
+      toast({
+        title: "购买失败",
+        description: "无法启动购买流程，请稍后再试",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -76,6 +105,7 @@ const CourseDetails: React.FC = () => {
               courseId={courseId || ''}
               courseTitle={course.title}
               onAccessCodeCheck={handleAccessCodeCheck}
+              onPurchase={handlePurchaseCourse}
             />
           </div>
           

@@ -15,6 +15,7 @@ interface CourseContentProps {
   courseId: string;
   courseTitle: string;
   onAccessCodeCheck: () => void;
+  onPurchase?: () => void;
 }
 
 export const CourseContent = ({ 
@@ -22,7 +23,8 @@ export const CourseContent = ({
   isAdmin, 
   courseId, 
   courseTitle,
-  onAccessCodeCheck 
+  onAccessCodeCheck,
+  onPurchase
 }: CourseContentProps) => {
   const { t, lang } = useI18n();
   const course = mockCourses.find(c => c.id === courseId);
@@ -67,7 +69,11 @@ export const CourseContent = ({
           )}
         </>
       ) : (
-        <LockedCourseContent onAccessCodeCheck={onAccessCodeCheck} />
+        <LockedCourseContent 
+          onAccessCodeCheck={onAccessCodeCheck} 
+          onPurchase={onPurchase}
+          course={course}
+        />
       )}
       
       {!isOralPracticeCourse && !isMasterclassLesson && <CourseHomework />}
