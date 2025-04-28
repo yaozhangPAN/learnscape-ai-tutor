@@ -1,4 +1,5 @@
 
+import React, { useState } from 'react';
 import { CourseVideo } from "./CourseVideo";
 import { LockedCourseContent } from "./LockedCourseContent";
 import { CourseHomework } from "./CourseHomework";
@@ -26,6 +27,7 @@ export const CourseContent = ({
   const { t, lang } = useI18n();
   const course = mockCourses.find(c => c.id === courseId);
   const isOralPracticeCourse = courseId.includes('psle-chinese-oral-practice');
+  const isFirstLesson = courseId === 'psle-chinese-masterclass-lesson1';
   
   return (
     <div className="space-y-8">
@@ -61,7 +63,7 @@ export const CourseContent = ({
         <LockedCourseContent onAccessCodeCheck={onAccessCodeCheck} />
       )}
       
-      {!isOralPracticeCourse && <CourseHomework />}
+      {!isOralPracticeCourse && !isFirstLesson && <CourseHomework />}
     </div>
   );
 };
