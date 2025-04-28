@@ -129,13 +129,50 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
     };
   }, []);
 
+  // Add a CSS class to prevent selection on the entire video container
+  const preventSelectionClass = "prevent-selection";
+  
+  // Add the CSS class to the document head when the component mounts
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .${preventSelectionClass} {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        pointer-events: auto;
+      }
+      
+      .${preventSelectionClass} video::-internal-media-controls-download-button {
+        display: none;
+      }
+      
+      .${preventSelectionClass} video::-webkit-media-controls-enclosure {
+        overflow: hidden;
+      }
+      
+      .${preventSelectionClass} video::-webkit-media-controls-panel {
+        width: calc(100% + 30px);
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
     <div 
-      className="relative rounded-lg overflow-hidden bg-gray-900"
+      className={`relative rounded-lg overflow-hidden bg-gray-900 ${preventSelectionClass}`}
       onCopy={(e) => e.preventDefault()}
       onCut={(e) => e.preventDefault()}
       onPaste={(e) => e.preventDefault()}
       onContextMenu={handleContextMenu}
+      onDragStart={(e) => e.preventDefault()}
     >
       <div 
         ref={videoContainerRef}
@@ -171,7 +208,7 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
               ref={videoRef}
               className="w-full h-full"
               controls
-              controlsList="nodownload noplaybackrate"
+              controlsList="nodownload noplaybackrate nofullscreen"
               onContextMenu={handleContextMenu}
               playsInline
               onLoadedData={() => setIsLoading(false)}
@@ -179,8 +216,7 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
               style={{ 
                 WebkitTouchCallout: 'none',
                 WebkitUserSelect: 'none',
-                userSelect: 'none',
-                pointerEvents: 'none'
+                userSelect: 'none'
               }}
               onDoubleClick={handleEnterFullscreen}
             >
@@ -191,6 +227,11 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
               className="absolute inset-0" 
               style={{ pointerEvents: 'auto' }}
               onContextMenu={handleContextMenu}
+              onClick={(e) => {
+                if (videoRef.current) {
+                  videoRef.current.paused ? videoRef.current.play() : videoRef.current.pause();
+                }
+              }}
             />
           </>
         ) : (
