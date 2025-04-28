@@ -26,7 +26,7 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       
       if (error) {
         console.error("测试表查询失败:", error);
-        return { tables: [], error };
+        return { tables: [], error: error.message || '未知错误' };
       }
       
       // 连接成功后，列出已知的表名（这里不是真的查询数据库，而是提供固定的列表）
@@ -35,7 +35,7 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       return { tables: knownTables, error: null };
     } catch (err) {
       console.error("查询表时出现异常:", err);
-      return { tables: [], error: err };
+      return { tables: [], error: err instanceof Error ? err.message : '未知错误' };
     }
   };
 
@@ -61,12 +61,12 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
         // 如果获取表失败，并且没有有效会话
         setConnectionDetails("身份验证会话无效，且获取表格列表失败，请尝试重新登录");
         setConnectionStatus('error');
-        throw tablesError;
+        throw new Error(String(tablesError));
       } else if (tablesError) {
         // 如果有会话但获取表失败，可能是权限问题
-        setConnectionDetails(`获取表格列表失败，但身份验证成功。可能是权限问题: ${tablesError.message || String(tablesError)}`);
+        setConnectionDetails(`获取表格列表失败，但身份验证成功。可能是权限问题: ${String(tablesError)}`);
         setConnectionStatus('error');
-        throw tablesError;
+        throw new Error(String(tablesError));
       } else if (!authData.data.session) {
         // 如果没有会话但获取表成功（公开表）
         setConnectionDetails("数据库连接成功，但用户未登录。使用的是公开表访问权限。");
