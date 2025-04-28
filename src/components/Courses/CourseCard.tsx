@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,40 @@ interface CourseCardProps {
     views: number;
     enrollment_count: number | null;
   };
+  isLessonInSeries?: boolean;
 }
 
-export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow, stats }) => {
+export const CourseCard: React.FC<CourseCardProps> = ({ course, onWatchNow, stats, isLessonInSeries }) => {
   const { t } = useI18n();
 
+  // Simplified card for individual lessons in a series
+  if (isLessonInSeries) {
+    return (
+      <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
+        <div className="h-36 overflow-hidden relative">
+          <img 
+            src={course.image} 
+            alt={course.title} 
+            className="w-full h-full object-cover transition-transform hover:scale-105"
+          />
+        </div>
+        <CardContent className="pt-4">
+          <h3 className="text-lg font-semibold mb-1">{course.title}</h3>
+        </CardContent>
+        <CardFooter className="flex justify-end items-center pt-2">
+          <Button 
+            className="bg-learnscape-blue hover:bg-blue-700"
+            onClick={() => onWatchNow(course)}
+          >
+            <Video className="h-4 w-4 mr-2" />
+            {t.VIDEO_TUTORIALS.WATCH_NOW}
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  }
+
+  // Full card for series and standalone courses
   return (
     <Card className="overflow-hidden border-gray-200 hover:shadow-md transition-shadow">
       <div className="h-48 overflow-hidden relative">

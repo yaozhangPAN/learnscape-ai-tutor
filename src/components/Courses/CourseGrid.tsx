@@ -5,9 +5,10 @@ import { Course } from "@/types/course";
 
 interface CourseGridProps {
   courses: Course[];
+  isLessonInSeries?: boolean;
 }
 
-export const CourseGrid = ({ courses }: CourseGridProps) => {
+export const CourseGrid = ({ courses, isLessonInSeries }: CourseGridProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
       {courses.map((course) => (
@@ -19,6 +20,7 @@ export const CourseGrid = ({ courses }: CourseGridProps) => {
           <CourseCard
             course={course}
             onWatchNow={() => {}}
+            isLessonInSeries={isLessonInSeries}
           />
         </Link>
       ))}
