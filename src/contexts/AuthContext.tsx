@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,8 +23,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log("AuthContext initializing...");
+    
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log("Auth state changed:", event, !!session);
+        
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -33,19 +39,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             description: "You have successfully signed in.",
           });
           
-          // Check admin role after sign in
+          // Check admin role after sign in - using setTimeout to prevent blocking
           if (session?.user) {
-            const { data } = await supabase
-              .from('user_roles')
-              .select('role')
-              .eq('user_id', session.user.id)
-              .eq('role', 'administrator')
-              .single();
-            
-            setIsAdmin(!!data);
+            setTimeout(async () => {
+              try {
+                const { data } = await supabase
+                  .from('user_roles')
+                  .select('role')
+                  .eq('user_id', session.user.id)
+                  .eq('role', 'administrator')
+                  .single();
+                
+                setIsAdmin(!!data);
+              } catch (error) {
+                console.error("Error checking admin role:", error);
+              }
+            }, 0);
           }
           
-          // Track login event
+          // Track login event - using setTimeout to prevent blocking
           setTimeout(() => {
             trackUserBehavior('login', {
               actionDetails: { 
@@ -65,29 +77,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setIsAdmin(false);
         }
         
+        // Set loading to false regardless of outcome
         setIsLoading(false);
       }
     );
 
     // THEN check for existing session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      console.log("Initial session check:", !!session);
+      
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        const { data } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .eq('role', 'administrator')
-          .single();
-        
-        setIsAdmin(!!data);
+        try {
+          const { data } = await supabase
+            .from('user_roles')
+            .select('role')
+            .eq('user_id', session.user.id)
+            .eq('role', 'administrator')
+            .single();
+          
+          setIsAdmin(!!data);
+        } catch (error) {
+          console.error("Error checking admin role:", error);
+        }
       }
       
       setIsLoading(false);
       
-      // Track session restore if user exists
+      // Track session restore if user exists - using setTimeout to prevent blocking
       if (session?.user) {
         setTimeout(() => {
           trackUserBehavior('page_view', {
@@ -98,9 +117,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           });
         }, 0);
       }
+    }).catch(error => {
+      console.error("Error fetching initial session:", error);
+      setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    // Add a safety timeout to ensure isLoading is eventually set to false
+    const safetyTimeout = setTimeout(() => {
+      if (isLoading) {
+        console.log("Safety timeout triggered: forcing isLoading to false");
+        setIsLoading(false);
+      }
+    }, 10000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(safetyTimeout);
+    };
   }, [toast]);
 
   const signOut = async () => {
