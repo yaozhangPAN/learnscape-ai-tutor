@@ -13,7 +13,15 @@ export const subscription = {
     PURCHASE_SUCCESS: "Purchase successful!",
     CANCEL_SUBSCRIPTION: "Cancel Subscription",
     LOGIN_REQUIRED: "Please log in first",
-    LOGIN_REQUIRED_DESC: "You need to be logged in to purchase or subscribe"
+    LOGIN_REQUIRED_DESC: "You need to be logged in to purchase or subscribe",
+    // Add the missing properties
+    AI_TUTOR_TITLE: "AI Tutor Premium Access",
+    AI_TUTOR_DESC: "Get unlimited access to personalized AI tutoring",
+    DAILY_REC_TITLE: "Daily Recommendations",
+    DAILY_REC_DESC: "Get personalized daily learning recommendations",
+    VIDEO_TITLE: "Premium Video Content",
+    SUBSCRIBE_BUTTON: "Subscribe Now",
+    PER_MONTH: "per month"
   },
   zh: {
     PREMIUM_REQUIRED: "需要高级会员资格",
@@ -28,6 +36,14 @@ export const subscription = {
     PURCHASE_SUCCESS: "购买成功！",
     CANCEL_SUBSCRIPTION: "取消订阅",
     LOGIN_REQUIRED: "请先登录",
-    LOGIN_REQUIRED_DESC: "您需要登录才能购买或订阅"
+    LOGIN_REQUIRED_DESC: "您需要登录才能购买或订阅",
+    // Add the missing properties
+    AI_TUTOR_TITLE: "AI 辅导高级访问",
+    AI_TUTOR_DESC: "获取无限访问个性化 AI 辅导",
+    DAILY_REC_TITLE: "每日推荐",
+    DAILY_REC_DESC: "获取个性化每日学习推荐",
+    VIDEO_TITLE: "高级视频内容",
+    SUBSCRIBE_BUTTON: "立即订阅",
+    PER_MONTH: "每月"
   }
 };
