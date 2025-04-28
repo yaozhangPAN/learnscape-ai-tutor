@@ -28,6 +28,8 @@ export const CourseContent = ({
   const course = mockCourses.find(c => c.id === courseId);
   const isOralPracticeCourse = courseId.includes('psle-chinese-oral-practice');
   const isFirstLesson = courseId === 'psle-chinese-masterclass-lesson1';
+  const isSecondLesson = courseId === 'psle-chinese-masterclass-lesson2';
+  const isMasterclassLesson = isFirstLesson || isSecondLesson;
   
   return (
     <div className="space-y-8">
@@ -63,7 +65,7 @@ export const CourseContent = ({
         <LockedCourseContent onAccessCodeCheck={onAccessCodeCheck} />
       )}
       
-      {!isOralPracticeCourse && !isFirstLesson && <CourseHomework />}
+      {!isOralPracticeCourse && !isMasterclassLesson && <CourseHomework />}
     </div>
   );
 };
