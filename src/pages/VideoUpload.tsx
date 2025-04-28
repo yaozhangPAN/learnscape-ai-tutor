@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import SupabaseConnectionChecker from "@/components/SupabaseConnectionChecker";
+import { VideoFileManager } from "@/components/VideoUpload/VideoFileManager";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader, LogIn } from "lucide-react";
+import { LogIn, Loader } from "lucide-react";
 
 const VideoUpload = () => {
   const { user, session, isLoading, refreshSession } = useAuth();
@@ -143,8 +144,8 @@ const VideoUpload = () => {
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold">上传课程视频</h1>
           <div className="flex items-center space-x-2">
             {(user || sessionData?.session?.user) ? (
@@ -177,33 +178,29 @@ const VideoUpload = () => {
           </div>
         </div>
         
-        <Card className="mb-6">
+        <Card>
           <CardHeader>
             <CardTitle>数据库连接状态</CardTitle>
             <CardDescription>检查与Supabase数据库的连接状态</CardDescription>
           </CardHeader>
           <CardContent>
             <SupabaseConnectionChecker className="mb-4" />
-            
-            <div className="mt-4 p-4 bg-gray-50 rounded-md border border-gray-200">
-              <p className="text-sm font-medium mb-2">会话信息:</p>
-              <pre className="text-xs mt-2 overflow-auto max-h-40 p-2 bg-gray-100 rounded">
-                {sessionData ? JSON.stringify(sessionData, null, 2) : "无会话数据"}
-              </pre>
-            </div>
           </CardContent>
         </Card>
         
         {(user || sessionData?.session?.user) ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>视频上传</CardTitle>
-              <CardDescription>上传课程视频文件</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <VideoUploadStatus courseId="test-course" />
-            </CardContent>
-          </Card>
+          <>
+            <VideoFileManager courseId="test-course" />
+            <Card>
+              <CardHeader>
+                <CardTitle>视频上传</CardTitle>
+                <CardDescription>上传课程视频文件</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <VideoUploadStatus courseId="test-course" />
+              </CardContent>
+            </Card>
+          </>
         ) : (
           <Card className="bg-yellow-50 border-yellow-200">
             <CardHeader>
