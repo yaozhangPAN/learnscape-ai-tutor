@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -66,6 +65,13 @@ const Navbar = () => {
             onClick={() => handleNavigation("/ai-tutor", t.NAVBAR.AI_TUTOR)}
           >
             {t.NAVBAR.AI_TUTOR}
+          </Link>
+          <Link 
+            to="/mock-exam" 
+            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
+            onClick={() => handleNavigation("/mock-exam", "mock-exam")}
+          >
+            {lang === 'zh' ? '模拟考试' : 'Mock Exam'}
           </Link>
           <Link 
             to="/zoom-courses" 
@@ -129,9 +135,6 @@ const Navbar = () => {
           <SheetContent side="right" className="sm:max-w-xs">
             <SheetHeader>
               <SheetTitle>{lang === 'zh' ? '菜单' : 'Menu'}</SheetTitle>
-              <SheetDescription>
-                {lang === 'zh' ? '浏览我们的功能' : 'Browse our features'}
-              </SheetDescription>
             </SheetHeader>
             <div className="grid gap-4 py-4">
               <Link to="/video-tutorials" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
@@ -139,6 +142,9 @@ const Navbar = () => {
               </Link>
               <Link to="/ai-tutor" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {t.NAVBAR.AI_TUTOR}
+              </Link>
+              <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
+                {lang === 'zh' ? '模拟考试' : 'Mock Exam'}
               </Link>
               <Link to="/zoom-courses" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {lang === 'zh' ? '线上课堂' : 'Online Classroom'}

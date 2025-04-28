@@ -4,11 +4,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HomeHeader from "@/components/home/HomeHeader";
 import HomeNote from "@/components/home/HomeNote";
-import { Video, Book, Grid2x2, LayoutGrid } from "lucide-react";
+import { Video, Book, Grid2x2, LayoutGrid, FileText } from "lucide-react";
 import OnlineClassroomSection from "@/components/home/OnlineClassroomSection";
 import { useI18n } from "@/contexts/I18nContext";
 import HomeAITutorSection from "@/components/home/HomeAITutorSection";
 import HomeVideoLessonsSection from "@/components/home/HomeVideoLessonsSection";
+import HomeMockExamSection from "@/components/home/HomeMockExamSection";
 
 const Index = () => {
   const { t, lang } = useI18n();
@@ -33,6 +34,16 @@ const Index = () => {
       icon: <Video className="w-8 h-8 mr-2" />,
       img: "/lovable-uploads/02c00429-df63-4436-8a1b-a1a76314f56e.png",
       to: "/video-tutorials"
+    },
+    {
+      key: "mock-exam",
+      title: t.NAV.MOCK_EXAM,
+      desc: lang === "zh" ? "真题模拟练习" : "Practice with Past Papers",
+      bg: "bg-[#F7941D]",
+      text: "text-white",
+      icon: <FileText className="w-8 h-8 mr-2" />,
+      img: "/lovable-uploads/47623492-7d97-4968-aa79-e349f06e68b4.png",
+      to: "/mock-exam"
     },
     {
       key: "online-classroom",
@@ -69,12 +80,21 @@ const Index = () => {
             icon={mainBlocks[1].icon}
             img={mainBlocks[1].img}
           />
-          <OnlineClassroomSection
+          <HomeMockExamSection
             to={mainBlocks[2].to}
-            className={`${mainBlocks[2].bg} ${mainBlocks[2].text}`}
-            icon={<img src="/lovable-uploads/7a7e4714-d8d9-4f9c-acdc-a5e2aaae7344.png" alt="Online Classroom Icon" className="w-8 h-8 mr-2" />}
             title={mainBlocks[2].title}
             desc={mainBlocks[2].desc}
+            bg={mainBlocks[2].bg}
+            textColor={mainBlocks[2].text}
+            icon={mainBlocks[2].icon}
+            img={mainBlocks[2].img}
+          />
+          <OnlineClassroomSection
+            to={mainBlocks[3].to}
+            className={`${mainBlocks[3].bg} ${mainBlocks[3].text}`}
+            icon={<img src="/lovable-uploads/7a7e4714-d8d9-4f9c-acdc-a5e2aaae7344.png" alt="Online Classroom Icon" className="w-8 h-8 mr-2" />}
+            title={mainBlocks[3].title}
+            desc={mainBlocks[3].desc}
           />
         </div>
         <HomeNote

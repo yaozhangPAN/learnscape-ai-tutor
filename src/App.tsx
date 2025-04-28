@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,7 +10,6 @@ import { useState, useEffect } from "react";
 import { trackUserBehavior } from "@/utils/behaviorTracker";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
 import MockExam from "./pages/MockExam";
 import OnlineExam from "./components/ExamTaking/OnlineExam";
 import Courses from "./pages/Courses";
@@ -73,7 +73,8 @@ const App = () => {
                   <Route path="/payment-canceled" element={<PaymentCanceled />} />
                   
                   <Route path="/video-tutorials" element={<Courses />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/mock-exam" element={<MockExam />} />
+                  <Route path="/take-exam/:examId" element={<OnlineExam />} />
                   <Route path="/courses" element={<Courses />} />
                   <Route path="/courses/series/:seriesId" element={<CourseSeries />} />
                   <Route path="/courses/:courseId" element={<CourseDetails />} />
