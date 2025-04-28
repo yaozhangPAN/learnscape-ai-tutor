@@ -12,9 +12,9 @@ const ExamLoadingState = () => {
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-learnscape-blue mx-auto"></div>
         <p className="mt-4 text-lg">
-          {typeof translations === 'object' && 'LOADING' in translations 
-            ? translations.LOADING 
-            : "Loading..."}
+          {(typeof translations === 'object' && 'LOADING' in translations 
+            ? translations.LOADING as React.ReactNode
+            : "Loading...")}
         </p>
       </div>
     </div>

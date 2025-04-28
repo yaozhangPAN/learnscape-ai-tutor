@@ -10,14 +10,14 @@ const ExamPageHeader = () => {
   return (
     <div className="mb-6">
       <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">
-        {typeof translations === 'object' && 'TITLE' in translations 
-          ? translations.TITLE 
-          : "Mock Exams"}
+        {(typeof translations === 'object' && 'TITLE' in translations 
+          ? translations.TITLE as React.ReactNode
+          : "Mock Exams")}
       </h1>
       <p className="text-gray-600">
-        {typeof translations === 'object' && 'SUBTITLE' in translations 
-          ? translations.SUBTITLE 
-          : "Practice with real past papers and get instant feedback"}
+        {(typeof translations === 'object' && 'SUBTITLE' in translations 
+          ? translations.SUBTITLE as React.ReactNode
+          : "Practice with real past papers and get instant feedback")}
       </p>
     </div>
   );
