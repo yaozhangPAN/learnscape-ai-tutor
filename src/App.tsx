@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +25,7 @@ import ZoomCourses from "./pages/ZoomCourses";
 import NotFound from "./pages/NotFound";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCanceled from "./pages/PaymentCanceled";
+import PaymentVerification from "./pages/PaymentVerification";
 import VocabularyBuilder from "./pages/VocabularyBuilder";
 import LanguageArtsRedirect from "./components/LanguageArtsRedirect";
 import ReadingCoachRedirect from "./components/ReadingCoachRedirect";
@@ -69,6 +71,7 @@ const App = () => {
                   <Route path="/register" element={<Login />} />
                   <Route path="/payment-success" element={<PaymentSuccess />} />
                   <Route path="/payment-canceled" element={<PaymentCanceled />} />
+                  <Route path="/payment-verification" element={<PaymentVerification />} />
                   
                   <Route path="/video-tutorials" element={<Courses />} />
                   <Route path="/take-exam/:examId" element={<OnlineExam />} />

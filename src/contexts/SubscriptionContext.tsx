@@ -1,7 +1,9 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 type SubscriptionContextType = {
   isPremium: boolean;
@@ -18,6 +20,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const { user, session } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const checkPremiumStatus = async () => {
     if (!user) {
@@ -28,13 +31,24 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
 
     try {
       setLoadingSubscription(true);
-      const { data, error } = await supabase.functions.invoke("check-subscription");
+      
+      // Check directly in the database if user has an active subscription
+      const { data: subscriptionData, error: subscriptionError } = await supabase
+        .from("subscriptions")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("subscription_type", "premium")
+        .eq("status", "active")
+        .lt("start_date", new Date().toISOString())
+        .gt("end_date", new Date().toISOString())
+        .maybeSingle();
 
-      if (error) {
-        throw error;
+      if (subscriptionError) {
+        console.error("Error checking subscription:", subscriptionError);
+        setIsPremium(false);
+      } else {
+        setIsPremium(!!subscriptionData);
       }
-
-      setIsPremium(!!data?.isPremium);
     } catch (error: any) {
       console.error("Error checking premium status:", error.message);
       toast({
@@ -90,11 +104,14 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         throw error;
       }
 
-      if (!data?.url) {
-        throw new Error("No checkout URL returned");
+      if (!data?.paymentInfo) {
+        throw new Error("No payment information returned");
       }
 
-      return data.url;
+      // For PayNow payments, redirect to the verification page
+      navigate(`/payment-verification?reference=${data.paymentInfo.reference}&type=${productType}${productId ? `&id=${productId}` : ''}`);
+      
+      return data.paymentInfo.successUrl;
     } catch (error: any) {
       console.error("Error creating checkout session:", error.message);
       toast({
