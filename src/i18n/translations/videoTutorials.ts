@@ -8,8 +8,7 @@ export const videoTutorials = {
     COURSES: "courses",
     PREMIUM_BADGE: "Premium Content",
     FEATURED_COURSES: "Featured Courses",
-    FREE_PREVIEW: "Free Preview",
-    ALL_COURSES: "All Courses"
+    FREE_PREVIEW: "Free Preview"
   },
   zh: {
     TITLE: "视频教程",
@@ -19,7 +18,6 @@ export const videoTutorials = {
     COURSES: "课程",
     PREMIUM_BADGE: "高级内容",
     FEATURED_COURSES: "精选课程",
-    FREE_PREVIEW: "免费试听",
-    ALL_COURSES: "所有课程"
+    FREE_PREVIEW: "免费试听"
   }
 };
