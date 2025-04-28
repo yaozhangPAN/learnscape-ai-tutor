@@ -1,6 +1,7 @@
 
 export const streak = {
   en: {
+    TITLE: "Learning Streak",
     PERSONAL: "Personal",
     FRIENDS: "Friends",
     STREAK_SOCIETY: "Streak Society",
@@ -12,6 +13,7 @@ export const streak = {
     FRIENDS_MESSAGE: "Coming soon! Compare your streak with friends"
   },
   zh: {
+    TITLE: "学习连续记录",
     PERSONAL: "个人",
     FRIENDS: "朋友",
     STREAK_SOCIETY: "连续学习社区",

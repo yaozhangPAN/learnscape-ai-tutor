@@ -9,6 +9,9 @@ import { dailyPlan } from './translations/dailyPlan';
 import { videoTutorials } from './translations/videoTutorials';
 import { subscription } from './translations/subscription';
 import { streak } from './translations/streak';
+import { leaderboard } from './translations/leaderboard';
+import { notFound } from './translations/notFound';
+import { paymentSuccess } from './translations/paymentSuccess';
 
 export const zh = {
   COMMON: common.zh,
@@ -21,5 +24,8 @@ export const zh = {
   DAILY_PLAN: dailyPlan.zh,
   VIDEO_TUTORIALS: videoTutorials.zh,
   SUBSCRIPTION: subscription.zh,
-  STREAK: streak.zh
+  STREAK: streak.zh,
+  LEADERBOARD: leaderboard.zh,
+  NOT_FOUND: notFound.zh,
+  PAYMENT_SUCCESS: paymentSuccess.zh
 };
