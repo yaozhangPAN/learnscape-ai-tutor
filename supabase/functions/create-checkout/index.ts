@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
@@ -59,6 +60,7 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       success_url: `${req.headers.get("origin")}/payment-success?type=${productType}${productId ? `&id=${productId}` : ''}`,
       cancel_url: `${req.headers.get("origin")}/payment-canceled`,
+      payment_method_types: ['paynow', 'card'], // Add PayNow as payment method
     };
 
     // Configure line items based on product type
