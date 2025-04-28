@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,8 +13,6 @@ import Dashboard from "./pages/Dashboard";
 import MockExam from "./pages/MockExam";
 import OnlineExam from "./components/ExamTaking/OnlineExam";
 import Courses from "./pages/Courses";
-import QuestionBank from "./pages/QuestionBank";
-import Leaderboard from "./pages/Leaderboard";
 import Worksheets from "./pages/Worksheets";
 import Referral from "./pages/Referral";
 import AITutor from "./pages/AITutor";
@@ -25,7 +22,6 @@ import DictationPractice from "./pages/DictationPractice";
 import TutorMe from "./pages/TutorMe";
 import ErrorAnalysis from "./pages/ErrorAnalysis";
 import SnapAndSolve from "./pages/SnapAndSolve";
-import DailyPlan from "./pages/DailyPlan";
 import ZoomCourses from "./pages/ZoomCourses";
 import NotFound from "./pages/NotFound";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -37,7 +33,6 @@ import CourseDetails from "./pages/CourseDetails";
 import OralExamRedirect from "./components/AITutor/OralExamRedirect";
 import { I18nProvider } from "@/contexts/I18nContext";
 import Account from "./pages/Account";
-import ChineseCharacters from "./pages/ChineseCharacters";
 import VideoUpload from "./pages/VideoUpload";
 import CourseSeries from "./pages/CourseSeries";
 
@@ -79,17 +74,12 @@ const App = () => {
                   
                   <Route path="/video-tutorials" element={<Courses />} />
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/mock-exam" element={<MockExam />} />
-                  <Route path="/take-exam/:examId" element={<OnlineExam />} />
                   <Route path="/courses" element={<Courses />} />
                   <Route path="/courses/series/:seriesId" element={<CourseSeries />} />
                   <Route path="/courses/:courseId" element={<CourseDetails />} />
                   <Route path="/worksheets" element={<Worksheets />} />
-                  <Route path="/question-bank" element={<QuestionBank />} />
-                  <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route path="/referral" element={<Referral />} />
                   <Route path="/ai-tutor" element={<AITutor />} />
-                  <Route path="/daily-plan" element={<DailyPlan />} />
                   <Route path="/zoom-courses" element={<ZoomCourses />} />
                   
                   <Route path="/ai-tutor/writing-coach" element={<WritingCoach />} />
@@ -101,8 +91,6 @@ const App = () => {
                   <Route path="/ai-tutor/vocabulary" element={<VocabularyBuilder />} />
                   <Route path="/ai-tutor/language-arts" element={<LanguageArtsRedirect />} />
                   <Route path="/ai-tutor/reading-coach" element={<ReadingCoachRedirect />} />
-                  
-                  <Route path="/chinese-characters" element={<ChineseCharacters />} />
                   
                   <Route path="/about" element={<Navigate to="/" replace />} />
                   <Route path="/account" element={<Account />} />

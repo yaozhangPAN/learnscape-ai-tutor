@@ -74,20 +74,6 @@ const Navbar = () => {
           >
             {lang === 'zh' ? '线上课堂' : 'Online Classroom'}
           </Link>
-          <Link 
-            to="/question-bank" 
-            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-            onClick={() => handleNavigation("/question-bank", t.NAVBAR.QUESTION_BANK)}
-          >
-            {t.NAVBAR.QUESTION_BANK}
-          </Link>
-          <Link 
-            to="/mock-exam" 
-            className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue"
-            onClick={() => handleNavigation("/mock-exam", t.NAVBAR.MOCK_EXAM)}
-          >
-            {t.NAVBAR.MOCK_EXAM}
-          </Link>
           <Button variant="ghost" size="sm" onClick={handleLanguageToggle} className="gap-2">
             <Languages className="h-4 w-4" />
             {lang === 'en' ? '中文' : 'English'}
@@ -156,12 +142,6 @@ const Navbar = () => {
               </Link>
               <Link to="/zoom-courses" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
                 {lang === 'zh' ? '线上课堂' : 'Online Classroom'}
-              </Link>
-              <Link to="/question-bank" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                {t.NAVBAR.QUESTION_BANK}
-              </Link>
-              <Link to="/mock-exam" className="text-sm font-medium transition-colors hover:text-learnscape-darkBlue">
-                {t.NAVBAR.MOCK_EXAM}
               </Link>
               <Button variant="ghost" size="sm" onClick={handleLanguageToggle} className="gap-2 justify-start">
                 <Languages className="h-4 w-4" />
