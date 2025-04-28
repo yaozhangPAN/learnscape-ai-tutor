@@ -16,6 +16,9 @@ const QuestionBankDataFetcher: React.FC<QuestionBankDataFetcherProps> = ({
   onError,
   onLoadingChange,
 }) => {
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 2;
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -25,17 +28,35 @@ const QuestionBankDataFetcher: React.FC<QuestionBankDataFetcherProps> = ({
         console.log(`Fetching questions from Supabase... Language: ${language}`);
         console.log("Database connection check:", !!supabase);
         
-        // Test connection with a simple query
-        const { data: testData, error: testError } = await supabase
-          .from('questions')
-          .select('count(*)', { count: 'exact', head: true });
-          
-        if (testError) {
-          console.error('Connection test error:', testError);
-          throw new Error('Failed to connect to database');
+        // First check if the Supabase client is available
+        if (!supabase) {
+          throw new Error('Supabase client is not initialized properly');
         }
         
-        console.log('Connection test successful, count query result:', testData);
+        // Use a simpler, direct query to test the connection first
+        try {
+          const { count, error: countError } = await supabase
+            .from('questions')
+            .select('*', { count: 'exact', head: true });
+          
+          if (countError) {
+            console.error('Connection test error:', countError);
+            // Just log the error but continue with the fallback data
+            throw new Error('Database connection test failed');
+          }
+          
+          console.log('Connection test successful, approximate count:', count);
+        } catch (testError) {
+          console.warn('Connection test failed, will use fallback data:', testError);
+          // If we've exceeded retry attempts, just use fallback data
+          if (retryCount >= maxRetries) {
+            console.log('Max retries reached, using default data');
+            onDataLoaded([]);
+            onError(true);
+            onLoadingChange(false);
+            return;
+          }
+        }
         
         // Now fetch the actual data
         const { data, error } = await supabase
@@ -62,14 +83,29 @@ const QuestionBankDataFetcher: React.FC<QuestionBankDataFetcherProps> = ({
       } catch (error) {
         console.error('Exception when fetching questions:', error);
         onError(true);
-        toast.error(language === 'zh' ? "加载题目时发生错误。" : "An error occurred while loading questions.");
+        
+        // Only show toast error message if we're not retrying automatically
+        if (retryCount >= maxRetries) {
+          toast.error(language === 'zh' ? "加载题目时发生错误，使用默认数据。" : "An error occurred while loading questions. Using default data.");
+        }
+        
+        // Use empty array to trigger fallback to default data
+        onDataLoaded([]);
+        
+        // Retry logic
+        if (retryCount < maxRetries) {
+          console.log(`Retrying fetch attempt ${retryCount + 1} of ${maxRetries}...`);
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+          }, 1000); // Wait 1 second before retrying
+        }
       } finally {
         onLoadingChange(false);
       }
     };
 
     fetchQuestions();
-  }, [language, onDataLoaded, onError, onLoadingChange]);
+  }, [language, onDataLoaded, onError, onLoadingChange, retryCount]);
 
   return null;
 };

@@ -134,26 +134,29 @@ const QuestionBank = () => {
   };
 
   const handleRetry = () => {
+    setIsLoading(true);
+    setFetchError(false);
     window.location.reload();
   };
 
   const handleCheckSupabaseConnection = async () => {
     try {
+      toast.loading(language === 'zh' ? "测试数据库连接中..." : "Testing database connection...");
       console.log("Testing Supabase connection...");
       const { data, error } = await supabase.from('questions').select('count(*)', { count: 'exact', head: true });
       
       if (error) {
         console.error("Supabase connection test failed:", error);
-        toast.error("Failed to connect to Supabase");
+        toast.error(language === 'zh' ? "连接Supabase数据库失败" : "Failed to connect to Supabase");
         return;
       }
       
       console.log("Supabase connection successful:", data);
-      toast.success("Supabase connection successful");
+      toast.success(language === 'zh' ? "Supabase连接成功" : "Supabase connection successful");
       
     } catch (err) {
       console.error("Error testing Supabase connection:", err);
-      toast.error("Error testing Supabase connection");
+      toast.error(language === 'zh' ? "测试Supabase连接时出错" : "Error testing Supabase connection");
     }
   };
 
@@ -177,7 +180,7 @@ const QuestionBank = () => {
               onClick={handleCheckSupabaseConnection}
               className="text-sm"
             >
-              Test Supabase Connection
+              {getTranslation('TEST_CONNECTION')}
             </Button>
           </div>
           
@@ -289,14 +292,14 @@ const QuestionBank = () => {
             </div>
           ) : fetchError ? (
             <div className="text-center py-12">
-              <p className="text-lg text-red-500 mb-4">{language === 'zh' ? '从数据库加载题目时出错' : 'Error loading questions from the database'}</p>
-              <p className="mb-4">{language === 'zh' ? '当前显示样本数据' : 'Currently displaying sample data'}</p>
+              <p className="text-lg text-red-500 mb-4">{getTranslation('CONNECTION_ERROR')}</p>
+              <p className="mb-4">{getTranslation('USING_SAMPLE_DATA')}</p>
               <Button 
                 variant="default"
                 className="bg-learnscape-blue text-white"
                 onClick={handleRetry}
               >
-                {language === 'zh' ? '重试' : 'Retry'}
+                {getTranslation('RETRY')}
               </Button>
             </div>
           ) : (

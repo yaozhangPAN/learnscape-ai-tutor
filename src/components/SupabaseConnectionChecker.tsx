@@ -75,7 +75,7 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       } else {
         // 会话和表都正常
         setTables(tablesList);
-        setConnectionDetails(`连接成功! 有效会话用户: ${authData.data.session?.user?.email}`);
+        setConnectionDetails(`连接成功! 有效会话用户: ${authData.data.session?.user?.email || authData.data.session?.user?.id}`);
         setConnectionStatus('success');
       }
       

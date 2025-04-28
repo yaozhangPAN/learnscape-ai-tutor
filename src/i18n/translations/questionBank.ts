@@ -18,7 +18,10 @@ export const questionBank = {
     CLEAR_FILTERS: "Clear Filters",
     SHOWING_RESULTS: "Showing {start} to {end} of {total} results",
     QUESTION_LIST: "Question List",
-    RETRY: "Retry"
+    RETRY: "Retry",
+    CONNECTION_ERROR: "Error connecting to database",
+    USING_SAMPLE_DATA: "Currently displaying sample data",
+    TEST_CONNECTION: "Test Database Connection"
   },
   zh: {
     TITLE: "题库",
@@ -38,6 +41,9 @@ export const questionBank = {
     CLEAR_FILTERS: "清除筛选",
     SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 结果",
     QUESTION_LIST: "题目列表",
-    RETRY: "重试"
+    RETRY: "重试",
+    CONNECTION_ERROR: "连接数据库时出错",
+    USING_SAMPLE_DATA: "当前显示样本数据",
+    TEST_CONNECTION: "测试数据库连接"
   }
 };
