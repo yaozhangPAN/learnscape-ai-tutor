@@ -7,8 +7,11 @@ import { Pagination } from "@/components/ui/pagination";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { CourseFilters } from "@/components/Courses/CourseFilters";
 import { CourseSeriesGrid } from "@/components/Courses/CourseSeriesGrid";
+import { CourseGrid } from "@/components/Courses/CourseGrid";
 import { useI18n } from "@/contexts/I18nContext";
 import { mockCourseSeries } from "@/data/courses/courseSeries";
+import { mockCourses } from "@/data/mockCourses";
+import { masterclassCourse } from "@/data/courses/chinese";
 
 const Courses = () => {
   const { t } = useI18n();
@@ -23,6 +26,9 @@ const Courses = () => {
       (selectedType === "all" || series.type === selectedType)
   );
 
+  // Featured courses that should be displayed separately at the top
+  const featuredCourses = [masterclassCourse];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -31,6 +37,13 @@ const Courses = () => {
           <h1 className="text-3xl font-bold text-learnscape-darkBlue mb-2">{t.VIDEO_TUTORIALS.TITLE}</h1>
           <p className="text-gray-600">{t.VIDEO_TUTORIALS.SUBTITLE}</p>
         </div>
+
+        {featuredCourses.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">PSLE 华文名师课 - 赠课</h2>
+            <CourseGrid courses={featuredCourses} />
+          </div>
+        )}
 
         <CourseFilters
           onLevelChange={setSelectedLevel}
