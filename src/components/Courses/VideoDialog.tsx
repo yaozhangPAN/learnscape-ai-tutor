@@ -25,11 +25,9 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
   onSubscribe,
   onPurchase,
 }) => {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
   
   if (!course) return null;
-
-  const isMasterclass = course.id.includes('psle-chinese-masterclass');
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -61,16 +59,12 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button onClick={onPurchase}>
-                  {isMasterclass 
-                    ? lang === 'zh' ? '购买本课程' : 'Purchase This Course'
-                    : t.SUBSCRIPTION.PURCHASE_VIDEO} ({course.price})
+                  {t.SUBSCRIPTION.PURCHASE_VIDEO} ({course.price})
                 </Button>
-                {!isMasterclass && (
-                  <Button variant="outline" onClick={onSubscribe}>
-                    <Crown className="mr-2 h-4 w-4" />
-                    {t.SUBSCRIPTION.SUBSCRIBE_PREMIUM}
-                  </Button>
-                )}
+                <Button variant="outline" onClick={onSubscribe}>
+                  <Crown className="mr-2 h-4 w-4" />
+                  {t.SUBSCRIPTION.SUBSCRIBE_PREMIUM}
+                </Button>
               </div>
             </div>
           </div>
