@@ -16,7 +16,8 @@ export const questionBank = {
     SELECT_GRADE: "Select Grade",
     SELECT_TERM: "Select Term",
     CLEAR_FILTERS: "Clear Filters",
-    SHOWING_RESULTS: "Showing {start} to {end} of {total} results"
+    SHOWING_RESULTS: "Showing {start} to {end} of {total} results",
+    QUESTION_LIST: "Question List" // Added missing translation key
   },
   zh: {
     TITLE: "题库",
@@ -34,6 +35,7 @@ export const questionBank = {
     SELECT_GRADE: "选择年级",
     SELECT_TERM: "选择学期",
     CLEAR_FILTERS: "清除筛选",
-    SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 结果"
+    SHOWING_RESULTS: "显示 {start} 到 {end}，共 {total} 结果",
+    QUESTION_LIST: "题目列表" // Added missing translation key
   }
 };
