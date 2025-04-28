@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +8,10 @@ import { VideoFileManager } from "@/components/VideoUpload/VideoFileManager";
 import VideoAuthStatus from "@/components/VideoUpload/VideoAuthStatus";
 import ConnectionStatusCard from "@/components/VideoUpload/ConnectionStatusCard";
 import AuthRequiredCard from "@/components/VideoUpload/AuthRequiredCard";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Loader } from "lucide-react";
+import { Navigate } from "react-router-dom";
 
 const VideoUpload = () => {
   const { user, session, isLoading, refreshSession } = useAuth();
