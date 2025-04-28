@@ -8,8 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import QuestionViewer from "@/components/QuestionBank/QuestionViewer";
 import { useI18n } from "@/contexts/I18nContext";
@@ -61,19 +60,26 @@ const QuestionBank = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         setIsLoading(true);
+        setFetchError(false);
+
+        console.log("Fetching questions from Supabase...");
         const { data, error } = await supabase
           .from('questions')
           .select('*');
         
         if (error) {
           console.error('Error fetching questions:', error);
+          setFetchError(true);
+          toast.error("Failed to load questions. Using default data instead.");
           setQuestionData(defaultQuestionData);
         } else if (data && data.length > 0) {
+          console.log('Successfully fetched questions:', data.length);
           const formattedData = data
             .filter(item => !EXCLUDED_TITLES.includes(item.title))
             .map(item => ({
@@ -88,13 +94,15 @@ const QuestionBank = () => {
               content: item.content
             }));
           setQuestionData(formattedData);
-          console.log('Fetched questions:', data);
         } else {
           console.log('No data found in questions table, using default data');
+          toast.info("No questions found in database. Using sample data instead.");
           setQuestionData(defaultQuestionData);
         }
       } catch (error) {
         console.error('Exception when fetching questions:', error);
+        setFetchError(true);
+        toast.error("An error occurred while loading questions.");
         setQuestionData(defaultQuestionData);
       } finally {
         setIsLoading(false);
@@ -148,44 +156,6 @@ const QuestionBank = () => {
   const handleViewQuestion = (question) => {
     setSelectedQuestion(question);
     setDialogOpen(true);
-  };
-
-  const renderQuestionContent = (content: any) => {
-    if (!content) return <p className="text-gray-500">No content available for this question.</p>;
-
-    try {
-      const parsedContent = typeof content === 'string' ? JSON.parse(content) : content;
-      
-      return (
-        <div className="space-y-6">
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium mb-2">Question:</h3>
-            <pre className="whitespace-pre-wrap font-mono text-sm">
-              {JSON.stringify(parsedContent.question, null, 2)}
-            </pre>
-          </div>
-
-          {parsedContent.options && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Options:</h3>
-              <RadioGroup defaultValue={parsedContent.correctAnswer}>
-                {Object.entries(parsedContent.options).map(([key, value]) => (
-                  <div key={key} className="flex items-center space-x-2 p-2">
-                    <RadioGroupItem value={key} id={key} />
-                    <label htmlFor={key} className="text-sm">
-                      {value as string}
-                    </label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          )}
-        </div>
-      );
-    } catch (error) {
-      console.error('Error parsing question content:', error);
-      return <p className="text-red-500">Error displaying question content</p>;
-    }
   };
 
   return (
@@ -302,6 +272,18 @@ const QuestionBank = () => {
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-learnscape-blue"></div>
             </div>
+          ) : fetchError ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-red-500 mb-4">Error loading questions from the database</p>
+              <p className="mb-4">Currently displaying sample data</p>
+              <Button 
+                variant="default"
+                className="bg-learnscape-blue text-white"
+                onClick={() => window.location.reload()}
+              >
+                Retry
+              </Button>
+            </div>
           ) : (
             <>
               <Card>
@@ -352,7 +334,7 @@ const QuestionBank = () => {
 
               <div className="mt-4 text-sm text-gray-500">
                 {translations.SHOWING_RESULTS
-                  .replace('{start}', String((currentPage - 1) * QUESTIONS_PER_PAGE + 1))
+                  .replace('{start}', String(filteredQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0))
                   .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
                   .replace('{total}', String(filteredQuestions.length))}
               </div>
