@@ -6,6 +6,15 @@ import { mockExamPapers } from "@/data/mockExamPapers";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
+// Helper type for handling the content type safely
+type ContentObject = {
+  school?: string;
+  year?: string;
+  type?: string;
+  downloadCount?: number;
+  isTopSchool?: boolean;
+};
+
 export const useExamData = () => {
   const { language } = useI18n();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -37,18 +46,42 @@ export const useExamData = () => {
         console.log(`Successfully loaded ${examQuestions.length} exams from Supabase questions table`);
         
         // Convert the question data to the ExamPaper format
-        const convertedExams: ExamPaper[] = examQuestions.map(q => ({
-          id: q.id,
-          title: q.title || 'Untitled Exam',
-          school: q.content && typeof q.content === 'object' ? (q.content.school as string) || 'Unknown School' : 'Unknown School',
-          year: q.content && typeof q.content === 'object' ? (q.content.year as string) || new Date().getFullYear().toString() : new Date().getFullYear().toString(),
-          type: q.content && typeof q.content === 'object' ? (q.content.type as string) || 'Practice' : 'Practice',
-          subject: q.subject || 'general',
-          level: q.level || 'p6',
-          downloadCount: q.content && typeof q.content === 'object' ? (q.content.downloadCount as number) || 0 : 0,
-          isTopSchool: q.content && typeof q.content === 'object' ? (q.content.isTopSchool as boolean) || false : false,
-          isOnlineAvailable: true
-        }));
+        const convertedExams: ExamPaper[] = examQuestions.map(q => {
+          // Safely parse the content field
+          let contentObj: ContentObject = {};
+          
+          if (q.content) {
+            if (typeof q.content === 'string') {
+              try {
+                contentObj = JSON.parse(q.content) as ContentObject;
+              } catch (e) {
+                console.warn("Failed to parse content as JSON:", e);
+                contentObj = {};
+              }
+            } else if (typeof q.content === 'object') {
+              // Handle both array and object cases
+              if (Array.isArray(q.content)) {
+                console.warn("Content is an array, expected an object");
+                contentObj = {};
+              } else {
+                contentObj = q.content as ContentObject;
+              }
+            }
+          }
+          
+          return {
+            id: q.id,
+            title: q.title || 'Untitled Exam',
+            school: contentObj.school || 'Unknown School',
+            year: contentObj.year || new Date().getFullYear().toString(),
+            type: contentObj.type || 'Practice',
+            subject: q.subject || 'general',
+            level: q.level || 'p6',
+            downloadCount: contentObj.downloadCount || 0,
+            isTopSchool: contentObj.isTopSchool || false,
+            isOnlineAvailable: true
+          };
+        });
         
         setExamData(convertedExams);
       } else {
