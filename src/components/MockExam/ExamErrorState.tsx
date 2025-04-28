@@ -9,12 +9,13 @@ interface ExamErrorStateProps {
 
 const ExamErrorState: React.FC<ExamErrorStateProps> = ({ onRetry }) => {
   const { t } = useI18n();
+  // Set a default empty object with optional chaining to handle potential missing translations
   const translations = t.MOCK_EXAM || {};
 
   return (
     <div className="text-center py-12">
-      <p className="text-lg text-red-500 mb-4">{translations.ERROR_LOADING}</p>
-      <Button onClick={onRetry}>{translations.RETRY}</Button>
+      <p className="text-lg text-red-500 mb-4">{translations.ERROR_LOADING || "Error loading exams"}</p>
+      <Button onClick={onRetry}>{translations.RETRY || "Retry"}</Button>
     </div>
   );
 };
