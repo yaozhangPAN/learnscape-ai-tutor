@@ -40,13 +40,13 @@ export const useExamData = () => {
         const convertedExams: ExamPaper[] = examQuestions.map(q => ({
           id: q.id,
           title: q.title || 'Untitled Exam',
-          school: q.content?.school || 'Unknown School',
-          year: q.content?.year || new Date().getFullYear().toString(),
-          type: q.content?.type || 'Practice',
+          school: q.content && typeof q.content === 'object' ? (q.content.school as string) || 'Unknown School' : 'Unknown School',
+          year: q.content && typeof q.content === 'object' ? (q.content.year as string) || new Date().getFullYear().toString() : new Date().getFullYear().toString(),
+          type: q.content && typeof q.content === 'object' ? (q.content.type as string) || 'Practice' : 'Practice',
           subject: q.subject || 'general',
           level: q.level || 'p6',
-          downloadCount: q.content?.downloadCount || 0,
-          isTopSchool: q.content?.isTopSchool || false,
+          downloadCount: q.content && typeof q.content === 'object' ? (q.content.downloadCount as number) || 0 : 0,
+          isTopSchool: q.content && typeof q.content === 'object' ? (q.content.isTopSchool as boolean) || false : false,
           isOnlineAvailable: true
         }));
         
