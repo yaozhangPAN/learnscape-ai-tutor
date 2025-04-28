@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { SubscriptionProvider } from "@/contexts/SubscriptionProvider";
 import { useState, useEffect } from "react";
 import { trackUserBehavior } from "@/utils/behaviorTracker";
 import Index from "./pages/Index";
@@ -59,11 +59,11 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <I18nProvider>
-          <AuthProvider>
-            <SubscriptionProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
+          <BrowserRouter>
+            <AuthProvider>
+              <SubscriptionProvider>
+                <Toaster />
+                <Sonner />
                 <RouteTracker />
                 <Routes>
                   <Route path="/" element={<Index />} />
@@ -99,9 +99,9 @@ const App = () => {
                   <Route path="/video-upload" element={<VideoUpload />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </BrowserRouter>
-            </SubscriptionProvider>
-          </AuthProvider>
+              </SubscriptionProvider>
+            </AuthProvider>
+          </BrowserRouter>
         </I18nProvider>
       </TooltipProvider>
     </QueryClientProvider>

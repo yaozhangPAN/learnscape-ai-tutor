@@ -3,7 +3,6 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
 
 type SubscriptionContextType = {
   isPremium: boolean;
@@ -20,7 +19,6 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const [loadingSubscription, setLoadingSubscription] = useState(true);
   const { user, session } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const checkPremiumStatus = async () => {
     if (!user) {
@@ -108,9 +106,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         throw new Error("No payment information returned");
       }
 
-      // For PayNow payments, redirect to the verification page
-      navigate(`/payment-verification?reference=${data.paymentInfo.reference}&type=${productType}${productId ? `&id=${productId}` : ''}`);
-      
+      // Return the success URL which contains information needed for verification
       return data.paymentInfo.successUrl;
     } catch (error: any) {
       console.error("Error creating checkout session:", error.message);

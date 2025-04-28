@@ -12,6 +12,19 @@ import { CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/contexts/I18nContext";
 
+interface PaymentData {
+  id: string;
+  payment_reference: string;
+  product_type: string;
+  product_id: string | null;
+  amount: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+  transaction_id: string | null;
+}
+
 const PaymentVerification = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -46,24 +59,26 @@ const PaymentVerification = () => {
           throw new Error("Payment not found or does not belong to you");
         }
 
+        const payment = paymentData as PaymentData;
+
         // If payment is already verified or completed, redirect to success page
-        if (paymentData.status === "completed") {
+        if (payment.status === "completed") {
           navigate(`/payment-success?type=${productType}${contentId ? `&id=${contentId}` : ''}`);
           return;
         }
 
-        setPaymentStatus(paymentData.status);
+        setPaymentStatus(payment.status);
         
         // Get original payment info from the database
-        const productName = paymentData.product_type === "premium_subscription" 
+        const productName = payment.product_type === "premium_subscription" 
           ? "Premium Access Pass" 
           : "PSLE Tutorial";
         
-        const formattedPrice = `S$${(paymentData.amount / 100).toFixed(2)}`;
+        const formattedPrice = `S$${(payment.amount / 100).toFixed(2)}`;
         
         // Construct payment info object
         setPaymentInfo({
-          reference: paymentData.payment_reference,
+          reference: payment.payment_reference,
           productName: productName,
           amount: formattedPrice,
           payeeUEN: "202401234K", // Replace with your actual company UEN

@@ -10,7 +10,7 @@ interface PayNowPaymentProps {
   paymentInfo: {
     reference: string;
     productName: string;
-    productDescription: string;
+    productDescription?: string;
     amount: string;
     payeeUEN: string;
     payeeName: string;

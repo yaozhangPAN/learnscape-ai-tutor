@@ -340,6 +340,45 @@ export type Database = {
           },
         ]
       }
+      paynow_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          payment_reference: string
+          product_id: string | null
+          product_type: string
+          status: string
+          transaction_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          payment_reference: string
+          product_id?: string | null
+          product_type: string
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_reference?: string
+          product_id?: string | null
+          product_type?: string
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
