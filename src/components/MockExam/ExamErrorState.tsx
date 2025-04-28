@@ -14,8 +14,16 @@ const ExamErrorState: React.FC<ExamErrorStateProps> = ({ onRetry }) => {
 
   return (
     <div className="text-center py-12">
-      <p className="text-lg text-red-500 mb-4">{translations.ERROR_LOADING || "Error loading exams"}</p>
-      <Button onClick={onRetry}>{translations.RETRY || "Retry"}</Button>
+      <p className="text-lg text-red-500 mb-4">
+        {typeof translations === 'object' && 'ERROR_LOADING' in translations 
+          ? translations.ERROR_LOADING 
+          : "Error loading exams"}
+      </p>
+      <Button onClick={onRetry}>
+        {typeof translations === 'object' && 'RETRY' in translations 
+          ? translations.RETRY 
+          : "Retry"}
+      </Button>
     </div>
   );
 };
