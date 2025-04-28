@@ -31,7 +31,7 @@ export const masterclassLesson1: Course = {
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
   requiresAccessCode: false,
-  seriesId: "psle-chinese-masterclass",
+  seriesId: "psle-chinese-comprehension-composition",
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson1.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjEubXA0IiwiaWF0IjoxNzQ1ODU5NjAxLCJleHAiOjE3NzczOTU2MDF9._Rqh1Lf6jo16EG6fFhFkHerdz-MX-a1ZJzD7pH4DUts"
 };
 
@@ -49,7 +49,7 @@ export const masterclassLesson2: Course = {
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
   requiresAccessCode: false,
-  seriesId: "psle-chinese-masterclass",
+  seriesId: "psle-chinese-comprehension-composition",
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson2.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjIubXA0IiwiaWF0IjoxNzQ1ODU5OTkwLCJleHAiOjE3NzczOTU5OTB9.cd3-xLVrjFvYsTic3DCmqiZP5cbJHobl6con-02Ardc"
 };
 
@@ -67,7 +67,7 @@ export const masterclassLesson3: Course = {
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
   requiresAccessCode: false,
-  seriesId: "psle-chinese-masterclass",
+  seriesId: "psle-chinese-comprehension-composition",
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson3.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjMubXA0IiwiaWF0IjoxNzQ1ODYwNzkzLCJleHAiOjE3NzczOTY3OTN9.HRTEJSshi7nVND3MK8T3UyMEgJzKgVth2oxtqcQNk44"
 };
 
@@ -85,7 +85,7 @@ export const masterclassLesson4: Course = {
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
   requiresAccessCode: false,
-  seriesId: "psle-chinese-masterclass",
+  seriesId: "psle-chinese-comprehension-composition",
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson4.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjQubXA0IiwiaWF0IjoxNzQ1ODYwOTA4LCJleHAiOjE3NzczOTY5MDh9.D3qEUSBQGt-eEHZEsO1Fw-NwA7D9LM6ONpS4Ev3_fYg"
 };
 
@@ -103,7 +103,7 @@ export const masterclassLesson5: Course = {
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
   requiresAccessCode: false,
-  seriesId: "psle-chinese-masterclass",
+  seriesId: "psle-chinese-comprehension-composition",
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson5.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjUubXA0IiwiaWF0IjoxNzQ1ODYxMDA2LCJleHAiOjE3NzczOTcwMDZ9.y_ICXhJA9B4fb8ovMoUq09CkCju_B36vrIdSkpWXQPY"
 };
 
@@ -121,7 +121,7 @@ export const masterclassLesson6: Course = {
   image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
   type: "masterclass",
   requiresAccessCode: false,
-  seriesId: "psle-chinese-masterclass",
+  seriesId: "psle-chinese-comprehension-composition",
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson6.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjYubXA0IiwiaWF0IjoxNzQ1ODYxMTAzLCJleHAiOjE3NzczOTcxMDN9.MBKv5_29x24BKkBh5tqe3XOJmQjEogXINorc-g5a45M"
 };
 
@@ -256,7 +256,7 @@ export const oralPracticeSeries = {
 };
 
 export const chineseProfMarkingCourse = {
-  id: "psle-chinese-masterclass",
+  id: "psle-chinese-comprehension-composition",
   title: "PSLE Chinese Masterclass-Comprehension and composition",
   titleZh: "PSLE 华文名师阅读理解、作文专项提分课",
   description: "Get your Chinese essays and papers marked by experienced PSLE teachers with detailed feedback.",
