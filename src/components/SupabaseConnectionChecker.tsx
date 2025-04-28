@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,20 +19,22 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
   
   const listTables = async () => {
     try {
+      // 先检查一个表是否存在，如果返回记录数，则说明连接成功
       const { data, error } = await supabase
         .from('questions')
         .select('count(*)', { count: 'exact', head: true });
       
       if (error) {
-        console.error("Error fetching tables:", error);
+        console.error("测试表查询失败:", error);
         return { tables: [], error };
       }
       
+      // 连接成功后，列出已知的表名（这里不是真的查询数据库，而是提供固定的列表）
+      // 这避免了需要额外权限来列出所有表的问题
       const knownTables = ['questions', 'profiles', 'subscriptions', 'video_files'];
-      
       return { tables: knownTables, error: null };
     } catch (err) {
-      console.error("Exception when fetching tables:", err);
+      console.error("查询表时出现异常:", err);
       return { tables: [], error: err };
     }
   };
@@ -49,34 +52,35 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       const authData = await supabase.auth.getSession();
       console.log("身份验证会话:", authData);
       
-      if (!authData.data.session) {
-        setConnectionDetails("身份验证会话无效，请尝试重新登录");
-        throw new Error("无效的身份验证会话");
-      }
+      // 即使没有有效会话，也继续尝试连接数据库
+      // 这样可以检测 RLS 策略是否允许未认证访问
       
       const { tables: tablesList, error: tablesError } = await listTables();
       
-      if (tablesError) {
-        setConnectionDetails(`获取表格列表失败: ${tablesError.message || String(tablesError)}`);
+      if (tablesError && !authData.data.session) {
+        // 如果获取表失败，并且没有有效会话
+        setConnectionDetails("身份验证会话无效，且获取表格列表失败，请尝试重新登录");
+        setConnectionStatus('error');
         throw tablesError;
+      } else if (tablesError) {
+        // 如果有会话但获取表失败，可能是权限问题
+        setConnectionDetails(`获取表格列表失败，但身份验证成功。可能是权限问题: ${tablesError.message || String(tablesError)}`);
+        setConnectionStatus('error');
+        throw tablesError;
+      } else if (!authData.data.session) {
+        // 如果没有会话但获取表成功（公开表）
+        setConnectionDetails("数据库连接成功，但用户未登录。使用的是公开表访问权限。");
+        setTables(tablesList);
+        setConnectionStatus('success');
+      } else {
+        // 会话和表都正常
+        setTables(tablesList);
+        setConnectionDetails(`连接成功! 有效会话用户: ${authData.data.session?.user?.email}`);
+        setConnectionStatus('success');
       }
       
-      setTables(tablesList);
-      console.log("可用的数据表:", tablesList);
-      
-      const { data, error } = await supabase
-        .from('questions')
-        .select('count(*)', { count: 'exact', head: true });
-      
-      if (error) {
-        setConnectionDetails(`查询questions表失败: ${error.message}`);
-        throw error;
-      }
-      
-      setConnectionDetails(`连接成功! 有效会话用户: ${authData.data.session?.user?.email}`);
-      console.log("Supabase 连接成功:", data);
+      console.log("Supabase 连接成功:", { tables: tablesList });
       toast.success("成功连接到 Supabase 数据库");
-      setConnectionStatus('success');
       
     } catch (err) {
       console.error("测试 Supabase 连接时出错:", err);
