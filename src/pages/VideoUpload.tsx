@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { VideoUploadStatus } from "@/components/VideoUpload/VideoUploadStatus";
 import { useAuth } from "@/contexts/AuthContext";
-import { Navigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import SupabaseConnectionChecker from "@/components/SupabaseConnectionChecker";
+import { toast } from "sonner";
+import { VideoUploadStatus } from "@/components/VideoUpload/VideoUploadStatus";
 import { VideoFileManager } from "@/components/VideoUpload/VideoFileManager";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogIn, Loader } from "lucide-react";
+import VideoAuthStatus from "@/components/VideoUpload/VideoAuthStatus";
+import ConnectionStatusCard from "@/components/VideoUpload/ConnectionStatusCard";
+import AuthRequiredCard from "@/components/VideoUpload/AuthRequiredCard";
 
 const VideoUpload = () => {
   const { user, session, isLoading, refreshSession } = useAuth();
@@ -75,17 +73,9 @@ const VideoUpload = () => {
     }
   };
 
-  const checkSupabaseConnection = () => {
-    console.log("手动检查Supabase连接...");
-    supabase.auth.getSession().then(({ data }) => {
-      console.log("手动检查会话结果:", data);
-      setSessionData(data);
-      if (data.session) {
-        toast.success("Supabase会话有效");
-      } else {
-        toast.error("未检测到有效的Supabase会话");
-      }
-    });
+  const handleRelogin = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
   };
 
   if (isLoading && !authChecked) {
@@ -137,56 +127,21 @@ const VideoUpload = () => {
     return <Navigate to="/login" replace />;
   }
 
-  const handleRelogin = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
-  };
-
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold">上传课程视频</h1>
-          <div className="flex items-center space-x-2">
-            {(user || sessionData?.session?.user) ? (
-              <div className="text-sm text-green-600">
-                已登录: {user?.email || sessionData?.session?.user?.email}
-              </div>
-            ) : (
-              <div className="text-sm text-red-600">
-                未检测到登录
-              </div>
-            )}
-            <Button variant="outline" size="sm" onClick={handleRelogin} className="flex items-center gap-1">
-              <LogIn className="h-4 w-4" />
-              重新登录
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleRefreshSession}
-              disabled={isRefreshing}
-              className="flex items-center gap-1"
-            >
-              {isRefreshing ? (
-                <Loader className="h-4 w-4 animate-spin" />
-              ) : (
-                <Loader className="h-4 w-4" />
-              )}
-              刷新会话
-            </Button>
-          </div>
+          <VideoAuthStatus
+            user={user}
+            sessionData={sessionData}
+            isRefreshing={isRefreshing}
+            onRelogin={handleRelogin}
+            onRefreshSession={handleRefreshSession}
+          />
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>数据库连接状态</CardTitle>
-            <CardDescription>检查与Supabase数据库的连接状态</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <SupabaseConnectionChecker className="mb-4" />
-          </CardContent>
-        </Card>
+        <ConnectionStatusCard />
         
         {(user || sessionData?.session?.user) ? (
           <>
@@ -202,20 +157,7 @@ const VideoUpload = () => {
             </Card>
           </>
         ) : (
-          <Card className="bg-yellow-50 border-yellow-200">
-            <CardHeader>
-              <CardTitle className="text-yellow-800">无法加载上传功能</CardTitle>
-              <CardDescription className="text-yellow-700">请确保您已成功登录系统</CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
-              <Button 
-                onClick={() => window.location.href = "/login"}
-                className="bg-yellow-500 hover:bg-yellow-600"
-              >
-                前往登录
-              </Button>
-            </CardContent>
-          </Card>
+          <AuthRequiredCard />
         )}
       </div>
     </div>
