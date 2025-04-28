@@ -19,7 +19,10 @@ export const mockExam = {
     SEARCH_PLACEHOLDER: "Search exams...",
     NO_RESULTS: "No exam papers found matching your criteria",
     RESET_FILTERS: "Reset Filters",
-    TRY_AGAIN: "Try Again"
+    TRY_AGAIN: "Try Again",
+    RETRY: "Retry",
+    LOADING: "Loading...",
+    ERROR_LOADING: "Error loading exams"
   },
   zh: {
     TITLE: "模拟考试",
@@ -40,6 +43,9 @@ export const mockExam = {
     SEARCH_PLACEHOLDER: "搜索考试...",
     NO_RESULTS: "未找到符合条件的试卷",
     RESET_FILTERS: "重置筛选",
-    TRY_AGAIN: "重试"
+    TRY_AGAIN: "重试",
+    RETRY: "重试",
+    LOADING: "加载中...",
+    ERROR_LOADING: "加载考试数据出错"
   }
 };

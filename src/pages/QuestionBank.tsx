@@ -48,8 +48,8 @@ const subjects = ["All Subjects", "English", "Math", "Chinese", "Science", "华�
 const terms = ["All Terms", "CA1", "SA1", "CA2", "SA2"];
 
 const QuestionBank = () => {
-  const { t } = useI18n();
-  const translations = t.QUESTION_BANK_PAGE;
+  const { t, language } = useI18n();
+  const translations = t.QUESTION_BANK_PAGE || {};
   
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,7 +68,7 @@ const QuestionBank = () => {
         setIsLoading(true);
         setFetchError(false);
 
-        console.log("Fetching questions from Supabase...");
+        console.log(`Fetching questions from Supabase... Language: ${language}`);
         const { data, error } = await supabase
           .from('questions')
           .select('*');
@@ -76,7 +76,7 @@ const QuestionBank = () => {
         if (error) {
           console.error('Error fetching questions:', error);
           setFetchError(true);
-          toast.error("Failed to load questions. Using default data instead.");
+          toast.error(language === 'zh' ? "加载题目失败，使用默认数据替代。" : "Failed to load questions. Using default data instead.");
           setQuestionData(defaultQuestionData);
         } else if (data && data.length > 0) {
           console.log('Successfully fetched questions:', data.length);
@@ -96,13 +96,13 @@ const QuestionBank = () => {
           setQuestionData(formattedData);
         } else {
           console.log('No data found in questions table, using default data');
-          toast.info("No questions found in database. Using sample data instead.");
+          toast.info(language === 'zh' ? "数据库中未找到题目，使用样本数据代替。" : "No questions found in database. Using sample data instead.");
           setQuestionData(defaultQuestionData);
         }
       } catch (error) {
         console.error('Exception when fetching questions:', error);
         setFetchError(true);
-        toast.error("An error occurred while loading questions.");
+        toast.error(language === 'zh' ? "加载题目时发生错误。" : "An error occurred while loading questions.");
         setQuestionData(defaultQuestionData);
       } finally {
         setIsLoading(false);
@@ -110,7 +110,7 @@ const QuestionBank = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, [language]);
 
   const filteredQuestions = questionData.filter(question => {
     const matchesSearch = 
@@ -158,27 +158,36 @@ const QuestionBank = () => {
     setDialogOpen(true);
   };
 
+  // 确保所有需要翻译的字符串都有默认值
+  const getTranslation = (key) => {
+    return translations[key] || key;
+  };
+
+  const handleRetry = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       
       <div className="bg-learnscape-darkBlue text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">{translations.TITLE}</h1>
-          <p className="text-lg max-w-3xl">{translations.SUBTITLE}</p>
+          <h1 className="text-4xl font-bold mb-4">{getTranslation('TITLE')}</h1>
+          <p className="text-lg max-w-3xl">{getTranslation('SUBTITLE')}</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{translations.QUESTION_LIST}</h2>
+          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{getTranslation('QUESTION_LIST')}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="relative flex items-center col-span-1 md:col-span-4">
               <Search className="absolute left-3 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder={translations.SEARCH_PLACEHOLDER}
+                placeholder={getTranslation('SEARCH_PLACEHOLDER')}
                 className="pl-10 pr-4"
                 value={searchTerm}
                 onChange={(e) => {
@@ -197,7 +206,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.SELECT_SUBJECT} />
+                  <SelectValue placeholder={getTranslation('SELECT_SUBJECT')} />
                 </SelectTrigger>
                 <SelectContent>
                   {subjects.map((subject) => (
@@ -218,7 +227,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.SELECT_GRADE} />
+                  <SelectValue placeholder={getTranslation('SELECT_GRADE')} />
                 </SelectTrigger>
                 <SelectContent>
                   {grades.map((grade) => (
@@ -239,7 +248,7 @@ const QuestionBank = () => {
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.SELECT_TERM} />
+                  <SelectValue placeholder={getTranslation('SELECT_TERM')} />
                 </SelectTrigger>
                 <SelectContent>
                   {terms.map((term) => (
@@ -263,7 +272,7 @@ const QuestionBank = () => {
                   handleFilterChange();
                 }}
               >
-                {translations.CLEAR_FILTERS}
+                {getTranslation('CLEAR_FILTERS')}
               </Button>
             </div>
           </div>
@@ -274,14 +283,14 @@ const QuestionBank = () => {
             </div>
           ) : fetchError ? (
             <div className="text-center py-12">
-              <p className="text-lg text-red-500 mb-4">Error loading questions from the database</p>
-              <p className="mb-4">Currently displaying sample data</p>
+              <p className="text-lg text-red-500 mb-4">{language === 'zh' ? '从数据库加载题目时出错' : 'Error loading questions from the database'}</p>
+              <p className="mb-4">{language === 'zh' ? '当前显示样本数据' : 'Currently displaying sample data'}</p>
               <Button 
                 variant="default"
                 className="bg-learnscape-blue text-white"
-                onClick={() => window.location.reload()}
+                onClick={handleRetry}
               >
-                Retry
+                {language === 'zh' ? '重试' : 'Retry'}
               </Button>
             </div>
           ) : (
@@ -291,12 +300,12 @@ const QuestionBank = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>{translations.QUESTION_TITLE}</TableHead>
-                        <TableHead>{translations.SUBJECT}</TableHead>
-                        <TableHead>{translations.LEVEL}</TableHead>
-                        <TableHead>{translations.TERM}</TableHead>
-                        <TableHead>{translations.DATE}</TableHead>
-                        <TableHead className="text-right">{translations.ACTION}</TableHead>
+                        <TableHead>{getTranslation('QUESTION_TITLE')}</TableHead>
+                        <TableHead>{getTranslation('SUBJECT')}</TableHead>
+                        <TableHead>{getTranslation('LEVEL')}</TableHead>
+                        <TableHead>{getTranslation('TERM')}</TableHead>
+                        <TableHead>{getTranslation('DATE')}</TableHead>
+                        <TableHead className="text-right">{getTranslation('ACTION')}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -315,7 +324,7 @@ const QuestionBank = () => {
                                 className="bg-learnscape-blue text-white"
                                 onClick={() => handleViewQuestion(question)}
                               >
-                                {translations.VIEW}
+                                {getTranslation('VIEW')}
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -323,7 +332,7 @@ const QuestionBank = () => {
                       ) : (
                         <TableRow>
                           <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                            {translations.NO_QUESTIONS}
+                            {getTranslation('NO_QUESTIONS')}
                           </TableCell>
                         </TableRow>
                       )}
@@ -333,7 +342,7 @@ const QuestionBank = () => {
               </Card>
 
               <div className="mt-4 text-sm text-gray-500">
-                {translations.SHOWING_RESULTS
+                {getTranslation('SHOWING_RESULTS')
                   .replace('{start}', String(filteredQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0))
                   .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
                   .replace('{total}', String(filteredQuestions.length))}
