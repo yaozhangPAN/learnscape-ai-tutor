@@ -55,12 +55,12 @@ serve(async (req) => {
     }
 
     // Define the Stripe checkout session parameters based on the product type
-    let sessionParams: any = {
+    let sessionParams = {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       success_url: `${req.headers.get("origin")}/payment-success?type=${productType}${productId ? `&id=${productId}` : ''}`,
       cancel_url: `${req.headers.get("origin")}/payment-canceled`,
-      payment_method_types: ['paynow', 'card'], // Add PayNow as payment method
+      payment_method_types: ["card", "paynow"],
     };
 
     // Configure line items based on product type
@@ -137,7 +137,9 @@ serve(async (req) => {
     }
 
     // Create the Stripe checkout session
+    console.log("Creating session with params:", JSON.stringify(sessionParams));
     const session = await stripe.checkout.sessions.create(sessionParams);
+    console.log("Session created successfully:", session.id);
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
