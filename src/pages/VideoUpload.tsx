@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { VideoUploadStatus } from "@/components/VideoUpload/VideoUploadStatus";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import SupabaseConnectionChecker from "@/components/SupabaseConnectionChecker";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ReloadIcon, LogIn } from "lucide-react";
+import { Loader, LogIn } from "lucide-react";
 
 const VideoUpload = () => {
   const { user, session, isLoading, refreshSession } = useAuth();
@@ -18,12 +17,10 @@ const VideoUpload = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    // 检查当前的认证状态并记录
     const checkAuth = async () => {
       console.log("检查认证状态：", { user, session, isLoading });
       
       try {
-        // 获取当前会话状态
         const { data } = await supabase.auth.getSession();
         setSessionData(data);
         console.log("Supabase会话状态：", data);
@@ -31,7 +28,6 @@ const VideoUpload = () => {
         if (data.session) {
           toast.success(`用户 ${data.session.user.email} 已登录`);
         } else if (checkCount < 3) {
-          // 如果多次检查后仍无会话，显示错误通知
           toast.error("获取不到用户会话，请尝试重新登录");
         }
       } catch (err) {
@@ -43,7 +39,6 @@ const VideoUpload = () => {
       }
     };
     
-    // 如果身份验证加载超过5秒，强制检查一次
     const timeoutId = setTimeout(() => {
       if (!authChecked && isLoading) {
         checkAuth();
@@ -57,7 +52,6 @@ const VideoUpload = () => {
     return () => clearTimeout(timeoutId);
   }, [user, session, isLoading, authChecked, checkCount]);
 
-  // 手动刷新会话
   const handleRefreshSession = async () => {
     setIsRefreshing(true);
     try {
@@ -76,7 +70,6 @@ const VideoUpload = () => {
     }
   };
 
-  // 检查Supabase连接状态
   const checkSupabaseConnection = () => {
     console.log("手动检查Supabase连接...");
     supabase.auth.getSession().then(({ data }) => {
@@ -90,7 +83,6 @@ const VideoUpload = () => {
     });
   };
 
-  // 显示加载状态
   if (isLoading && !authChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -112,12 +104,12 @@ const VideoUpload = () => {
               >
                 {isRefreshing ? (
                   <>
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader className="mr-2 h-4 w-4 animate-spin" />
                     刷新中...
                   </>
                 ) : (
                   <>
-                    <ReloadIcon className="mr-2 h-4 w-4" />
+                    <Loader className="mr-2 h-4 w-4" />
                     刷新会话
                   </>
                 )}
@@ -135,13 +127,11 @@ const VideoUpload = () => {
     );
   }
 
-  // 认证检查完成但无用户，重定向到登录
   if (authChecked && !user && !sessionData?.session) {
     toast.error("需要登录，请先登录后再访问此页面");
     return <Navigate to="/login" replace />;
   }
 
-  // 重新登录按钮
   const handleRelogin = async () => {
     await supabase.auth.signOut();
     window.location.href = "/login";
@@ -174,9 +164,9 @@ const VideoUpload = () => {
               className="flex items-center gap-1"
             >
               {isRefreshing ? (
-                <ReloadIcon className="h-4 w-4 animate-spin" />
+                <Loader className="h-4 w-4 animate-spin" />
               ) : (
-                <ReloadIcon className="h-4 w-4" />
+                <Loader className="h-4 w-4" />
               )}
               刷新会话
             </Button>

@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ReloadIcon, CheckCircle, XCircle, Database } from "lucide-react";
+import { Loader, CheckCircle, XCircle, Database } from "lucide-react";
 
 interface SupabaseConnectionCheckerProps {
   className?: string;
@@ -19,7 +18,6 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
   
   const listTables = async () => {
     try {
-      // 尝试获取question表的计数，作为连接测试
       const { data, error } = await supabase
         .from('questions')
         .select('count(*)', { count: 'exact', head: true });
@@ -29,7 +27,6 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
         return { tables: [], error };
       }
       
-      // 列出已知的表
       const knownTables = ['questions', 'profiles', 'subscriptions', 'video_files'];
       
       return { tables: knownTables, error: null };
@@ -49,7 +46,6 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
         throw new Error("Supabase 客户端未初始化");
       }
       
-      // 测试身份验证连接
       const authData = await supabase.auth.getSession();
       console.log("身份验证会话:", authData);
       
@@ -58,7 +54,6 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
         throw new Error("无效的身份验证会话");
       }
       
-      // 获取可用表格列表
       const { tables: tablesList, error: tablesError } = await listTables();
       
       if (tablesError) {
@@ -69,7 +64,6 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       setTables(tablesList);
       console.log("可用的数据表:", tablesList);
       
-      // 测试是否可以对questions表进行简单查询
       const { data, error } = await supabase
         .from('questions')
         .select('count(*)', { count: 'exact', head: true });
@@ -93,14 +87,11 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
     }
   };
 
-  // 组件加载时自动检查连接，如果失败会在5秒后重试一次
   useEffect(() => {
-    // 设置一个延迟，以确保应用其他部分已经加载
     const timer = setTimeout(() => {
       checkConnection().catch(err => {
         console.error("初始连接检查失败:", err);
         if (retryCount < 2) {
-          // 5秒后重试一次
           setTimeout(() => {
             setRetryCount(prev => prev + 1);
             checkConnection();
@@ -155,7 +146,7 @@ const SupabaseConnectionChecker: React.FC<SupabaseConnectionCheckerProps> = ({ c
       >
         {isChecking ? (
           <>
-            <ReloadIcon className="h-4 w-4 animate-spin" />
+            <Loader className="h-4 w-4 animate-spin" />
             <span>测试中...</span>
           </>
         ) : (
