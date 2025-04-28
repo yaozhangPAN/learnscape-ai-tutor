@@ -19,6 +19,9 @@ const Courses = () => {
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
   
+  // Move CourseFilters to the top under the title
+  
+  // Filter series based on selected filters
   const filteredSeries = mockCourseSeries.filter(
     series => 
       (selectedLevel === "all" || series.level === selectedLevel) && 
@@ -26,8 +29,16 @@ const Courses = () => {
       (selectedType === "all" || series.type === selectedType)
   );
 
-  // Featured courses that should be displayed separately at the top
-  const featuredCourses = [masterclassCourse];
+  // Combine all courses including masterclassCourse
+  const allCourses = [...mockCourses, masterclassCourse];
+  
+  // Filter courses using the same criteria
+  const filteredCourses = allCourses.filter(
+    course => 
+      (selectedLevel === "all" || course.level === selectedLevel) && 
+      (selectedSubject === "all" || course.subject === selectedSubject) &&
+      (selectedType === "all" || course.type === selectedType)
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -38,18 +49,18 @@ const Courses = () => {
           <p className="text-gray-600">{t.VIDEO_TUTORIALS.SUBTITLE}</p>
         </div>
 
-        {featuredCourses.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">PSLE 华文名师课 - 赠课</h2>
-            <CourseGrid courses={featuredCourses} />
-          </div>
-        )}
-
         <CourseFilters
           onLevelChange={setSelectedLevel}
           onSubjectChange={setSelectedSubject}
           onTypeChange={setSelectedType}
         />
+
+        {filteredCourses.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">{t.VIDEO_TUTORIALS.ALL_COURSES}</h2>
+            <CourseGrid courses={filteredCourses} />
+          </div>
+        )}
 
         <CourseSeriesGrid series={filteredSeries} />
 
