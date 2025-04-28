@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import QuestionViewer from "@/components/QuestionBank/QuestionViewer";
+import QuestionBankDataFetcher from "@/components/QuestionBank/QuestionBankDataFetcher";
 import { useI18n } from "@/contexts/I18nContext";
 
 const QUESTIONS_PER_PAGE = 10;
@@ -62,55 +62,28 @@ const QuestionBank = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [fetchError, setFetchError] = useState(false);
 
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        setIsLoading(true);
-        setFetchError(false);
-
-        console.log(`Fetching questions from Supabase... Language: ${language}`);
-        const { data, error } = await supabase
-          .from('questions')
-          .select('*');
-        
-        if (error) {
-          console.error('Error fetching questions:', error);
-          setFetchError(true);
-          toast.error(language === 'zh' ? "加载题目失败，使用默认数据替代。" : "Failed to load questions. Using default data instead.");
-          setQuestionData(defaultQuestionData);
-        } else if (data && data.length > 0) {
-          console.log('Successfully fetched questions:', data.length);
-          const formattedData = data
-            .filter(item => !EXCLUDED_TITLES.includes(item.title))
-            .map(item => ({
-              id: typeof item.id === 'number' ? item.id : parseInt(item.id) || Math.floor(Math.random() * 1000),
-              title: item.title || 'Untitled',
-              subject: item.subject || 'Unknown',
-              type: typeof item.content === 'string' ? 'General' : 'Comprehensive',
-              level: item.level || 'Unknown',
-              term: item.term || 'Unknown',
-              date: item.created_at || new Date().toISOString(),
-              created_at: item.created_at,
-              content: item.content
-            }));
-          setQuestionData(formattedData);
-        } else {
-          console.log('No data found in questions table, using default data');
-          toast.info(language === 'zh' ? "数据库中未找到题目，使用样本数据代替。" : "No questions found in database. Using sample data instead.");
-          setQuestionData(defaultQuestionData);
-        }
-      } catch (error) {
-        console.error('Exception when fetching questions:', error);
-        setFetchError(true);
-        toast.error(language === 'zh' ? "加载题目时发生错误。" : "An error occurred while loading questions.");
-        setQuestionData(defaultQuestionData);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchQuestions();
-  }, [language]);
+  const handleDataLoaded = (data) => {
+    if (data && data.length > 0) {
+      console.log('Data loaded successfully, processing...');
+      const formattedData = data
+        .filter(item => !EXCLUDED_TITLES.includes(item.title))
+        .map(item => ({
+          id: typeof item.id === 'number' ? item.id : parseInt(item.id) || Math.floor(Math.random() * 1000),
+          title: item.title || 'Untitled',
+          subject: item.subject || 'Unknown',
+          type: typeof item.content === 'string' ? 'General' : 'Comprehensive',
+          level: item.level || 'Unknown',
+          term: item.term || 'Unknown',
+          date: item.created_at || new Date().toISOString(),
+          created_at: item.created_at,
+          content: item.content
+        }));
+      setQuestionData(formattedData);
+    } else {
+      console.log('No data received or empty data array, using default data');
+      setQuestionData(defaultQuestionData);
+    }
+  };
 
   const filteredQuestions = questionData.filter(question => {
     const matchesSearch = 
@@ -129,10 +102,8 @@ const QuestionBank = () => {
   });
 
   const totalPages = Math.ceil(filteredQuestions.length / QUESTIONS_PER_PAGE);
-  const currentQuestions = filteredQuestions.slice(
-    (currentPage - 1) * QUESTIONS_PER_PAGE,
-    currentPage * QUESTIONS_PER_PAGE
-  );
+  const startIndex = (currentPage - 1) * QUESTIONS_PER_PAGE;
+  const currentItems = filteredQuestions.slice(startIndex, startIndex + QUESTIONS_PER_PAGE);
 
   const handleFilterChange = () => {
     setCurrentPage(1);
@@ -158,13 +129,32 @@ const QuestionBank = () => {
     setDialogOpen(true);
   };
 
-  // 确保所有需要翻译的字符串都有默认值
   const getTranslation = (key) => {
     return translations[key] || key;
   };
 
   const handleRetry = () => {
     window.location.reload();
+  };
+
+  const handleCheckSupabaseConnection = async () => {
+    try {
+      console.log("Testing Supabase connection...");
+      const { data, error } = await supabase.from('questions').select('count(*)', { count: 'exact', head: true });
+      
+      if (error) {
+        console.error("Supabase connection test failed:", error);
+        toast.error("Failed to connect to Supabase");
+        return;
+      }
+      
+      console.log("Supabase connection successful:", data);
+      toast.success("Supabase connection successful");
+      
+    } catch (err) {
+      console.error("Error testing Supabase connection:", err);
+      toast.error("Error testing Supabase connection");
+    }
   };
 
   return (
@@ -180,7 +170,23 @@ const QuestionBank = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-2xl font-bold text-learnscape-darkBlue mb-6">{getTranslation('QUESTION_LIST')}</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-learnscape-darkBlue">{getTranslation('QUESTION_LIST')}</h2>
+            <Button 
+              variant="outline" 
+              onClick={handleCheckSupabaseConnection}
+              className="text-sm"
+            >
+              Test Supabase Connection
+            </Button>
+          </div>
+          
+          <QuestionBankDataFetcher 
+            language={language}
+            onDataLoaded={handleDataLoaded}
+            onError={setFetchError}
+            onLoadingChange={setIsLoading}
+          />
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="relative flex items-center col-span-1 md:col-span-4">
@@ -309,8 +315,8 @@ const QuestionBank = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {currentQuestions.length > 0 ? (
-                        currentQuestions.map((question) => (
+                      {currentItems.length > 0 ? (
+                        currentItems.map((question) => (
                           <TableRow key={question.id}>
                             <TableCell className="font-medium">{question.title}</TableCell>
                             <TableCell>{question.subject}</TableCell>
@@ -343,8 +349,8 @@ const QuestionBank = () => {
 
               <div className="mt-4 text-sm text-gray-500">
                 {getTranslation('SHOWING_RESULTS')
-                  .replace('{start}', String(filteredQuestions.length > 0 ? (currentPage - 1) * QUESTIONS_PER_PAGE + 1 : 0))
-                  .replace('{end}', String(Math.min(currentPage * QUESTIONS_PER_PAGE, filteredQuestions.length)))
+                  .replace('{start}', String(startIndex + 1))
+                  .replace('{end}', String(Math.min(startIndex + QUESTIONS_PER_PAGE, filteredQuestions.length)))
                   .replace('{total}', String(filteredQuestions.length))}
               </div>
 

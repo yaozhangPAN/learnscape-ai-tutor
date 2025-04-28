@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -11,6 +10,7 @@ import EmptyState from "@/components/MockExam/EmptyState";
 import ExamPageHeader from "@/components/MockExam/ExamPageHeader";
 import ExamLoadingState from "@/components/MockExam/ExamLoadingState";
 import ExamErrorState from "@/components/MockExam/ExamErrorState";
+import SupabaseConnectionChecker from "@/components/SupabaseConnectionChecker";
 import { useExamData } from "@/hooks/useExamData";
 import { schools, years, paperTypes } from "@/data/mockExamPapers";
 
@@ -97,7 +97,10 @@ const MockExam = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
-        <ExamPageHeader />
+        <div className="flex justify-between items-center mb-4">
+          <ExamPageHeader />
+          <SupabaseConnectionChecker />
+        </div>
 
         {isLoading ? (
           <ExamLoadingState />
