@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,6 +50,9 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
           title: "提示",
           description: "为保护课程内容，切换标签页时视频将暂停播放",
         });
+        if (videoRef.current) {
+          videoRef.current.pause();
+        }
       }
     };
 
@@ -60,6 +62,10 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [toast]);
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
 
   const handleEnterFullscreen = () => {
     if (videoContainerRef.current) {
@@ -75,6 +81,7 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
       onCopy={(e) => e.preventDefault()}
       onCut={(e) => e.preventDefault()}
       onPaste={(e) => e.preventDefault()}
+      onContextMenu={handleContextMenu}
     >
       <div 
         ref={videoContainerRef}
@@ -98,7 +105,7 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
               className="w-full h-full"
               controls
               controlsList="nodownload noplaybackrate"
-              onContextMenu={(e) => e.preventDefault()}
+              onContextMenu={handleContextMenu}
               playsInline
               onLoadedData={() => setIsLoading(false)}
               poster="/placeholder.svg"
@@ -106,12 +113,18 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
                 WebkitTouchCallout: 'none',
                 WebkitUserSelect: 'none',
                 userSelect: 'none',
+                pointerEvents: 'none'
               }}
               onDoubleClick={handleEnterFullscreen}
             >
               <source src={signedUrl} type="video/mp4" />
               您的浏览器不支持视频播放。
             </video>
+            <div 
+              className="absolute inset-0" 
+              style={{ pointerEvents: 'auto' }}
+              onContextMenu={handleContextMenu}
+            />
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -132,4 +145,3 @@ export const CourseVideo: React.FC<CourseVideoProps> = ({ bucketName, filePath, 
     </div>
   );
 };
-
