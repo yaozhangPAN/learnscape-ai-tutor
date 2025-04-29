@@ -37,8 +37,8 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
           <DialogDescription>{course.description}</DialogDescription>
         </DialogHeader>
         
-        {/* Changed condition: Now we only check hasAccess for premium content, not isPremium status */}
-        {(!course.isPremium || hasAccess) ? (
+        {/* Only check hasAccess - premium status doesn't matter for content access anymore */}
+        {hasAccess ? (
           <div className="aspect-video bg-black rounded-md overflow-hidden">
             <div className="w-full h-full flex items-center justify-center text-white">
               <div className="text-center">
@@ -62,10 +62,12 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
                 <Button onClick={onPurchase}>
                   {t.SUBSCRIPTION.PURCHASE_VIDEO} ({course.price})
                 </Button>
-                <Button variant="outline" onClick={onSubscribe}>
-                  <Crown className="mr-2 h-4 w-4" />
-                  {t.SUBSCRIPTION.SUBSCRIBE_PREMIUM}
-                </Button>
+                {!isPremium && (
+                  <Button variant="outline" onClick={onSubscribe}>
+                    <Crown className="mr-2 h-4 w-4" />
+                    {t.SUBSCRIPTION.SUBSCRIBE_PREMIUM}
+                  </Button>
+                )}
               </div>
             </div>
           </div>

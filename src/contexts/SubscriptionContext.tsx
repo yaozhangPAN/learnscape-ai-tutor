@@ -64,6 +64,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     if (!user) return false;
 
     try {
+      // Changed logic: always check for specific content purchase
+      // regardless of premium subscription status
       const { data, error } = await supabase
         .from("purchased_content")
         .select("*")
@@ -76,6 +78,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         return false;
       }
 
+      // User has access if they specifically purchased this content
       return data && data.length > 0;
     } catch (error: any) {
       console.error("Error checking content access:", error.message);
