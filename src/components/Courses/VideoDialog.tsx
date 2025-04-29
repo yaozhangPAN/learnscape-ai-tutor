@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Video, Lock, Crown } from "lucide-react";
 import { Course } from '@/types/course';
 import { useI18n } from "@/contexts/I18nContext";
-import { useToast } from "@/hooks/use-toast";
 
 interface VideoDialogProps {
   open: boolean;
@@ -26,21 +25,9 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
   onSubscribe,
   onPurchase,
 }) => {
-  const { t, lang } = useI18n();
-  const { toast } = useToast();
+  const { t } = useI18n();
   
   if (!course) return null;
-
-  const handlePurchase = () => {
-    toast({
-      title: lang === 'zh' ? "购买课程" : "Purchase Course",
-      description: lang === 'zh' ? "请联系管理员购买课程，微信zhangliping0801" : "Please contact the administrator to purchase this course, WeChat: zhangliping0801",
-      duration: 5000,
-    });
-    
-    // Still call the original onPurchase handler if needed
-    onPurchase();
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -72,7 +59,7 @@ export const VideoDialog: React.FC<VideoDialogProps> = ({
                 {t.SUBSCRIPTION.VIDEO_DESC}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button onClick={handlePurchase}>
+                <Button onClick={onPurchase}>
                   {t.SUBSCRIPTION.PURCHASE_VIDEO} ({course.price})
                 </Button>
                 {!isPremium && (

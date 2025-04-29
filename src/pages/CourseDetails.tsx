@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -76,15 +77,6 @@ const CourseDetails: React.FC = () => {
       return;
     }
 
-    // Show the WeChat contact information
-    toast({
-      title: "购买课程",
-      description: "请联系管理员购买课程，微信zhangliping0801",
-      duration: 5000,
-    });
-
-    // Keep the original checkout process code commented in case we want to revert later
-    /*
     try {
       const checkoutUrl = await startCheckoutSession("video_tutorial", courseId);
       if (checkoutUrl) {
@@ -98,7 +90,6 @@ const CourseDetails: React.FC = () => {
         variant: "destructive",
       });
     }
-    */
   };
 
   return (
