@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +53,7 @@ const AuthForm: React.FC<AuthFormProps> = () => {
           title: "Success",
           description: "Logged in successfully!",
         });
-        navigate("/dashboard");
+        navigate("/"); // Changed from "/dashboard" to "/"
       }
     } catch (error) {
       toast({
