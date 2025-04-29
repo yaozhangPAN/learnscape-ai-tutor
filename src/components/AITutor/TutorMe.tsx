@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/hooks/useSupabase";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import TutorCharacter from "./TutorCharacter";
 import InputControls from "./InputControls";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +22,7 @@ const TutorMe = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { supabase } = useSupabase();
+  const { isPremiumUser } = useRequirePremium();
 
   const handleVoiceInput = (text: string) => {
     setQuestion(text);
@@ -51,6 +53,15 @@ const TutorMe = () => {
   };
 
   const handleSubmit = async () => {
+    if (!isPremiumUser) {
+      toast({
+        title: "仅限高级会员",
+        description: "请升级您的账户以使用AI导师功能。",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!question.trim()) {
       toast({
         title: "空白问题",
@@ -105,6 +116,19 @@ const TutorMe = () => {
     setQuestion("");
     setMessages([]);
   };
+
+  // Show welcome message only when component mounts and messages is empty
+  useEffect(() => {
+    if (messages.length === 0 && !isLoading) {
+      const welcomeMessage: Message = {
+        id: "welcome",
+        type: "ai",
+        content: "你好！我是你的AI导师。请问你有什么问题需要帮助？",
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">

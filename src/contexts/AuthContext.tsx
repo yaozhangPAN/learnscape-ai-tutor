@@ -25,7 +25,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loadingErrors, setLoadingErrors] = useState<string[]>([]);
   const [hasShownLoginToast, setHasShownLoginToast] = useState(false);
-  const { toast: uiToast } = useToast();
 
   // 刷新会话的函数，可以在应用中任何需要重新验证的地方调用
   const refreshSession = async (): Promise<Session | null> => {
@@ -68,10 +67,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     console.log("AuthContext initializing...");
+    let isInitialized = false;
     
     // 设置身份验证状态监听器
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
+      (event, newSession) => {
         console.log("Auth state changed:", event, !!newSession);
         
         // 更新会话状态
@@ -107,12 +107,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setHasShownLoginToast(false); // 重置toast标记，以便下次登录时可以显示
         }
         
-        // 无论如何都设置加载状态为false
-        setIsLoading(false);
+        // 设置加载状态为false，因为我们已经收到了状态变化
+        if (isLoading) {
+          setIsLoading(false);
+        }
       }
     );
 
-    // 然后检查现有会话
+    // 然后检查现有会话 - 使用更短的超时
     const initializeAuth = async () => {
       try {
         console.log("正在检查现有会话...");
@@ -152,6 +154,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error("初始化身份验证时出现异常:", e);
         setLoadingErrors(prev => [...prev, `初始化异常: ${e instanceof Error ? e.message : String(e)}`]);
       } finally {
+        isInitialized = true;
         setIsLoading(false);
       }
     };
@@ -159,6 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     initializeAuth();
 
     // 添加一个安全超时，确保isLoading最终设置为false
+    // 减少超时时间以避免长时间等待
     const safetyTimeout = setTimeout(() => {
       if (isLoading) {
         console.log("安全超时触发: 强制isLoading为false");
@@ -166,7 +170,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoadingErrors(prev => [...prev, "身份验证加载超时"]);
         toast.warning("身份验证处理超时，请尝试刷新页面");
       }
-    }, 10000);
+    }, 5000); // 从10秒减少到5秒
 
     return () => {
       subscription.unsubscribe();
@@ -174,7 +178,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // 如果加载超过3秒，显示一个加载提示
+  // 如果加载超过2秒，显示一个加载提示（从3秒减少到2秒）
   useEffect(() => {
     let timer: NodeJS.Timeout;
     
@@ -183,7 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isLoading) {
           toast.info("正在验证身份...");
         }
-      }, 3000);
+      }, 2000);
     }
     
     return () => clearTimeout(timer);
