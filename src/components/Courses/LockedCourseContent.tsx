@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
 import { Course } from "@/types/course";
 import { useI18n } from "@/contexts/I18nContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface LockedCourseContentProps {
   onAccessCodeCheck: () => void;
@@ -16,7 +17,21 @@ export const LockedCourseContent = ({
   course 
 }: LockedCourseContentProps) => {
   const { lang } = useI18n();
+  const { toast } = useToast();
   const requiresAccessCode = course?.requiresAccessCode;
+
+  const handlePurchaseClick = () => {
+    toast({
+      title: "购买课程",
+      description: "请联系管理员购买课程，微信zhangliping0801",
+      variant: "default",
+    });
+    
+    // Still call the original onPurchase if provided
+    if (onPurchase) {
+      onPurchase();
+    }
+  };
 
   return (
     <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
@@ -36,7 +51,7 @@ export const LockedCourseContent = ({
               {lang === 'zh' ? '输入访问码' : 'Enter Access Code'}
             </Button>
           ) : (
-            <Button onClick={onPurchase}>
+            <Button onClick={handlePurchaseClick}>
               {lang === 'zh' ? '购买此课程' : 'Purchase This Course'}
             </Button>
           )}
