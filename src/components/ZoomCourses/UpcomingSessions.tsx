@@ -62,7 +62,7 @@ const UpcomingSessions = ({ sessions, onJoinSession }: UpcomingSessionsProps) =>
         <CardHeader className="pb-2">
           <CardTitle className="text-xl text-learnscape-darkBlue">
             <Calendar className="h-5 w-5 inline-block mr-2" />
-            Upcoming Sessions, time to be confirmed
+            Upcoming Sessions This Week
           </CardTitle>
         </CardHeader>
         <CardContent>
