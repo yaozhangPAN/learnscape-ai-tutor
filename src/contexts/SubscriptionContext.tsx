@@ -94,19 +94,13 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      // Add console logs to help with debugging
-      console.log("Starting checkout session with:", { productType, productId, userId: user.id });
-      
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { productType, productId },
       });
 
       if (error) {
-        console.error("Function error:", error);
         throw error;
       }
-
-      console.log("Checkout response:", data);
 
       if (!data?.paymentInfo) {
         throw new Error("No payment information returned");
