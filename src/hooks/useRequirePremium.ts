@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 
 /**
  * 强制要求为 premium，如果不是，则跳转首页并给出提示。
+ * 返回用户的premium状态以便组件可以进行其他操作。
  */
 export function useRequirePremium() {
   const { isPremium, loadingSubscription } = useSubscription();
@@ -23,4 +24,10 @@ export function useRequirePremium() {
       navigate("/", { replace: true });
     }
   }, [isPremium, loadingSubscription, toast, navigate]);
+
+  // 返回premium状态给组件使用
+  return {
+    isPremiumUser: isPremium,
+    loadingSubscription
+  };
 }
