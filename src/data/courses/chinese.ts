@@ -17,6 +17,23 @@ export const masterclassCourse: Course = {
   seriesId: "psle-chinese-masterclass"
 };
 
+export const workshopCourse: Course = {
+  id: "psle-chinese-workshop",
+  title: "PSLE备考Workshop",
+  description: "免费课程：PSLE华文备考Workshop，提供实用备考策略和技巧，帮助学生高效准备PSLE华文考试。",
+  level: "p6",
+  subject: "chinese",
+  duration: "1 video",
+  rating: 4.8,
+  views: 203,
+  price: "free",
+  isPremium: false,
+  image: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=500&auto=format&fit=crop",
+  type: "workshop",
+  requiresAccessCode: false,
+  videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/422.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlLzQyMi5tcDQiLCJpYXQiOjE3NDU5MTg5NjEsImV4cCI6MTc3NzQ1NDk2MX0.bXMj8PmDlKTBG1WEWenCgRX_vng8JfKxPAV0AMm0SAc"
+};
+
 export const masterclassLesson1: Course = {
   id: "psle-chinese-masterclass-lesson1",
   title: "PSLE 华文名师课 - 第一课",
@@ -146,7 +163,7 @@ export const oralPracticeCourses: Course[] = [
   {
     id: "psle-chinese-oral-practice-2",
     title: "PSLE 华文口试练习2",
-    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点。",
+    description: "免费口试练习视频系列，帮助学生掌握口试考试技巧和要点���",
     level: "p6",
     subject: "chinese",
     duration: "1 video",
@@ -277,6 +294,7 @@ export const chineseProfMarkingCourse = {
 
 export const chineseCourses = [
   masterclassCourse,
+  workshopCourse,
   ...oralPracticeCourses,
   chineseProfMarkingCourse,
   masterclassLesson1,

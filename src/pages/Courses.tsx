@@ -11,7 +11,7 @@ import { CourseGrid } from "@/components/Courses/CourseGrid";
 import { useI18n } from "@/contexts/I18nContext";
 import { mockCourseSeries } from "@/data/courses/courseSeries";
 import { mockCourses } from "@/data/mockCourses";
-import { masterclassCourse } from "@/data/courses/chinese";
+import { masterclassCourse, workshopCourse } from "@/data/courses/chinese";
 
 const Courses = () => {
   const { t } = useI18n();
@@ -27,7 +27,7 @@ const Courses = () => {
   );
 
   // Featured courses that should be displayed separately at the top
-  const featuredCourses = [masterclassCourse];
+  const featuredCourses = [masterclassCourse, workshopCourse];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -40,7 +40,7 @@ const Courses = () => {
 
         {featuredCourses.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">PSLE 华文名师课 - 赠课</h2>
+            <h2 className="text-xl font-semibold mb-4">免费精选课程</h2>
             <CourseGrid courses={featuredCourses} />
           </div>
         )}

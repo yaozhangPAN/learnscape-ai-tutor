@@ -29,6 +29,7 @@ export const CourseContent = ({
   const { t, lang } = useI18n();
   const course = mockCourses.find(c => c.id === courseId);
   const isOralPracticeCourse = courseId.includes('psle-chinese-oral-practice');
+  const isWorkshopCourse = courseId === 'psle-chinese-workshop';
   const isFirstLesson = courseId === 'psle-chinese-masterclass-lesson1';
   const isSecondLesson = courseId === 'psle-chinese-masterclass-lesson2';
   const isThirdLesson = courseId === 'psle-chinese-masterclass-lesson3';
@@ -67,6 +68,32 @@ export const CourseContent = ({
               </Link>
             </div>
           )}
+          
+          {isWorkshopCourse && (
+            <div className="bg-blue-50 border border-blue-100 rounded-lg p-6 mt-6">
+              <h3 className="text-lg font-semibold mb-2">
+                {lang === 'zh' ? '课程资源' : 'Course Resources'}
+              </h3>
+              <p className="mb-4 text-gray-600">
+                {lang === 'zh' 
+                  ? '如果您对PSLE华文备考有任何疑问，欢迎使用我们的AI辅导员功能获取帮助。'
+                  : 'If you have any questions about PSLE Chinese preparation, feel free to use our AI Tutor feature for assistance.'}
+              </p>
+              <div className="flex gap-3">
+                <Link to="/ai-tutor">
+                  <Button className="gap-2">
+                    <Check className="h-4 w-4" />
+                    {lang === 'zh' ? 'AI辅导员' : 'AI Tutor'}
+                  </Button>
+                </Link>
+                <Link to="/zoom-courses">
+                  <Button variant="outline" className="gap-2">
+                    {lang === 'zh' ? '查看线上课程' : 'Browse Online Courses'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <LockedCourseContent 
@@ -76,7 +103,7 @@ export const CourseContent = ({
         />
       )}
       
-      {!isOralPracticeCourse && !isMasterclassLesson && <CourseHomework />}
+      {!isOralPracticeCourse && !isMasterclassLesson && !isWorkshopCourse && <CourseHomework />}
     </div>
   );
 };
