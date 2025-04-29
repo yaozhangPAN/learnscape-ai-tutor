@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -35,7 +34,25 @@ const CourseDetails: React.FC = () => {
   useEffect(() => {
     const checkAccess = async () => {
       if (!courseId || !user) {
+        // If it's workshop course - it's free for everyone
+        if (course && course.id === 'psle-chinese-workshop') {
+          setHasAccess(true);
+          return;
+        }
+        
+        // Otherwise check if it's free and doesn't require access code
+        if (course && !course.isPremium && !course.requiresAccessCode) {
+          setHasAccess(true);
+          return;
+        }
+        
         setHasAccess(false);
+        return;
+      }
+
+      // Workshop course is always accessible
+      if (course && course.id === 'psle-chinese-workshop') {
+        setHasAccess(true);
         return;
       }
 
