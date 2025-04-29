@@ -26,7 +26,8 @@ export const aiTutor = {
     LANGUAGE_ARTS_DESC: "Develop your language skills",
     SUBTITLE_LANGUAGE_ARTS: "Develop comprehensive language skills",
     READING_COACH: "Reading Coach",
-    GO: "Go"
+    GO: "Go",
+    COMING_SOON: "Coming Soon"
   },
   zh: {
     TITLE: "AI 辅导",
@@ -54,6 +55,7 @@ export const aiTutor = {
     LANGUAGE_ARTS_DESC: "发展你的语言技能",
     SUBTITLE_LANGUAGE_ARTS: "全面发展语言技能",
     READING_COACH: "阅读教练",
-    GO: "前往"
+    GO: "前往",
+    COMING_SOON: "服务升级中"
   }
 };

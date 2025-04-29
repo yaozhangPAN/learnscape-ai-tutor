@@ -20,10 +20,7 @@ export const zh = {
   NAV: navigation.zh,
   DASHBOARD_PAGE: dashboard.zh,
   MOCK_EXAM: mockExam.zh,
-  AI_TUTOR: {
-    ...aiTutor.zh,
-    COMING_SOON: "服务升级中"
-  },
+  AI_TUTOR: aiTutor.zh,
   DAILY_RECOMMENDATION: dailyRecommendation.zh,
   DAILY_PLAN: dailyPlan.zh,
   VIDEO_TUTORIALS: videoTutorials.zh,
