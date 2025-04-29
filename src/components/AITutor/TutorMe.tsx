@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/hooks/useSupabase";
+import { useRequirePremium } from "@/hooks/useRequirePremium";
 import TutorCharacter from "./TutorCharacter";
 import InputControls from "./InputControls";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +17,9 @@ interface Message {
 }
 
 const TutorMe = () => {
+  // Add the useRequirePremium hook to restrict access to premium users
+  useRequirePremium();
+  
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
