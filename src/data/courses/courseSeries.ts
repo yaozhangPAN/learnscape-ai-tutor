@@ -1,3 +1,4 @@
+
 import { CourseSeries } from "@/types/course";
 import { mathematicsCourses, mathematicsPastPapers } from "./mathematics";
 import { scienceCourses, sciencePastPapers } from "./science";
@@ -24,7 +25,8 @@ export const mockCourseSeries: CourseSeries[] = [
     isPremium: true,
     image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb",
     type: "masterclass",
-    courses: [...mathematicsCourses, ...mathematicsPastPapers]
+    courses: [...mathematicsCourses, ...mathematicsPastPapers],
+    comingSoon: true  // Mark as coming soon
   },
   {
     id: "psle-science-masterclass",
@@ -43,7 +45,8 @@ export const mockCourseSeries: CourseSeries[] = [
     isPremium: true,
     image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d",
     type: "masterclass",
-    courses: [...scienceCourses, ...sciencePastPapers]
+    courses: [...scienceCourses, ...sciencePastPapers],
+    comingSoon: true  // Mark as coming soon
   },
   {
     id: "psle-english-masterclass",
@@ -62,6 +65,7 @@ export const mockCourseSeries: CourseSeries[] = [
     isPremium: true,
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
     type: "masterclass",
-    courses: [...englishCourses, ...englishPastPapers]
+    courses: [...englishCourses, ...englishPastPapers],
+    comingSoon: true  // Mark as coming soon
   }
 ];
