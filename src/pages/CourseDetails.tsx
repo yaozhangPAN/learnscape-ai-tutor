@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { mockCourses } from "@/data/mockCourses";
@@ -19,7 +20,7 @@ const CourseDetails: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [accessCodeDialogOpen, setAccessCodeDialogOpen] = useState(false);
-  const { hasAccessToContent, startCheckoutSession } = useSubscription();
+  const { hasAccessToContent } = useSubscription();
   
   const course = mockCourses.find(c => c.id === courseId);
 
@@ -76,27 +77,12 @@ const CourseDetails: React.FC = () => {
       return;
     }
 
-    // Show purchase instructions toast
+    // Show purchase instructions toast only
     toast({
       title: "购买课程",
       description: "请联系管理员购买课程，微信zhangliping0801",
       variant: "default",
     });
-
-    // Keep the original checkout code but it won't be reached in normal flow
-    try {
-      const checkoutUrl = await startCheckoutSession("video_tutorial", courseId);
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
-      }
-    } catch (error: any) {
-      console.error("Failed to initiate checkout:", error);
-      toast({
-        title: "购买失败",
-        description: "无法启动购买流程，请稍后再试",
-        variant: "destructive",
-      });
-    }
   };
 
   return (

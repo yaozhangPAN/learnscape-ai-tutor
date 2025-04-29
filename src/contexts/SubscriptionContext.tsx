@@ -86,40 +86,10 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Simplified startCheckoutSession function that just returns null
   const startCheckoutSession = async (productType: string, productId?: string) => {
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please sign in to make a purchase.",
-        variant: "destructive",
-      });
-      return null;
-    }
-
-    try {
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { productType, productId },
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      if (!data?.paymentInfo) {
-        throw new Error("No payment information returned");
-      }
-
-      // Return the success URL which contains information needed for verification
-      return data.paymentInfo.successUrl;
-    } catch (error: any) {
-      console.error("Error creating checkout session:", error.message);
-      toast({
-        title: "Checkout Failed",
-        description: error.message || "Could not create checkout session.",
-        variant: "destructive",
-      });
-      return null;
-    }
+    // Instead of starting a checkout session, we just show the toast message in the UI
+    return null;
   };
 
   useEffect(() => {
