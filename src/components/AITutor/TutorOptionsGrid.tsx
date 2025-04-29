@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/contexts/I18nContext";
 import TutorOptionCard from "./TutorOptionCard";
 import { COLORS } from "./constants";
+import MaskOverlay from "@/components/MaskOverlay";
 
 const TutorOptionsGrid = () => {
   const navigate = useNavigate();
@@ -22,7 +23,8 @@ const TutorOptionsGrid = () => {
       color: COLORS.PURPLE,
       description: t.AI_TUTOR.WRITING_COACH_DESC,
       path: "/ai-tutor/writing-coach",
-      emoji: "✏️"
+      emoji: "✏️",
+      disabled: true
     },
     {
       id: "oral-exam",
@@ -42,7 +44,8 @@ const TutorOptionsGrid = () => {
       color: COLORS.MINT,
       description: t.AI_TUTOR.DICTATION_DESC,
       path: "/ai-tutor/dictation-practice",
-      emoji: "🎧"
+      emoji: "🎧",
+      disabled: true
     },
     {
       id: "tutor-me",
@@ -62,7 +65,8 @@ const TutorOptionsGrid = () => {
       color: COLORS.ORANGE,
       description: t.AI_TUTOR.VOCABULARY_DESC,
       path: "/ai-tutor/vocabulary",
-      emoji: "📚"
+      emoji: "📚",
+      disabled: true
     },
     {
       id: "language-arts",
@@ -82,6 +86,9 @@ const TutorOptionsGrid = () => {
       {tutorOptions.map((option) => (
         <div key={option.id} className="relative group">
           <TutorOptionCard {...option} />
+          
+          {/* Add mask overlay for disabled options */}
+          {option.disabled && <MaskOverlay />}
         </div>
       ))}
     </div>

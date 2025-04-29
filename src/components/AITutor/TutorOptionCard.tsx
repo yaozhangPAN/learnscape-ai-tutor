@@ -15,6 +15,7 @@ interface TutorOptionProps {
   path: string;
   onClick?: () => void;
   emoji: string;
+  disabled?: boolean;
 }
 
 const TutorOptionCard: React.FC<TutorOptionProps> = ({
@@ -25,7 +26,8 @@ const TutorOptionCard: React.FC<TutorOptionProps> = ({
   description,
   path,
   onClick,
-  emoji
+  emoji,
+  disabled
 }) => {
   const { t } = useI18n();
 
@@ -88,11 +90,16 @@ const TutorOptionCard: React.FC<TutorOptionProps> = ({
             fontWeight: 700
           }}
         >
-          {t.AI_TUTOR.GO} {title}
+          {disabled ? (t.AI_TUTOR.COMING_SOON || "Coming Soon") : `${t.AI_TUTOR.GO} ${title}`}
         </Button>
       </CardFooter>
     </Card>
   );
+
+  // For disabled options, wrap in a div instead of a link
+  if (disabled) {
+    return <div className="no-underline relative cursor-default">{cardContent}</div>;
+  }
 
   // Use conditional rendering to return either a Link or a div with onClick
   return path === "#" ? (
