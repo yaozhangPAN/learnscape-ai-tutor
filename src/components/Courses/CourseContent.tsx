@@ -103,9 +103,9 @@ export const CourseContent = ({
                     {lang === 'zh' ? 'AI辅导员' : 'AI Tutor'}
                   </Button>
                 </Link>
-                <Link to="/zoom-courses">
+                <Link to="/video-tutorials">
                   <Button variant="outline" className="gap-2">
-                    {lang === 'zh' ? '查看线上课程' : 'Browse Online Courses'}
+                    {lang === 'zh' ? '查看更多课程' : 'Browse Courses'}
                   </Button>
                 </Link>
               </div>
