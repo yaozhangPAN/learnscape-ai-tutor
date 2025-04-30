@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/contexts/I18nContext";
@@ -24,7 +23,7 @@ const TutorOptionsGrid = () => {
       description: t.AI_TUTOR.WRITING_COACH_DESC,
       path: "/ai-tutor/writing-coach",
       emoji: "✏️",
-      disabled: true
+      disabled: false // Changed from true to false to enable Writing Coach
     },
     {
       id: "oral-exam",
