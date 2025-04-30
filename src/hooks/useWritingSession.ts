@@ -44,7 +44,7 @@ export const useWritingSession = () => {
       // 2. Upload image to Supabase Storage
       const fileExt = imageFile.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `writing-images/${fileName}`;
+      const filePath = `${fileName}`;
 
       const { error: uploadError, data: uploadData } = await supabase.storage
         .from('writing-images')
@@ -77,7 +77,7 @@ export const useWritingSession = () => {
         throw new Error(`无法保存图片记录: ${imageError.message}`);
       }
 
-      // 4. Create writing session
+      // 4. Create writing session with matched column names
       const { data: sessionData, error: sessionError } = await supabase
         .from('writing_sessions')
         .insert({

@@ -699,11 +699,15 @@ export type Database = {
           created_at: string
           current_stage: string
           essay_type: string | null
+          genre: string | null
           grade: string | null
+          grade_level: string | null
           id: string
           image_id: string | null
           instructions: string | null
           is_active: boolean
+          prompt_text: string | null
+          session_type: string | null
           title: string | null
           updated_at: string
           user_id: string
@@ -713,11 +717,15 @@ export type Database = {
           created_at?: string
           current_stage?: string
           essay_type?: string | null
+          genre?: string | null
           grade?: string | null
+          grade_level?: string | null
           id?: string
           image_id?: string | null
           instructions?: string | null
           is_active?: boolean
+          prompt_text?: string | null
+          session_type?: string | null
           title?: string | null
           updated_at?: string
           user_id: string
@@ -727,11 +735,15 @@ export type Database = {
           created_at?: string
           current_stage?: string
           essay_type?: string | null
+          genre?: string | null
           grade?: string | null
+          grade_level?: string | null
           id?: string
           image_id?: string | null
           instructions?: string | null
           is_active?: boolean
+          prompt_text?: string | null
+          session_type?: string | null
           title?: string | null
           updated_at?: string
           user_id?: string
