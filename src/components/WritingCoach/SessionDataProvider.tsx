@@ -64,7 +64,18 @@ export const SessionDataProvider: React.FC<SessionDataProviderProps> = ({ childr
       if (sessionError) throw sessionError;
       if (!session) throw new Error("未找到写作会话");
       
-      setSessionData(session);
+      // Map the database fields to our SessionData interface
+      const sessionDataFormatted: SessionData = {
+        id: session.id,
+        title: session.title || "",
+        prompt_text: session.instructions || "",
+        grade_level: session.grade || "",
+        genre: session.essay_type || "",
+        word_limit: session.word_count || 600,
+        images: session.images
+      };
+      
+      setSessionData(sessionDataFormatted);
       setImageUrl(session.images?.url || "");
       
     } catch (error: any) {

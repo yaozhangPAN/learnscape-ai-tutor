@@ -16,7 +16,8 @@ const WritingCoach = () => {
       <main className="flex-1">
         <Routes>
           <Route index element={<NewEssayForm />} />
-          <Route path="/practice" element={<WritingPractice />} />
+          <Route path="practice" element={<WritingPractice />} />
+          <Route path="*" element={<Navigate to="/ai-tutor/writing-coach" />} />
         </Routes>
       </main>
       <Footer />

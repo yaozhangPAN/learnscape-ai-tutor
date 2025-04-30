@@ -22,7 +22,7 @@ const TaskPanel = ({ title, prompt, gradeLevel, genre, wordLimit, imageUrl }: Ta
       case 'grade_4': return lang === 'zh' ? '小学四年级' : 'Grade 4';
       case 'grade_5': return lang === 'zh' ? '小学五年级' : 'Grade 5';
       case 'grade_6': return lang === 'zh' ? '小学六年级' : 'Grade 6';
-      default: return '';
+      default: return grade || '';
     }
   };
 
@@ -32,7 +32,7 @@ const TaskPanel = ({ title, prompt, gradeLevel, genre, wordLimit, imageUrl }: Ta
       case 'picture_composition': return lang === 'zh' ? '看图写作' : 'Picture Composition';
       case 'narrative': return lang === 'zh' ? '记叙文' : 'Narrative';
       case 'descriptive': return lang === 'zh' ? '说明文' : 'Descriptive';
-      default: return '';
+      default: return genre || '';
     }
   };
 
