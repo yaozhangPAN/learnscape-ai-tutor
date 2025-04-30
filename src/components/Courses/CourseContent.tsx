@@ -30,13 +30,30 @@ export const CourseContent = ({
   const course = mockCourses.find(c => c.id === courseId);
   const isOralPracticeCourse = courseId.includes('psle-chinese-oral-practice');
   const isWorkshopCourse = courseId === 'psle-chinese-workshop';
+  
+  // Updated to include lessons 7-10
   const isFirstLesson = courseId === 'psle-chinese-masterclass-lesson1';
   const isSecondLesson = courseId === 'psle-chinese-masterclass-lesson2';
   const isThirdLesson = courseId === 'psle-chinese-masterclass-lesson3';
   const isFourthLesson = courseId === 'psle-chinese-masterclass-lesson4';
   const isFifthLesson = courseId === 'psle-chinese-masterclass-lesson5';
   const isSixthLesson = courseId === 'psle-chinese-masterclass-lesson6';
-  const isMasterclassLesson = isFirstLesson || isSecondLesson || isThirdLesson || isFourthLesson || isFifthLesson || isSixthLesson;
+  const isSeventhLesson = courseId === 'psle-chinese-masterclass-lesson7';
+  const isEighthLesson = courseId === 'psle-chinese-masterclass-lesson8';
+  const isNinthLesson = courseId === 'psle-chinese-masterclass-lesson9';
+  const isTenthLesson = courseId === 'psle-chinese-masterclass-lesson10';
+  
+  const isMasterclassLesson = 
+    isFirstLesson || 
+    isSecondLesson || 
+    isThirdLesson || 
+    isFourthLesson || 
+    isFifthLesson || 
+    isSixthLesson ||
+    isSeventhLesson ||
+    isEighthLesson ||
+    isNinthLesson ||
+    isTenthLesson;
   
   return (
     <div className="space-y-8">

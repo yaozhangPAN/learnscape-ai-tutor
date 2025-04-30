@@ -1,3 +1,4 @@
+
 import { Course } from "@/types/course";
 
 export const masterclassCourse: Course = {
@@ -140,6 +141,82 @@ export const masterclassLesson6: Course = {
   requiresAccessCode: false,
   seriesId: "psle-chinese-comprehension-composition",
   videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson6.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjYubXA0IiwiaWF0IjoxNzQ1ODYxMTAzLCJleHAiOjE3NzczOTcxMDN9.MBKv5_29x24BKkBh5tqe3XOJmQjEogXINorc-g5a45M"
+};
+
+// Adding lesson 7 as requested
+export const masterclassLesson7: Course = {
+  id: "psle-chinese-masterclass-lesson7",
+  title: "PSLE 华文名师课 - 第七课",
+  description: "本系列第七课，由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "10 weeks",
+  rating: 4.9,
+  views: 156,
+  price: "S$399",
+  isPremium: true,
+  image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
+  type: "masterclass",
+  requiresAccessCode: false,
+  seriesId: "psle-chinese-comprehension-composition",
+  videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson7.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjcubXA0IiwiaWF0IjoxNzQ2MDA1MDUyLCJleHAiOjE3Nzc1NDEwNTJ9.-R2hMASyVKcjr4tKQkT-nkfyiHC-srEO8R55Kgegu7I"
+};
+
+// Adding lesson 8 as requested
+export const masterclassLesson8: Course = {
+  id: "psle-chinese-masterclass-lesson8",
+  title: "PSLE 华文名师课 - 第八课",
+  description: "本系列第八课，由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "10 weeks",
+  rating: 4.9,
+  views: 156,
+  price: "S$399",
+  isPremium: true,
+  image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
+  type: "masterclass",
+  requiresAccessCode: false,
+  seriesId: "psle-chinese-comprehension-composition",
+  videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson8.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjgubXA0IiwiaWF0IjoxNzQ2MDA1MDc2LCJleHAiOjE3Nzc1NDEwNzZ9.kal3Q_mVfEGJjKo4rcKZD8SzoKMR7TRA35RS42Kyz3I"
+};
+
+// Adding lesson 9 as requested
+export const masterclassLesson9: Course = {
+  id: "psle-chinese-masterclass-lesson9",
+  title: "PSLE 华文名师课 - 第九课",
+  description: "本系列第九课，由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "10 weeks",
+  rating: 4.9,
+  views: 156,
+  price: "S$399",
+  isPremium: true,
+  image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
+  type: "masterclass",
+  requiresAccessCode: false,
+  seriesId: "psle-chinese-comprehension-composition",
+  videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson9.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjkubXA0IiwiaWF0IjoxNzQ2MDA1MDg3LCJleHAiOjE3Nzc1NDEwODd9.zGDNl0w63WEWrrO5fWUqGUG03nNeBzrCJ3bDkrzQx_A"
+};
+
+// Adding lesson 10 as requested
+export const masterclassLesson10: Course = {
+  id: "psle-chinese-masterclass-lesson10",
+  title: "PSLE 华文名师课 - 第十课",
+  description: "本系列第十课，由资深华文名师主讲，针对PSLE华文考试阅读理解和作文重点难点进行专项训练，助你提升成绩。",
+  level: "p6",
+  subject: "chinese",
+  duration: "10 weeks",
+  rating: 4.9,
+  views: 156,
+  price: "S$399",
+  isPremium: true,
+  image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop",
+  type: "masterclass",
+  requiresAccessCode: false,
+  seriesId: "psle-chinese-comprehension-composition",
+  videoUrl: "https://xfwnjocfdvuocvwjopke.supabase.co/storage/v1/object/sign/course-videos/test-course/Lesson10.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InN0b3JhZ2UtdXJsLXNpZ25pbmcta2V5XzFhMjI5Njc1LTk4NmEtNDMzMi04MTZjLWJlM2NiYWExOTY1MiJ9.eyJ1cmwiOiJjb3Vyc2UtdmlkZW9zL3Rlc3QtY291cnNlL0xlc3NvbjEwLm1wNCIsImlhdCI6MTc0NjAwNTA5NiwiZXhwIjoxNzc3NTQxMDk2fQ.4U8PBdZMPB2XEmXw79TZCyJWfuZAOomVXW5k7FJHm8Y"
 };
 
 export const oralPracticeCourse: Course = {
@@ -289,7 +366,18 @@ export const chineseProfMarkingCourse = {
   isPremium: true,
   image: "/lovable-uploads/bea0789a-216e-4b8c-ad8d-db7cbc87bb78.png",
   type: "masterclass" as const,
-  courses: [masterclassLesson1, masterclassLesson2, masterclassLesson3, masterclassLesson4, masterclassLesson5, masterclassLesson6]
+  courses: [
+    masterclassLesson1, 
+    masterclassLesson2, 
+    masterclassLesson3, 
+    masterclassLesson4, 
+    masterclassLesson5, 
+    masterclassLesson6,
+    masterclassLesson7,  // Added lesson 7
+    masterclassLesson8,  // Added lesson 8
+    masterclassLesson9,  // Added lesson 9
+    masterclassLesson10  // Added lesson 10
+  ]
 };
 
 export const chineseCourses = [
@@ -302,5 +390,9 @@ export const chineseCourses = [
   masterclassLesson3,
   masterclassLesson4,
   masterclassLesson5,
-  masterclassLesson6
+  masterclassLesson6,
+  masterclassLesson7,  // Added lesson 7
+  masterclassLesson8,  // Added lesson 8
+  masterclassLesson9,  // Added lesson 9
+  masterclassLesson10  // Added lesson 10
 ];
