@@ -72,7 +72,8 @@ export const SessionDataProvider: React.FC<SessionDataProviderProps> = ({ childr
         prompt_text: session.prompt_text || "",
         grade_level: session.grade_level || "",
         genre: session.genre || "",
-        word_limit: session.word_limit || 600,
+        // Use word_limit if available, otherwise fallback to word_count or default 600
+        word_limit: session.word_limit || session.word_count || 600,
         images: session.images
       };
       
