@@ -65,14 +65,12 @@ export const SessionDataProvider: React.FC<SessionDataProviderProps> = ({ childr
       if (!session) throw new Error("未找到写作会话");
       
       // Map the database fields to our SessionData interface
-      // Updated to use the correct column names
       const sessionDataFormatted: SessionData = {
         id: session.id,
         title: session.title || "",
         prompt_text: session.prompt_text || "",
         grade_level: session.grade_level || "",
         genre: session.genre || "",
-        // Use word_limit if available, otherwise fallback to word_count or default 600
         word_limit: session.word_limit || session.word_count || 600,
         images: session.images
       };

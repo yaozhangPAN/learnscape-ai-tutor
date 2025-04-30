@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Image } from "lucide-react";
@@ -150,10 +149,20 @@ const NewEssayForm = () => {
       
       const bucketExists = buckets.some(bucket => bucket.name === 'writing-images');
       if (!bucketExists) {
+        console.error("The writing-images bucket does not exist");
+        
+        // Try to create the bucket (this will likely fail if the user doesn't have permission)
+        try {
+          await supabase.storage.createBucket('writing-images', { public: true });
+          console.log("Successfully created writing-images bucket");
+        } catch (createError) {
+          console.error("Failed to create bucket:", createError);
+        }
+        
         toast({
           variant: "destructive",
-          title: "系统错误",
-          description: "图片存储空间未配置，请联系管理员",
+          title: "图片存储空间未配置",
+          description: "请联系管理员配置图片存储空间",
         });
         return;
       }

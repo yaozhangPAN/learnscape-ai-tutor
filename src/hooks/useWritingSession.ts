@@ -38,6 +38,16 @@ export const useWritingSession = () => {
       
       const bucketExists = buckets.some(bucket => bucket.name === 'writing-images');
       if (!bucketExists) {
+        console.error("The writing-images bucket does not exist");
+        
+        // Try to create the bucket (this will likely fail if the user doesn't have permission)
+        try {
+          await supabase.storage.createBucket('writing-images', { public: true });
+          console.log("Successfully created writing-images bucket");
+        } catch (createError) {
+          console.error("Failed to create bucket:", createError);
+        }
+        
         throw new Error("图片存储空间不存在，请联系管理员");
       }
 
