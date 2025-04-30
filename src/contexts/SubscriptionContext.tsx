@@ -64,22 +64,58 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     if (!user) return false;
 
     try {
-      // Changed logic: always check for specific content purchase
-      // regardless of premium subscription status
+      // 修改逻辑: 检查特定课程系列与单个课程
+      // 首先检查用户是否购买了整个课程系列
+      const seriesIdMap: Record<string, string> = {
+        'psle-chinese-masterclass-lesson1': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson2': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson3': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson4': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson5': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson6': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson7': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson8': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson9': 'psle-chinese-comprehension-composition',
+        'psle-chinese-masterclass-lesson10': 'psle-chinese-comprehension-composition'
+      };
+      
+      // 检查是否有系列映射
+      const seriesId = seriesIdMap[contentId];
+      
+      // 如果有系列ID，首先检查系列访问权限
+      if (seriesId) {
+        const { data: seriesData, error: seriesError } = await supabase
+          .from("purchased_content")
+          .select("*")
+          .eq("content_id", seriesId)
+          .eq("content_type", contentType)
+          .eq("user_id", user.id)
+          .maybeSingle();
+          
+        if (seriesError) {
+          console.error("Error checking series access:", seriesError);
+        } else if (seriesData) {
+          // 如果购买了系列，则授予访问权限
+          return true;
+        }
+      }
+      
+      // 检查单个课程访问权限（原有逻辑）
       const { data, error } = await supabase
         .from("purchased_content")
         .select("*")
         .eq("content_id", contentId)
         .eq("content_type", contentType)
-        .eq("user_id", user.id);
+        .eq("user_id", user.id)
+        .maybeSingle();
 
       if (error) {
         console.error("Error checking purchased content:", error);
         return false;
       }
 
-      // User has access if they specifically purchased this content
-      return data && data.length > 0;
+      // 用户有访问权限，如果他们特定购买了此内容
+      return data !== null;
     } catch (error: any) {
       console.error("Error checking content access:", error.message);
       return false;
