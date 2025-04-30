@@ -88,6 +88,7 @@ export const useWritingSession = () => {
       }
 
       // 4. Create writing session with matched column names
+      // Use word_count instead of word_limit
       const { data: sessionData, error: sessionError } = await supabase
         .from('writing_sessions')
         .insert({
@@ -95,7 +96,7 @@ export const useWritingSession = () => {
           session_type: formData.session_type,
           grade_level: formData.grade_level,
           genre: formData.genre,
-          word_limit: formData.word_limit,
+          word_count: formData.word_limit, // Use word_count instead of word_limit
           prompt_text: formData.prompt_text,
           image_id: imageData.id,
           user_id: user.id
