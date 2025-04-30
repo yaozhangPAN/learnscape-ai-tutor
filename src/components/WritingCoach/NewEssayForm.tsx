@@ -17,11 +17,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const NewEssayForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { createWritingSession, isLoading } = useWritingSession();
+  const { user } = useAuth();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isAnalyzingImage, setIsAnalyzingImage] = useState(false);
@@ -119,6 +121,16 @@ const NewEssayForm = () => {
         const previewUrl = event.target?.result as string;
         setImagePreview(previewUrl);
         
+        // Check if user is logged in before attempting to analyze
+        if (!user) {
+          toast({
+            variant: "destructive",
+            title: "请先登录",
+            description: "需要登录才能使用图片分析功能",
+          });
+          return;
+        }
+        
         // Upload image to temporary storage to get a URL for the AI to analyze
         uploadImageForAnalysis(file);
       };
@@ -128,16 +140,37 @@ const NewEssayForm = () => {
   
   const uploadImageForAnalysis = async (file: File) => {
     try {
+      // Check if bucket exists first
+      const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
+      
+      if (bucketsError) {
+        console.error("Error checking buckets:", bucketsError);
+        throw new Error("存储系统错误，无法上传图片");
+      }
+      
+      const bucketExists = buckets.some(bucket => bucket.name === 'writing-images');
+      if (!bucketExists) {
+        toast({
+          variant: "destructive",
+          title: "系统错误",
+          description: "图片存储空间未配置，请联系管理员",
+        });
+        return;
+      }
+      
       // Upload to Supabase storage to get a URL
       const fileExt = file.name.split('.').pop();
       const fileName = `temp-${Math.random()}.${fileExt}`;
-      const filePath = `writing-images/${fileName}`;
+      const filePath = `${fileName}`;
 
       const { error: uploadError, data: uploadData } = await supabase.storage
         .from('writing-images')
         .upload(filePath, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Image upload error:", uploadError);
+        throw uploadError;
+      }
 
       // Get public URL for the uploaded image
       const { data: publicUrlData } = supabase.storage
@@ -148,18 +181,27 @@ const NewEssayForm = () => {
         // Send the image URL to AI for analysis
         await analyzeImage(publicUrlData.publicUrl);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading image for analysis:', error);
       toast({
         variant: "destructive",
         title: "图片上传失败",
-        description: "无法上传图片进行分析",
+        description: error.message || "无法上传图片进行分析",
       });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "请先登录",
+        description: "需要登录才能创建写作练习",
+      });
+      return;
+    }
     
     if (!imageFile) {
       toast({
