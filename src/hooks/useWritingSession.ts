@@ -46,9 +46,8 @@ export const useWritingSession = () => {
           console.log("Successfully created writing-images bucket");
         } catch (createError) {
           console.error("Failed to create bucket:", createError);
+          throw new Error("图片存储空间不存在，请联系管理员");
         }
-        
-        throw new Error("图片存储空间不存在，请联系管理员");
       }
 
       // 2. Upload image to Supabase Storage
@@ -87,8 +86,19 @@ export const useWritingSession = () => {
         throw new Error(`无法保存图片记录: ${imageError.message}`);
       }
 
-      // 4. Create writing session with matched column names
-      // Use word_count instead of word_limit
+      // 4. Create writing session
+      // Using word_count in the database as it matches the column name
+      console.log("Creating writing session with:", {
+        title: formData.title,
+        session_type: formData.session_type,
+        grade_level: formData.grade_level,
+        genre: formData.genre,
+        word_count: formData.word_limit, // Map from word_limit in form to word_count in DB
+        prompt_text: formData.prompt_text,
+        image_id: imageData.id,
+        user_id: user.id
+      });
+      
       const { data: sessionData, error: sessionError } = await supabase
         .from('writing_sessions')
         .insert({
@@ -96,7 +106,7 @@ export const useWritingSession = () => {
           session_type: formData.session_type,
           grade_level: formData.grade_level,
           genre: formData.genre,
-          word_count: formData.word_limit, // Use word_count instead of word_limit
+          word_count: formData.word_limit, // Using word_count as column name
           prompt_text: formData.prompt_text,
           image_id: imageData.id,
           user_id: user.id

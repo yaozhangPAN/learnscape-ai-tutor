@@ -54,7 +54,7 @@ export const SessionDataProvider: React.FC<SessionDataProviderProps> = ({ childr
     try {
       setIsLoading(true);
       
-      // Fetch writing session data with the new column names
+      // Fetch writing session data
       const { data: session, error: sessionError } = await supabase
         .from("writing_sessions")
         .select("*, images(*)")
@@ -64,14 +64,17 @@ export const SessionDataProvider: React.FC<SessionDataProviderProps> = ({ childr
       if (sessionError) throw sessionError;
       if (!session) throw new Error("未找到写作会话");
       
+      console.log("Fetched session data:", session);
+      
       // Map the database fields to our SessionData interface
+      // Note: Database uses word_count but our interface uses word_limit
       const sessionDataFormatted: SessionData = {
         id: session.id,
         title: session.title || "",
         prompt_text: session.prompt_text || "",
         grade_level: session.grade_level || "",
         genre: session.genre || "",
-        word_limit: session.word_count || 600, // Use word_count instead of word_limit
+        word_limit: session.word_count || 600, // Map from word_count in DB to word_limit in UI
         images: session.images
       };
       
