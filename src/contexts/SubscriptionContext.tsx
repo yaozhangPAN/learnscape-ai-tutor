@@ -76,7 +76,18 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         'psle-chinese-masterclass-lesson7': 'psle-chinese-comprehension-composition',
         'psle-chinese-masterclass-lesson8': 'psle-chinese-comprehension-composition',
         'psle-chinese-masterclass-lesson9': 'psle-chinese-comprehension-composition',
-        'psle-chinese-masterclass-lesson10': 'psle-chinese-comprehension-composition'
+        'psle-chinese-masterclass-lesson10': 'psle-chinese-comprehension-composition',
+        // 添加 oral comprehension 2 系列的映射
+        'psle-oral-comprehension2-lesson1': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson2': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson3': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson4': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson5': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson6': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson7': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson8': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson9': 'psle-oral-comprehension2-series',
+        'psle-oral-comprehension2-lesson10': 'psle-oral-comprehension2-series',
       };
       
       // 检查是否有系列映射
