@@ -31,6 +31,9 @@ export const CourseContent = ({
   const isOralPracticeCourse = courseId.includes('psle-chinese-oral-practice');
   const isWorkshopCourse = courseId === 'psle-chinese-workshop';
   
+  // Check if it's one of the oral comprehension 2 courses
+  const isOralComprehension2Course = courseId.includes('psle-oral-comprehension2');
+  
   // Updated to include lessons 7-10
   const isFirstLesson = courseId === 'psle-chinese-masterclass-lesson1';
   const isSecondLesson = courseId === 'psle-chinese-masterclass-lesson2';
@@ -86,6 +89,25 @@ export const CourseContent = ({
             </div>
           )}
           
+          {isOralComprehension2Course && (
+            <div className="bg-blue-50 border border-blue-100 rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-2">
+                {lang === 'zh' ? '口语考试练习' : 'Oral Exam Practice'}
+              </h3>
+              <p className="mb-4 text-gray-600">
+                {lang === 'zh' 
+                  ? '观看完视频后，建议您使用我们的AI口语练习功能来巩固所学的口试技巧。'
+                  : 'After watching the video, we recommend using our AI Oral Practice feature to reinforce the oral exam techniques you\'ve learned.'}
+              </p>
+              <Link to="/ai-tutor/oral-exam">
+                <Button className="gap-2">
+                  <Check className="h-4 w-4" />
+                  {lang === 'zh' ? '前往口语考试练习' : 'Go to Oral Exam Practice'}
+                </Button>
+              </Link>
+            </div>
+          )}
+          
           {isWorkshopCourse && (
             <div className="bg-blue-50 border border-blue-100 rounded-lg p-6 mt-6">
               <h3 className="text-lg font-semibold mb-2">
@@ -120,7 +142,7 @@ export const CourseContent = ({
         />
       )}
       
-      {!isOralPracticeCourse && !isMasterclassLesson && !isWorkshopCourse && <CourseHomework />}
+      {!isOralPracticeCourse && !isMasterclassLesson && !isWorkshopCourse && !isOralComprehension2Course && <CourseHomework />}
     </div>
   );
 };
