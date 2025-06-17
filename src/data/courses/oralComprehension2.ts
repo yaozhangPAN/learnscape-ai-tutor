@@ -1,4 +1,3 @@
-
 import { Course, CourseSeries } from "@/types/course";
 
 // 将Google Drive视频链接转换为嵌入格式的函数
@@ -234,8 +233,8 @@ export const oralComprehension2Series: CourseSeries = {
   durationZh: "10堂课",
   rating: 4.8,
   views: 0,
-  price: "S$999",
-  priceZh: "999新币",
+  price: "S$399",
+  priceZh: "399新币",
   isPremium: true,
   image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=800&q=80",
   type: "tutorial",
