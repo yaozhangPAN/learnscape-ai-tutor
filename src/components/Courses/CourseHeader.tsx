@@ -20,9 +20,6 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
       <div className="text-gray-600 space-y-1">
         <div>{lang === 'zh' ? '课程等级: ' : 'Level: '}{course.level}</div>
         <div>{lang === 'zh' ? '科目: ' : 'Subject: '}{course.subject}</div>
-        <div>{lang === 'zh' ? '持续时间: ' : 'Duration: '}
-          {lang === 'zh' ? course.durationZh || course.duration : course.duration}
-        </div>
       </div>
     </div>
   );
