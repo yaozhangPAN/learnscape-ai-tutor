@@ -19,7 +19,7 @@ export interface CourseSeries {
   image: string;
   type: CourseSeriesType;
   courses?: Course[];
-  comingSoon?: boolean; // Add this new property
+  comingSoon?: boolean;
 }
 
 export type Course = {
@@ -38,7 +38,7 @@ export type Course = {
   priceZh?: string;
   isPremium: boolean;
   image: string;
-  type: "tutorial" | "past_paper" | "masterclass" | "workshop"; // Added "workshop" type
+  type: "tutorial" | "past_paper" | "masterclass" | "workshop";
   videoUrl?: string;
   requiresAccessCode?: boolean;
   seriesId?: string;

@@ -4,10 +4,12 @@ import { mathematicsCourses, mathematicsPastPapers } from "./mathematics";
 import { scienceCourses, sciencePastPapers } from "./science";
 import { englishCourses, englishPastPapers } from "./english";
 import { chineseProfMarkingCourse, oralPracticeSeries } from "./chinese";
+import { oralComprehension2Series } from "./oralComprehension2";
 
 export const mockCourseSeries: CourseSeries[] = [
   chineseProfMarkingCourse,
   oralPracticeSeries,
+  oralComprehension2Series, // 添加新的课程系列
   {
     id: "psle-math-masterclass",
     title: "PSLE Mathematics Masterclass",
@@ -26,7 +28,7 @@ export const mockCourseSeries: CourseSeries[] = [
     image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb",
     type: "masterclass",
     courses: [...mathematicsCourses, ...mathematicsPastPapers],
-    comingSoon: true  // Mark as coming soon
+    comingSoon: true
   },
   {
     id: "psle-science-masterclass",
@@ -46,7 +48,7 @@ export const mockCourseSeries: CourseSeries[] = [
     image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d",
     type: "masterclass",
     courses: [...scienceCourses, ...sciencePastPapers],
-    comingSoon: true  // Mark as coming soon
+    comingSoon: true
   },
   {
     id: "psle-english-masterclass",
@@ -66,6 +68,6 @@ export const mockCourseSeries: CourseSeries[] = [
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
     type: "masterclass",
     courses: [...englishCourses, ...englishPastPapers],
-    comingSoon: true  // Mark as coming soon
+    comingSoon: true
   }
 ];
